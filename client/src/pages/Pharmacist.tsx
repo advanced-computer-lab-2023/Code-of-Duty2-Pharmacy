@@ -25,10 +25,14 @@ const PharmacistPage: React.FC = () => {
     }
   };
 
+  const handleUpdated = () => {
+    fetchMedicines();
+  };
+
   return (
     <div>
       <h1>Pharmacist Page</h1>
-      <MedicineList medicines={medicines} />
+      <MedicineList medicines={medicines} onUpdated={handleUpdated} />
       <AddMedicineForm />
     </div>
   );
