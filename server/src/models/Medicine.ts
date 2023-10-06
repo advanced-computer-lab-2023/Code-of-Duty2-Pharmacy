@@ -15,9 +15,9 @@ export interface IMedicine {
 export interface IMedicineModel extends IMedicine, Document {}
 
 const MedicineSchema: Schema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true  },
     activeIngredients: { type: [String], required: true },
-    price: { type: Number, required: true },
+    price: { type: Number, required: true, min: 0 },
     availableQuantity: { type: Number, required: true },
     pictureUrl: { type: String },
     description: { type: String },
