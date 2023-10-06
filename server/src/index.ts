@@ -25,3 +25,5 @@ const initializeApp = async () => {
 };
 
 initializeApp();
+
+app.use(express.json());
