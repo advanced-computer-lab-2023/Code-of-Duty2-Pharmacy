@@ -1,13 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
-import config from "../config/config";
-import { Medicine } from "../types";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+
+import config from "../config/config";
+
+import { Medicine } from "../types";
 
 interface Props {
   medicine: Medicine;

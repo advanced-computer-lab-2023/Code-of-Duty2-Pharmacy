@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { Medicine } from "../types";
 import EditMedicineForm from "./EditMedicineForm";
 
@@ -24,7 +25,7 @@ const MedicineList: React.FC<Props> = ({ medicines, onUpdated }) => {
     <div>
       {medicines.map((medicine) => (
         <div key={medicine._id}>
-          <img src={medicine.pictureUrl} alt={medicine.name} />
+          <img src={medicine.pictureUrl} alt={medicine.name} width="200" />
           <h2>Name: {medicine.name}</h2>
           <p>Description: {medicine.description}</p>
           <p>Price: {medicine.price}</p>
