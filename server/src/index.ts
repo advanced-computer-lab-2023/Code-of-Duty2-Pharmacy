@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import config from './config/config';
 
+import medicineRouter from './routes/medicineRoutes';
+
 const app = express();
 
 const connectToDB = async () => {
@@ -27,3 +29,5 @@ const initializeApp = async () => {
 initializeApp();
 
 app.use(express.json());
+
+app.use('/medicines', medicineRouter);
