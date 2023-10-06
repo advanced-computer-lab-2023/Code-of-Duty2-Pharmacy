@@ -3,8 +3,9 @@ import axios from "axios";
 
 import config from "../config/config";
 
-import MedicineList from "../components/MedicineList";
 import { Medicine } from "../types";
+import MedicineList from "../components/MedicineList";
+import AddMedicineForm from "../components/AddMedicineForm";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -28,6 +29,7 @@ const PharmacistPage: React.FC = () => {
     <div>
       <h1>Pharmacist Page</h1>
       <MedicineList medicines={medicines} />
+      <AddMedicineForm />
     </div>
   );
 };
