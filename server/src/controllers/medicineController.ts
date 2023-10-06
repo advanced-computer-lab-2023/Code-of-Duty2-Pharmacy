@@ -20,3 +20,15 @@ export const addMedicine = async (req: Request, res: Response) => {
         res.status(500).json();
     }
 }
+
+export const updateMedicine = async (req: Request, res: Response) => {
+    try {
+        const updatedMedicineData: IMedicineModel = req.body;
+        const medicineId = req.params.id;
+        const updatedMedicine = await Medicine.findByIdAndUpdate(medicineId, updatedMedicineData, { new: true });
+        res.status(200).json(updatedMedicine);
+    } catch (err) {
+        res.status(500).json();
+    }
+}
+
