@@ -9,9 +9,9 @@ const MedicineList: React.FC<Props> = ({ medicines }) => (
     {medicines.map((medicine) => (
       <div key={medicine._id}>
         <img src={medicine.pictureUrl} alt={medicine.name} />
-        <h2>{medicine.name}</h2>
-        <p>{medicine.description}</p>
-        <p>{medicine.price}</p>
+        <h2>Name: {medicine.name}</h2>
+        <p>Description: {medicine.description}</p>
+        <p>Price: {medicine.price}</p>
       </div>
     ))}
   </div>
