@@ -28,9 +28,11 @@ const initializeApp = async () => {
   startServer();
 };
 
+
 initializeApp();
 
-app.use(cors());
+app.use(cors(config.corsOptions));
+
 app.use(express.json());
 
 app.use('/medicines', medicineRouter);
