@@ -27,7 +27,7 @@ const AdministratorPage: React.FC = () => {
   return (
     <div>
       <h1>Administrator Page</h1>
-      <MedicineList medicines={medicines} />
+      <MedicineList medicines={medicines} canEdit={false} />
     </div>
   );
 };

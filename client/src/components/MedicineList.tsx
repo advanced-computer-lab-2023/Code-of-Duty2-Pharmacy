@@ -5,10 +5,11 @@ import EditMedicineForm from "./EditMedicineForm";
 
 interface Props {
   medicines: Medicine[];
-  onUpdated: () => void;
+  onUpdated?: () => void;
+  canEdit: boolean;
 }
 
-const MedicineList: React.FC<Props> = ({ medicines, onUpdated }) => {
+const MedicineList: React.FC<Props> = ({ medicines, onUpdated, canEdit }) => {
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
     null
   );
@@ -29,7 +30,9 @@ const MedicineList: React.FC<Props> = ({ medicines, onUpdated }) => {
           <h2>Name: {medicine.name}</h2>
           <p>Description: {medicine.description}</p>
           <p>Price: {medicine.price}</p>
-          <button onClick={() => handleEditClick(medicine)}>Edit</button>
+          {canEdit && (
+            <button onClick={() => handleEditClick(medicine)}>Edit</button>
+          )}
           {selectedMedicine && selectedMedicine._id === medicine._id && (
             <EditMedicineForm
               open={!!selectedMedicine}

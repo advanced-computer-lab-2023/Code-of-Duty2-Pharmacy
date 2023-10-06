@@ -27,7 +27,7 @@ const PatientPage: React.FC = () => {
   return (
     <div>
       <h1>Patient Page</h1>
-      <MedicineList medicines={medicines} />
+      <MedicineList medicines={medicines} canEdit={false} />
     </div>
   );
 };

@@ -15,7 +15,7 @@ interface Props {
   medicine: Medicine;
   open: boolean;
   onClose: () => void;
-  onUpdated: () => void;
+  onUpdated?: () => void;
 }
 
 const EditMedicineForm: React.FC<Props> = ({
@@ -38,7 +38,7 @@ const EditMedicineForm: React.FC<Props> = ({
         price,
         availableQuantity,
       });
-      onUpdated();
+      onUpdated && onUpdated();
       onClose();
     } catch (err) {
       console.error(err);

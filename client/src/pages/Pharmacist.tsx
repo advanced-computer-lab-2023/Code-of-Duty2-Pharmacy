@@ -32,7 +32,11 @@ const PharmacistPage: React.FC = () => {
   return (
     <div>
       <h1>Pharmacist Page</h1>
-      <MedicineList medicines={medicines} onUpdated={handleUpdated} />
+      <MedicineList
+        medicines={medicines}
+        onUpdated={handleUpdated}
+        canEdit={true}
+      />
       <AddMedicineForm />
     </div>
   );
