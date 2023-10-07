@@ -5,7 +5,11 @@ import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-const AddMedicineForm: React.FC = () => {
+interface Props {
+  onMedicineAdded: () => void;
+}
+
+const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
   const [name, setName] = useState("");
   const [activeIngredients, setActiveIngredients] = useState<string[]>([]);
   const [newIngredient, setNewIngredient] = useState("");
@@ -38,6 +42,7 @@ const AddMedicineForm: React.FC = () => {
         availableQuantity,
       });
       console.log(response.data);
+      onMedicineAdded();
     } catch (err) {
       console.error(err);
     }

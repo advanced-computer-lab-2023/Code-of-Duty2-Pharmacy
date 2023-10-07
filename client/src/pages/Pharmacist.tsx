@@ -37,7 +37,7 @@ const PharmacistPage: React.FC = () => {
         onUpdated={handleUpdated}
         canEdit={true}
       />
-      <AddMedicineForm />
+      <AddMedicineForm onMedicineAdded={fetchMedicines} />
     </div>
   );
 };
