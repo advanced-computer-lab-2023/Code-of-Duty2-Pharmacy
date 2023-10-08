@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/', getAllMedicines);
 router.post('/', addMedicine);
-router.put('/:id', updateMedicine);
+router.patch('/:id', updateMedicine);
 
 export default router;
