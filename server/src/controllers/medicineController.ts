@@ -41,3 +41,23 @@ export const updateMedicine = async (req: Request, res: Response) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
     }
 }
+
+
+export const searchMedicines = async (req: Request, res: Response) => {
+    let medicineName: string = req.query.name as string || "";
+
+    if ( medicineName === "" ){
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide a medicine name' });
+    }
+
+    try {
+        const medicines: IMedicineModel[] = await Medicine.find({ name: { $regex: medicineName, $options: 'i' } });
+        if (medicines.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: 'No medicines found' });
+        }
+        res.status(StatusCodes.OK).json(medicines);
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+    }
+}
+
