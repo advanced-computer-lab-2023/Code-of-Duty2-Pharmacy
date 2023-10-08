@@ -33,7 +33,7 @@ const EditMedicineForm: React.FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.put(`${config.API_URL}/medicines/${medicine._id}`, {
+      await axios.patch(`${config.API_URL}/medicines/${medicine._id}`, {
         name,
         price,
         availableQuantity,
