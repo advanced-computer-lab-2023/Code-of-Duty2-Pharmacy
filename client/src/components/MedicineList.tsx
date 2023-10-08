@@ -26,8 +26,8 @@ const MedicineList: React.FC<Props> = ({ medicines, onUpdated, canEdit }) => {
     <div>
       {medicines.map((medicine) => (
         <div key={medicine._id}>
-          <img src={medicine.pictureUrl} alt={medicine.name} width="200" />
           <h2>Name: {medicine.name}</h2>
+          <img src={medicine.pictureUrl} alt={medicine.name} width="200" />
           <p>Description: {medicine.description}</p>
           <p>Price: {medicine.price}</p>
           {canEdit && (
