@@ -36,25 +36,3 @@ app.use(cors(config.corsOptions));
 app.use(express.json());
 
 app.use('/medicines', medicineRouter);
-
-// DUMMY DATA MEDICINE
-
-// import Medicine from './models/Medicine';
-
-// const addMedicine = async () => {
-//   const newMedicine = new Medicine({
-//     name: 'Test Medicine',
-//     activeIngredients: ['Ingredient 1', 'Ingredient 2'],
-//     price: 10.99,
-//     availableQuantity: 100,
-//   });
-
-//   try {
-//     await newMedicine.save();
-//     console.log('Medicine saved successfully');
-//   } catch (error) {
-//     console.error('Error saving medicine:', error);
-//   }
-// };
-
-// addMedicine();
