@@ -31,7 +31,13 @@ const initializeApp = async () => {
 
 initializeApp();
 
-app.use(cors(config.corsOptions));
+// app.use(cors(config.corsOptions));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', config.FRONT_END_URL);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 app.use(express.json());
 
