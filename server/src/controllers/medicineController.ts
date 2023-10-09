@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import Medicine, { IMedicineModel } from '../models/Medicine';
+import Medicine, { IMedicineModel } from '../models/medicines/Medicine';
 
 export const getAllMedicines = async (req: Request, res: Response) => {
     try {
