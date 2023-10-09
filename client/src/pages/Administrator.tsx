@@ -40,9 +40,12 @@ const AdministratorPage: React.FC = () => {
         fetchMedicines();
         return;
       }
-      console.log(
-        err.response?.status === 404 ? "No Medicine with this name" : err
-      );
+      if (err.response?.status === 404) {
+        console.log("No Medicine with this name");
+        setMedicines([]);
+      } else {
+        console.log(err);
+      }
     }
   };
 

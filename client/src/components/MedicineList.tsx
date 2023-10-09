@@ -24,6 +24,7 @@ const MedicineList: React.FC<Props> = ({ medicines, onUpdated, canEdit }) => {
 
   return (
     <div>
+      {medicines.length === 0 && <p>No medicines found.</p>}
       {medicines.map((medicine) => (
         <div key={medicine._id}>
           <h2>Name: {medicine.name}</h2>
