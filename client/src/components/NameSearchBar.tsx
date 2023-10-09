@@ -38,7 +38,7 @@ const NameSearchBar: React.FC<Props> = ({
           sx={{ m: 1, width: "80vw" }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">name</InputAdornment>
+              <InputAdornment position="start">name:</InputAdornment>
             ),
           }}
           variant="filled"
