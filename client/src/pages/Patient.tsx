@@ -5,6 +5,7 @@ import config from "../config/config";
 
 import MedicineList from "../components/MedicineList";
 import { Medicine } from "../types";
+import NameSearchBar from "../components/NameSearchBar";
 
 const PatientPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -24,9 +25,35 @@ const PatientPage: React.FC = () => {
     }
   };
 
+  const goSearch = async (searchTerm: string, searchCollection: string) => {
+    // console.log("search");
+    try {
+      const response = await axios.get(
+        `${config.API_URL}/${searchCollection}/search/?name=${searchTerm}`
+      );
+      console.log("searching for " + searchTerm + " in " + searchCollection);
+      console.log(response.data);
+      setMedicines(response.data);
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        console.log("Get All Meds");
+        fetchMedicines();
+        return;
+      }
+      console.log(
+        err.response?.status === 404 ? "No Medicine with this name" : err
+      );
+    }
+  };
+
   return (
     <div>
       <h1>Patient Page</h1>
+      <NameSearchBar
+        searchCollection="medicines"
+        onSearch={goSearch}
+        initialValue="(or leave empty for all)"
+      />
       <MedicineList medicines={medicines} canEdit={false} />
     </div>
   );
