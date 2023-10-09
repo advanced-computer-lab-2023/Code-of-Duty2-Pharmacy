@@ -46,7 +46,7 @@ export const updateMedicine = async (req: Request, res: Response) => {
 export const searchMedicines = async (req: Request, res: Response) => {
     let medicineName: string = req.query.name as string || "";
 
-    if ( medicineName === "" ){
+    if ( medicineName.length === 0){
         return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide a medicine name' });
     }
 
