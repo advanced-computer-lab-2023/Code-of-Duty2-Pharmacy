@@ -5,7 +5,7 @@ import config from "../config/config";
 
 import MedicineList from "../components/MedicineList";
 import { Medicine } from "../types";
-import NameSearchBar from "../components/NameSearchBar";
+import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -25,15 +25,11 @@ const AdministratorPage: React.FC = () => {
     }
   };
 
-  const goSearch = async (searchTerm: string, searchCollection: string) => {
-    // console.log("search");
+  const handleSearch = async (searchTerm: string, searchCollection: string) => {
     try {
-      const response = await axios.get(
-        `${config.API_URL}/${searchCollection}/search/?name=${searchTerm}`
-      );
-      console.log("searching for " + searchTerm + " in " + searchCollection);
-      console.log(response.data);
-      setMedicines(response.data);
+      let responseData = await goSearch(searchTerm, searchCollection);
+      console.log(responseData);
+      setMedicines(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
         console.log("Get All Meds");
@@ -54,7 +50,7 @@ const AdministratorPage: React.FC = () => {
       <h1>Administrator Page</h1>
       <NameSearchBar
         searchCollection="medicines"
-        onSearch={goSearch}
+        onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
       <MedicineList medicines={medicines} canEdit={false} />
