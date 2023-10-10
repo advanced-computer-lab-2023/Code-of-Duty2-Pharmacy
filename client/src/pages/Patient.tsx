@@ -50,7 +50,7 @@ const PatientPage: React.FC = () => {
       <h1>Patient Page</h1>
       <NameSearchBar
         searchCollection="medicines"
-        onSearch={goSearch}
+        onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
       <MedicineList medicines={medicines} canEdit={false} />
