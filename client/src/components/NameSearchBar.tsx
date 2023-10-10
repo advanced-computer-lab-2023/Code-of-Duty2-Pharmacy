@@ -4,6 +4,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button/Button";
 import SearchIcon from "@mui/icons-material/Search";
+import Medicine from "../types/Medicine";
+import config from "../config/config";
+import axios from "axios";
 
 interface Props {
   searchCollection?: string;
@@ -11,11 +14,29 @@ interface Props {
   onSearch: (searchTerm: string, searchCollection: string) => void;
 }
 
+const goSearch = async (
+  searchTerm: string,
+  searchCollection: string
+): Promise<Medicine[]> => {
+  // console.log("search");
+
+  const response = await axios.get(
+    `${config.API_URL}/${searchCollection}/search/?name=${searchTerm}`
+  );
+  console.log("searching for " + searchTerm + " in " + searchCollection);
+
+  return response.data;
+};
+
 const NameSearchBar: React.FC<Props> = ({
   searchCollection = "medicines",
   initialValue = "",
   onSearch,
 }) => {
+  let firstLetter = searchCollection.charAt(0).toUpperCase();
+  const withoutLastChar = searchCollection.slice(1, -1); // the plural form
+  let labelName = firstLetter + withoutLastChar;
+
   let [searchTerm, setSearchTerm] = React.useState("");
 
   const handleSearch = () => {
@@ -30,7 +51,7 @@ const NameSearchBar: React.FC<Props> = ({
     <Box sx={{ display: "flex", flexWrap: "wrap" }}>
       <div>
         <TextField
-          label="Medicine"
+          label={labelName}
           onChange={handleTextChange}
           id="filled-start-adornment"
           placeholder={initialValue}
@@ -56,4 +77,4 @@ const NameSearchBar: React.FC<Props> = ({
   );
 };
 
-export default NameSearchBar;
+export { NameSearchBar, goSearch };

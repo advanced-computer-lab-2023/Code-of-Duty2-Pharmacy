@@ -6,7 +6,7 @@ import config from "../config/config";
 import { Medicine } from "../types";
 import MedicineList from "../components/MedicineList";
 import AddMedicineForm from "../components/AddMedicineForm";
-import NameSearchBar from "../components/NameSearchBar";
+import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -30,15 +30,12 @@ const PharmacistPage: React.FC = () => {
     fetchMedicines();
   };
 
-  const goSearch = async (searchTerm: string, searchCollection: string) => {
-    // console.log("search");
+  const handleSearch = async (searchTerm: string, searchCollection: string) => {
     try {
-      const response = await axios.get(
-        `${config.API_URL}/${searchCollection}/search/?name=${searchTerm}`
-      );
-      console.log("searching for " + searchTerm + " in " + searchCollection);
-      console.log(response.data);
-      setMedicines(response.data);
+      let responseData = await goSearch(searchTerm, searchCollection);
+
+      console.log(responseData);
+      setMedicines(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
         console.log("Get All Meds");
@@ -59,7 +56,7 @@ const PharmacistPage: React.FC = () => {
       <h1>Pharmacist Page</h1>
       <NameSearchBar
         searchCollection="medicines"
-        onSearch={goSearch}
+        onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
       <AddMedicineForm onMedicineAdded={fetchMedicines} />
