@@ -10,6 +10,18 @@ import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
+
+  const loadSales = async () => {
+    const response = await axios.get<{ [key: string]: number }>(
+      `${config.API_URL}/medicines/sales`
+    );
+    setMedSales(response.data);
+  };
+
+  useEffect(() => {
+    loadSales();
+  }, []);
 
   useEffect(() => {
     fetchMedicines();
@@ -64,6 +76,7 @@ const PharmacistPage: React.FC = () => {
         medicines={medicines}
         onUpdated={handleUpdated}
         canEdit={true}
+        medSales={medSales}
       />
     </div>
   );
