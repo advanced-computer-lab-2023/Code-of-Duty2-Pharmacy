@@ -8,6 +8,7 @@ import medicineRouter from './routes/medicineRoutes';
 import patientRouter from './routes/patientRoutes';
 import registrationRouter from './routes/registrationRoutes';
 import adminRouter from './routes/adminRoutes';
+import pharmacistRouter from './routes/pharmacistRoutes';
 
 const app = express();
 
@@ -45,5 +46,6 @@ app.use(cors(config.corsOptions));
 app.use(express.json());
 app.use('/medicines', medicineRouter);
 app.use('/patients', patientRouter);
+app.use('/pharmacists', pharmacistRouter);
 app.use('/register', registrationRouter);
 app.use('/admin', adminRouter);
