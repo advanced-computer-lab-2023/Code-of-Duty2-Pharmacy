@@ -34,10 +34,10 @@ const MedicineList: React.FC<Props> = ({
   };
 
   const filteredMedicines = usageFilter
-    ? medicines.filter((medicine) =>
-        medicine.usages ? medicine.usages.includes(usageFilter) : false
-      )
-    : medicines;
+  ? medicines.filter((medicine) =>
+      medicine.usages ? medicine.usages.some(usage => usage.toLowerCase().includes(usageFilter.toLowerCase())) : false
+    )
+  : medicines;
 
   return (
     <div>
