@@ -1,4 +1,5 @@
 interface Prescription {
+    _id: string;
     date: Date;
     doctorId: string;
     patientId: string;
