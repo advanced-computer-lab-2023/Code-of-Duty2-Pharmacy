@@ -36,6 +36,15 @@ const AdministratorPage: React.FC = () => {
     }
   };
 
+  const deletePatient = async (id: string) => {
+    try {
+      await axios.delete(`${config.API_URL}/patients/${id}`);
+      fetchPatients();
+    } catch (err) {
+      console.error("Error deleting patient:", err);
+    }
+  };
+
   const handleSearch = async (searchTerm: string, searchCollection: string) => {
     try {
       let responseData = await goSearch(searchTerm, searchCollection);
@@ -64,7 +73,11 @@ const AdministratorPage: React.FC = () => {
         onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
-      <PatientList patients={patients} />
+      <PatientList
+        patients={patients}
+        canDelete={true}
+        onDelete={deletePatient}
+      />
       <MedicineList medicines={medicines} canEdit={false} />
     </div>
   );
