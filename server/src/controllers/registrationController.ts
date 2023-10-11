@@ -12,11 +12,15 @@ export const registerPatient = async (req: Request, res: Response) => {
     // TODO: Check for username duplication
     // in users collection.
 
-    const existingPatient = await Patient.findOne({ email });
-
-    if (existingPatient) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists' });
+    const existingUserName = await Patient.findOne({ username });
+    if (existingUserName) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'username already exists' });
     }
+    const existingMail = await Patient.findOne({ email });
+    if (existingMail) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'email already exists' });
+    }
+    
 
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -49,10 +53,13 @@ export const registerPharmacist = async (req: Request, res: Response) => {
     // TODO: Check for username , email, phone number ,etc duplication <----------------------------------------------------
     // in users collection.
 
+    const existingUserName = await PharmacistRegistrationRequest.findOne({ username });
+    if (existingUserName) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'username already exists' });
+    }
     const existingMail = await PharmacistRegistrationRequest.findOne({ email });
-
     if (existingMail) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Mail already taken' });
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'email already exists' });
     }
 
     const saltRounds = 10;
