@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import MedicineList from "../components/MedicineList";
+import PatientList from "../components/PatientList";
 
 import config from "../config/config";
-
-import MedicineList from "../components/MedicineList";
-import { Medicine } from "../types";
+import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [patients, setPatients] = useState<Patient[]>([]); 
 
   useEffect(() => {
     fetchMedicines();
+    fetchPatients(); 
   }, []);
 
   const fetchMedicines = async () => {
@@ -22,6 +24,17 @@ const AdministratorPage: React.FC = () => {
       setMedicines(response.data);
     } catch (err) {
       console.error("Error fetching medicines:", err);
+    }
+  };
+
+  const fetchPatients = async () => {
+    try {
+      const response = await axios.get<Patient[]>(
+        `${config.API_URL}/patients`
+      );
+      setPatients(response.data);
+    } catch (err) {
+      console.error("Error fetching patients:", err);
     }
   };
 
@@ -53,9 +66,9 @@ const AdministratorPage: React.FC = () => {
         onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
+        <PatientList patients={patients} />
       <MedicineList medicines={medicines} canEdit={false} />
     </div>
   );
 };
-
 export default AdministratorPage;
