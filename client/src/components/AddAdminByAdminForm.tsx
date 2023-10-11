@@ -14,7 +14,7 @@ const AddAdminByAdminForm = () => {
       password,
     };
 
-    axios.post(`${config.API_URL}/admin/add-admin`, requestBody)
+    axios.post(`${config.API_URL}/admins`, requestBody)
       .then((response) => {
         console.log(response.data);
         alert("Admin added successfully!");

@@ -6,7 +6,8 @@ import PatientList from "../components/PatientList";
 import config from "../config/config";
 import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
-import AddAdminBoyAdminForm from "../components/AddAdminByAdminForm";
+import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
+import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -80,7 +81,8 @@ const AdministratorPage: React.FC = () => {
         onDelete={deletePatient}
       />
       <MedicineList medicines={medicines} canEdit={false} />
-      <AddAdminBoyAdminForm />
+      <AddAdminByAdminForm />
+      <ViewRegistrationRequests />
     </div>
   );
 };

@@ -48,4 +48,4 @@ app.use(express.json());
 app.use('/medicines', medicineRouter);
 app.use('/patients', patientRouter);
 app.use('/register', registrationRouter);
-app.use('/admin',adminRouter);
+app.use('/admins',adminRouter);
