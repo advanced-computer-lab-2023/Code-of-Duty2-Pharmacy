@@ -12,13 +12,14 @@ const PatientRegistration = () => {
   const [gender, setGender] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [emergencyContact, setEmergencyContact] = useState({
-    fullName: '',
+    fullname: '',
     mobileNumber: '',
-    relation: '',
+    relationToPatient: '',
   });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
   event.preventDefault();
+  // const dateOfBirthObj = new Date(dateOfBirth);
   const requestBody = {
     username,
     name,
@@ -78,11 +79,11 @@ const PatientRegistration = () => {
         <input
           type="text"
           id="emergencyContactFullName"
-          value={emergencyContact.fullName}
+          value={emergencyContact.fullname}
           onChange={(event) =>
             setEmergencyContact({
               ...emergencyContact,
-              fullName: event.target.value,
+              fullname: event.target.value,
             })
           }
           required
@@ -108,11 +109,11 @@ const PatientRegistration = () => {
         <input
           type="text"
           id="emergencyContactRelation"
-          value={emergencyContact.relation}
+          value={emergencyContact.relationToPatient}
           onChange={(event) =>
             setEmergencyContact({
               ...emergencyContact,
-              relation: event.target.value,
+              relationToPatient: event.target.value,
             })
           }
           required

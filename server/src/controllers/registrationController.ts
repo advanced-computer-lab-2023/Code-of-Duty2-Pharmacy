@@ -8,6 +8,7 @@ import PharmacistRegistrationRequest from '../models/pharmacist_registration_req
 export const registerPatient = async (req: Request, res: Response) => {
   try {
     const { username, name, email, password, dateOfBirth, gender, mobileNumber, emergencyContact } = req.body;
+    const dateOfBirthObject = new Date(dateOfBirth); // convert date of birth to date object
 
     // must check user in the future not only patient <---------------------------------------------------
     const existingPatient = await Patient.findOne({ email });
@@ -25,25 +26,30 @@ export const registerPatient = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
-      dateOfBirth,
+      // make new date object from dateOfBirth
+      dateOfBirth : dateOfBirthObject,
       gender,
       mobileNumber,
       emergencyContact: {
-        fullName: emergencyContact.fullName,
+        fullname: emergencyContact.fullname,
         mobileNumber: emergencyContact.mobileNumber,
-        relation: emergencyContact.relation,
+        relationToPatient: emergencyContact.relationToPatient,
       },
     });
+    // fullname: string;
+    // mobileNumber: string;
+    // relationToPatient: string;
 
     // Save the patient to the database
     await newPatient.save();
 
     // Return a success response
     res.status(StatusCodes.CREATED).json({ message: 'Patient registered successfully' });
-    alert("Registration successful");
+    // alert("Registration successful");
     
 
   } catch (err) {
+    // console.log(err); 
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
     
   }  
