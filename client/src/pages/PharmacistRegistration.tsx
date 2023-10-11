@@ -31,11 +31,22 @@ const PharmacistRegistrationRequest = () => {
       .then((response) => {
         console.log(response.data);
         alert("pharmacist registration request done successfully! , the admins will review your request and accept it if you are eligible !");
-        window.location.href = "http://localhost:5173/";
+        // window.location.href = "http://localhost:5173/";
 
 
       })
-      .catch((err) => console.error(err));
+      .catch((error) => {
+        console.error(error);
+        if (error.response && error.response.data && error.response.data.message === "username already exists") {
+          alert("username already exists!");
+        } 
+        else if (error.response && error.response.data && error.response.data.message === "email already exists") {
+          alert("email already exists!");
+        }
+        else {
+          alert("An error occurred while registering the pharmacist.");
+        }
+      });
   };
   return (
     <form onSubmit={handleSubmit}>
