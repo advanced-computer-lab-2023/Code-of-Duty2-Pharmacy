@@ -5,6 +5,8 @@ import cors from 'cors';
 import config from './config/config';
 
 import medicineRouter from './routes/medicineRoutes';
+import patientRouter from './routes/patientRoutes';
+import Patient from './models/patients/Patient';
 
 const app = express();
 
@@ -42,3 +44,6 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 app.use('/medicines', medicineRouter);
+
+
+app.use('/patients', patientRouter);
