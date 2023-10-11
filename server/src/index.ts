@@ -8,6 +8,7 @@ import medicineRouter from './routes/medicineRoutes';
 import patientRouter from './routes/patientRoutes';
 import Patient from './models/patients/Patient';
 import registrationRouter from './routes/registrationRoutes';
+import adminRouter from './routes/adminRoutes';
 
 const app = express();
 
@@ -47,3 +48,4 @@ app.use(express.json());
 app.use('/medicines', medicineRouter);
 app.use('/patients', patientRouter);
 app.use('/register', registrationRouter);
+app.use('/admin',adminRouter);
