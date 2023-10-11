@@ -8,19 +8,18 @@ import PharmacistRegistrationRequest from '../models/pharmacist_registration_req
 export const registerPatient = async (req: Request, res: Response) => {
   try {
     const { username, name, email, password, dateOfBirth, gender, mobileNumber, emergencyContact } = req.body;
-    const dateOfBirthObject = new Date(dateOfBirth); // convert date of birth to date object
 
-    // must check user in the future not only patient <---------------------------------------------------
+    // TODO: Check for username duplication
+    // in users collection.
+
     const existingPatient = await Patient.findOne({ email });
+
     if (existingPatient) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists' });
     }
 
-    // Hash the password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Create a new patient
     const newPatient = new Patient({
       username,
       name,
@@ -36,40 +35,29 @@ export const registerPatient = async (req: Request, res: Response) => {
       },
     });
 
-    // Save the patient to the database
-    await newPatient.save();
-
-    // Return a success response
-    res.status(StatusCodes.CREATED).json({ message: 'Patient registered successfully' });
-    // alert("Registration successful");
-    
-
+    const savedPatient = await newPatient.save();
+    res.status(StatusCodes.CREATED).json(savedPatient);
   } catch (err) {
-    // console.log(err); 
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
-    
   }  
-
-  // must then redirect to login
-
-  
 };
 
 export const registerPharmacist = async (req: Request, res: Response) => {
   try {
     const { username, name, email, password, dateOfBirth, hourlyRate, affiliation, educationalBackground } = req.body;
 
-    // Check if a pharmacist registration request already exists with the same email
-    const existingRequest = await PharmacistRegistrationRequest.findOne({ email });
-    if (existingRequest) {
+    // TODO: Check for username duplication
+    // in users collection.
+
+    const existingRegistrationRequest = await PharmacistRegistrationRequest.findOne({ email });
+
+    if (existingRegistrationRequest) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Registration request already exists' });
     }
 
-    // Hash the password
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create a new pharmacist registration request
     const newRequest = new PharmacistRegistrationRequest({
       username,
       name,
@@ -81,11 +69,8 @@ export const registerPharmacist = async (req: Request, res: Response) => {
       educationalBackground,
     });
 
-    // Save the pharmacist registration request to the database
-    await newRequest.save();
-
-    // Return a success response
-    res.status(StatusCodes.CREATED).json({ message: 'Pharmacist registration request successful' });
+    const savedRegistrationRequest = await newRequest.save();
+    res.status(StatusCodes.CREATED).json(savedRegistrationRequest);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }

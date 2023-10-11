@@ -18,7 +18,7 @@ const PatientRegistration = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // const dateOfBirthObj = new Date(dateOfBirth);
+
     const requestBody = {
       username,
       name,
@@ -29,14 +29,14 @@ const PatientRegistration = () => {
       mobileNumber,
       emergencyContact,
     };
-    console.log(JSON.stringify(requestBody)); // Log the request body as JSON
+
     axios
       .post(`${config.API_URL}/register`, requestBody)
       .then((response) => {
         console.log(response.data);
         // TODO: Handle the response from the server
       })
-      .catch((error) => console.error(error));
+      .catch((err) => console.error(err));
   };
   return (
     <form onSubmit={handleSubmit}>
