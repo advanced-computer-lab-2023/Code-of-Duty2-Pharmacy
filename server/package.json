@@ -5,6 +5,7 @@
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q build/index.js\""
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.14",
     "@types/express": "^4.17.18",
     "@types/mongoose": "^5.11.97",
@@ -20,6 +21,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "http-status-codes": "^2.3.0",
     "validator": "^13.11.0"
   }
