@@ -7,6 +7,7 @@ import config from './config/config';
 import medicineRouter from './routes/medicineRoutes';
 import patientRouter from './routes/patientRoutes';
 import Patient from './models/patients/Patient';
+import registrationRouter from './routes/registrationRoutes';
 
 const app = express();
 
@@ -32,7 +33,6 @@ const initializeApp = async () => {
 
 
 initializeApp();
-
 // app.use(cors(config.corsOptions));
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -41,9 +41,9 @@ app.use(function(req, res, next) {
   next();
 });
 
+
 app.use(express.json());
 
 app.use('/medicines', medicineRouter);
-
-
 app.use('/patients', patientRouter);
+app.use('/register', registrationRouter);
