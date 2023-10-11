@@ -6,6 +6,7 @@ import PatientList from "../components/PatientList";
 import config from "../config/config";
 import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
+import AddAdminBoyAdminForm from "../components/AddAdminByAdminForm";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -79,6 +80,7 @@ const AdministratorPage: React.FC = () => {
         onDelete={deletePatient}
       />
       <MedicineList medicines={medicines} canEdit={false} />
+      <AddAdminBoyAdminForm />
     </div>
   );
 };
