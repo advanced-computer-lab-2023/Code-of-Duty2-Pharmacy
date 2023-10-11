@@ -26,8 +26,7 @@ export const registerPatient = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
-      // make new date object from dateOfBirth
-      dateOfBirth : dateOfBirthObject,
+      dateOfBirth,
       gender,
       mobileNumber,
       emergencyContact: {
@@ -36,9 +35,6 @@ export const registerPatient = async (req: Request, res: Response) => {
         relationToPatient: emergencyContact.relationToPatient,
       },
     });
-    // fullname: string;
-    // mobileNumber: string;
-    // relationToPatient: string;
 
     // Save the patient to the database
     await newPatient.save();
