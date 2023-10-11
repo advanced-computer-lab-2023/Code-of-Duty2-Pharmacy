@@ -6,9 +6,9 @@ import config from './config/config';
 
 import medicineRouter from './routes/medicineRoutes';
 import patientRouter from './routes/patientRoutes';
-import Patient from './models/patients/Patient';
 import registrationRouter from './routes/registrationRoutes';
 import adminRouter from './routes/adminRoutes';
+import pharmacistRouter from './routes/pharmacistRoutes';
 
 const app = express();
 
@@ -34,18 +34,19 @@ const initializeApp = async () => {
 
 
 initializeApp();
-// app.use(cors(config.corsOptions));
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
 
+app.use(cors(config.corsOptions));
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type');
+//   next();
+// });
 app.use(express.json());
-
 app.use('/medicines', medicineRouter);
 app.use('/patients', patientRouter);
+app.use('/pharmacists', pharmacistRouter);
 app.use('/register', registrationRouter);
 app.use('/admins',adminRouter);
+
