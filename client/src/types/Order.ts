@@ -1,4 +1,5 @@
 interface Order {
+    _id: string;
     patientId: string;
     patientName: string;
     patientAddress: string;

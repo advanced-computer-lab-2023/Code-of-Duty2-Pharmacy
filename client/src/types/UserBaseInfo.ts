@@ -1,6 +1,7 @@
 /* Likely for all user types EXCEPT Admin */
 
 export interface UserBaseInfo {  
+    _id: string;
     username: string;
     name: string;
     email: string;

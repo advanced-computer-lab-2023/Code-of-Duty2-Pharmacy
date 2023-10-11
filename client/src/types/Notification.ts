@@ -1,4 +1,5 @@
 interface Notification {
+    _id: string;
     email: string;
     title: string;
     description: string;

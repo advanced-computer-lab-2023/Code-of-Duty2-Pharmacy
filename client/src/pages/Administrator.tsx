@@ -10,11 +10,11 @@ import AddAdminBoyAdminForm from "../components/AddAdminByAdminForm";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
-  const [patients, setPatients] = useState<Patient[]>([]); 
+  const [patients, setPatients] = useState<Patient[]>([]);
 
   useEffect(() => {
     fetchMedicines();
-    fetchPatients(); 
+    fetchPatients();
   }, []);
 
   const fetchMedicines = async () => {
@@ -30,12 +30,19 @@ const AdministratorPage: React.FC = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get<Patient[]>(
-        `${config.API_URL}/patients`
-      );
+      const response = await axios.get<Patient[]>(`${config.API_URL}/patients`);
       setPatients(response.data);
     } catch (err) {
       console.error("Error fetching patients:", err);
+    }
+  };
+
+  const deletePatient = async (id: string) => {
+    try {
+      await axios.delete(`${config.API_URL}/patients/${id}`);
+      fetchPatients();
+    } catch (err) {
+      console.error("Error deleting patient:", err);
     }
   };
 
@@ -67,7 +74,11 @@ const AdministratorPage: React.FC = () => {
         onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
-        <PatientList patients={patients} />
+      <PatientList
+        patients={patients}
+        canDelete={true}
+        onDelete={deletePatient}
+      />
       <MedicineList medicines={medicines} canEdit={false} />
       <AddAdminBoyAdminForm />
     </div>

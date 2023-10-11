@@ -1,8 +1,9 @@
 import express from 'express';
-import { getAllPatients} from '../controllers/patientController';
+import { getAllPatients, deletePatient } from '../controllers/patientController';
 
 const router = express.Router();
 
 router.get('/', getAllPatients);
+router.delete('/:id', deletePatient);
 
 export default router;
