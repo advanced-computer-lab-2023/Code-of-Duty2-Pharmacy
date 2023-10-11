@@ -15,11 +15,11 @@ const PatientList: React.FC<Props> = ({ patients }) => {
           <p>Phone: {patient.mobileNumber}</p>
           <p>Emergency Contact Name: {patient.emergencyContact.fullname}</p>
           <p>
-            Emergency Contact Mobile Number:{" "}
+            Emergency Contact Mobile Number:
             {patient.emergencyContact.mobileNumber}
           </p>
           <p>
-            Emergency Contact Relation To Patient:{" "}
+            Emergency Contact Relation To Patient:
             {patient.emergencyContact.relationToPatient}
           </p>
           <br></br>
