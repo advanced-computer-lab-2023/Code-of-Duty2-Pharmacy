@@ -46,13 +46,13 @@ export const registerPharmacist = async (req: Request, res: Response) => {
   try {
     const { username, name, email, password, dateOfBirth, hourlyRate, affiliation, educationalBackground } = req.body;
 
-    // TODO: Check for username duplication
+    // TODO: Check for username , email, phone number ,etc duplication <----------------------------------------------------
     // in users collection.
 
-    const existingRegistrationRequest = await PharmacistRegistrationRequest.findOne({ email });
+    const existingMail = await PharmacistRegistrationRequest.findOne({ email });
 
-    if (existingRegistrationRequest) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Registration request already exists' });
+    if (existingMail) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Mail already taken' });
     }
 
     const saltRounds = 10;

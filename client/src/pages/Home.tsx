@@ -19,6 +19,7 @@ const Home = () => {
 
   return (
     <div>
+      <h1>Home page</h1>
       {buttons.map((button) => (
         <button key={button.text} onClick={() => handleClick(button.path)}>
           {button.text}

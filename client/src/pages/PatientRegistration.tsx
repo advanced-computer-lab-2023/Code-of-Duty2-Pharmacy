@@ -31,10 +31,14 @@ const PatientRegistration = () => {
     };
 
     axios
-      .post(`${config.API_URL}/register`, requestBody)
+      .post(`${config.API_URL}/register/patient`, requestBody)
       .then((response) => {
         console.log(response.data);
-        // TODO: Handle the response from the server
+        alert("Patient registered successfully!");
+        // make http request to localhost:5173/Home
+        window.location.href = "http://localhost:5173/";
+
+
       })
       .catch((err) => console.error(err));
   };
