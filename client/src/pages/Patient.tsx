@@ -9,6 +9,7 @@ import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 
 const PatientPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [usageFilter, setUsageFilter] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMedicines();
@@ -53,7 +54,12 @@ const PatientPage: React.FC = () => {
         onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
-      <MedicineList medicines={medicines} canEdit={false} />
+      <MedicineList 
+        medicines={medicines} 
+        canEdit={false} 
+        usageFilter={usageFilter}
+        setUsageFilter={setUsageFilter} 
+      />
     </div>
   );
 };

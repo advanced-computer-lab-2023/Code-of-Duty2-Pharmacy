@@ -12,6 +12,7 @@ import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [usageFilter, setUsageFilter] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMedicines();
@@ -80,7 +81,12 @@ const AdministratorPage: React.FC = () => {
         canDelete={true}
         onDelete={deletePatient}
       />
-      <MedicineList medicines={medicines} canEdit={false} />
+      <MedicineList 
+        medicines={medicines} 
+        canEdit={false} 
+        usageFilter={usageFilter} 
+        setUsageFilter={setUsageFilter} 
+      />
       <AddAdminByAdminForm />
       <ViewRegistrationRequests />
     </div>

@@ -11,6 +11,7 @@ import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
+  const [usageFilter, setUsageFilter] = useState<string | null>(null);
 
   const loadSales = async () => {
     const response = await axios.get<{ [key: string]: number }>(
@@ -77,6 +78,8 @@ const PharmacistPage: React.FC = () => {
         onUpdated={handleUpdated}
         canEdit={true}
         medSales={medSales}
+        usageFilter={usageFilter}
+        setUsageFilter={setUsageFilter}
       />
     </div>
   );
