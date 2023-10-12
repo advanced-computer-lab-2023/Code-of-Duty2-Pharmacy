@@ -8,8 +8,9 @@ import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
 import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
-import BasicTabs, { CustomTabPanel } from "../components/BasicTabs";
+import BasicTabs from "../components/BasicTabs";
 import React from "react";
+import PharmacistModal from "../components/PharmacistModal";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -70,12 +71,6 @@ const AdministratorPage: React.FC = () => {
     }
   };
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
-  const [value, setValue] = React.useState(0);
-
   return (
     <div>
       <h1>Administrator Page</h1>
@@ -83,8 +78,9 @@ const AdministratorPage: React.FC = () => {
         tabNames={[
           "Medicines",
           "Patients List",
-          "Add Admin Form",
+          "Pharmacists List",
           "Pharmacists Registration Requests",
+          "Add Admin Form",
         ]}
       >
         {/* each child/component/tag is a tab */}
@@ -106,8 +102,9 @@ const AdministratorPage: React.FC = () => {
           canDelete={true}
           onDelete={deletePatient}
         />
-        <AddAdminByAdminForm />
+        <PharmacistModal pharmacists={}} />
         <ViewRegistrationRequests />
+        <AddAdminByAdminForm />
       </BasicTabs>
     </div>
   );
