@@ -8,6 +8,8 @@ import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
 import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
+import BasicTabs, { CustomTabPanel } from "../components/BasicTabs";
+import React from "react";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -68,27 +70,45 @@ const AdministratorPage: React.FC = () => {
     }
   };
 
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const [value, setValue] = React.useState(0);
+
   return (
     <div>
       <h1>Administrator Page</h1>
-      <NameSearchBar
-        searchCollection="medicines"
-        onSearch={handleSearch}
-        initialValue="(or leave empty for all)"
-      />
-      <PatientList
-        patients={patients}
-        canDelete={true}
-        onDelete={deletePatient}
-      />
-      <MedicineList 
-        medicines={medicines} 
-        canEdit={false} 
-        usageFilter={usageFilter} 
-        setUsageFilter={setUsageFilter} 
-      />
-      <AddAdminByAdminForm />
-      <ViewRegistrationRequests />
+      <BasicTabs
+        tabNames={[
+          "Medicines",
+          "Patients List",
+          "Add Admin Form",
+          "Pharmacists Registration Requests",
+        ]}
+      >
+        {/* each child/component/tag is a tab */}
+        <div>
+          <NameSearchBar
+            searchCollection="medicines"
+            onSearch={handleSearch}
+            initialValue="(or leave empty for all)"
+          />
+          <MedicineList
+            medicines={medicines}
+            canEdit={false}
+            usageFilter={usageFilter}
+            setUsageFilter={setUsageFilter}
+          />
+        </div>
+        <PatientList
+          patients={patients}
+          canDelete={true}
+          onDelete={deletePatient}
+        />
+        <AddAdminByAdminForm />
+        <ViewRegistrationRequests />
+      </BasicTabs>
     </div>
   );
 };
