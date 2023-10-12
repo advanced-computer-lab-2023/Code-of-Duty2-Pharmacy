@@ -4,13 +4,13 @@ import { IOrder } from './interfaces/IOrder';
 export interface IOrderModel extends IOrder, Document {}
 
 export const OrderSchema = new Schema<IOrderModel>({
-    patientId: { type: Schema.Types.ObjectId, required: true },
+    patientId: { type: Schema.Types.ObjectId, ref: 'Patient', required: true },
     patientName: { type: String, required: true },
     patientAddress: { type: String, required: true },
     patientMobileNumber: { type: String, required: true },
     medicines: [
         {
-            medicine_id: { type: Schema.Types.ObjectId, required: true },
+            medicine_id: { type: Schema.Types.ObjectId, ref: 'Medicine', required: true },
             quantity: { type: Number, required: true },
         },
     ],
