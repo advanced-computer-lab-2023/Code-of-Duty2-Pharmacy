@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Pharmacist from "../types/Pharmacist";
+import { grey } from "@mui/material/colors";
 
 const style = {
   position: "absolute" as "absolute",
@@ -36,13 +37,40 @@ export default function PharmacistListModal({
   return (
     <div>
       {pharmacists.map((pharmacist, index) => (
-        <Button
-          id={`viewPhButton${index}`}
+        <div
           key={index}
-          onClick={() => handleOpen(index)}
+          style={{
+            display: "block",
+            paddingBottom: "1rem",
+          }}
         >
-          view Pharmacist
-        </Button>
+          <div style={{ display: "block", padding: "1rem" }}>
+            <h5 style={{ display: "inline" }}>Name:</h5>
+            {pharmacist.name},{" "}
+            <span style={{ color: "grey" }}>{`(${pharmacist.username})`}</span>
+          </div>
+          <div
+            style={{
+              display: "block",
+              paddingTop: "0rem",
+              paddingLeft: "1.2rem",
+            }}
+          >
+            <h5 style={{ display: "inline" }}>Email:</h5>{" "}
+            <span>{pharmacist.email}</span>
+          </div>
+          <Button
+            id={`viewPhButton${index}`}
+            key={index}
+            onClick={() => handleOpen(index)}
+            style={{ float: "right" }}
+          >
+            view Pharmacist
+          </Button>
+          <br />
+          <br />
+          <hr />
+        </div>
       ))}
       <Modal
         open={open}
