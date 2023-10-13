@@ -30,18 +30,21 @@ export const getPharmacists = async (req: Request, res: Response) => {
 
 export const searchPharmacists = async (req: Request, res: Response) => {
     try {
-        
-        const username = req.params.username as string;
-        const email = req.params.email as string;
-
+        //console.log(req.route);
+        const username = req.query.username as string;
+        const email = req.query.email as string;
+        console.log(username);
+        console.log(email);
 
 
         const pharmacists: IPharmacistModel[] = ((!username || username.length ===0) && (!email || email.length ===0))? 
                                                 await Pharmacist.find() :(!username || username.length ===0) ?
-                                                await Pharmacist.find({ username: { $regex: username, $options: 'i' } }) :  
-                                                await Pharmacist.find({email: { $regex: email, $options: 'i' } });
+                                                await Pharmacist.find({ email: { $regex: email, $options: 'i' } }) :  
+                                                await Pharmacist.find({username: { $regex: username, $options: 'i' } });
         
-
+        if (pharmacists.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: 'No pharmacists found' });
+        }
         res.status(StatusCodes.OK).json(pharmacists);
     } catch (err) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });

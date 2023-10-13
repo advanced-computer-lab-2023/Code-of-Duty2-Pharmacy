@@ -56,11 +56,16 @@ const AdministratorPage: React.FC = () => {
   };
   const handlePharmacistSearch = async (
     searchTerm: string,
-    attribute: string
+    searchCollection: string,
+    attribute?: string
   ) => {
     try {
-      let responseData = await goSearch(searchTerm, "pharmacists", attribute);
-      console.log(responseData);
+      let responseData = await goSearch(
+        searchTerm,
+        searchCollection,
+        attribute
+      );
+      console.log("========" + responseData);
       setPharmacists(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
@@ -69,7 +74,7 @@ const AdministratorPage: React.FC = () => {
         return;
       }
       if (err.response?.status === 404) {
-        console.log("No Medicine with this name");
+        console.log("No Pharmacists with this name");
         setPharmacists([]);
       } else {
         console.log(err);
