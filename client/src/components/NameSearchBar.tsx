@@ -28,7 +28,19 @@ const goSearch = async (
   const response = await axios.get(
     `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
   );
-  console.log("searching for '" + searchTerm + "' in " + searchCollection);
+  console.log(
+    "link : " +
+      `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
+  );
+  console.log(
+    "searching for '" +
+      searchTerm +
+      "' in " +
+      searchCollection +
+      " " +
+      attribute +
+      "s"
+  );
   console.log(response.data.length + " results found");
 
   return response.data;
@@ -52,6 +64,9 @@ const NameSearchBar: React.FC<Props> = ({
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    if (e.target.value === "") {
+      onSearch("", searchCollection, attribute);
+    }
   };
 
   return (

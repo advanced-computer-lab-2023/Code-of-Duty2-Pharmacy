@@ -10,7 +10,7 @@ import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
 import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
-import PharmacistModal from "../components/PharmacistModal";
+import PharmacistListModal from "../components/PharmacistListModal";
 import Pharmacist from "../types/Pharmacist";
 
 const AdministratorPage: React.FC = () => {
@@ -56,11 +56,16 @@ const AdministratorPage: React.FC = () => {
   };
   const handlePharmacistSearch = async (
     searchTerm: string,
-    attribute: string
+    searchCollection: string,
+    attribute?: string
   ) => {
     try {
-      let responseData = await goSearch(searchTerm, "pharmacists", attribute);
-      console.log(responseData);
+      let responseData = await goSearch(
+        searchTerm,
+        searchCollection,
+        attribute
+      );
+      console.log("========" + responseData);
       setPharmacists(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
@@ -69,7 +74,7 @@ const AdministratorPage: React.FC = () => {
         return;
       }
       if (err.response?.status === 404) {
-        console.log("No Medicine with this name");
+        console.log("No Pharmacists with this name");
         setPharmacists([]);
       } else {
         console.log(err);
@@ -151,7 +156,7 @@ const AdministratorPage: React.FC = () => {
             onSearch={handlePharmacistSearch}
             initialValue="(or leave empty for all)"
           />
-          <PharmacistModal pharmacists={pharmacists} />
+          <PharmacistListModal pharmacists={pharmacists} />
         </div>
         <ViewRegistrationRequests />
         <AddAdminByAdminForm />
