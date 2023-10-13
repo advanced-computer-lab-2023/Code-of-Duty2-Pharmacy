@@ -23,50 +23,52 @@ interface Props {
 export default function BasicModal({
   pharmacists = [],
 }: Props): React.ReactElement<Props> {
-  let modalArr[] = Array.from({length: 5}, () => React.useState(false));
-  const handleOpen = () => modalArr[0](true);
+  const [open, setOpen] = React.useState(false);
+  const [currentPharmacist, setCurrentPharmacist] = React.useState<Pharmacist>(
+    pharmacists[0]
+  );
+  const handleOpen = (index: number) => {
+    setOpen(true);
+    setCurrentPharmacist(pharmacists[index]);
+  };
   const handleClose = () => setOpen(false);
 
   return (
     <div>
       {pharmacists.map((pharmacist, index) => (
         <div>
-          <Button onClick={handleOpen}>view Pharmacist</Button>
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby={`modal-modal-title${index}`}
-            aria-describedby={`modal-modal-description${index}`}
-          >
-            <Box sx={style}>
-              <Typography
-                id={`modal-modal-title${index}`}
-                variant="h6"
-                component="h2"
-              >
-                Pharmacist Information
-              </Typography>
-              <Typography id={`modal-modal-description${index}`} sx={{ mt: 2 }}>
-                <h6>Name:</h6> <p>{pharmacist.name}</p>
-                <h6>Username:</h6> <p>{pharmacist.username}</p>
-                <h6>Gender:</h6> <p>{pharmacist.gender}</p>
-                <h6>Email:</h6> <p>{pharmacist.email}</p>
-                <h6>Date of Birth:</h6>
-                <p>{pharmacist.dateOfBirth.toString()}</p>
-                <h6>Mobile Number:</h6> <p>{pharmacist.mobileNumber}</p>
-                <h6>Hourly Rate:</h6> <p>{pharmacist.hourlyRate}</p>
-                <h6>Affiliation:</h6> <p>{pharmacist.affiliation}</p>
-                <h6>Educational Background:</h6>{" "}
-                <p>{pharmacist.educationalBackground}</p>
-              </Typography>
-
-              <Button onClick={handleClose} color="info">
-                Close
-              </Button>
-            </Box>
-          </Modal>
+          <Button onClick={() => handleOpen(index)}>view Pharmacist</Button>
         </div>
       ))}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Pharmacist Information
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <h6>Name:</h6> <p>{currentPharmacist.name}</p>
+            <h6>Username:</h6> <p>{currentPharmacist.username}</p>
+            <h6>Gender:</h6> <p>{currentPharmacist.gender}</p>
+            <h6>Email:</h6> <p>{currentPharmacist.email}</p>
+            <h6>Date of Birth:</h6>
+            <p>{currentPharmacist.dateOfBirth.toString()}</p>
+            <h6>Mobile Number:</h6> <p>{currentPharmacist.mobileNumber}</p>
+            <h6>Hourly Rate:</h6> <p>{currentPharmacist.hourlyRate}</p>
+            <h6>Affiliation:</h6> <p>{currentPharmacist.affiliation}</p>
+            <h6>Educational Background:</h6>{" "}
+            <p>{currentPharmacist.educationalBackground}</p>
+          </Typography>
+
+          <Button onClick={handleClose} color="info">
+            Close
+          </Button>
+        </Box>
+      </Modal>
     </div>
   );
 }
