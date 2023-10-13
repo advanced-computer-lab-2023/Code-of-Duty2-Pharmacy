@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Pharmacist from "../types/Pharmacist";
-import { grey } from "@mui/material/colors";
 
 const style = {
   position: "absolute" as "absolute",
@@ -82,18 +81,135 @@ export default function PharmacistListModal({
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Pharmacist Information
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <h6>Name:</h6> <p>{currentPharmacist.name}</p>
-            <h6>Username:</h6> <p>{currentPharmacist.username}</p>
-            <h6>Gender:</h6> <p>{currentPharmacist.gender}</p>
-            <h6>Email:</h6> <p>{currentPharmacist.email}</p>
-            <h6>Date of Birth:</h6>
-            <p>{currentPharmacist.dateOfBirth.toString()}</p>
-            <h6>Mobile Number:</h6> <p>{currentPharmacist.mobileNumber}</p>
-            <h6>Hourly Rate:</h6> <p>{currentPharmacist.hourlyRate}</p>
-            <h6>Affiliation:</h6> <p>{currentPharmacist.affiliation}</p>
-            <h6>Educational Background:</h6>{" "}
-            <p>{currentPharmacist.educationalBackground}</p>
+          <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+            component="div"
+          >
+            <div
+              style={{
+                fontFamily: "Arial, sans-serif",
+                maxWidth: "600px",
+                margin: "auto",
+              }}
+            >
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Name:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.name}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Username:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.username}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Gender:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.gender}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Email:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.email}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Date of Birth:
+              </h6>
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.dateOfBirth.toString().slice(0, 10)}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Mobile Number:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.mobileNumber}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Hourly Rate:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.hourlyRate}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Affiliation:
+              </h6>{" "}
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.affiliation}
+              </span>
+              <br />
+              <h6
+                style={{
+                  fontWeight: "bold",
+                  display: "inline",
+                  marginRight: "10px",
+                }}
+              >
+                Educational Background:
+              </h6>
+              <span style={{ display: "inline" }}>
+                {currentPharmacist.educationalBackground}
+              </span>
+            </div>
           </Typography>
 
           <Button onClick={handleClose} color="info">
