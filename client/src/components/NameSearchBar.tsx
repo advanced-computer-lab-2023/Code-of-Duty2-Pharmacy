@@ -4,32 +4,39 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button/Button";
 import SearchIcon from "@mui/icons-material/Search";
-import Medicine from "../types/Medicine";
 import config from "../config/config";
 import axios from "axios";
 
 interface Props {
   searchCollection?: string;
+  attribute?: string;
   initialValue?: string;
-  onSearch: (searchTerm: string, searchCollection: string) => void;
+  onSearch: (
+    searchTerm: string,
+    searchCollection: string,
+    attribute?: string
+  ) => void;
 }
 
 const goSearch = async (
   searchTerm: string,
-  searchCollection: string
-): Promise<Medicine[]> => {
+  searchCollection: string,
+  attribute = "name"
+) => {
   // console.log("search");
 
   const response = await axios.get(
-    `${config.API_URL}/${searchCollection}/search/?name=${searchTerm}`
+    `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
   );
-  console.log("searching for " + searchTerm + " in " + searchCollection);
+  console.log("searching for '" + searchTerm + "' in " + searchCollection);
+  console.log(response.data.length + " results found");
 
   return response.data;
 };
 
 const NameSearchBar: React.FC<Props> = ({
   searchCollection = "medicines",
+  attribute = "name",
   initialValue = "",
   onSearch,
 }) => {
@@ -40,7 +47,7 @@ const NameSearchBar: React.FC<Props> = ({
   let [searchTerm, setSearchTerm] = React.useState("");
 
   const handleSearch = () => {
-    onSearch(searchTerm, searchCollection);
+    onSearch(searchTerm, searchCollection, attribute);
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +66,7 @@ const NameSearchBar: React.FC<Props> = ({
           sx={{ m: 1, width: "80vw" }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">name:</InputAdornment>
+              <InputAdornment position="start">{attribute}:</InputAdornment>
             ),
           }}
           variant="filled"

@@ -18,3 +18,32 @@ export const deletePharmacist = async (req: Request, res: Response) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
     }
 };
+export const getPharmacists = async (req: Request, res: Response) => {
+    try {
+        const pharmacists: IPharmacistModel[] = await Pharmacist.find();
+
+        res.status(StatusCodes.OK).json(pharmacists);
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+    }
+};
+
+export const searchPharmacists = async (req: Request, res: Response) => {
+    try {
+        
+        const username = req.params.username as string;
+        const email = req.params.email as string;
+
+
+
+        const pharmacists: IPharmacistModel[] = ((!username || username.length ===0) && (!email || email.length ===0))? 
+                                                await Pharmacist.find() :(!username || username.length ===0) ?
+                                                await Pharmacist.find({ username: { $regex: username, $options: 'i' } }) :  
+                                                await Pharmacist.find({email: { $regex: email, $options: 'i' } });
+        
+
+        res.status(StatusCodes.OK).json(pharmacists);
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+    }
+}

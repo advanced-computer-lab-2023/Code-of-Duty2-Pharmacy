@@ -11,15 +11,18 @@ import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
 import PharmacistModal from "../components/PharmacistModal";
+import Pharmacist from "../types/Pharmacist";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [usageFilter, setUsageFilter] = useState<string | null>(null);
+  const [pharmacists, setPharmacists] = useState<Pharmacist[]>([]);
 
   useEffect(() => {
     fetchMedicines();
     fetchPatients();
+    fetchPharmacists();
   }, []);
 
   const fetchMedicines = async () => {
@@ -39,6 +42,38 @@ const AdministratorPage: React.FC = () => {
       setPatients(response.data);
     } catch (err) {
       console.error("Error fetching patients:", err);
+    }
+  };
+
+  const fetchPharmacists = async () => {
+    try {
+      const response = await goSearch("", "pharmacists", "username");
+      setPharmacists(response);
+      console.log("---------" + response);
+    } catch (err) {
+      console.error("Error fetching pharmacists:", err);
+    }
+  };
+  const handlePharmacistSearch = async (
+    searchTerm: string,
+    attribute: string
+  ) => {
+    try {
+      let responseData = await goSearch(searchTerm, "pharmacists", attribute);
+      console.log(responseData);
+      setPharmacists(responseData);
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        console.log("Get All Meds");
+        fetchPharmacists();
+        return;
+      }
+      if (err.response?.status === 404) {
+        console.log("No Medicine with this name");
+        setPharmacists([]);
+      } else {
+        console.log(err);
+      }
     }
   };
 
@@ -102,7 +137,22 @@ const AdministratorPage: React.FC = () => {
           canDelete={true}
           onDelete={deletePatient}
         />
-        <PharmacistModal pharmacists={}} />
+        <div>
+          <NameSearchBar
+            searchCollection="pharmacists"
+            onSearch={handlePharmacistSearch}
+            attribute="username"
+            initialValue="(or leave empty for all)"
+          />
+          <h3> OR </h3>
+          <NameSearchBar
+            searchCollection="pharmacists"
+            attribute="email"
+            onSearch={handlePharmacistSearch}
+            initialValue="(or leave empty for all)"
+          />
+          <PharmacistModal pharmacists={pharmacists} />
+        </div>
         <ViewRegistrationRequests />
         <AddAdminByAdminForm />
       </BasicTabs>
