@@ -63,6 +63,7 @@ export default function PharmacistListModal({
             key={index}
             onClick={() => handleOpen(index)}
             style={{ float: "right" }}
+            variant="outlined"
           >
             view Pharmacist
           </Button>
