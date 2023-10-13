@@ -20,7 +20,7 @@ interface Props {
   children?: React.ReactNode;
   pharmacists: Pharmacist[];
 }
-export default function BasicModal({
+export default function PharmacistListModal({
   pharmacists = [],
 }: Props): React.ReactElement<Props> {
   const [open, setOpen] = React.useState(false);
@@ -36,9 +36,13 @@ export default function BasicModal({
   return (
     <div>
       {pharmacists.map((pharmacist, index) => (
-        <div>
-          <Button onClick={() => handleOpen(index)}>view Pharmacist</Button>
-        </div>
+        <Button
+          id={`viewPhButton${index}`}
+          key={index}
+          onClick={() => handleOpen(index)}
+        >
+          view Pharmacist
+        </Button>
       ))}
       <Modal
         open={open}

@@ -10,7 +10,7 @@ import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
 import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
-import PharmacistModal from "../components/PharmacistModal";
+import PharmacistListModal from "../components/PharmacistListModal";
 import Pharmacist from "../types/Pharmacist";
 
 const AdministratorPage: React.FC = () => {
@@ -151,7 +151,7 @@ const AdministratorPage: React.FC = () => {
             onSearch={handlePharmacistSearch}
             initialValue="(or leave empty for all)"
           />
-          <PharmacistModal pharmacists={pharmacists} />
+          <PharmacistListModal pharmacists={pharmacists} />
         </div>
         <ViewRegistrationRequests />
         <AddAdminByAdminForm />
