@@ -32,15 +32,15 @@ const PatientList: React.FC<Props> = ({ patients, onDelete, canDelete }) => {
             <strong>Mobile Number:</strong> {patient.mobileNumber}
           </p>
           <p>
-            <strong>Emergency Contact Name:</strong>
+            <strong>Emergency Contact Name:</strong>{" "}
             {patient.emergencyContact.fullname}
           </p>
           <p>
-            <strong>Emergency Contact Mobile Number:</strong>
+            <strong>Emergency Contact Mobile Number:</strong>{" "}
             {patient.emergencyContact.mobileNumber}
           </p>
           <p>
-            <strong>Emergency Contact Relation To Patient:</strong>
+            <strong>Emergency Contact Relation To Patient:</strong>{" "}
             {patient.emergencyContact.relationToPatient}
           </p>
           {canDelete && (
