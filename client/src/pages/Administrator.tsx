@@ -125,11 +125,11 @@ const AdministratorPage: React.FC = () => {
       <h1>Administrator Page</h1>
       <BasicTabs
         tabNames={[
-          "Medicines",
-          "Patients List",
-          "Pharmacists List",
-          "Pharmacists Registration Requests",
-          "Add Admin Form",
+          "View Medicines",
+          "View Patients",
+          "View Pharmacists",
+          "Pharmacist Registration Requests",
+          "Add New Admin",
         ]}
       >
         {/* each child/component/tag is a tab */}

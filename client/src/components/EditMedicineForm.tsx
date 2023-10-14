@@ -30,6 +30,7 @@ const EditMedicineForm: React.FC<Props> = ({
   const [description, setDescription] = useState(medicine.description || "");
   const [usages, setUsages] = useState(medicine.usages || []);
   const [newUsage, setNewUsage] = useState("");
+  const [pictureUrl, setPictureUrl] = useState(medicine.pictureUrl || "");
 
   const handleDeleteUsage = (usageToDelete: string) => () => {
     setUsages((usages) => usages.filter((usage) => usage !== usageToDelete));
@@ -53,6 +54,7 @@ const EditMedicineForm: React.FC<Props> = ({
         price,
         description,
         usages,
+        pictureUrl,
       });
       onUpdated && onUpdated();
       onClose();
@@ -78,6 +80,13 @@ const EditMedicineForm: React.FC<Props> = ({
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+          <br></br>
+          <br></br>
+          <TextField
+            label="Picture URL"
+            value={pictureUrl}
+            onChange={(e) => setPictureUrl(e.target.value)}
           />
           <br></br>
           <br></br>
