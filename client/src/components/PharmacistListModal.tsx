@@ -1,8 +1,9 @@
-import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+
 import Pharmacist from "../types/Pharmacist";
 
 const style = {
@@ -29,14 +30,16 @@ export default function PharmacistListModal({
   canDelete,
   onDelete,
 }: Props): React.ReactElement<Props> {
-  const [open, setOpen] = React.useState(false);
-  const [currentPharmacist, setCurrentPharmacist] = React.useState<Pharmacist>(
+  const [open, setOpen] = useState(false);
+  const [currentPharmacist, setCurrentPharmacist] = useState<Pharmacist>(
     pharmacists[0]
   );
+
   const handleOpen = (index: number) => {
     setOpen(true);
     setCurrentPharmacist(pharmacists[index]);
   };
+
   const handleClose = () => setOpen(false);
 
   return (

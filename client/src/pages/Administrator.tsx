@@ -6,7 +6,7 @@ import PatientList from "../components/PatientList";
 import config from "../config/config";
 import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
-import AddAdminByAdminForm from "../components/AddAdminByAdminForm";
+import AddAdminForm from "../components/AddAdminForm";
 import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
@@ -172,7 +172,7 @@ const AdministratorPage: React.FC = () => {
           />
         </div>
         <ViewRegistrationRequests />
-        <AddAdminByAdminForm />
+        <AddAdminForm />
       </BasicTabs>
     </div>
   );

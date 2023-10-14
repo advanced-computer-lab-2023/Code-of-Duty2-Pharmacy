@@ -54,11 +54,11 @@ const PatientPage: React.FC = () => {
         onSearch={handleSearch}
         initialValue="(or leave empty for all)"
       />
-      <MedicineList 
-        medicines={medicines} 
-        canEdit={false} 
+      <MedicineList
+        medicines={medicines}
+        canEdit={false}
         usageFilter={usageFilter}
-        setUsageFilter={setUsageFilter} 
+        setUsageFilter={setUsageFilter}
       />
     </div>
   );

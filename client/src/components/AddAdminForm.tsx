@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import config from "../config/config";
 import axios from "axios";
 
-const AddAdminByAdminForm = () => {
+const AddAdminForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -14,23 +13,28 @@ const AddAdminByAdminForm = () => {
       password,
     };
 
-    axios.post(`${config.API_URL}/admins`, requestBody)
+    axios
+      .post(`${config.API_URL}/admins`, requestBody)
       .then((response) => {
         console.log(response.data);
         alert("Admin added successfully!");
       })
       .catch((error) => {
         console.error(error);
-        if (error.response && error.response.data && error.response.data.message === "username already exists") {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message === "username already exists"
+        ) {
           alert("An admin with this username already exists!");
         } else {
           alert("An error occurred while adding the admin.");
         }
       });
-    };
+  };
   return (
     <form onSubmit={handleSubmit}>
-        <hr/>
+      <hr />
       <h1>Add Admin</h1>
       <div style={{ marginBottom: "1rem" }}>
         <label htmlFor="username">Username:</label>
@@ -57,4 +61,4 @@ const AddAdminByAdminForm = () => {
   );
 };
 
-export default AddAdminByAdminForm;
+export default AddAdminForm;

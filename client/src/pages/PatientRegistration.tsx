@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import config from "../config/config";
 import axios from "axios";
 
@@ -37,18 +37,22 @@ const PatientRegistration = () => {
         alert("Patient registered successfully!");
         // make http request to localhost:5173/Home
         // window.location.href = "http://localhost:5173/";
-
-
       })
       .catch((error) => {
         console.error(error);
-        if (error.response && error.response.data && error.response.data.message === "username already exists") {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message === "username already exists"
+        ) {
           alert("username already exists!");
-        } 
-        else if (error.response && error.response.data && error.response.data.message === "email already exists") {
+        } else if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message === "email already exists"
+        ) {
           alert("email already exists!");
-        }
-        else {
+        } else {
           alert("An error occurred while registering the pharmacist.");
         }
       });

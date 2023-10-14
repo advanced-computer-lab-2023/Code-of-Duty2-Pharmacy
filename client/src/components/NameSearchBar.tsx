@@ -1,11 +1,12 @@
-import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button/Button";
 import SearchIcon from "@mui/icons-material/Search";
-import config from "../config/config";
 import axios from "axios";
+
+import config from "../config/config";
 
 interface Props {
   searchCollection?: string;
@@ -24,7 +25,6 @@ const goSearch = async (
   attribute = "name"
 ) => {
   // console.log("search");
-
   const response = await axios.get(
     `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
   );
@@ -56,7 +56,7 @@ const NameSearchBar: React.FC<Props> = ({
   const withoutLastChar = searchCollection.slice(1, -1); // the plural form
   let labelName = firstLetter + withoutLastChar;
 
-  let [searchTerm, setSearchTerm] = React.useState("");
+  let [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
     onSearch(searchTerm, searchCollection, attribute);
