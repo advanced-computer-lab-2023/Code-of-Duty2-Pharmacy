@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Button, Chip } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  Typography,
+} from "@mui/material";
 
 import { Medicine } from "../types";
 import EditMedicineModal from "./EditMedicineModal";
@@ -69,8 +78,67 @@ const MedicineList: React.FC<Props> = ({
 
       {filteredMedicines.length === 0 && <p>No medicines found.</p>}
       {filteredMedicines.map((medicine) => (
-        <div key={medicine._id}>
-          <img
+        <div
+          key={medicine._id}
+          style={{ padding: "1rem", display: "inline-block" }}
+        >
+          <Card
+            sx={{ Width: 345 }}
+            style={{ padding: "1rem", display: "inline-block" }}
+          >
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                style={{ objectFit: "contain" }}
+                height={140}
+                image={medicine.pictureUrl}
+                alt={medicine.name + " image"}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {medicine.name}
+                </Typography>
+                {medicine.usages &&
+                  medicine.usages.map((usage, index) => (
+                    <Chip label={usage} key={index} />
+                  ))}
+                <br />
+                <br />
+                <Typography variant="body2" color="text.secondary">
+                  {medicine.description}
+                </Typography>
+                <p>
+                  <strong>Price:</strong> {medicine.price}
+                </p>
+                {canViewQuantity && (
+                  <p>
+                    <strong>Quantity:</strong> {medicine.availableQuantity}
+                  </p>
+                )}
+                {canViewSales && (
+                  <p>
+                    <strong>Sales:</strong> {medSales[medicine._id] || 0}
+                  </p>
+                )}
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button size="small" color="primary">
+                Buy
+              </Button>
+              {canEdit && (
+                <Button
+                  onClick={() => handleEditClick(medicine)}
+                  size="small"
+                  color="primary"
+                >
+                  Edit
+                </Button>
+              )}
+            </CardActions>
+          </Card>
+
+          {/* <img
             src={medicine.pictureUrl}
             alt={medicine.name + " image"}
             height="120"
@@ -111,7 +179,7 @@ const MedicineList: React.FC<Props> = ({
           )}
           <br></br>
           <hr></hr>
-          <br></br>
+          <br></br> */}
           {selectedMedicine && selectedMedicine._id === medicine._id && (
             <EditMedicineModal
               open={!!selectedMedicine}
