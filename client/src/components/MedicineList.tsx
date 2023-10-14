@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, Chip } from "@mui/material";
 
 import { Medicine } from "../types";
 import EditMedicineForm from "./EditMedicineForm";
@@ -62,25 +63,55 @@ const MedicineList: React.FC<Props> = ({
         placeholder="Filter by usage"
         style={{ width: "300px", height: "25px" }}
       />
+      <br></br>
+      <br></br>
+      <br></br>
+
       {filteredMedicines.length === 0 && <p>No medicines found.</p>}
       {filteredMedicines.map((medicine) => (
         <div key={medicine._id}>
-          <h3>Name: {medicine.name}</h3>
-          <img src={medicine.pictureUrl} alt={medicine.name} width="200" />
-          <p>Description: {medicine.description}</p>
-          <p>Usages:</p>
-          <ul>
-            {medicine.usages &&
-              medicine.usages.map((usage, index) => (
-                <li key={index}>{usage}</li>
-              ))}
-          </ul>
-          <p>Price: {medicine.price}</p>
-          {canViewQuantity && <p>Quantity: {medicine.availableQuantity}</p>}
-          {canViewSales && <p>Sales: {medSales[medicine._id] || 0}</p>}
+          <img
+            src={medicine.pictureUrl}
+            alt={medicine.name + " image"}
+            height="120"
+          />
+          <br></br>
+          <br></br>
           {canEdit && (
-            <button onClick={() => handleEditClick(medicine)}>Edit</button>
+            <Button
+              onClick={() => handleEditClick(medicine)}
+              variant="outlined"
+            >
+              Edit
+            </Button>
           )}
+          <h3>{medicine.name}</h3>
+          <p>
+            <strong>Description:</strong> {medicine.description}
+          </p>
+          <p>
+            <strong>Usages:</strong>
+          </p>
+          {medicine.usages &&
+            medicine.usages.map((usage, index) => (
+              <Chip label={usage} key={index} />
+            ))}
+          <p>
+            <strong>Price:</strong> {medicine.price}
+          </p>
+          {canViewQuantity && (
+            <p>
+              <strong>Quantity:</strong> {medicine.availableQuantity}
+            </p>
+          )}
+          {canViewSales && (
+            <p>
+              <strong>Sales:</strong> {medSales[medicine._id] || 0}
+            </p>
+          )}
+          <br></br>
+          <hr></hr>
+          <br></br>
           {selectedMedicine && selectedMedicine._id === medicine._id && (
             <EditMedicineForm
               open={!!selectedMedicine}

@@ -6,6 +6,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
 
 import config from "../config/config";
 
@@ -26,9 +27,23 @@ const EditMedicineForm: React.FC<Props> = ({
 }) => {
   const [name, setName] = useState(medicine.name);
   const [price, setPrice] = useState(medicine.price);
-  const [availableQuantity, setAvailableQuantity] = useState(
-    medicine.availableQuantity
-  );
+  const [description, setDescription] = useState(medicine.description || "");
+  const [usages, setUsages] = useState(medicine.usages || []);
+  const [newUsage, setNewUsage] = useState("");
+
+  const handleDeleteUsage = (usageToDelete: string) => () => {
+    setUsages((usages) => usages.filter((usage) => usage !== usageToDelete));
+  };
+
+  const handleAddUsage = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ([" ", "Tab", ",", "Enter"].includes(e.key)) {
+      e.preventDefault();
+      if (newUsage && !usages.includes(newUsage)) {
+        setUsages([...usages, newUsage]);
+        setNewUsage("");
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +51,8 @@ const EditMedicineForm: React.FC<Props> = ({
       await axios.patch(`${config.API_URL}/medicines/${medicine._id}`, {
         name,
         price,
-        availableQuantity,
+        description,
+        usages,
       });
       onUpdated && onUpdated();
       onClose();
@@ -59,18 +75,32 @@ const EditMedicineForm: React.FC<Props> = ({
           <br></br>
           <br></br>
           <TextField
-            label="Price"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
           <br></br>
           <br></br>
           <TextField
-            label="Available Quantity"
+            label="Usages"
+            value={newUsage}
+            onKeyDown={handleAddUsage}
+            onChange={(e) => setNewUsage(e.target.value)}
+          />
+          <br></br>
+          {usages.map((usage, index) => (
+            <div key={index}>
+              <br></br>
+              <Chip label={usage} onDelete={handleDeleteUsage(usage)} />
+            </div>
+          ))}
+          <br></br>
+          <br></br>
+          <TextField
+            label="Price"
             type="number"
-            value={availableQuantity}
-            onChange={(e) => setAvailableQuantity(Number(e.target.value))}
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
           />
         </form>
       </DialogContent>
