@@ -11,6 +11,9 @@ import Patient from "./pages/Patient";
 import PatientRegistration from "./pages/PatientRegistration";
 import PharmacistRegistration from "./pages/PharmacistRegistration";
 import Home from "./pages/Home";
+import IconButton from "@mui/material/IconButton";
+import { AccountCircle } from "@mui/icons-material";
+import logoicon from "./assets/logo.png";
 
 const StyledLink = styled(Link)({
   color: "white",
@@ -23,11 +26,42 @@ const StyledLink = styled(Link)({
 const App = () => (
   <BrowserRouter>
     <CssBaseline />
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6" component={StyledLink} to="/">
+        <a href="/">
+          <img
+            src={logoicon}
+            alt="Logo"
+            style={{ height: "30px", paddingRight: "1rem" }}
+          />
+        </a>
+        <Typography
+          variant="h6"
+          noWrap
+          component="a"
+          href="/"
+          sx={{
+            mr: 2,
+            display: { md: "flex" },
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: ".3rem",
+            color: "inherit",
+            textDecoration: "none",
+          }}
+        >
           El7a2ni Pharmacy
         </Typography>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          style={{ marginLeft: "auto" }}
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
       </Toolbar>
     </AppBar>
     <Routes>
