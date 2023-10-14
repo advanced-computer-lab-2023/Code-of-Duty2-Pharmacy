@@ -19,7 +19,7 @@ interface Props {
   onUpdated?: () => void;
 }
 
-const EditMedicineForm: React.FC<Props> = ({
+const EditMedicineModal: React.FC<Props> = ({
   medicine,
   open,
   onClose,
@@ -123,4 +123,4 @@ const EditMedicineForm: React.FC<Props> = ({
   );
 };
 
-export default EditMedicineForm;
+export default EditMedicineModal;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Chip } from "@mui/material";
 
 import { Medicine } from "../types";
-import EditMedicineForm from "./EditMedicineForm";
+import EditMedicineModal from "./EditMedicineModal";
 
 interface Props {
   medicines: Medicine[];
@@ -113,7 +113,7 @@ const MedicineList: React.FC<Props> = ({
           <hr></hr>
           <br></br>
           {selectedMedicine && selectedMedicine._id === medicine._id && (
-            <EditMedicineForm
+            <EditMedicineModal
               open={!!selectedMedicine}
               medicine={selectedMedicine}
               onClose={handleClose}
