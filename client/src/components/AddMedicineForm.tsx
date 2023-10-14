@@ -49,8 +49,9 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
   };
 
   return (
-    <>
-      <h2>Add a new medicine</h2>
+    <div style={{ padding: "1rem" }}>
+      <h2>Add a new medicine:</h2>
+
       <form onSubmit={handleSubmit}>
         <TextField
           label="Name"
@@ -98,7 +99,7 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
           Add Medicine
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 

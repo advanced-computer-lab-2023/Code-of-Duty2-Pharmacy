@@ -1,8 +1,18 @@
 import { useState } from "react";
-import { Button, Chip } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Chip,
+  Typography,
+} from "@mui/material";
 
 import { Medicine } from "../types";
 import EditMedicineModal from "./EditMedicineModal";
+import MedicineCard from "./MedicineCard";
 
 interface Props {
   medicines: Medicine[];
@@ -55,13 +65,13 @@ const MedicineList: React.FC<Props> = ({
 
   return (
     <div>
-      <h2>Medicine Information</h2>
+      <h2 style={{ paddingLeft: "1rem" }}>Medicine Information</h2>
       <input
         type="text"
         value={usageFilter || ""}
         onChange={handleUsageFilterChange}
         placeholder="Filter by usage"
-        style={{ width: "300px", height: "25px" }}
+        style={{ width: "300px", height: "25px", padding: "1rem" }}
       />
       <br></br>
       <br></br>
@@ -69,8 +79,37 @@ const MedicineList: React.FC<Props> = ({
 
       {filteredMedicines.length === 0 && <p>No medicines found.</p>}
       {filteredMedicines.map((medicine) => (
-        <div key={medicine._id}>
-          <img
+        <div
+          key={medicine._id}
+          style={{ padding: "1rem", display: "inline-block" }}
+        >
+          <MedicineCard
+            medicine={medicine}
+            canEdit={canEdit}
+            canViewSales={canViewSales}
+            canViewQuantity={canViewQuantity}
+          />
+
+          {selectedMedicine && selectedMedicine._id === medicine._id && (
+            <EditMedicineModal
+              open={!!selectedMedicine}
+              medicine={selectedMedicine}
+              onClose={handleClose}
+              onUpdated={onUpdated}
+            />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default MedicineList;
+
+// old list for reference
+
+{
+  /* <img
             src={medicine.pictureUrl}
             alt={medicine.name + " image"}
             height="120"
@@ -111,19 +150,5 @@ const MedicineList: React.FC<Props> = ({
           )}
           <br></br>
           <hr></hr>
-          <br></br>
-          {selectedMedicine && selectedMedicine._id === medicine._id && (
-            <EditMedicineModal
-              open={!!selectedMedicine}
-              medicine={selectedMedicine}
-              onClose={handleClose}
-              onUpdated={onUpdated}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export default MedicineList;
+          <br></br> */
+}
