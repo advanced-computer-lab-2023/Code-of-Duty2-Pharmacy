@@ -55,7 +55,7 @@ const PharmacistRegistrationRequest = () => {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Pharmacist Registration Request</h1>
+      <h1>Pharmacist Registration</h1>
       <label>
         Username:
         <input

@@ -1,29 +1,65 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 const Home = () => {
-  const navigate = useNavigate();
-
-  const handleClick = (path: string) => {
-    navigate(path);
-  };
-
-  const buttons = [
-    { text: "register as patient", path: "/patient-registration" },
-    { text: "register as pharmacist", path: "/pharmacist-registration" },
-    { text: "login as administrator", path: "/Administrator" },
-    { text: "login as pharmacist", path: "/Pharmacist" },
-    { text: "login as patient", path: "/Patient" },
-  ];
-
   return (
-    <div>
-      <h1>Home page</h1>
-      {buttons.map((button) => (
-        <button key={button.text} onClick={() => handleClick(button.path)}>
-          {button.text}
-        </button>
-      ))}
-    </div>
+    <Box sx={{ m: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        Home
+      </Typography>
+
+      <Button
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/patient-registration"
+        sx={{ m: 1 }}
+      >
+        Register as Patient
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/pharmacist-registration"
+        sx={{ m: 1 }}
+      >
+        Register as Pharmacist
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/administrator"
+        sx={{ m: 1 }}
+      >
+        Login as Administrator
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/pharmacist"
+        sx={{ m: 1 }}
+      >
+        Login as Pharmacist
+      </Button>
+
+      <Button
+        variant="contained"
+        color="primary"
+        component={Link}
+        to="/patient"
+        sx={{ m: 1 }}
+      >
+        Login as Patient
+      </Button>
+    </Box>
   );
 };
 

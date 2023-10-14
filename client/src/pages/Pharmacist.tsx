@@ -66,7 +66,7 @@ const PharmacistPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Pharmacist Page</h1>
+      <h1>Pharmacist Dashboard</h1>
       <NameSearchBar
         searchCollection="medicines"
         onSearch={handleSearch}

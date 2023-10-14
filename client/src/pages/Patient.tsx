@@ -48,7 +48,7 @@ const PatientPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Patient Page</h1>
+      <h1>Patient Dashboard</h1>
       <NameSearchBar
         searchCollection="medicines"
         onSearch={handleSearch}

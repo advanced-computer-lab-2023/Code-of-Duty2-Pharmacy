@@ -122,7 +122,7 @@ const AdministratorPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Administrator Page</h1>
+      <h1>Administrator Dashboard</h1>
       <BasicTabs
         tabNames={[
           "View Medicines",
