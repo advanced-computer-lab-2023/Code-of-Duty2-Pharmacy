@@ -68,16 +68,13 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
           onKeyDown={handleAddIngredient}
           onChange={(e) => setNewIngredient(e.target.value)}
         />
-        {activeIngredients.map((ingredient) => (
-          <>
-            <br></br>
-            <br></br>
+        {activeIngredients.map((ingredient, index) => (
+          <div key={index}>
             <Chip
-              key={ingredient}
               label={ingredient}
               onDelete={handleDeleteIngredient(ingredient)}
             />
-          </>
+          </div>
         ))}
         <br></br>
         <br></br>
