@@ -28,8 +28,12 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
 }) => {
   return (
     <Card
-      sx={{ maxWidth: "280px" }}
-      style={{ padding: "1rem", display: "inline-block" }}
+      style={{
+        padding: "1rem",
+        display: "inline-block",
+        width: "280px",
+        height: "auto",
+      }}
     >
       <CardActionArea>
         <CardMedia
@@ -39,7 +43,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
           image={medicine.pictureUrl}
           alt={medicine.name + " image"}
         />
-        <CardContent>
+        <CardContent style={{ height: "300px" }}>
           <Typography gutterBottom variant="h5" component="div">
             {medicine.name}
           </Typography>
