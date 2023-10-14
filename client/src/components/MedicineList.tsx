@@ -65,13 +65,13 @@ const MedicineList: React.FC<Props> = ({
 
   return (
     <div>
-      <h2>Medicine Information</h2>
+      <h2 style={{ paddingLeft: "1rem" }}>Medicine Information</h2>
       <input
         type="text"
         value={usageFilter || ""}
         onChange={handleUsageFilterChange}
         placeholder="Filter by usage"
-        style={{ width: "300px", height: "25px" }}
+        style={{ width: "300px", height: "25px", padding: "1rem" }}
       />
       <br></br>
       <br></br>

@@ -49,7 +49,7 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
   };
 
   return (
-    <>
+    <div style={{ padding: "1rem" }}>
       <h2>Add a medicine:</h2>
       <form onSubmit={handleSubmit}>
         <label>
@@ -95,7 +95,7 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
           Add Medicine
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 
