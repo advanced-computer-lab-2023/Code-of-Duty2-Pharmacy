@@ -14,16 +14,33 @@ const PatientList: React.FC<Props> = ({ patients, onDelete, canDelete }) => {
       <h2>Patient Information</h2>
       {patients.map((patient) => (
         <div key={patient._id}>
-          <p>Name: {patient.name}</p>
-          <p>Email: {patient.email}</p>
-          <p>Phone: {patient.mobileNumber}</p>
-          <p>Emergency Contact Name: {patient.emergencyContact.fullname}</p>
           <p>
-            Emergency Contact Mobile Number:
+            <strong>Name:</strong> {patient.name}{" "}
+            <span style={{ color: "grey" }}>{`(${patient.username})`}</span>
+          </p>
+          <p>
+            <strong>Gender:</strong> {patient.gender}
+          </p>
+          <p>
+            <strong>Date of Birth:</strong>{" "}
+            {new Date(patient.dateOfBirth).toLocaleDateString()}
+          </p>
+          <p>
+            <strong>Email:</strong> {patient.email}
+          </p>
+          <p>
+            <strong>Mobile Number:</strong> {patient.mobileNumber}
+          </p>
+          <p>
+            <strong>Emergency Contact Name:</strong>
+            {patient.emergencyContact.fullname}
+          </p>
+          <p>
+            <strong>Emergency Contact Mobile Number:</strong>
             {patient.emergencyContact.mobileNumber}
           </p>
           <p>
-            Emergency Contact Relation To Patient:
+            <strong>Emergency Contact Relation To Patient:</strong>
             {patient.emergencyContact.relationToPatient}
           </p>
           {canDelete && (
@@ -35,6 +52,7 @@ const PatientList: React.FC<Props> = ({ patients, onDelete, canDelete }) => {
               Delete Patient
             </Button>
           )}
+          <br></br>
           <br></br>
           <br></br>
         </div>
