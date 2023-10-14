@@ -91,6 +91,15 @@ const AdministratorPage: React.FC = () => {
     }
   };
 
+  const deletePharmacist = async (id: string) => {
+    try {
+      await axios.delete(`${config.API_URL}/pharmacists/${id}`);
+      fetchPharmacists();
+    } catch (err) {
+      console.error("Error deleting pharmacist:", err);
+    }
+  };
+
   const handleSearch = async (searchTerm: string, searchCollection: string) => {
     try {
       let responseData = await goSearch(searchTerm, searchCollection);
@@ -156,7 +165,11 @@ const AdministratorPage: React.FC = () => {
             onSearch={handlePharmacistSearch}
             initialValue="(or leave empty for all)"
           />
-          <PharmacistListModal pharmacists={pharmacists} />
+          <PharmacistListModal
+            pharmacists={pharmacists}
+            canDelete={true}
+            onDelete={deletePharmacist}
+          />
         </div>
         <ViewRegistrationRequests />
         <AddAdminByAdminForm />

@@ -18,6 +18,7 @@ export const deletePharmacist = async (req: Request, res: Response) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
     }
 };
+
 export const getPharmacists = async (req: Request, res: Response) => {
     try {
         const pharmacists: IPharmacistModel[] = await Pharmacist.find();

@@ -16,12 +16,18 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 interface Props {
-  children?: React.ReactNode;
   pharmacists: Pharmacist[];
+  canDelete: boolean;
+  onDelete: (id: string) => void;
+  children?: React.ReactNode;
 }
+
 export default function PharmacistListModal({
   pharmacists = [],
+  canDelete,
+  onDelete,
 }: Props): React.ReactElement<Props> {
   const [open, setOpen] = React.useState(false);
   const [currentPharmacist, setCurrentPharmacist] = React.useState<Pharmacist>(
@@ -65,8 +71,18 @@ export default function PharmacistListModal({
             style={{ float: "right" }}
             variant="outlined"
           >
-            view Pharmacist
+            View Pharmacist
           </Button>
+          {canDelete && (
+            <Button
+              key={pharmacist._id}
+              style={{ float: "right" }}
+              variant="outlined"
+              onClick={() => onDelete(pharmacist._id)}
+            >
+              Delete
+            </Button>
+          )}
           <br />
           <br />
           <hr />

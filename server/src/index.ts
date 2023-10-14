@@ -43,10 +43,11 @@ app.use(cors(config.corsOptions));
 //   res.header('Access-Control-Allow-Headers', 'Content-Type');
 //   next();
 // });
+
 app.use(express.json());
+
 app.use('/medicines', medicineRouter);
 app.use('/patients', patientRouter);
 app.use('/pharmacists', pharmacistRouter);
 app.use('/register', registrationRouter);
-app.use('/admins',adminRouter);
-
+app.use('/admins', adminRouter);
