@@ -8,6 +8,8 @@ interface Props {
   medSales?: { [key: string]: number };
   onUpdated?: () => void;
   canEdit: boolean;
+  canViewSales: boolean;
+  canViewQuantity: boolean;
   usageFilter: string | null;
   setUsageFilter: React.Dispatch<React.SetStateAction<string | null>>;
 }
@@ -16,9 +18,11 @@ const MedicineList: React.FC<Props> = ({
   medicines,
   onUpdated,
   canEdit,
+  canViewSales,
+  canViewQuantity,
   medSales = {},
   usageFilter,
-  setUsageFilter
+  setUsageFilter,
 }) => {
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
     null
@@ -72,8 +76,8 @@ const MedicineList: React.FC<Props> = ({
               ))}
           </ul>
           <p>Price: {medicine.price}</p>
-          <p>Quantity: {medicine.availableQuantity}</p>
-          <p>Sales: {medSales[medicine._id] || 0}</p>
+          {canViewQuantity && <p>Quantity: {medicine.availableQuantity}</p>}
+          {canViewSales && <p>Sales: {medSales[medicine._id] || 0}</p>}
           {canEdit && (
             <button onClick={() => handleEditClick(medicine)}>Edit</button>
           )}

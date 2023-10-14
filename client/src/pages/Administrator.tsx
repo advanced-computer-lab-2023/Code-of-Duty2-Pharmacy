@@ -142,6 +142,8 @@ const AdministratorPage: React.FC = () => {
           <MedicineList
             medicines={medicines}
             canEdit={false}
+            canViewSales={false}
+            canViewQuantity={false}
             usageFilter={usageFilter}
             setUsageFilter={setUsageFilter}
           />

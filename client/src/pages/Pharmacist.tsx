@@ -77,6 +77,8 @@ const PharmacistPage: React.FC = () => {
         medicines={medicines}
         onUpdated={handleUpdated}
         canEdit={true}
+        canViewSales={true}
+        canViewQuantity={true}
         medSales={medSales}
         usageFilter={usageFilter}
         setUsageFilter={setUsageFilter}
