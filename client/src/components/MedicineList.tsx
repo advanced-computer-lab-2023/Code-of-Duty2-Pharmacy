@@ -88,6 +88,8 @@ const MedicineList: React.FC<Props> = ({
             canEdit={canEdit}
             canViewSales={canViewSales}
             canViewQuantity={canViewQuantity}
+            sales={medSales[medicine._id]}
+            handleEditClick={handleEditClick}
           />
 
           {selectedMedicine && selectedMedicine._id === medicine._id && (
