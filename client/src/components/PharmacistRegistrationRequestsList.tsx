@@ -5,7 +5,7 @@ import config from "../config/config";
 
 import { PharmacistRegistrationRequest } from "../types";
 
-const PharmacistRegistrationRequests: React.FC = () => {
+const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<
     PharmacistRegistrationRequest[]
@@ -63,13 +63,13 @@ const PharmacistRegistrationRequests: React.FC = () => {
             }}
           >
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>UserName:</strong> {request.username}
+              <strong>Name:</strong> {request.name}
+            </p>
+            <p style={{ margin: "0", fontSize: "1.2rem" }}>
+              <strong>Username:</strong> {request.username}
             </p>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Email:</strong> {request.email}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Name:</strong> {request.name}
             </p>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Date of Birth:</strong>{" "}
@@ -95,4 +95,4 @@ const PharmacistRegistrationRequests: React.FC = () => {
   );
 };
 
-export default PharmacistRegistrationRequests;
+export default PharmacistRegistrationRequestsList;

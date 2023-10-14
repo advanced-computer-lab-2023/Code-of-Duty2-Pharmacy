@@ -7,7 +7,7 @@ import config from "../config/config";
 import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 import AddAdminForm from "../components/AddAdminForm";
-import ViewRegistrationRequests from "../components/ViewRegistrationRequests";
+import PharmacistRegistrationRequestsList from "../components/PharmacistRegistrationRequestsList";
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
 import PharmacistListModal from "../components/PharmacistListModal";
@@ -173,7 +173,7 @@ const AdministratorPage: React.FC = () => {
             onDelete={deletePharmacist}
           />
         </div>
-        <ViewRegistrationRequests />
+        <PharmacistRegistrationRequestsList />
         <AddAdminForm />
       </BasicTabs>
     </div>
