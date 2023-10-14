@@ -7,6 +7,7 @@ import { Medicine } from "../types";
 import MedicineList from "../components/MedicineList";
 import AddMedicineForm from "../components/AddMedicineForm";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
+import BasicTabs from "../components/BasicTabs";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -67,22 +68,29 @@ const PharmacistPage: React.FC = () => {
   return (
     <div>
       <h1>Pharmacist Dashboard</h1>
-      <NameSearchBar
-        searchCollection="medicines"
-        onSearch={handleSearch}
-        initialValue="(or leave empty for all)"
-      />
-      <AddMedicineForm onMedicineAdded={fetchMedicines} />
-      <MedicineList
-        medicines={medicines}
-        onUpdated={handleUpdated}
-        canEdit={true}
-        canViewSales={true}
-        canViewQuantity={true}
-        medSales={medSales}
-        usageFilter={usageFilter}
-        setUsageFilter={setUsageFilter}
-      />
+      <BasicTabs tabNames={["View Medicines", "Add Medicine"]}>
+        {/* each child/component/tag is a tab */}
+        <div>
+          <NameSearchBar
+            searchCollection="medicines"
+            onSearch={handleSearch}
+            initialValue="(or leave empty for all)"
+          />
+          <MedicineList
+            medicines={medicines}
+            onUpdated={handleUpdated}
+            canEdit={true}
+            canViewSales={true}
+            canViewQuantity={true}
+            medSales={medSales}
+            usageFilter={usageFilter}
+            setUsageFilter={setUsageFilter}
+          />
+        </div>
+        <div>
+          <AddMedicineForm onMedicineAdded={fetchMedicines} />
+        </div>
+      </BasicTabs>
     </div>
   );
 };
