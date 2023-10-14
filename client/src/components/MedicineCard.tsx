@@ -26,11 +26,9 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
   canEdit,
   handleEditClick = () => {},
 }) => {
-  // Define component logic here
-
   return (
     <Card
-      sx={{ Width: 345 }}
+      sx={{ maxWidth: "280px" }}
       style={{ padding: "1rem", display: "inline-block" }}
     >
       <CardActionArea>
