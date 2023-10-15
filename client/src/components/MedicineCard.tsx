@@ -43,13 +43,28 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
           image={medicine.pictureUrl}
           alt={medicine.name + " image"}
         />
-        <CardContent style={{ height: "300px" }}>
+        <CardContent style={{ height: "400px" }}>
           <Typography gutterBottom variant="h5" component="div">
             {medicine.name}
           </Typography>
+          <br />
+          <Typography variant="body2">
+            <strong>Usages:</strong>
+          </Typography>
+          <br />
           {medicine.usages &&
             medicine.usages.map((usage, index) => (
               <Chip label={usage} key={index} />
+            ))}
+          <br />
+          <br />
+          <Typography variant="body2">
+            <strong>Active Ingredients:</strong>
+          </Typography>
+          <br />
+          {medicine.activeIngredients &&
+            medicine.activeIngredients.map((ingredient, index) => (
+              <Chip label={ingredient} key={index} />
             ))}
           <br />
           <br />

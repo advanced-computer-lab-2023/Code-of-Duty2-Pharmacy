@@ -16,25 +16,25 @@ const darkTheme = createTheme({
         '"Segoe UI Symbol"',
       ].join(','),
   },
-//   palette: {
-//     mode: 'dark',
-//     background: {
-//       default: grey[900],
-//       paper: grey[900],
-//     },
-//     primary: {
-//       light: pink[100],
-//       main: purple[300],
-//       dark: pink[900],
-//       contrastText: '#ffffff',
-//     },
-//     secondary: {
-//       light: deepPurple[100],
-//       main: deepPurple[500],
-//       dark: deepPurple[900],
-//       contrastText: '#ffffff',
-//     },
-//   },
+  palette: {
+    mode: 'dark',
+    background: {
+      default: grey[900],
+      paper: grey[900],
+    },
+    primary: {
+      light: pink[100],
+      main: purple[300],
+      dark: pink[900],
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      light: deepPurple[100],
+      main: deepPurple[500],
+      dark: deepPurple[900],
+      contrastText: '#ffffff',
+    },
+  },
 });
 
 export default darkTheme;

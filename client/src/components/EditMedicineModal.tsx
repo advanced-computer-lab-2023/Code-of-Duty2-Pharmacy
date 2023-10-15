@@ -31,6 +31,10 @@ const EditMedicineModal: React.FC<Props> = ({
   const [usages, setUsages] = useState(medicine.usages || []);
   const [newUsage, setNewUsage] = useState("");
   const [pictureUrl, setPictureUrl] = useState(medicine.pictureUrl || "");
+  const [activeIngredients, setActiveIngredients] = useState(
+    medicine.activeIngredients || []
+  );
+  const [newActiveIngredient, setNewActiveIngredient] = useState("");
 
   const handleDeleteUsage = (usageToDelete: string) => () => {
     setUsages((usages) => usages.filter((usage) => usage !== usageToDelete));
@@ -46,6 +50,27 @@ const EditMedicineModal: React.FC<Props> = ({
     }
   };
 
+  const handleDeleteActiveIngredient = (ingredientToDelete: string) => () => {
+    setActiveIngredients((ingredients) =>
+      ingredients.filter((ingredient) => ingredient !== ingredientToDelete)
+    );
+  };
+
+  const handleAddActiveIngredient = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if ([" ", "Tab", ",", "Enter"].includes(e.key)) {
+      e.preventDefault();
+      if (
+        newActiveIngredient &&
+        !activeIngredients.includes(newActiveIngredient)
+      ) {
+        setActiveIngredients([...activeIngredients, newActiveIngredient]);
+        setNewActiveIngredient("");
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -54,6 +79,7 @@ const EditMedicineModal: React.FC<Props> = ({
         price,
         description,
         usages,
+        activeIngredients,
         pictureUrl,
       });
       onUpdated && onUpdated();
@@ -88,6 +114,24 @@ const EditMedicineModal: React.FC<Props> = ({
             value={pictureUrl}
             onChange={(e) => setPictureUrl(e.target.value)}
           />
+          <br></br>
+          <br></br>
+          <TextField
+            label="Active Ingredients"
+            value={newActiveIngredient}
+            onKeyDown={handleAddActiveIngredient}
+            onChange={(e) => setNewActiveIngredient(e.target.value)}
+          />
+          <br></br>
+          {activeIngredients.map((ingredient, index) => (
+            <div key={index}>
+              <br></br>
+              <Chip
+                label={ingredient}
+                onDelete={handleDeleteActiveIngredient(ingredient)}
+              />
+            </div>
+          ))}
           <br></br>
           <br></br>
           <TextField
