@@ -7,7 +7,7 @@ import { EmergencyContact } from './EmergencyContact';
 interface Patient extends UserBaseInfo {
   emergencyContact: EmergencyContact;
   deliveryAddresses?: string[];
-  healthRecords?: Buffer[];
+  healthRecords?: string[];
   subscribedPackage?: SubscribedPackage;
   dependentFamilyMembers?: DependentFamilyMember[];
   registeredFamilyMembers?: RegisteredFamilyMember[];
