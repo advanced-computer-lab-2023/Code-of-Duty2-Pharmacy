@@ -133,7 +133,6 @@ const AdministratorPage: React.FC = () => {
           "Add New Admin",
         ]}
       >
-        {/* each child/component/tag is a tab */}
         <div>
           <NameSearchBar
             searchCollection="medicines"

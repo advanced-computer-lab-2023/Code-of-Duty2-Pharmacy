@@ -68,9 +68,7 @@ const PharmacistPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Pharmacist Dashboard</h1>
       <BasicTabs tabNames={["View Medicines", "Add Medicine"]}>
-        {/* each child/component/tag is a tab */}
         <div>
           <NameSearchBar
             searchCollection="medicines"

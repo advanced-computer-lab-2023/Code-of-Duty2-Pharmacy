@@ -50,9 +50,7 @@ const PatientPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Patient Dashboard</h1>
       <BasicTabs tabNames={["View Medicines"]}>
-        {/* each child/component/tag is a tab */}
         <div>
           <NameSearchBar
             searchCollection="medicines"
