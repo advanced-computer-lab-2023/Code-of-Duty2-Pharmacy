@@ -139,7 +139,6 @@ const MedicineList: React.FC<Props> = ({
           </div>
         ))}
       </Grid>
-      {/*<Grid item sm={1}></Grid>*/}
     </Grid>
   );
 };
