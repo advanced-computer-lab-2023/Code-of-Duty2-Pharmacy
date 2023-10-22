@@ -8,9 +8,12 @@ import Medicine from "../types/Medicine";
 import CardMedia from "@mui/material/CardMedia";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface MedicineCardProps {
   medicine: Medicine;
+  canBuy: boolean;
   canEdit: boolean;
   canViewSales: boolean;
   canViewQuantity: boolean;
@@ -23,14 +26,15 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
   sales = 0,
   canViewQuantity,
   canViewSales,
+  canBuy,
   canEdit,
   handleEditClick = () => {},
 }) => {
   return (
     <Card
-      style={{
-        padding: "1rem",
-        display: "inline-block",
+      sx={{
+        m: 2,
+        p: 2,
         width: "280px",
         height: "auto",
       }}
@@ -38,62 +42,76 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
       <CardActionArea>
         <CardMedia
           component="img"
-          style={{ objectFit: "contain" }}
+          sx={{ objectFit: "contain" }}
           height={140}
           image={medicine.pictureUrl}
-          alt={medicine.name + " image"}
+          alt={`${medicine.name} image`}
         />
-        <CardContent style={{ height: "400px" }}>
+        <CardContent sx={{ height: "420px" }}>
           <Typography gutterBottom variant="h5" component="div">
             {medicine.name}
           </Typography>
-          <br />
-          <Typography variant="body2">
-            <strong>Usages:</strong>
-          </Typography>
-          <br />
-          {medicine.usages &&
-            medicine.usages.map((usage, index) => (
-              <Chip label={usage} key={index} />
-            ))}
-          <br />
-          <br />
-          <Typography variant="body2">
-            <strong>Active Ingredients:</strong>
-          </Typography>
-          <br />
-          {medicine.activeIngredients &&
-            medicine.activeIngredients.map((ingredient, index) => (
-              <Chip label={ingredient} key={index} />
-            ))}
-          <br />
-          <br />
           <Typography variant="body2" color="text.secondary">
             {medicine.description}
           </Typography>
-          <p>
-            <strong>Price:</strong> {medicine.price}
-          </p>
-          {canViewQuantity && (
-            <p>
-              <strong>Quantity:</strong> {medicine.availableQuantity}
-            </p>
-          )}
-          {canViewSales && (
-            <p>
-              <strong>Sales:</strong> {sales || 0}
-            </p>
-          )}
+          <Box mt={2}>
+            <Typography variant="body2">
+              <strong>Usages</strong>
+            </Typography>
+            {medicine.usages &&
+              medicine.usages.map((usage, index) => (
+                <Chip label={usage} key={index} />
+              ))}
+            <Box mt={2}>
+              <Typography variant="body2">
+                <strong>Active Ingredients</strong>
+              </Typography>
+              {medicine.activeIngredients &&
+                medicine.activeIngredients.map((ingredient, index) => (
+                  <Chip label={ingredient} key={index} />
+                ))}
+              <Box mt={2}>
+                <Box mt={2}>
+                  <Typography variant="body2" color="text.secondary">
+                    Price
+                  </Typography>
+                  <Typography variant="h6">
+                    {`${medicine.price} EGP`}
+                  </Typography>
+                  {canViewQuantity && (
+                    <Box mt={2}>
+                      <Typography variant="body2" color="text.secondary">
+                        Available Quantity
+                      </Typography>
+                      <Typography variant="h6">
+                        {medicine.availableQuantity}
+                      </Typography>
+                    </Box>
+                  )}
+                  {canViewSales && (
+                    <Box mt={2}>
+                      <Typography variant="body2" color="text.secondary">
+                        Number of Sales
+                      </Typography>
+                      <Typography variant="h6">{sales || 0}</Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Buy
-        </Button>
+        {canBuy && (
+          <Button size="small" color="primary">
+            Buy
+          </Button>
+        )}
         {canEdit && (
           <Button
             onClick={() => handleEditClick(medicine)}
-            size="small"
+            startIcon={<EditIcon />}
             color="primary"
           >
             Edit

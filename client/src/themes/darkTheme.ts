@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { grey, lightBlue, purple, teal, green, deepPurple, indigo, cyan, pink } from '@mui/material/colors';
+import { grey, blue } from '@mui/material/colors';
 
 const darkTheme = createTheme({
   typography: {
@@ -23,15 +23,15 @@ const darkTheme = createTheme({
       paper: grey[900],
     },
     primary: {
-      light: pink[100],
-      main: purple[300],
-      dark: pink[900],
+      light: blue[100],
+      main: blue[800],
+      dark: blue[900],
       contrastText: '#ffffff',
     },
     secondary: {
-      light: deepPurple[100],
-      main: deepPurple[500],
-      dark: deepPurple[900],
+      light: blue[100],
+      main: blue[800],
+      dark: blue[900],
       contrastText: '#ffffff',
     },
   },

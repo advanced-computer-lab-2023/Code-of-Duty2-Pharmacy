@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import config from "../config/config";
+import MedicineUsages from "../data/MedicineUsages";
 
 import { Medicine } from "../types";
 import MedicineList from "../components/MedicineList";
@@ -11,8 +12,8 @@ import BasicTabs from "../components/BasicTabs";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
-  const [usageFilter, setUsageFilter] = useState<string | null>(null);
 
   const loadSales = async () => {
     const response = await axios.get<{ [key: string]: number }>(
@@ -79,12 +80,14 @@ const PharmacistPage: React.FC = () => {
           <MedicineList
             medicines={medicines}
             onUpdated={handleUpdated}
+            filterOptions={MedicineUsages}
+            canBuy={false}
             canEdit={true}
             canViewSales={true}
             canViewQuantity={true}
-            medSales={medSales}
             usageFilter={usageFilter}
             setUsageFilter={setUsageFilter}
+            medSales={medSales}
           />
         </div>
         <div>

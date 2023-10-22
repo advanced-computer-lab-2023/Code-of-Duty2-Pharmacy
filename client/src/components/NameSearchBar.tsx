@@ -1,8 +1,5 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button/Button";
+import { Box, IconButton, InputBase, Paper } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 
@@ -24,24 +21,9 @@ const goSearch = async (
   searchCollection: string,
   attribute = "name"
 ) => {
-  // console.log("search");
   const response = await axios.get(
     `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
   );
-  console.log(
-    "link : " +
-      `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
-  );
-  console.log(
-    "searching for '" +
-      searchTerm +
-      "' in " +
-      searchCollection +
-      " " +
-      attribute +
-      "s"
-  );
-  console.log(response.data.length + " results found");
 
   return response.data;
 };
@@ -58,7 +40,8 @@ const NameSearchBar: React.FC<Props> = ({
 
   let [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = () => {
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
     onSearch(searchTerm, searchCollection, attribute);
   };
 
@@ -70,32 +53,31 @@ const NameSearchBar: React.FC<Props> = ({
   };
 
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-      <div>
-        <TextField
-          label={labelName}
-          onChange={handleTextChange}
-          id="filled-start-adornment"
-          placeholder={initialValue}
-          size="small"
-          sx={{ m: 1, width: "80vw" }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">{attribute}:</InputAdornment>
-            ),
-          }}
-          variant="filled"
-        />
-
-        <Button
-          variant="contained"
-          endIcon={<SearchIcon />}
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
-      </div>
-    </Box>
+    <Paper
+      component="form"
+      sx={{
+        p: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        width: "95vw",
+      }}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder={labelName}
+        inputProps={{ "aria-label": labelName }}
+        onChange={handleTextChange}
+        value={searchTerm}
+      />
+      <IconButton
+        type="submit"
+        sx={{ p: "10px" }}
+        aria-label="search"
+        onClick={handleSearch}
+      >
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 };
 

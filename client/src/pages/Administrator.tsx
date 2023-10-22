@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+import MedicineUsages from "../data/MedicineUsages";
+import config from "../config/config";
+
 import MedicineList from "../components/MedicineList";
 import PatientList from "../components/PatientList";
-
-import config from "../config/config";
 import { Medicine, Patient } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
 import AddAdminForm from "../components/AddAdminForm";
@@ -16,7 +18,7 @@ import Pharmacist from "../types/Pharmacist";
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
-  const [usageFilter, setUsageFilter] = useState<string | null>(null);
+  const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [pharmacists, setPharmacists] = useState<Pharmacist[]>([]);
 
   useEffect(() => {
@@ -122,7 +124,6 @@ const AdministratorPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Administrator Dashboard</h1>
       <BasicTabs
         tabNames={[
           "View Medicines",
@@ -141,7 +142,9 @@ const AdministratorPage: React.FC = () => {
           />
           <MedicineList
             medicines={medicines}
+            canBuy={false}
             canEdit={false}
+            filterOptions={MedicineUsages}
             canViewSales={false}
             canViewQuantity={false}
             usageFilter={usageFilter}
@@ -179,4 +182,5 @@ const AdministratorPage: React.FC = () => {
     </div>
   );
 };
+
 export default AdministratorPage;

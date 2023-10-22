@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import config from "../config/config";
+import MedicineUsages from "../data/MedicineUsages";
 
 import MedicineList from "../components/MedicineList";
 import { Medicine } from "../types";
@@ -10,7 +11,7 @@ import BasicTabs from "../components/BasicTabs";
 
 const PatientPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
-  const [usageFilter, setUsageFilter] = useState<string | null>(null);
+  const [usageFilter, setUsageFilter] = useState<string[]>([]);
 
   useEffect(() => {
     fetchMedicines();
@@ -60,7 +61,9 @@ const PatientPage: React.FC = () => {
           />
           <MedicineList
             medicines={medicines}
+            canBuy={true}
             canEdit={false}
+            filterOptions={MedicineUsages}
             canViewSales={false}
             canViewQuantity={false}
             usageFilter={usageFilter}

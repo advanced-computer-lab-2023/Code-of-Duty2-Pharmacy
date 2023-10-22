@@ -1,7 +1,6 @@
-import * as React from "react";
+import React from "react";
 import Tabs, { tabsClasses } from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 interface TabPanelProps {
@@ -59,7 +58,7 @@ export default function BasicTabs({
           onChange={handleChange}
           aria-label="basic scrollable tabs example"
           variant="scrollable"
-          scrollButtons
+          scrollButtons="auto"
           allowScrollButtonsMobile
           sx={{
             [`& .${tabsClasses.scrollButtons}`]: {
