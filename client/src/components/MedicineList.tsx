@@ -92,7 +92,7 @@ const MedicineList: React.FC<Props> = ({
         </Typography>
         {(showMore ? filterOptions : filterOptions.slice(0, 10)).map(
           (option) => (
-            <>
+            <Box marginBottom={-1} key={option}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -104,8 +104,7 @@ const MedicineList: React.FC<Props> = ({
                 }
                 label={option}
               />
-              <br />
-            </>
+            </Box>
           )
         )}
         {!showMore && filterOptions.length > 10 && (
