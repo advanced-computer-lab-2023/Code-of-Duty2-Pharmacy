@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const Home = () => {
+const Welcome = () => {
   return (
     <Box sx={{ m: 4 }}>
       <Typography variant="h4" gutterBottom>
@@ -63,4 +63,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Welcome;

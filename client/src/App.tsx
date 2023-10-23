@@ -12,19 +12,19 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import logoicon from "./assets/logo.png";
 
-import DarkTheme from "./themes/darkTheme";
-import LightTheme from "./themes/lightTheme";
+import darkTheme from "./themes/DarkTheme";
+import lightTheme from "./themes/LightTheme";
 import Pharmacist from "./pages/Pharmacist";
 import Administrator from "./pages/Administrator";
 import Patient from "./pages/Patient";
 import PatientRegistration from "./pages/PatientRegistration";
 import PharmacistRegistration from "./pages/PharmacistRegistration";
-import Home from "./pages/Home";
+import Welcome from "./pages/Welcome";
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  const theme = darkMode ? DarkTheme : LightTheme;
+  const theme = darkMode ? darkTheme : lightTheme;
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDarkMode(event.target.checked);
@@ -81,7 +81,7 @@ const App = () => {
         </AppBar>
 
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Welcome />} />
           <Route path="/pharmacist" element={<Pharmacist />} />
           <Route path="/administrator" element={<Administrator />} />
           <Route path="/patient" element={<Patient />} />
