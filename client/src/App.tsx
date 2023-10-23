@@ -12,8 +12,8 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import logoicon from "./assets/logo.png";
 
-import darkTheme from "./themes/darkTheme";
-import lightTheme from "./themes/lightTheme";
+import DarkTheme from "./themes/darkTheme";
+import LightTheme from "./themes/lightTheme";
 import Pharmacist from "./pages/Pharmacist";
 import Administrator from "./pages/Administrator";
 import Patient from "./pages/Patient";
@@ -24,7 +24,7 @@ import Home from "./pages/Home";
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  const theme = darkMode ? darkTheme : lightTheme;
+  const theme = darkMode ? DarkTheme : LightTheme;
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDarkMode(event.target.checked);

@@ -7,10 +7,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
+import Autocomplete from "@mui/material/Autocomplete";
 
 import config from "../config/config";
-
+import { MedicineUsages } from "../data";
 import { Medicine } from "../types";
+import { Box } from "@mui/material";
 
 interface Props {
   medicine: Medicine;
@@ -29,26 +31,11 @@ const EditMedicineModal: React.FC<Props> = ({
   const [price, setPrice] = useState(medicine.price);
   const [description, setDescription] = useState(medicine.description || "");
   const [usages, setUsages] = useState(medicine.usages || []);
-  const [newUsage, setNewUsage] = useState("");
   const [pictureUrl, setPictureUrl] = useState(medicine.pictureUrl || "");
   const [activeIngredients, setActiveIngredients] = useState(
     medicine.activeIngredients || []
   );
   const [newActiveIngredient, setNewActiveIngredient] = useState("");
-
-  const handleDeleteUsage = (usageToDelete: string) => () => {
-    setUsages((usages) => usages.filter((usage) => usage !== usageToDelete));
-  };
-
-  const handleAddUsage = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ([" ", "Tab", ",", "Enter"].includes(e.key)) {
-      e.preventDefault();
-      if (newUsage && !usages.includes(newUsage)) {
-        setUsages([...usages, newUsage]);
-        setNewUsage("");
-      }
-    }
-  };
 
   const handleDeleteActiveIngredient = (ingredientToDelete: string) => () => {
     setActiveIngredients((ingredients) =>
@@ -90,73 +77,85 @@ const EditMedicineModal: React.FC<Props> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Medicine</DialogTitle>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>What do you want to change?</DialogTitle>
       <DialogContent>
-        <br></br>
         <form id="edit-form" onSubmit={handleSubmit}>
-          <TextField
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <br></br>
-          <br></br>
-          <TextField
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <br></br>
-          <br></br>
-          <TextField
-            label="Picture URL"
-            value={pictureUrl}
-            onChange={(e) => setPictureUrl(e.target.value)}
-          />
-          <br></br>
-          <br></br>
-          <TextField
-            label="Active Ingredients"
-            value={newActiveIngredient}
-            onKeyDown={handleAddActiveIngredient}
-            onChange={(e) => setNewActiveIngredient(e.target.value)}
-          />
-          <br></br>
+          <Box mt={1}>
+            <TextField
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              fullWidth
+            />
+          </Box>
+          <Box mt={3}>
+            <TextField
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              fullWidth
+            />
+          </Box>
+          <Box mt={3}>
+            <TextField
+              label="Image URL"
+              value={pictureUrl}
+              onChange={(e) => setPictureUrl(e.target.value)}
+              fullWidth
+            />
+          </Box>
+          <Box mt={3}>
+            <TextField
+              label="Active Ingredients"
+              placeholder="Separate by spaces"
+              value={newActiveIngredient}
+              onKeyDown={handleAddActiveIngredient}
+              onChange={(e) => setNewActiveIngredient(e.target.value)}
+              fullWidth
+            />
+          </Box>
+          {activeIngredients && <Box mt={2}></Box>}
           {activeIngredients.map((ingredient, index) => (
-            <div key={index}>
-              <br></br>
-              <Chip
-                label={ingredient}
-                onDelete={handleDeleteActiveIngredient(ingredient)}
-              />
-            </div>
+            <Chip
+              variant="outlined"
+              label={ingredient}
+              onDelete={handleDeleteActiveIngredient(ingredient)}
+            />
           ))}
-          <br></br>
-          <br></br>
-          <TextField
-            label="Usages"
-            value={newUsage}
-            onKeyDown={handleAddUsage}
-            onChange={(e) => setNewUsage(e.target.value)}
-          />
-          <br></br>
-          {usages.map((usage, index) => (
-            <div key={index}>
-              <br></br>
-              <Chip label={usage} onDelete={handleDeleteUsage(usage)} />
-            </div>
-          ))}
-          <br></br>
-          <br></br>
-          <TextField
-            label="Price"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
-          />
+          {activeIngredients && <Box mt={4}></Box>}
+          <Box mt={3}>
+            <Autocomplete
+              multiple
+              id="usages"
+              options={MedicineUsages}
+              filterSelectedOptions
+              value={usages}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Medicinal Usages"
+                  placeholder="Select all that applies..."
+                  fullWidth
+                />
+              )}
+              onChange={(event, newValue) => {
+                setUsages(newValue as string[]);
+              }}
+            />
+          </Box>
+          <Box mt={3}>
+            <TextField
+              label="Price"
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              fullWidth
+            />
+          </Box>
         </form>
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button type="submit" form="edit-form">

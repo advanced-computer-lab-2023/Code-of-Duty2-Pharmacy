@@ -4,6 +4,7 @@ import config from "../config/config";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { Box, Typography } from "@mui/material";
 
 interface Props {
   onMedicineAdded: () => void;
@@ -49,55 +50,61 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Add a new medicine:</h2>
+    <div>
+      <Box mb={3}>
+        <Typography variant="h4" color="text.secondary">
+          What do you want to add?
+        </Typography>
+      </Box>
 
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Name"
+          label="Medicine Name"
           placeholder="Enter medicine name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <br></br>
-        <br></br>
-        <TextField
-          label="Active Ingredients"
-          placeholder="Separate by spaces"
-          value={newIngredient}
-          onKeyDown={handleAddIngredient}
-          onChange={(e) => setNewIngredient(e.target.value)}
-        />
-        {activeIngredients.map((ingredient, index) => (
-          <div key={index}>
+        <Box mt={3}>
+          <TextField
+            label="Active Ingredients"
+            placeholder="Separate by spaces"
+            value={newIngredient}
+            onKeyDown={handleAddIngredient}
+            onChange={(e) => setNewIngredient(e.target.value)}
+          />
+          {activeIngredients.map((ingredient, index) => (
             <Chip
+              key={index}
               label={ingredient}
               onDelete={handleDeleteIngredient(ingredient)}
             />
-          </div>
-        ))}
-        <br></br>
-        <br></br>
-        <TextField
-          label="Price"
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
-        />
-        <br></br>
-        <br></br>
-        <TextField
-          label="Available Quantity"
-          type="number"
-          value={availableQuantity}
-          onChange={(e) => setAvailableQuantity(Number(e.target.value))}
-        />
-        <br></br>
-        <br></br>
-        <Button type="submit" variant="contained">
-          Add Medicine
-        </Button>
+          ))}
+
+          <Box mt={3} />
+
+          <TextField
+            label="Price"
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+          />
+
+          <Box mt={3} />
+
+          <TextField
+            label="Available Quantity"
+            type="number"
+            value={availableQuantity}
+            onChange={(e) => setAvailableQuantity(Number(e.target.value))}
+          />
+
+          <Box mt={3} />
+
+          <Button type="submit" variant="contained" color="success">
+            Add Medicine
+          </Button>
+        </Box>
       </form>
     </div>
   );

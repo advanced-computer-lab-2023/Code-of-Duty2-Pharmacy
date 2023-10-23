@@ -5,6 +5,7 @@ import {
   Typography,
   Grid,
   Button,
+  Box,
 } from "@mui/material";
 
 import { Medicine } from "../types";
@@ -21,6 +22,8 @@ interface Props {
   canViewQuantity: boolean;
   usageFilter: string[];
   setUsageFilter: React.Dispatch<React.SetStateAction<string[]>>;
+  showMore: boolean;
+  setShowMore: React.Dispatch<React.SetStateAction<boolean>>;
   filterOptions: string[];
 }
 
@@ -33,13 +36,14 @@ const MedicineList: React.FC<Props> = ({
   canViewQuantity,
   usageFilter,
   setUsageFilter,
+  showMore,
+  setShowMore,
   medSales = {},
   filterOptions,
 }) => {
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
     null
   );
-  const [showMore, setShowMore] = useState(false);
 
   const handleEditClick = (medicine: Medicine) => {
     setSelectedMedicine(medicine);
@@ -47,6 +51,14 @@ const MedicineList: React.FC<Props> = ({
 
   const handleClose = () => {
     setSelectedMedicine(null);
+  };
+
+  const handleShowMoreClick = () => {
+    setShowMore(true);
+  };
+
+  const handleShowLessClick = () => {
+    setShowMore(false);
   };
 
   const handleUsageFilterChange =
@@ -74,7 +86,7 @@ const MedicineList: React.FC<Props> = ({
   return (
     <Grid container>
       <Grid sm={12} md={2}>
-        <br />
+        <Box mt={1} />
         <Typography variant="h6" gutterBottom>
           Medicine Usages
         </Typography>
@@ -97,8 +109,13 @@ const MedicineList: React.FC<Props> = ({
           )
         )}
         {!showMore && filterOptions.length > 10 && (
-          <Button onClick={() => setShowMore(true)} color="primary">
+          <Button onClick={handleShowMoreClick} color="secondary">
             Show more
+          </Button>
+        )}
+        {showMore && (
+          <Button onClick={handleShowLessClick} color="secondary">
+            Show less
           </Button>
         )}
       </Grid>

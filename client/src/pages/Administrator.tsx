@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import MedicineUsages from "../data/MedicineUsages";
+import { MedicineUsages } from "../data";
 import config from "../config/config";
-
 import MedicineList from "../components/MedicineList";
 import PatientList from "../components/PatientList";
 import { Medicine, Patient } from "../types";
@@ -13,13 +12,14 @@ import PharmacistRegistrationRequestsList from "../components/PharmacistRegistra
 import BasicTabs from "../components/BasicTabs";
 import React from "react";
 import PharmacistListModal from "../components/PharmacistListModal";
-import Pharmacist from "../types/Pharmacist";
+import { Pharmacist } from "../types";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [pharmacists, setPharmacists] = useState<Pharmacist[]>([]);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     fetchMedicines();
@@ -56,6 +56,7 @@ const AdministratorPage: React.FC = () => {
       console.error("Error fetching pharmacists:", err);
     }
   };
+
   const handlePharmacistSearch = async (
     searchTerm: string,
     searchCollection: string,
@@ -148,6 +149,8 @@ const AdministratorPage: React.FC = () => {
             canViewQuantity={false}
             usageFilter={usageFilter}
             setUsageFilter={setUsageFilter}
+            showMore={showMore}
+            setShowMore={setShowMore}
           />
         </div>
         <PatientList

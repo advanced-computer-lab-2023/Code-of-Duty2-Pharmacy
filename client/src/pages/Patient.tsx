@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import config from "../config/config";
-import MedicineUsages from "../data/MedicineUsages";
 
+import { MedicineUsages } from "../data";
 import MedicineList from "../components/MedicineList";
 import { Medicine } from "../types";
 import { NameSearchBar, goSearch } from "../components/NameSearchBar";
@@ -12,6 +12,7 @@ import BasicTabs from "../components/BasicTabs";
 const PatientPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [usageFilter, setUsageFilter] = useState<string[]>([]);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     fetchMedicines();
@@ -66,6 +67,8 @@ const PatientPage: React.FC = () => {
             canViewQuantity={false}
             usageFilter={usageFilter}
             setUsageFilter={setUsageFilter}
+            showMore={showMore}
+            setShowMore={setShowMore}
           />
         </div>
       </BasicTabs>

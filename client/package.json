@@ -12,13 +12,16 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.3.2",
     "@mui/icons-material": "^5.14.12",
     "@mui/lab": "^5.0.0-alpha.148",
     "@mui/material": "^5.14.12",
     "axios": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-hook-form": "^7.47.0",
+    "react-router-dom": "^6.16.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.8.2",
