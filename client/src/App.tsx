@@ -36,13 +36,13 @@ const App = () => {
         <CssBaseline />
         <AppBar position="sticky">
           <Toolbar>
-            <a href="/">
+            <Link to="/">
               <img
                 src={logoicon}
                 alt="Logo"
-                style={{ height: "30px", paddingRight: "1rem" }}
+                style={{ height: "2rem", paddingRight: "1rem" }}
               />
-            </a>
+            </Link>
             <Typography
               variant="h6"
               noWrap
