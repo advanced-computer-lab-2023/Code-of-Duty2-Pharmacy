@@ -1,5 +1,5 @@
-const MedicneActiveIngredients = [
+const MedicineActiveIngredients = [
     ""
 ];
 
-export default MedicneActiveIngredients;
+export default MedicineActiveIngredients;
