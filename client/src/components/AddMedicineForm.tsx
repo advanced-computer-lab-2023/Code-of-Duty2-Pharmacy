@@ -73,6 +73,7 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
             onKeyDown={handleAddIngredient}
             onChange={(e) => setNewIngredient(e.target.value)}
           />
+          {activeIngredients && <Box mt={3} />}
           {activeIngredients.map((ingredient, index) => (
             <Chip
               key={index}
