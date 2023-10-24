@@ -21,7 +21,12 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ darkMode, handleThemeChange }) => {
   return (
-    <AppBar position="sticky">
+    <AppBar
+      position="sticky"
+      sx={{
+        background: (theme) => theme.palette.gradient,
+      }}
+    >
       <Toolbar>
         <Link component={RouterLink} to="/">
           <img

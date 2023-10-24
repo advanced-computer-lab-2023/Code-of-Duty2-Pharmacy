@@ -1,5 +1,14 @@
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    gradient?: string;
+  }
+  interface PaletteOptions {
+    gradient?: string;
+  }
+}
+
 const darkTheme = createTheme({
   typography: {
     fontFamily: [
@@ -27,6 +36,7 @@ const darkTheme = createTheme({
     secondary: {
       main: '#064C5B',
     },
+    gradient: 'linear-gradient(to right bottom, #064C5B, #82ffa1)'
   },
 });
 
