@@ -1,4 +1,4 @@
-import { IUserBaseInfo } from '../../IUserBaseInfo';
+import { IUserBaseInfo } from '../../users/interfaces/IUserBaseInfo';
 import { ISubscribedPackage } from './subinterfaces/ISubscribedPackage';
 import { IDependentFamilyMember } from './subinterfaces/IDependentFamilyMember';
 import { IRegisteredFamilyMember } from './subinterfaces/IRegisteredFamilyMember';

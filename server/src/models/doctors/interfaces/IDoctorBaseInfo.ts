@@ -1,8 +1,8 @@
 import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
 
-export interface IPharmacistRegistrationRequest extends IUserBaseInfo {
+export interface IDoctorBaseInfo extends IUserBaseInfo {
     hourlyRate: number;
     affiliation: string;
     educationalBackground: string;
-    status: 'pending' | 'accepted' | 'rejected';
+    [key: string]: any;
 }
