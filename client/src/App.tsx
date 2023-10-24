@@ -1,16 +1,7 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { Switch, FormControlLabel, Box } from "@mui/material";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import IconButton from "@mui/material/IconButton";
-import { AccountCircle } from "@mui/icons-material";
 import { ThemeProvider } from "@mui/material/styles";
-
-import logoicon from "./assets/logo.png";
 
 import darkTheme from "./themes/DarkTheme";
 import lightTheme from "./themes/LightTheme";
@@ -20,6 +11,7 @@ import Patient from "./pages/Patient";
 import PatientRegistration from "./pages/PatientRegistration";
 import PharmacistRegistration from "./pages/PharmacistRegistration";
 import Welcome from "./pages/Welcome";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -34,52 +26,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <CssBaseline />
-        <AppBar position="sticky">
-          <Toolbar>
-            <Link to="/">
-              <img
-                src={logoicon}
-                alt="Logo"
-                style={{ height: "2rem", paddingRight: "1rem" }}
-              />
-            </Link>
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              El7a2ni Pharmacy
-            </Typography>
-            <Box style={{ marginLeft: "auto" }}>
-              <FormControlLabel
-                control={
-                  <Switch checked={darkMode} onChange={handleThemeChange} />
-                }
-                label={darkMode ? <Brightness4 /> : <Brightness7 />}
-              />
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
-
+        <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/pharmacist" element={<Pharmacist />} />
