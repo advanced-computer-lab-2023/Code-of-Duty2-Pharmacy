@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
 
 const lightTheme = createTheme({
   typography: {
@@ -19,8 +18,8 @@ const lightTheme = createTheme({
   palette: {
     mode: 'light',
     background: {
-      default: grey[50],
-      paper: grey[50],
+      default: '#FFFFFF',
+      paper: '#FFFFFF',
     },
     primary: {
       main: '#064C5B',
