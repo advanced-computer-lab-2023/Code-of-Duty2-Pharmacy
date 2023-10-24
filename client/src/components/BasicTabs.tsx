@@ -64,15 +64,6 @@ export default function BasicTabs({
             [`& .${tabsClasses.scrollButtons}`]: {
               "&.Mui-disabled": { opacity: 0.3 },
             },
-            "& .MuiTabs-indicator": {
-              backgroundColor: "primary.contrastText",
-            },
-            "& .MuiTab-root": {
-              color: "primary.contrastText",
-              "&.Mui-selected": {
-                color: "primary.contrastText",
-              },
-            },
           }}
         >
           {React.Children.map(children, (child, index) => (
