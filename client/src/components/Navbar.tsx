@@ -12,7 +12,7 @@ import {
 import { Brightness4, Brightness7, AccountCircle } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 
-import logoicon from "../assets/logo.png";
+import el7a2niLogo from "../assets/el7a2ni_logo.png";
 
 interface NavbarProps {
   darkMode: boolean;
@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, handleThemeChange }) => {
       <Toolbar>
         <Link component={RouterLink} to="/">
           <img
-            src={logoicon}
+            src={el7a2niLogo}
             alt="Logo"
             style={{ height: "2rem", paddingRight: "1rem" }}
           />
