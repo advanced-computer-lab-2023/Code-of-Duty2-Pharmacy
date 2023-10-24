@@ -23,7 +23,7 @@ const lightTheme = createTheme({
       paper: grey[50],
     },
     primary: {
-      main: blue[800],
+      main: '#1f1f1f',
     },
     secondary: {
       main: blue[800],

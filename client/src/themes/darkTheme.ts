@@ -23,7 +23,7 @@ const darkTheme = createTheme({
       paper: '#1f1f1f',
     },
     primary: {
-      main: blue[800],
+      main: '#ffffff',
     },
     secondary: {
       main: blue[800],
