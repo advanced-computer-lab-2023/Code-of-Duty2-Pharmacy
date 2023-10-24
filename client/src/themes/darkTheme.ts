@@ -19,14 +19,14 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     background: {
-      default: '#1f1f1f',
-      paper: '#1f1f1f',
+      default: '#1B1B1B',
+      paper: '#1B1B1B',
     },
     primary: {
-      main: blue[800],
+      main: '#064C5B',
     },
     secondary: {
-      main: blue[800],
+      main: '#064C5B',
     },
   },
 });
