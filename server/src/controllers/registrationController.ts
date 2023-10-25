@@ -82,3 +82,18 @@ export const registerPharmacist = async (req: Request, res: Response) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
+export const acceptPharmacistRegistrationRequest = async (req: Request, res: Response) => {
+
+};
+
+export const rejectPharmacistRegistrationRequest = async (req: Request, res: Response) => {
+  //delete the request from the database by username
+  const deletedRequest = await PharmacistRegistrationRequest.findOneAndDelete({username: req.params.username});
+
+  //TODO: send an email to the pharmacist with the reason of rejection
+
+
+  // return the deleted request and deletion message
+  res.status(StatusCodes.OK).json(deletedRequest);
+
+};
