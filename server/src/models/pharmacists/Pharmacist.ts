@@ -11,7 +11,7 @@ export const PharmacistSchema = new Schema<IPharmacistModel>({
   name: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
   gender: { type: String, required: true, enum: ['male', 'female'] },
-  mobileNumber: { type: String, required: true },
+  mobileNumber: { type: String, required: false }, //TO BE CHECKED
   hourlyRate: { type: Number, required: true },
   affiliation: { type: String, required: true },
   educationalBackground: { type: String, required: true },
