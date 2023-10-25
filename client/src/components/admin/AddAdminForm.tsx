@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import config from "../config/config";
+import config from "../../config/config";
 
 const AddAdminForm = () => {
   const [username, setUsername] = useState("");

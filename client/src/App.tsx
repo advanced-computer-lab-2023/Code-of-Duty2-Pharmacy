@@ -1,48 +1,32 @@
-import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
+import { Routes, Route, useLocation } from "react-router-dom";
 
-import darkTheme from "./themes/DarkTheme";
-import lightTheme from "./themes/LightTheme";
-import Pharmacist from "./pages/Pharmacist";
-import Administrator from "./pages/Administrator";
-import Patient from "./pages/Patient";
-import PatientRegistration from "./pages/PatientRegistration";
-import PharmacistRegistration from "./pages/PharmacistRegistration";
+import PharmacistDashboard from "./pages/pharmacist/PharmacistDashboard";
+import AdministratorDashboard from "./pages/admin/AdministratorDashboard";
+import PatientDashboard from "./pages/patient/PatientDashboard";
+import PatientRegistration from "./pages/register/PatientRegistration";
+import PharmacistRegistration from "./pages/register/PharmacistRegistration";
 import Welcome from "./pages/Welcome";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navigation/Navbar";
+import Sidebar from "./components/navigation/Sidebar";
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  const theme = darkMode ? darkTheme : lightTheme;
-
-  const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDarkMode(event.target.checked);
-  };
+  const location = useLocation();
 
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <CssBaseline />
-        <Navbar darkMode={darkMode} handleThemeChange={handleThemeChange} />
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/pharmacist" element={<Pharmacist />} />
-          <Route path="/administrator" element={<Administrator />} />
-          <Route path="/patient" element={<Patient />} />
-          <Route
-            path="/patient-registration"
-            element={<PatientRegistration />}
-          />
-          <Route
-            path="/pharmacist-registration"
-            element={<PharmacistRegistration />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <>
+      {location.pathname === "/" ? <Navbar /> : <Sidebar />}
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/pharmacist" element={<PharmacistDashboard />} />
+        <Route path="/administrator" element={<AdministratorDashboard />} />
+        <Route path="/patient" element={<PatientDashboard />} />
+        <Route path="/patient-registration" element={<PatientRegistration />} />
+        <Route
+          path="/pharmacist-registration"
+          element={<PharmacistRegistration />}
+        />
+      </Routes>
+    </>
   );
 };
 

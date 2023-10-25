@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 
-import { Patient } from "../types";
+import { Patient } from "../../types";
 
 interface Props {
   patients: Patient[];

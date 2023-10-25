@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { MedicineUsages } from "../data";
-import config from "../config/config";
-import MedicineList from "../components/MedicineList";
-import PatientList from "../components/PatientList";
-import { Medicine, Patient } from "../types";
-import { NameSearchBar, goSearch } from "../components/NameSearchBar";
-import AddAdminForm from "../components/AddAdminForm";
-import PharmacistRegistrationRequestsList from "../components/PharmacistRegistrationRequestsList";
-import BasicTabs from "../components/BasicTabs";
+import { MedicineUsages } from "../../data";
+import config from "../../config/config";
+import MedicineList from "../../components/medicine/MedicineList";
+import PatientList from "../../components/patient/PatientList";
+import { Medicine, Patient } from "../../types";
+import { NameSearchBar, goSearch } from "../../components/NameSearchBar";
+import AddAdminForm from "../../components/admin/AddAdminForm";
+import PharmacistRegistrationRequestsList from "../../components/pharmacist/PharmacistRegistrationRequestsList";
+import BasicTabs from "../../components/navigation/BasicTabs";
 import React from "react";
-import PharmacistListModal from "../components/PharmacistListModal";
-import { Pharmacist } from "../types";
+import PharmacistListModal from "../../components/pharmacist/PharmacistListModal";
+import { Pharmacist } from "../../types";
 
 const AdministratorPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);

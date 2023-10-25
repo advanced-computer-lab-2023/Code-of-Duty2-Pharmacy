@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-import config from "../config/config";
+import config from "../../config/config";
 
-import { PharmacistRegistrationRequest } from "../types";
+import { PharmacistRegistrationRequest } from "../../types";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);

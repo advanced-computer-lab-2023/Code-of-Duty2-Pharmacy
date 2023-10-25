@@ -9,9 +9,9 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 
-import config from "../config/config";
-import { MedicineUsages } from "../data";
-import { Medicine } from "../types";
+import config from "../../config/config";
+import { MedicineUsages } from "../../data";
+import { Medicine } from "../../types";
 import { Box } from "@mui/material";
 
 interface Props {
@@ -118,6 +118,7 @@ const EditMedicineModal: React.FC<Props> = ({
           {activeIngredients && <Box mt={2}></Box>}
           {activeIngredients.map((ingredient, index) => (
             <Chip
+              key={index}
               variant="outlined"
               label={ingredient}
               onDelete={handleDeleteActiveIngredient(ingredient)}

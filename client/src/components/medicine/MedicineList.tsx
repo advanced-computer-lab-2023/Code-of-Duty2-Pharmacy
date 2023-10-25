@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 
-import { Medicine } from "../types";
+import { Medicine } from "../../types";
 import EditMedicineModal from "./EditMedicineModal";
 import MedicineCard from "./MedicineCard";
 
@@ -85,7 +85,7 @@ const MedicineList: React.FC<Props> = ({
 
   return (
     <Grid container>
-      <Grid sm={12} md={2}>
+      <Grid item sm={12} md={2}>
         <Box mt={1} />
         <Typography variant="h6" gutterBottom>
           Medicine Usages

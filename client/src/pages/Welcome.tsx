@@ -7,7 +7,7 @@ const Welcome = () => {
   return (
     <Box sx={{ m: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Home
+        Welcome
       </Typography>
 
       <Button

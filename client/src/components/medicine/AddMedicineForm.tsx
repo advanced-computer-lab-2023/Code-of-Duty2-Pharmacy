@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import config from "../config/config";
+import config from "../../config/config";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";

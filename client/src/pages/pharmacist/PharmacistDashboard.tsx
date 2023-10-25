@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import config from "../config/config";
-import { MedicineUsages } from "../data";
-import { Medicine } from "../types";
-import MedicineList from "../components/MedicineList";
-import AddMedicineForm from "../components/AddMedicineForm";
-import { NameSearchBar, goSearch } from "../components/NameSearchBar";
-import BasicTabs from "../components/BasicTabs";
+import config from "../../config/config";
+import { MedicineUsages } from "../../data";
+import { Medicine } from "../../types";
+import MedicineList from "../../components/medicine/MedicineList";
+import AddMedicineForm from "../../components/medicine/AddMedicineForm";
+import { NameSearchBar, goSearch } from "../../components/NameSearchBar";
+import BasicTabs from "../../components/navigation/BasicTabs";
 
 const PharmacistPage: React.FC = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
