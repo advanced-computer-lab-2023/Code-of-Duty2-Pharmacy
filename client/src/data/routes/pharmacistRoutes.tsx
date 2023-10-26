@@ -1,8 +1,8 @@
-import AddMedicineForm from "../../components/medicine/AddMedicineForm";
-import MedicineList from "../../components/medicine/MedicineList";
 import PharmacistDashboard from "../../pages/pharmacist/PharmacistDashboard";
 import { Route } from "../../types";
 import PharmacistLayout from "../../layouts/PharmacistLayout";
+import PharmacistViewMedicinesPage from "../../pages/pharmacist/PharmacistViewMedicinesPage";
+import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
@@ -17,7 +17,7 @@ export const viewMedicinesRoute: Route = {
   path: "/pharmacist/view-medicines",
   component: (
     <PharmacistLayout>
-      <MedicineList />
+      <PharmacistViewMedicinesPage />
     </PharmacistLayout>
   ),
 };
@@ -26,7 +26,7 @@ export const addMedicineRoute: Route = {
   path: "/pharmacist/add-medicine",
   component: (
     <PharmacistLayout>
-      <AddMedicineForm />
+      <PharmacistAddMedicinePage />
     </PharmacistLayout>
   ),
 };

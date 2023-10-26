@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Navbar from "../components/navigation/Navbar";
-import { patientRegistrationRoute } from "../data/routes/guestRoutes";
-import { pharmacistRegistrationRoute } from "../data/routes/guestRoutes";
-import { adminDashboardRoute } from "../data/routes/adminRoutes";
-import { pharmacistDashboardRoute } from "../data/routes/pharmacistRoutes";
-import { patientDashboardRoute } from "../data/routes/patientRoutes";
+import Navbar from "../../components/navigation/Navbar";
+import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
+import { pharmacistRegistrationRoute } from "../../data/routes/guestRoutes";
+import { adminDashboardRoute } from "../../data/routes/adminRoutes";
+import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
+import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 
 const Welcome = () => {
   return (

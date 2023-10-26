@@ -1,8 +1,8 @@
-import PharmacistRegistration from "../../pages/registration/PharmacistRegistration";
-import PatientRegistration from "../../pages/registration/PatientRegistration";
-import PharmacistLogin from "../../pages/login/PharmacistLogin";
-import PatientLogin from "../../pages/login/PatientLogin";
-import Welcome from "../../pages/Welcome";
+import PharmacistRegistration from "../../pages/guest/PharmacistRegistration";
+import PatientRegistration from "../../pages/guest/PatientRegistration";
+import PharmacistLogin from "../../pages/guest/PharmacistLogin";
+import PatientLogin from "../../pages/guest/PatientLogin";
+import Welcome from "../../pages/guest/Welcome";
 import { Route } from "../../types";
 
 export const welcomeRoute: Route = {
