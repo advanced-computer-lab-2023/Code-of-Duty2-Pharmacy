@@ -13,7 +13,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
 import UserTray from "../trays/UserTray";
-import Notifications from "../Notifications";
 import { adminSidebarItems } from "../../data";
 import { pharmacistSidebarItems } from "../../data";
 import { patientSidebarItems } from "../../data";
@@ -45,14 +44,14 @@ const UserPanel = () => {
         justifyContent: "space-between",
         backgroundColor: isSmallScreen
           ? theme.palette.background.default
-          : "transparent", // Use a color from your theme only when the screen is small
-        margin: theme.spacing(1), // Add spacing around the component
-        padding: theme.spacing(2), // Add padding inside the component
-        borderRadius: isSmallScreen ? "10rem" : "none", // Make the two sides completely round only when the screen is small
-        position: isSmallScreen ? "sticky" : "static", // Make the position sticky only when the screen is small
-        top: isSmallScreen ? 0 : theme.spacing(2), // Add some space at the top of the screen
-        zIndex: theme.zIndex.drawer - 1, // Adjust z-index based on whether the drawer is open or not
-        boxShadow: isSmallScreen ? "0px 2px 2px rgba(0, 0, 0, 0.25)" : "none", // Add a shadow only when the screen is small
+          : "transparent",
+        margin: theme.spacing(1),
+        padding: theme.spacing(2),
+        borderRadius: isSmallScreen ? "10rem" : "none",
+        position: isSmallScreen ? "sticky" : "static",
+        top: isSmallScreen ? 0 : theme.spacing(2),
+        zIndex: theme.zIndex.drawer - 1,
+        boxShadow: isSmallScreen ? "0px 2px 2px rgba(0, 0, 0, 0.25)" : "none",
       }}
     >
       {isSmallScreen ? (
@@ -62,7 +61,7 @@ const UserPanel = () => {
             color="inherit"
             aria-label="menu"
             onClick={toggleDrawer(true)}
-            sx={{ marginLeft: theme.spacing(1) }} // Add space to the left of the icon button
+            sx={{ marginLeft: theme.spacing(1) }}
           >
             <MenuIcon />
           </IconButton>
@@ -103,14 +102,7 @@ const UserPanel = () => {
       ) : (
         <Box sx={{ width: "100%" }} /> // Empty box to reserve space
       )}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          marginRight: theme.spacing(1), // Add space to the right of the notifications and user tray
-        }}
-      >
-        <Notifications />
+      <Box sx={{ marginRight: theme.spacing(1) }}>
         <UserTray />
       </Box>
     </Box>

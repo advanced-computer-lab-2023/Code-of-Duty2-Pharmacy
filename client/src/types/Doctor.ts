@@ -1,6 +1,6 @@
 import { DoctorBaseInfo } from './DoctorBaseInfo';
 
-export interface Doctor extends DoctorBaseInfo {
+interface Doctor extends DoctorBaseInfo {
   speciality?: string;
   availableSlots: [
     {startTime: Date, endTime: Date}
@@ -14,3 +14,5 @@ export interface Doctor extends DoctorBaseInfo {
   contract?: Buffer;
   contractStatus?: 'pending' | 'accepted' | 'rejected';
 }
+
+export default Doctor;

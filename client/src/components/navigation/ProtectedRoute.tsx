@@ -3,6 +3,7 @@ import { RouteProps } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext } from "react";
 import UserRole from "../../types/enums/UserRole";
+import { patientLoginRoute } from "../../data/routes/guestRoutes";
 
 interface ProtectedRouteProps {
   routeProps: RouteProps;
@@ -16,8 +17,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   routeProps,
 }) => {
   const { authState } = useContext(AuthContext);
+  const loginPath = patientLoginRoute.path;
+
   if (!authState.isAuthenticated || authState.role !== requiredRole)
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`${loginPath}`} replace />;
 
   return <Route {...routeProps} element={element} />;
 };

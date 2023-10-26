@@ -3,6 +3,11 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Navbar from "../components/navigation/Navbar";
+import { patientRegistrationRoute } from "../data/routes/guestRoutes";
+import { pharmacistRegistrationRoute } from "../data/routes/guestRoutes";
+import { adminDashboardRoute } from "../data/routes/adminRoutes";
+import { pharmacistDashboardRoute } from "../data/routes/pharmacistRoutes";
+import { patientDashboardRoute } from "../data/routes/patientRoutes";
 
 const Welcome = () => {
   return (
@@ -10,14 +15,15 @@ const Welcome = () => {
       <Navbar />
       <Box sx={{ m: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Welcome
+          /TEMPORARY BUTTONS FOR TESTING, WILL BE REMOVED LATER AND LOGIN WILL
+          BE REQUIRED/
         </Typography>
 
         <Button
           variant="contained"
           color="primary"
           component={Link}
-          to="/patient-registration"
+          to={patientRegistrationRoute.path}
           sx={{ m: 1 }}
         >
           Register as Patient
@@ -27,7 +33,7 @@ const Welcome = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/pharmacist-registration"
+          to={pharmacistRegistrationRoute.path}
           sx={{ m: 1 }}
         >
           Register as Pharmacist
@@ -37,7 +43,7 @@ const Welcome = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/administrator"
+          to={adminDashboardRoute.path}
           sx={{ m: 1 }}
         >
           Login as Administrator
@@ -47,7 +53,7 @@ const Welcome = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/pharmacist"
+          to={pharmacistDashboardRoute.path}
           sx={{ m: 1 }}
         >
           Login as Pharmacist
@@ -57,7 +63,7 @@ const Welcome = () => {
           variant="contained"
           color="primary"
           component={Link}
-          to="/patient"
+          to={patientDashboardRoute.path}
           sx={{ m: 1 }}
         >
           Login as Patient

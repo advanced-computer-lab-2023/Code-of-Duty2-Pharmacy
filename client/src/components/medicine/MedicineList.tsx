@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Checkbox,
   FormControlLabel,
@@ -7,43 +7,85 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import axios from "axios";
+import config from "../../config/config";
 
 import { Medicine } from "../../types";
+import { MedicineUsages } from "../../data";
 import EditMedicineModal from "./EditMedicineModal";
 import MedicineCard from "./MedicineCard";
+import { NameSearchBar, goSearch } from "../../components/search/NameSearchBar";
 
 interface Props {
-  medicines: Medicine[];
-  medSales?: { [key: string]: number };
-  onUpdated?: () => void;
   canEdit: boolean;
   canBuy: boolean;
   canViewSales: boolean;
   canViewQuantity: boolean;
-  usageFilter: string[];
-  setUsageFilter: React.Dispatch<React.SetStateAction<string[]>>;
-  showMore: boolean;
-  setShowMore: React.Dispatch<React.SetStateAction<boolean>>;
-  filterOptions: string[];
 }
 
 const MedicineList: React.FC<Props> = ({
-  medicines,
-  onUpdated,
   canBuy,
   canEdit,
   canViewSales,
   canViewQuantity,
-  usageFilter,
-  setUsageFilter,
-  showMore,
-  setShowMore,
-  medSales = {},
-  filterOptions,
 }) => {
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [usageFilter, setUsageFilter] = useState<string[]>([]);
+  const [showMore, setShowMore] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
     null
   );
+  const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
+
+  const filterOptions = MedicineUsages;
+
+  useEffect(() => {
+    if (canViewSales) {
+      loadSales();
+    }
+  }, [canViewSales]);
+
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const loadSales = async () => {
+    const response = await axios.get<{ [key: string]: number }>(
+      `${config.API_URL}/medicines/sales`
+    );
+    setMedSales(response.data);
+  };
+
+  const fetchMedicines = async () => {
+    try {
+      const response = await axios.get<Medicine[]>(
+        `${config.API_URL}/medicines`
+      );
+      setMedicines(response.data);
+    } catch (err) {
+      console.error("Error fetching medicines:", err);
+    }
+  };
+
+  const handleSearch = async (searchTerm: string, searchCollection: string) => {
+    try {
+      let responseData = await goSearch(searchTerm, searchCollection);
+      console.log(responseData);
+      setMedicines(responseData);
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        console.log("Get All Meds");
+        fetchMedicines();
+        return;
+      }
+      if (err.response?.status === 404) {
+        console.log("No Medicine with this name");
+        setMedicines([]);
+      } else {
+        console.log(err);
+      }
+    }
+  };
 
   const handleEditClick = (medicine: Medicine) => {
     setSelectedMedicine(medicine);
@@ -128,6 +170,11 @@ const MedicineList: React.FC<Props> = ({
           justifyContent: "start",
         }}
       >
+        <NameSearchBar
+          searchCollection="medicines"
+          onSearch={handleSearch}
+          initialValue="(or leave empty for all)"
+        />
         {filteredMedicines.length === 0 && <p>No medicines found.</p>}
         {filteredMedicines.map((medicine) => (
           <div
@@ -143,13 +190,11 @@ const MedicineList: React.FC<Props> = ({
               sales={medSales[medicine._id]}
               handleEditClick={handleEditClick}
             />
-
             {selectedMedicine && selectedMedicine._id === medicine._id && (
               <EditMedicineModal
                 open={!!selectedMedicine}
                 medicine={selectedMedicine}
                 onClose={handleClose}
-                onUpdated={onUpdated}
               />
             )}
           </div>

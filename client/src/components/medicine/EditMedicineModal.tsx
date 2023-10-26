@@ -18,15 +18,9 @@ interface Props {
   medicine: Medicine;
   open: boolean;
   onClose: () => void;
-  onUpdated?: () => void;
 }
 
-const EditMedicineModal: React.FC<Props> = ({
-  medicine,
-  open,
-  onClose,
-  onUpdated,
-}) => {
+const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
   const [name, setName] = useState(medicine.name);
   const [price, setPrice] = useState(medicine.price);
   const [description, setDescription] = useState(medicine.description || "");
@@ -69,7 +63,6 @@ const EditMedicineModal: React.FC<Props> = ({
         activeIngredients,
         pictureUrl,
       });
-      onUpdated && onUpdated();
       onClose();
     } catch (err) {
       console.error(err);

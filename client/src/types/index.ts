@@ -6,8 +6,9 @@ import Patient from "./Patient";
 import PharmacistRegistrationRequest from "./PharmacistRegistrationRequest";
 import Prescription from "./Prescription";
 import Pharmacist from "./Pharmacist";
-import { Doctor } from "./Doctor";
+import Doctor from "./Doctor";
 import ButtonColor from "./ButtonColor";
+import Route from "./Route";
 
 export {
     type Medicine,
@@ -19,5 +20,7 @@ export {
     type PharmacistRegistrationRequest,
     type Prescription,
     type Doctor,
-    type ButtonColor
+
+    type ButtonColor,
+    type Route
 }

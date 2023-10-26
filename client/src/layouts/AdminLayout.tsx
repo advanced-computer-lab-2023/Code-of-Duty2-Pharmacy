@@ -9,9 +9,7 @@ interface AdministratorLayoutProps {
   children: ReactNode;
 }
 
-const AdministratorLayout: React.FC<AdministratorLayoutProps> = ({
-  children,
-}) => {
+const AdminLayout: React.FC<AdministratorLayoutProps> = ({ children }) => {
   const theme = useTheme();
   const isLargeOrMediumScreen = useMediaQuery(theme.breakpoints.up("md"));
   const marginLeft = isLargeOrMediumScreen ? "17rem" : "0";
@@ -33,4 +31,4 @@ const AdministratorLayout: React.FC<AdministratorLayoutProps> = ({
   );
 };
 
-export default AdministratorLayout;
+export default AdminLayout;
