@@ -1,7 +1,7 @@
 import PharmacistListModal from "../../components/pharmacist/PharmacistListModal";
 
 const AdminViewPharmacistsPage = () => {
-  return <PharmacistListModal />;
+  return <PharmacistListModal canDelete={true} />;
 };
 
 export default AdminViewPharmacistsPage;

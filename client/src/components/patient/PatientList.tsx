@@ -1,14 +1,39 @@
 import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
 
 import { Patient } from "../../types";
+import axios from "axios";
+import config from "../../config/config";
 
 interface Props {
-  patients: Patient[];
-  onDelete: (id: string) => void;
   canDelete: boolean;
 }
 
-const PatientList: React.FC<Props> = ({ patients, onDelete, canDelete }) => {
+const PatientList: React.FC<Props> = ({ canDelete }) => {
+  const [patients, setPatients] = useState<Patient[]>([]);
+
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const response = await axios.get<Patient[]>(`${config.API_URL}/patients`);
+      setPatients(response.data);
+    } catch (err) {
+      console.error("Error fetching patients:", err);
+    }
+  };
+
+  const deletePatient = async (id: string) => {
+    try {
+      await axios.delete(`${config.API_URL}/patients/${id}`);
+      fetchPatients();
+    } catch (err) {
+      console.error("Error deleting patient:", err);
+    }
+  };
+
   return (
     <div>
       <h2>Patient Information</h2>
@@ -47,7 +72,7 @@ const PatientList: React.FC<Props> = ({ patients, onDelete, canDelete }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => onDelete(patient._id)}
+              onClick={() => deletePatient(patient._id)}
             >
               Delete Patient
             </Button>

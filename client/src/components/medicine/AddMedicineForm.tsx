@@ -6,11 +6,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box, Typography } from "@mui/material";
 
-interface Props {
-  onMedicineAdded: () => void;
-}
-
-const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
+const AddMedicineForm = () => {
   const [name, setName] = useState("");
   const [activeIngredients, setActiveIngredients] = useState<string[]>([]);
   const [newIngredient, setNewIngredient] = useState("");
@@ -43,7 +39,6 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
         availableQuantity,
       });
       console.log(response.data);
-      onMedicineAdded();
     } catch (err) {
       console.error(err);
     }
@@ -102,7 +97,7 @@ const AddMedicineForm: React.FC<Props> = ({ onMedicineAdded }) => {
 
           <Box mt={3} />
 
-          <Button type="submit" variant="contained" color="success">
+          <Button type="submit" variant="contained">
             Add Medicine
           </Button>
         </Box>

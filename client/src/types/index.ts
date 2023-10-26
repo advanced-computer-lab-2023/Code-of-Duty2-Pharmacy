@@ -9,6 +9,7 @@ import Pharmacist from "./Pharmacist";
 import Doctor from "./Doctor";
 import ButtonColor from "./ButtonColor";
 import Route from "./Route";
+import SidebarItem from "./SidebarItem";
 
 export {
     type Medicine,
@@ -22,5 +23,6 @@ export {
     type Doctor,
 
     type ButtonColor,
-    type Route
+    type Route,
+    type SidebarItem
 }
