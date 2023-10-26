@@ -4,8 +4,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Drawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Stack } from "@mui/material";
-import { ButtonColor } from "../types";
+import { IconButton, Stack } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import MenuIcon from "@mui/icons-material/Menu";
+import { ButtonColor } from "../../types";
 
 const AuthTray = () => {
   const theme = useTheme();
@@ -18,7 +20,6 @@ const AuthTray = () => {
 
   const buttons: { color: ButtonColor; children: string }[] = [
     { color: "inherit", children: "About" },
-    { color: "inherit", children: "Register" },
     { color: "inherit", children: "For Pharmacists" },
     { color: "inherit", children: "Login" },
   ];
@@ -26,7 +27,9 @@ const AuthTray = () => {
   const drawerContent = (
     <Box sx={{ padding: theme.spacing(2) }}>
       <Stack direction="column" spacing={2} alignItems="flex-start">
-        <Button onClick={handleDrawerToggle}>Close</Button>
+        <IconButton onClick={handleDrawerToggle}>
+          <CloseIcon />
+        </IconButton>
         {buttons.map((buttonProps, index) => (
           <Button
             key={index}
@@ -48,15 +51,15 @@ const AuthTray = () => {
 
   return isMediumScreen ? (
     <>
-      <Button color="inherit" onClick={handleDrawerToggle}>
-        Menu
-      </Button>
+      <IconButton color="inherit" onClick={handleDrawerToggle}>
+        <MenuIcon />
+      </IconButton>
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle}>
         {drawerContent}
       </Drawer>
     </>
   ) : (
-    <Box style={{ marginLeft: "auto" }}>{largeScreenContent}</Box>
+    <Box>{largeScreenContent}</Box>
   );
 };
 

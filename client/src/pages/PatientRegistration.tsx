@@ -1,5 +1,5 @@
 import { useState } from "react";
-import config from "../../config/config";
+import config from "../config/config";
 import axios from "axios";
 
 const PatientRegistration = () => {

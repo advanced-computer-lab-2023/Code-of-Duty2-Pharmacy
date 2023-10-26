@@ -36,7 +36,7 @@ const darkTheme = createTheme({
     secondary: {
       main: '#064C5B',
     },
-    gradient: 'linear-gradient(to right bottom, #064C5B, #82ffa1)'
+    gradient: 'linear-gradient(to top, #064C5B, #064C5B)'
   },
 });
 

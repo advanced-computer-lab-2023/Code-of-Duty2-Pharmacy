@@ -1,32 +1,51 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-import PharmacistDashboard from "./pages/pharmacist/PharmacistDashboard";
-import AdministratorDashboard from "./pages/admin/AdministratorDashboard";
-import PatientDashboard from "./pages/patient/PatientDashboard";
-import PatientRegistration from "./pages/register/PatientRegistration";
-import PharmacistRegistration from "./pages/register/PharmacistRegistration";
+import PharmacistLayout from "./layouts/PharmacistLayout";
+import AdministratorLayout from "./layouts/AdministratorLayout";
+import PatientLayout from "./layouts/PatientLayout";
+import PatientRegistration from "./pages/PatientRegistration";
+import PharmacistRegistration from "./pages/PharmacistRegistration";
 import Welcome from "./pages/Welcome";
-import Navbar from "./components/navigation/Navbar";
-import Sidebar from "./components/navigation/Sidebar";
+import PatientDashboard from "./pages/patient/PatientDashboard";
+import AdministratorDashboard from "./pages/admin/AdministratorDashboard";
+import PharmacistDashboard from "./pages/pharmacist/PharmacistDashboard";
+import Login from "./pages/Login";
 
 const App = () => {
-  const location = useLocation();
-
   return (
-    <>
-      {location.pathname === "/" ? <Navbar /> : <Sidebar />}
-      <Routes>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/pharmacist" element={<PharmacistDashboard />} />
-        <Route path="/administrator" element={<AdministratorDashboard />} />
-        <Route path="/patient" element={<PatientDashboard />} />
-        <Route path="/patient-registration" element={<PatientRegistration />} />
-        <Route
-          path="/pharmacist-registration"
-          element={<PharmacistRegistration />}
-        />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Welcome />} />
+      <Route
+        path="/pharmacist"
+        element={
+          <PharmacistLayout>
+            <PharmacistDashboard />
+          </PharmacistLayout>
+        }
+      />
+      <Route
+        path="/administrator"
+        element={
+          <AdministratorLayout>
+            <AdministratorDashboard />
+          </AdministratorLayout>
+        }
+      />
+      <Route
+        path="/patient"
+        element={
+          <PatientLayout>
+            <PatientDashboard />
+          </PatientLayout>
+        }
+      />
+      <Route path="/patient-registration" element={<PatientRegistration />} />
+      <Route
+        path="/pharmacist-registration"
+        element={<PharmacistRegistration />}
+      />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 };
 

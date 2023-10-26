@@ -6,7 +6,7 @@ import config from "../../config/config";
 import MedicineList from "../../components/medicine/MedicineList";
 import PatientList from "../../components/patient/PatientList";
 import { Medicine, Patient } from "../../types";
-import { NameSearchBar, goSearch } from "../../components/NameSearchBar";
+import { NameSearchBar, goSearch } from "../../components/search/NameSearchBar";
 import AddAdminForm from "../../components/admin/AddAdminForm";
 import PharmacistRegistrationRequestsList from "../../components/pharmacist/PharmacistRegistrationRequestsList";
 import BasicTabs from "../../components/navigation/BasicTabs";

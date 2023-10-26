@@ -4,8 +4,8 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
-import UserTray from "../UserTray";
-import AuthTray from "../AuthTray";
+import UserTray from "../trays/UserTray";
+import AuthTray from "../trays/AuthTray";
 
 const Navbar = () => {
   const { authState } = useContext(AuthContext);
@@ -16,6 +16,8 @@ const Navbar = () => {
         position="sticky"
         sx={{
           background: (theme) => theme.palette.gradient,
+          height: "4rem",
+          justifyContent: "center",
         }}
       >
         <Toolbar>

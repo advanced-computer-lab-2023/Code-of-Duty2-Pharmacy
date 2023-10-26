@@ -6,7 +6,7 @@ import { MedicineUsages } from "../../data";
 import { Medicine } from "../../types";
 import MedicineList from "../../components/medicine/MedicineList";
 import AddMedicineForm from "../../components/medicine/AddMedicineForm";
-import { NameSearchBar, goSearch } from "../../components/NameSearchBar";
+import { NameSearchBar, goSearch } from "../../components/search/NameSearchBar";
 import BasicTabs from "../../components/navigation/BasicTabs";
 
 const PharmacistPage: React.FC = () => {

@@ -6,7 +6,7 @@ import Button from "@mui/material/Button/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 
-import config from "../config/config";
+import config from "../../config/config";
 
 interface Props {
   searchCollection?: string;
