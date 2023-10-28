@@ -1,26 +1,34 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   IconButton,
   Drawer,
-  Button,
   useTheme,
   useMediaQuery,
   List,
   Stack,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
+  ListItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
+import { SidebarItem } from "../../types";
 import UserTray from "../trays/UserTray";
-import { adminSidebarItems } from "../../data/sidebar";
-import { pharmacistSidebarItems } from "../../data/sidebar";
-import { patientSidebarItems } from "../../data/sidebar";
-import { AuthContext } from "../../contexts/AuthContext";
-import UserRole from "../../types/enums/UserRole";
+import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 
-const UserPanel = () => {
+interface Props {
+  sidebarItems: SidebarItem[];
+}
+
+const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [open, setOpen] = useState<string>(""); // For expandable sidebar items with sub-items
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -35,6 +43,46 @@ const UserPanel = () => {
       }
       setDrawerOpen(open);
     };
+
+  const handleClick = (item: SidebarItem) => {
+    if (item.items) {
+      setOpen((prevState) => (prevState === item.title ? "" : item.title));
+    }
+  };
+
+  const renderSidebarItems = (items: SidebarItem[]) => {
+    return items.map((item) => (
+      <React.Fragment key={item.title}>
+        <ListItemButton
+          component={item.href ? RouterLink : "div"}
+          to={item.href}
+          onClick={() => {
+            handleClick(item);
+            if (isSmallScreen) {
+              toggleDrawer(false); // Close the drawer when an item is clicked on small screens
+            }
+          }}
+          sx={{
+            textDecoration: "none",
+            padding: 1.5,
+            marginRight: theme.spacing(1),
+          }}
+        >
+          {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+          <ListItemText primary={item.title} sx={{ fontWeight: "bold" }} />
+          {item.items &&
+            (open === item.title ? <ExpandLess /> : <ExpandMore />)}
+        </ListItemButton>
+        {item.items && (
+          <Collapse in={open === item.title} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding sx={{ paddingLeft: 4 }}>
+              {renderSidebarItems(item.items)}
+            </List>
+          </Collapse>
+        )}
+      </React.Fragment>
+    ));
+  };
 
   return (
     <Box
@@ -72,29 +120,7 @@ const UserPanel = () => {
                 <IconButton onClick={toggleDrawer(false)}>
                   <CloseIcon />
                 </IconButton>
-                <List>
-                  {/*authState.role === UserRole.ADMIN && (
-                  adminSidebarItems.map((item) => ( 
-                  <ListItem component={RouterLink} to={item.path}>
-                    <ListItemText primary={item.name} />
-                  </ListItem>
-                  )*/}
-
-                  {/*authState.role === UserRole.PATIENT && (
-                  patientSidebarItems.map((item) => ( 
-                    <ListItem component={RouterLink} to={item.path}>
-                      <ListItemText primary={item.name} />
-                    </ListItem>
-                )*/}
-
-                  {/*authState.role === UserRole.PHARMACIST && ( 
-                  pharmacistSidebarItems.map((item) => ( 
-                    <ListItem component={RouterLink} to={item.path}>
-                      <ListItemText primary={item.name} />
-                   </ListItem>
-                ))
-                  )*/}
-                </List>
+                <List>{renderSidebarItems(sidebarItems)}</List>
               </Stack>
             </Box>
           </Drawer>

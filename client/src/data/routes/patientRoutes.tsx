@@ -1,24 +1,15 @@
-import PatientLayout from "../../layouts/PatientLayout";
 import PatientDashboard from "../../pages/patient/PatientDashboard";
 import PatientViewMedicinesPage from "../../pages/patient/PatientViewMedicinesPage";
 import { Route } from "../../types";
 
 export const patientDashboardRoute: Route = {
   path: "/patient/dashboard",
-  component: (
-    <PatientLayout>
-      <PatientDashboard />
-    </PatientLayout>
-  ),
+  component: <PatientDashboard />,
 };
 
 export const viewMedicinesRoute: Route = {
   path: "/patient/view-medicines",
-  component: (
-    <PatientLayout>
-      <PatientViewMedicinesPage />
-    </PatientLayout>
-  ),
+  component: <PatientViewMedicinesPage />,
 };
 
 const patientRoutes: Route[] = [patientDashboardRoute, viewMedicinesRoute];

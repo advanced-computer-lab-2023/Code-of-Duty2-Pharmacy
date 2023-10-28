@@ -1,34 +1,21 @@
 import PharmacistDashboard from "../../pages/pharmacist/PharmacistDashboard";
 import { Route } from "../../types";
-import PharmacistLayout from "../../layouts/PharmacistLayout";
 import PharmacistViewMedicinesPage from "../../pages/pharmacist/PharmacistViewMedicinesPage";
 import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
-  component: (
-    <PharmacistLayout>
-      <PharmacistDashboard />
-    </PharmacistLayout>
-  ),
+  component: <PharmacistDashboard />,
 };
 
 export const viewMedicinesRoute: Route = {
   path: "/pharmacist/view-medicines",
-  component: (
-    <PharmacistLayout>
-      <PharmacistViewMedicinesPage />
-    </PharmacistLayout>
-  ),
+  component: <PharmacistViewMedicinesPage />,
 };
 
 export const addMedicineRoute: Route = {
   path: "/pharmacist/add-medicine",
-  component: (
-    <PharmacistLayout>
-      <PharmacistAddMedicinePage />
-    </PharmacistLayout>
-  ),
+  component: <PharmacistAddMedicinePage />,
 };
 
 const pharmacistRoutes: Route[] = [

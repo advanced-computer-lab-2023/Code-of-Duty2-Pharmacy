@@ -12,7 +12,6 @@ import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 const Welcome = () => {
   return (
     <>
-      <Navbar />
       <Box sx={{ m: 4 }}>
         <Typography variant="h4" gutterBottom>
           /TEMPORARY BUTTONS FOR TESTING, WILL BE REMOVED LATER AND LOGIN WILL

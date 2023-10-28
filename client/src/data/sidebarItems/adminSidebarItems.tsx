@@ -1,5 +1,14 @@
+import {
+  addAdminRoute,
+  adminDashboardRoute,
+  viewMedicinesRoute,
+  viewPatientsRoute,
+  viewPharmacistRegistrationRequestsRoute,
+  viewPharmacistsRoute,
+} from "../routes/adminRoutes";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
@@ -8,14 +17,6 @@ import HealingIcon from "@mui/icons-material/Healing";
 import PeopleIcon from "@mui/icons-material/People";
 
 import { SidebarItem } from "../../types";
-import {
-  addAdminRoute,
-  viewMedicinesRoute,
-  viewPharmacistRegistrationRequestsRoute,
-  viewPatientsRoute,
-  viewPharmacistsRoute,
-  adminDashboardRoute,
-} from "../routes/adminRoutes";
 
 /**
  * One href for each admin page route.
@@ -28,6 +29,7 @@ export const adminSidebarItems: SidebarItem[] = [
   },
   {
     title: "Manage Users",
+    icon: <SupervisorAccountIcon />,
     items: [
       {
         title: "Admins",
@@ -51,7 +53,7 @@ export const adminSidebarItems: SidebarItem[] = [
     icon: <AssignmentIcon />,
     items: [
       {
-        title: "View Pharmacist Requests",
+        title: "Pharmacists",
         href: viewPharmacistRegistrationRequestsRoute.path,
         icon: <AssignmentTurnedInIcon />,
       },

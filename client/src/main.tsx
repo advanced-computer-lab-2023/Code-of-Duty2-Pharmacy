@@ -7,6 +7,7 @@ import "./index.css";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { CustomThemeProvider } from "./contexts/ThemeContext.tsx";
 import { CssBaseline } from "@mui/material";
+import Layout from "./layouts/Layout.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -14,7 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <CustomThemeProvider>
           <CssBaseline>
-            <App />
+            <Layout>
+              <App />
+            </Layout>
           </CssBaseline>
         </CustomThemeProvider>
       </AuthProvider>
