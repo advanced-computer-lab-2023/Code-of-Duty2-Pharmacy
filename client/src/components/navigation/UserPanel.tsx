@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Box,
   IconButton,
@@ -46,9 +46,9 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
 
   const handleClick = (item: SidebarItem) => {
     if (item.href) {
-      setOpen(""); // Close all expanded items when an item with a href is clicked
+      setOpen("");
       if (isSmallScreen) {
-        setDrawerOpen(false); // Close the drawer when an item with a href is clicked on small screens
+        setDrawerOpen(false);
       }
     } else if (item.items) {
       setOpen((prevState) => (prevState === item.title ? "" : item.title));
@@ -59,12 +59,12 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
     return items.map((item) => (
       <React.Fragment key={item.title}>
         <ListItemButton
-          component={item.href ? RouterLink : "div"}
+          component={item.href ? NavLink : "div"}
           to={item.href}
           onClick={() => {
             handleClick(item);
             if (isSmallScreen && item.href) {
-              setDrawerOpen(false); // Close the drawer when an item with a href is clicked on small screens
+              setDrawerOpen(false);
             }
           }}
           sx={{

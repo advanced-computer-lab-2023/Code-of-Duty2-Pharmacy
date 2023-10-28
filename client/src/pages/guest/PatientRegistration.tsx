@@ -1,7 +1,9 @@
 import { useState } from "react";
-import config from "../../config/config";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import axios from "axios";
+
+import config from "../../config/config";
 
 const PatientRegistration = () => {
   const [username, setUsername] = useState("");
@@ -16,6 +18,7 @@ const PatientRegistration = () => {
     mobileNumber: "",
     relationToPatient: "",
   });
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,10 +64,7 @@ const PatientRegistration = () => {
   return (
     <>
       {/* TODO: Fix this file's styling, form validation and submit handling */}
-      <Button
-        onClick={() => (window.location.href = "/")}
-        sx={{ mb: 5, fontSize: "1rem" }}
-      >
+      <Button onClick={() => navigate("/")} sx={{ mb: 5, fontSize: "1rem" }}>
         Back to Home
       </Button>
       <form onSubmit={handleSubmit}>

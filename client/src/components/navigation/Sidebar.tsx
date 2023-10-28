@@ -11,7 +11,7 @@ import {
   ListItemButton,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Transition } from "react-transition-group";
 
 import { SidebarItem } from "../../types";
@@ -38,7 +38,7 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
     return items.map((item) => (
       <React.Fragment key={item.title}>
         <ListItemButton
-          component={item.href ? RouterLink : "div"}
+          component={item.href ? NavLink : "div"}
           to={item.href}
           onClick={() => handleClick(item)}
           sx={{
@@ -50,10 +50,12 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
           {item.icon && (
             <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
           )}
+
           <ListItemText
             primary={item.title}
             sx={{ color: "white", fontWeight: "bold" }}
           />
+
           {item.items &&
             (open === item.title ? (
               <ExpandLess sx={{ color: "white" }} />
@@ -61,6 +63,7 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
               <ExpandMore sx={{ color: "white" }} />
             ))}
         </ListItemButton>
+
         {item.items && (
           <Collapse in={open === item.title} timeout="auto" unmountOnExit>
             <List component="div" disablePadding sx={{ paddingLeft: 4 }}>

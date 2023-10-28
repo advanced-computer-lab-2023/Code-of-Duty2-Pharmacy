@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { AppBar, Toolbar, Link, Typography } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
@@ -21,13 +21,13 @@ const Navbar = () => {
         }}
       >
         <Toolbar>
-          <Link component={RouterLink} to="/">
+          <NavLink to="/">
             <img
               src={el7a2niLogo}
               alt="Logo"
               style={{ height: "2rem", paddingRight: "1rem" }}
             />
-          </Link>
+          </NavLink>
 
           <Typography
             variant="h6"

@@ -14,6 +14,7 @@ import {
   patientLoginRoute,
   pharmacistLoginRoute,
 } from "../../data/routes/guestRoutes";
+import { NavLink } from "react-router-dom";
 
 const AuthTray = () => {
   const theme = useTheme();
@@ -41,11 +42,13 @@ const AuthTray = () => {
         <IconButton onClick={handleDrawerToggle}>
           <CloseIcon />
         </IconButton>
-        {buttons.map((buttonProps, index) => (
+        {[...buttons].reverse().map((buttonProps, index) => (
           <Button
             key={index}
             {...buttonProps}
-            sx={{ marginLeft: theme.spacing(2) }}
+            component={NavLink}
+            to={buttonProps.href}
+            sx={{ marginLeft: theme.spacing(2), textDecoration: "none" }}
           />
         ))}
       </Stack>
@@ -55,7 +58,13 @@ const AuthTray = () => {
   const largeScreenContent = (
     <Stack direction="row" spacing={2}>
       {buttons.map((buttonProps, index) => (
-        <Button key={index} {...buttonProps} />
+        <Button
+          key={index}
+          {...buttonProps}
+          component={NavLink}
+          to={buttonProps.href}
+          sx={{ textDecoration: "none" }}
+        />
       ))}
     </Stack>
   );

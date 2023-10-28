@@ -2,15 +2,17 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { pharmacistRegistrationRoute } from "../../data/routes/guestRoutes";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function PharmacistLogin() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //TODO: Handle login here...
@@ -33,10 +35,7 @@ export default function PharmacistLogin() {
             style={{ width: "100%", padding: "0rem 4rem" }}
           />
         </Link> */}
-        <Button
-          onClick={() => (window.location.href = "/")}
-          sx={{ mb: 5, fontSize: "1rem" }}
-        >
+        <Button onClick={() => navigate("/")} sx={{ mb: 5, fontSize: "1rem" }}>
           Back to Home
         </Button>
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -78,15 +77,13 @@ export default function PharmacistLogin() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="/" variant="body2">
-                {/* TODO: Add Forgot password href here */}
-                Forgot password?
-              </Link>
+              {/* TODO: Add Forgot password href here */}
+              <NavLink to="/">Forgot password?</NavLink>
             </Grid>
             <Grid item>
-              <Link href={pharmacistRegistrationRoute.path} variant="body2">
+              <NavLink to={pharmacistRegistrationRoute.path}>
                 Don't have an account? Sign Up
-              </Link>
+              </NavLink>
             </Grid>
           </Grid>
         </Box>

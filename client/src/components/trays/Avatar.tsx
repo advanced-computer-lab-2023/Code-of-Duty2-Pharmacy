@@ -7,10 +7,19 @@ import {
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../contexts/ThemeContext";
-import { AccountCircle, Brightness4, Brightness7 } from "@mui/icons-material";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import {
+  AccountCircle,
+  Brightness4,
+  Brightness7,
+  Logout as LogoutIcon,
+} from "@mui/icons-material";
 
 const Avatar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -20,6 +29,13 @@ const Avatar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    handleClose();
+  };
+
   return (
     <>
       <IconButton
@@ -45,6 +61,10 @@ const Avatar = () => {
             }
             label={theme === "dark" ? <Brightness4 /> : <Brightness7 />}
           />
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon />
+          Logout
         </MenuItem>
       </Menu>
     </>
