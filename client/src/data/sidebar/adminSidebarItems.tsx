@@ -18,7 +18,7 @@ import {
 } from "../routes/adminRoutes";
 
 /**
- * One sidebar item for each admin page/route.
+ * One href for each admin page route.
  */
 export const adminSidebarItems: SidebarItem[] = [
   {

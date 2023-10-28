@@ -10,7 +10,7 @@ import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import config from "../../config/config";
-import { MedicineUsages } from "../../data";
+import { MedicineUsages } from "../../data/medicines";
 import { Medicine } from "../../types";
 import { Box } from "@mui/material";
 

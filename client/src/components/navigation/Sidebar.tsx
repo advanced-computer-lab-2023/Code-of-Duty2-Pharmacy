@@ -6,9 +6,11 @@ import { List, ListItem, ListItemText } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Transition } from "react-transition-group";
 
-import { adminSidebarItems } from "../../data";
-import { pharmacistSidebarItems } from "../../data";
-import { patientSidebarItems } from "../../data";
+import {
+  adminSidebarItems,
+  pharmacistSidebarItems,
+  patientSidebarItems,
+} from "../../data/sidebar";
 import { AuthContext } from "../../contexts/AuthContext";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 import UserRole from "../../types/enums/UserRole";
@@ -46,27 +48,17 @@ const Sidebar = () => {
           />
         </ListItem>
 
-        {/*authState.role === UserRole.ADMIN && (
-          adminSidebarItems.map((item) => ( 
-          <ListItem component={RouterLink} to={item.path}>
-            <ListItemText primary={item.name} />
-          </ListItem>
-          )*/}
-
-        {/*authState.role === UserRole.PATIENT && (
-          patientSidebarItems.map((item) => ( 
-            <ListItem component={RouterLink} to={item.path}>
-              <ListItemText primary={item.name} />
-            </ListItem>
-        )*/}
-
-        {/*authState.role === UserRole.PHARMACIST && ( 
-          pharmacistSidebarItems.map((item) => ( 
-            <ListItem component={RouterLink} to={item.path}>
-              <ListItemText primary={item.name} />
-           </ListItem>
-        ))
-          )*/}
+        {authState.role === UserRole.ADMIN &&
+          adminSidebarItems.map(
+            (item) =>
+              item.href && (
+                <ListItem>
+                  <RouterLink to={item.href}>
+                    <ListItemText primary={item.title} />
+                  </RouterLink>
+                </ListItem>
+              )
+          )}
       </List>
     </Box>
   );

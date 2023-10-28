@@ -13,9 +13,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
 import UserTray from "../trays/UserTray";
-import { adminSidebarItems } from "../../data";
-import { pharmacistSidebarItems } from "../../data";
-import { patientSidebarItems } from "../../data";
+import { adminSidebarItems } from "../../data/sidebar";
+import { pharmacistSidebarItems } from "../../data/sidebar";
+import { patientSidebarItems } from "../../data/sidebar";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserRole from "../../types/enums/UserRole";
 

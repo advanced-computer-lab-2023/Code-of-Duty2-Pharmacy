@@ -11,7 +11,7 @@ import axios from "axios";
 import config from "../../config/config";
 
 import { Medicine } from "../../types";
-import { MedicineUsages } from "../../data";
+import { MedicineUsages } from "../../data/medicines";
 import EditMedicineModal from "./EditMedicineModal";
 import MedicineCard from "./MedicineCard";
 import { NameSearchBar, goSearch } from "../../components/search/NameSearchBar";
