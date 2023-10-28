@@ -7,6 +7,7 @@ const Footer = () => {
       sx={{
         backgroundColor: (theme) => theme.palette.background.paper,
         padding: (theme) => theme.spacing(6, 0),
+        marginTop: (theme) => theme.spacing(10),
         borderTop: (theme) => `1px solid ${theme.palette.divider}`,
         position: "static",
         bottom: 0,

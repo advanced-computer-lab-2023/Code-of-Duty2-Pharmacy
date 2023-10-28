@@ -3,11 +3,23 @@ import PatientRegistration from "../../pages/guest/PatientRegistration";
 import PharmacistLogin from "../../pages/guest/PharmacistLogin";
 import PatientLogin from "../../pages/guest/PatientLogin";
 import Welcome from "../../pages/guest/Welcome";
+import About from "../../pages/guest/About";
 import { Route } from "../../types";
+import ContactUs from "../../pages/guest/ContactUs";
 
 export const welcomeRoute: Route = {
   path: "/",
   component: <Welcome />,
+};
+
+export const aboutRoute: Route = {
+  path: "/about",
+  component: <About />,
+};
+
+export const contactUsRoute: Route = {
+  path: "/contact-us",
+  component: <ContactUs />,
 };
 
 export const patientLoginRoute: Route = {
@@ -32,6 +44,8 @@ export const pharmacistRegistrationRoute: Route = {
 
 const routes: Route[] = [
   welcomeRoute,
+  aboutRoute,
+  contactUsRoute,
   patientLoginRoute,
   patientRegistrationRoute,
   pharmacistLoginRoute,

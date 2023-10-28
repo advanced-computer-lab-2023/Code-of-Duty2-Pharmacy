@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Box, useMediaQuery } from "@mui/material";
 
-import Navbar from "../components/navigation/Navbar";
 import UserPanel from "../components/navigation/UserPanel";
 import Sidebar from "../components/navigation/Sidebar";
 import Footer from "../components/navigation/Footer";
@@ -21,7 +20,8 @@ const Layout: React.FC<Props> = ({ children }) => {
   const theme = useTheme();
   const isMediumScreenOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const sidebarWidth = "17rem";
-  // We apply a left margin to the main content when the sidebar
+  // We apply a left margin to the main content in the layout of
+  // authenticated users (because only they have a sidebar) when the sidebar
   // is open (on medium screens and larger) to prevent the main content
   // from being hidden behind the sidebar. We don't apply this margin
   // on small screens because the sidebar is hidden on small screens.
@@ -57,7 +57,6 @@ const Layout: React.FC<Props> = ({ children }) => {
   } else {
     return (
       <>
-        <Navbar />
         <MainPageContent />
         <Footer />
       </>

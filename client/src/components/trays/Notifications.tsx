@@ -1,15 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState<number>(0);
+  // TODO: Add this
+  // const [notifications, setNotifications] = useState({});
+  const [numberOfNotifications, setNumberOfNotifications] = useState<number>(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  useEffect(() => {
+    fetchNotifications()
+      .then((notifications) => {
+        setNumberOfNotifications(notifications);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  async function fetchNotifications() {
+    // TODO: Fetch notifications from database here
+    // For now, we'll just return a placeholder value
+    return Promise.resolve(101);
+  }
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    // This is where you would normally fetch the number of notifications
-    // For this example, we'll just increment the existing count
-    setNotifications(notifications + 1);
     setAnchorEl(event.currentTarget);
   };
 
@@ -20,7 +35,7 @@ const Notifications = () => {
   return (
     <div>
       <IconButton color="inherit" onClick={handleClick}>
-        <Badge badgeContent={notifications} color="error">
+        <Badge badgeContent={numberOfNotifications} color="error">
           <NotificationsIcon />
         </Badge>
       </IconButton>
@@ -31,7 +46,7 @@ const Notifications = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {/* Replace 'Notification 1', 'Notification 2', etc. with your actual notifications */}
+        {/* TODO: Replace 'Notification 1', 'Notification 2', etc. with your actual notifications */}
         <MenuItem>Notification 1</MenuItem>
         <MenuItem>Notification 2</MenuItem>
         <MenuItem>Notification 3</MenuItem>
