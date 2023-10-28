@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { pharmacistRegistrationRoute } from "../../data/routes/guestRoutes";
 
 export default function PharmacistLogin() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,6 +53,7 @@ export default function PharmacistLogin() {
             id="username"
             label="Username"
             name="username"
+            placeholder="Enter your pharmacist account's username"
             autoComplete="username"
             autoFocus
           />
@@ -60,6 +62,7 @@ export default function PharmacistLogin() {
             required
             fullWidth
             name="password"
+            placeholder="Enter your password"
             label="Password"
             type="password"
             id="password"
@@ -76,12 +79,13 @@ export default function PharmacistLogin() {
           <Grid container>
             <Grid item xs>
               <Link href="/" variant="body2">
+                {/* TODO: Add Forgot password href here */}
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href={pharmacistRegistrationRoute.path} variant="body2">
+                Don't have an account? Sign Up
               </Link>
             </Grid>
           </Grid>
