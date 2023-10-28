@@ -45,7 +45,12 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
     };
 
   const handleClick = (item: SidebarItem) => {
-    if (item.items) {
+    if (item.href) {
+      setOpen(""); // Close all expanded items when an item with a href is clicked
+      if (isSmallScreen) {
+        setDrawerOpen(false); // Close the drawer when an item with a href is clicked on small screens
+      }
+    } else if (item.items) {
       setOpen((prevState) => (prevState === item.title ? "" : item.title));
     }
   };
@@ -58,8 +63,8 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
           to={item.href}
           onClick={() => {
             handleClick(item);
-            if (isSmallScreen) {
-              toggleDrawer(false); // Close the drawer when an item is clicked on small screens
+            if (isSmallScreen && item.href) {
+              setDrawerOpen(false); // Close the drawer when an item with a href is clicked on small screens
             }
           }}
           sx={{
@@ -117,10 +122,25 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
           <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
             <Box sx={{ padding: theme.spacing(2) }}>
               <Stack direction="column" spacing={2} alignItems="flex-start">
-                <IconButton onClick={toggleDrawer(false)}>
+                <IconButton edge="end" onClick={toggleDrawer(false)}>
                   <CloseIcon />
                 </IconButton>
-                <List>{renderSidebarItems(sidebarItems)}</List>
+                <List>
+                  <ListItem>
+                    <img
+                      src={el7a2niLogo}
+                      alt="El7a2ni Logo"
+                      style={{
+                        maxHeight: "12rem",
+                        marginTop: "0rem",
+                        marginBottom: "0rem",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    />
+                  </ListItem>
+                  {renderSidebarItems(sidebarItems)}
+                </List>
               </Stack>
             </Box>
           </Drawer>

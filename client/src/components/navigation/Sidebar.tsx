@@ -17,36 +17,6 @@ import { Transition } from "react-transition-group";
 import { SidebarItem } from "../../types";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 
-/**
- * Animation related styling for sidebar appearing and disappearing
- * based on screen size.
- */
-const duration = 50;
-
-type TransitionStyles = {
-  entering: { opacity: number };
-  entered: { opacity: number };
-  exiting: { opacity: number };
-  exited: { opacity: number };
-  unmounted: { opacity: number };
-};
-
-const transitionStyles: TransitionStyles = {
-  entering: { opacity: 1 },
-  entered: { opacity: 1 },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 },
-  unmounted: { opacity: 0 },
-};
-
-const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
-  opacity: 1,
-};
-
-// End of animation related styling.
-//--------------------------------------------------------------
-
 interface Props {
   sidebarItems: SidebarItem[];
 }
@@ -57,7 +27,9 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClick = (item: SidebarItem) => {
-    if (item.items) {
+    if (item.href) {
+      setOpen("");
+    } else if (item.items) {
       setOpen((prevState) => (prevState === item.title ? "" : item.title));
     }
   };
@@ -121,7 +93,7 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
           >
             <Box>
               <List>
-                <ListItem component={RouterLink} to="/">
+                <ListItem>
                   <img
                     src={el7a2niLogo}
                     alt="El7a2ni Logo"
@@ -135,7 +107,6 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
                     }}
                   />
                 </ListItem>
-
                 {renderSidebarItems(sidebarItems)}
               </List>
             </Box>
@@ -147,3 +118,30 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
 };
 
 export default Sidebar;
+
+/**
+ * Animation related styling for sidebar appearing and disappearing
+ * based on screen size.
+ */
+const duration = 50;
+
+type TransitionStyles = {
+  entering: { opacity: number };
+  entered: { opacity: number };
+  exiting: { opacity: number };
+  exited: { opacity: number };
+  unmounted: { opacity: number };
+};
+
+const transitionStyles: TransitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+  unmounted: { opacity: 0 },
+};
+
+const defaultStyle = {
+  transition: `opacity ${duration}ms ease-in-out`,
+  opacity: 1,
+};
