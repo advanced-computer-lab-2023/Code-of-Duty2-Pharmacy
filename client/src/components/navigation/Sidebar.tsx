@@ -98,20 +98,18 @@ const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
             <Box>
               <List>
                 <ListItem>
-                  <NavLink to="/">
-                    <img
-                      src={el7a2niLogo}
-                      alt="El7a2ni Logo"
-                      style={{
-                        maxWidth: "70%",
-                        height: "auto",
-                        marginTop: "3rem",
-                        marginBottom: "3rem",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                      }}
-                    />
-                  </NavLink>
+                  <img
+                    src={el7a2niLogo}
+                    alt="El7a2ni Logo"
+                    style={{
+                      maxWidth: "70%",
+                      height: "auto",
+                      marginTop: "3rem",
+                      marginBottom: "3rem",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  />
                 </ListItem>
                 {renderSidebarItems(sidebarItems)}
               </List>
