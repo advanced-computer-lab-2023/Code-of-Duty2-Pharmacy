@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -10,6 +11,8 @@ import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 
 const Welcome = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Box sx={{ m: 4 }}>
@@ -20,8 +23,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={NavLink}
-          to={patientRegistrationRoute.path}
+          onClick={() => navigate(patientRegistrationRoute.path)}
           sx={{ m: 1 }}
         >
           Register as Patient
@@ -30,8 +32,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={NavLink}
-          to={pharmacistRegistrationRoute.path}
+          onClick={() => navigate(pharmacistRegistrationRoute.path)}
           sx={{ m: 1 }}
         >
           Register as Pharmacist
@@ -40,8 +41,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={NavLink}
-          to={adminDashboardRoute.path}
+          onClick={() => navigate(adminDashboardRoute.path)}
           sx={{ m: 1 }}
         >
           Login as Administrator
@@ -50,8 +50,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={NavLink}
-          to={pharmacistDashboardRoute.path}
+          onClick={() => navigate(pharmacistDashboardRoute.path)}
           sx={{ m: 1 }}
         >
           Login as Pharmacist
@@ -60,8 +59,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={NavLink}
-          to={patientDashboardRoute.path}
+          onClick={() => navigate(patientDashboardRoute.path)}
           sx={{ m: 1 }}
         >
           Login as Patient

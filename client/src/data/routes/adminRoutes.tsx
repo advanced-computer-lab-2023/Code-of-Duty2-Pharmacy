@@ -8,32 +8,32 @@ import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
-  component: <AdministratorDashboard />,
+  element: <AdministratorDashboard />,
 };
 
 export const viewMedicinesRoute: Route = {
   path: "/admin/view-medicines",
-  component: <AdminViewMedicinesPage />,
+  element: <AdminViewMedicinesPage />,
 };
 
 export const addAdminRoute: Route = {
   path: "/admin/add-admins",
-  component: <AdminAddAdminPage />,
+  element: <AdminAddAdminPage />,
 };
 
 export const viewPharmacistRegistrationRequestsRoute: Route = {
   path: "/admin/pharmacist-registration-requests",
-  component: <AdminViewPharmacistRequestsPage />,
+  element: <AdminViewPharmacistRequestsPage />,
 };
 
 export const viewPharmacistsRoute: Route = {
   path: "/admin/view-pharmacists",
-  component: <AdminViewPharmacistsPage />,
+  element: <AdminViewPharmacistsPage />,
 };
 
 export const viewPatientsRoute: Route = {
   path: "/admin/view-patients",
-  component: <AdminViewPatientsPage />,
+  element: <AdminViewPatientsPage />,
 };
 
 const adminRoutes: Route[] = [

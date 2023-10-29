@@ -3,12 +3,12 @@ import ServerNotAvailable from "../../pages/error/ServerNotFound";
 import { Route } from "../../types";
 
 export const pageNotFoundRoute: Route = {
-  path: "/page-not-found",
-  component: <PageNotFound />,
+  path: "*",
+  element: <PageNotFound />,
 };
 export const serverNotAvailableRoute: Route = {
   path: "/server-not-available",
-  component: <ServerNotAvailable />,
+  element: <ServerNotAvailable />,
 };
 
 const routes = [pageNotFoundRoute, serverNotAvailableRoute];

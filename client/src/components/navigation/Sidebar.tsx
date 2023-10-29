@@ -19,9 +19,10 @@ import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 
 interface Props {
   sidebarItems: SidebarItem[];
+  sidebarWidth: string;
 }
 
-const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
+const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
   const [open, setOpen] = useState<string>("");
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -81,8 +82,8 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
         {(state) => (
           <Box
             sx={{
-              minWidth: "17rem",
-              maxWidth: "17rem",
+              minWidth: sidebarWidth,
+              maxWidth: sidebarWidth,
               background: (theme) => theme.palette.gradient,
               ...defaultStyle,
               ...transitionStyles[state],
@@ -97,18 +98,20 @@ const Sidebar: React.FC<Props> = ({ sidebarItems }) => {
             <Box>
               <List>
                 <ListItem>
-                  <img
-                    src={el7a2niLogo}
-                    alt="El7a2ni Logo"
-                    style={{
-                      maxWidth: "70%",
-                      height: "auto",
-                      marginTop: "3rem",
-                      marginBottom: "3rem",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  />
+                  <NavLink to="/">
+                    <img
+                      src={el7a2niLogo}
+                      alt="El7a2ni Logo"
+                      style={{
+                        maxWidth: "70%",
+                        height: "auto",
+                        marginTop: "3rem",
+                        marginBottom: "3rem",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    />
+                  </NavLink>
                 </ListItem>
                 {renderSidebarItems(sidebarItems)}
               </List>

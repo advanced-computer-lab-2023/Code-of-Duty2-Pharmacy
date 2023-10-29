@@ -8,16 +8,13 @@ import UserPanel from "../components/navigation/UserPanel";
 import Sidebar from "../components/navigation/Sidebar";
 import Footer from "../components/navigation/Footer";
 import {
-  pharmacistSidebarItems,
-  patientSidebarItems,
-  adminSidebarItems,
-} from "../data/sidebarItems";
-import {
   patientLoginRoute,
   patientRegistrationRoute,
   pharmacistLoginRoute,
   pharmacistRegistrationRoute,
 } from "../data/routes/guestRoutes";
+import useFirstPath from "../hooks/useFirstPath";
+import getRequiredSidebarItems from "../utils/getRequiredSidebarItems";
 
 interface Props {
   children: React.ReactNode;
@@ -37,7 +34,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   // from being hidden behind the sidebar. We don't apply this margin
   // on small screens because the sidebar is hidden on small screens.
   const marginLeft = isMediumScreenOrLarger ? sidebarWidth : "0";
-  const firstPath = getFirstPath();
+  const firstPath = useFirstPath();
 
   const MainPageContent = () => {
     return <>{children}</>;
@@ -51,7 +48,7 @@ const Layout: React.FC<Props> = ({ children }) => {
     const sidebarItems = getRequiredSidebarItems(firstPath);
     return (
       <Box display="flex">
-        <Sidebar sidebarItems={sidebarItems} />
+        <Sidebar sidebarItems={sidebarItems} sidebarWidth={sidebarWidth} />
         <Box
           sx={{
             marginLeft,
@@ -87,24 +84,5 @@ const Layout: React.FC<Props> = ({ children }) => {
     );
   }
 };
-
-function getRequiredSidebarItems(firstPath: string) {
-  switch (firstPath) {
-    case "patient":
-      return patientSidebarItems;
-    case "pharmacist":
-      return pharmacistSidebarItems;
-    case "admin":
-      return adminSidebarItems;
-    default:
-      return [];
-  }
-}
-
-function getFirstPath() {
-  const location = useLocation();
-  const parts = location.pathname.split("/");
-  return parts[1];
-}
 
 export default Layout;

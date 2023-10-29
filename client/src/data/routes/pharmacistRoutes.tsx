@@ -5,17 +5,17 @@ import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedic
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
-  component: <PharmacistDashboard />,
+  element: <PharmacistDashboard />,
 };
 
 export const viewMedicinesRoute: Route = {
   path: "/pharmacist/view-medicines",
-  component: <PharmacistViewMedicinesPage />,
+  element: <PharmacistViewMedicinesPage />,
 };
 
 export const addMedicineRoute: Route = {
   path: "/pharmacist/add-medicine",
-  component: <PharmacistAddMedicinePage />,
+  element: <PharmacistAddMedicinePage />,
 };
 
 const pharmacistRoutes: Route[] = [

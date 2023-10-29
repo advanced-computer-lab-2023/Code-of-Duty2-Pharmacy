@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 interface Route {
     path: string;
-    component: ReactElement;
+    element: ReactElement;
 }
 
 export default Route;

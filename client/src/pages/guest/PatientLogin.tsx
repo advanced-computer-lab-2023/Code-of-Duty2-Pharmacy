@@ -10,13 +10,58 @@ import Container from "@mui/material/Container";
 import { NavLink, useNavigate } from "react-router-dom";
 import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
 import patientImage from "../../assets/patient.jpg";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useContext, useState } from "react";
+import UserRole from "../../types/enums/UserRole";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { AlertTitle } from "@mui/material";
+import { patientDashboardRoute } from "../../data/routes/patientRoutes";
+import { adminDashboardRoute } from "../../data/routes/adminRoutes";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
+  <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
+));
 
 export default function PatientLogin() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //TODO: Handle login here...
+
+    // Reset error state
+    setUsernameError(false);
+    setPasswordError(false);
+    setShowAlert(false);
+
+    // Basic form validation
+    if (username === "") {
+      setUsernameError(true);
+      return;
+    }
+
+    if (password === "") {
+      setPasswordError(true);
+      return;
+    }
+
+    if (username === "patient" && password === "123") {
+      login("TEMP-PATIENT-ACCESS-TOKEN", UserRole.PATIENT);
+      navigate(patientDashboardRoute.path);
+    } else if (username === "admin" && password === "123") {
+      login("TEMP-ADMIN-ACCESS-TOKEN", UserRole.ADMIN);
+      navigate(adminDashboardRoute.path);
+    } else {
+      setShowAlert(true);
+    }
   };
 
   return (
@@ -56,10 +101,33 @@ export default function PatientLogin() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            {showAlert && (
+              <Alert
+                variant="outlined"
+                severity="error"
+                sx={{ mt: 4, mb: 2 }}
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setShowAlert(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                <AlertTitle>Oops!</AlertTitle>
+                Something's wrong with your credentials —{" "}
+                <strong>please make sure they're correct!</strong>
+              </Alert>
+            )}
             <Box
               component="form"
-              onSubmit={handleSubmit}
               noValidate
+              onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -72,6 +140,10 @@ export default function PatientLogin() {
                 placeholder="Enter your patient account's username"
                 autoComplete="username"
                 autoFocus
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                error={usernameError}
+                helperText={usernameError ? "Username is required" : ""}
               />
               <TextField
                 margin="normal"
@@ -83,6 +155,10 @@ export default function PatientLogin() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={passwordError}
+                helperText={passwordError ? "Password is required" : ""}
               />
               <Button
                 type="submit"

@@ -9,37 +9,37 @@ import ContactUs from "../../pages/guest/ContactUs";
 
 export const welcomeRoute: Route = {
   path: "/",
-  component: <Welcome />,
+  element: <Welcome />,
 };
 
 export const aboutRoute: Route = {
   path: "/about",
-  component: <About />,
+  element: <About />,
 };
 
 export const contactUsRoute: Route = {
   path: "/contact-us",
-  component: <ContactUs />,
+  element: <ContactUs />,
 };
 
 export const patientLoginRoute: Route = {
   path: "/login/patient",
-  component: <PatientLogin />,
+  element: <PatientLogin />,
 };
 
 export const patientRegistrationRoute: Route = {
   path: "/register/patient",
-  component: <PatientRegistration />,
+  element: <PatientRegistration />,
 };
 
 export const pharmacistLoginRoute: Route = {
   path: "/login/pharmacist",
-  component: <PharmacistLogin />,
+  element: <PharmacistLogin />,
 };
 
 export const pharmacistRegistrationRoute: Route = {
   path: "/register/pharmacist",
-  component: <PharmacistRegistration />,
+  element: <PharmacistRegistration />,
 };
 
 const routes: Route[] = [
