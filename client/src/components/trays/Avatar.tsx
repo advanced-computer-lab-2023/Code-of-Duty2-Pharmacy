@@ -15,12 +15,13 @@ import {
   Brightness7,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
+import UserRole from "../../types/enums/UserRole";
 
 const Avatar = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { authState, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -54,6 +55,9 @@ const Avatar = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        {/* TODO: Remove this (used for testing only) */}
+        <MenuItem>{authState.role === UserRole.GUEST && "Guest"}</MenuItem>
+
         <MenuItem>
           <FormControlLabel
             control={
@@ -62,6 +66,7 @@ const Avatar = () => {
             label={theme === "dark" ? <Brightness4 /> : <Brightness7 />}
           />
         </MenuItem>
+
         <MenuItem onClick={handleLogout}>
           <LogoutIcon />
           Logout

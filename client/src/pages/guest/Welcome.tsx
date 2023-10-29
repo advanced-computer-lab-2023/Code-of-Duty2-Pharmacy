@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Navbar from "../../components/navigation/Navbar";
+
 import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
 import { pharmacistRegistrationRoute } from "../../data/routes/guestRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
@@ -12,18 +12,15 @@ import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 const Welcome = () => {
   return (
     <>
-      <Navbar />
-
       <Box sx={{ m: 4 }}>
         <Typography variant="h4" gutterBottom>
-          /TEMPORARY BUTTONS FOR TESTING, WILL BE REMOVED LATER AND LOGIN WILL
-          BE REQUIRED/
+          Welcome. Temporary buttons until login works.
         </Typography>
 
         <Button
           variant="contained"
           color="primary"
-          component={Link}
+          component={NavLink}
           to={patientRegistrationRoute.path}
           sx={{ m: 1 }}
         >
@@ -33,7 +30,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={Link}
+          component={NavLink}
           to={pharmacistRegistrationRoute.path}
           sx={{ m: 1 }}
         >
@@ -43,7 +40,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={Link}
+          component={NavLink}
           to={adminDashboardRoute.path}
           sx={{ m: 1 }}
         >
@@ -53,7 +50,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={Link}
+          component={NavLink}
           to={pharmacistDashboardRoute.path}
           sx={{ m: 1 }}
         >
@@ -63,7 +60,7 @@ const Welcome = () => {
         <Button
           variant="contained"
           color="primary"
-          component={Link}
+          component={NavLink}
           to={patientDashboardRoute.path}
           sx={{ m: 1 }}
         >

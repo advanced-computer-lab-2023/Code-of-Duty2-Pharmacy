@@ -60,7 +60,7 @@ const PharmacistRegistrationRequest = () => {
   return (
     <>
       {/* TODO: Fix this file's styling, form validation and submit handling */}
-      <Button onClick={() => navigate("/")} sx={{ mb: 5, fontSize: "1rem" }}>
+      <Button onClick={() => navigate("/")} sx={{ mb: 5, fontSize: "1.2rem" }}>
         Back to Home
       </Button>
       <form onSubmit={handleSubmit}>

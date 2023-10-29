@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useState, ReactNode } from "react";
 
 import UserRole from "../types/enums/UserRole";
+import config from "../config/config";
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -78,10 +79,18 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
+  // TODO: Verify this logic & that this works
   const refreshAuth = () => {
-    /* 
-        TODO: Implement refresh token logic here. 
-    */
+    axios
+      .get(`${config.API_URL}/auth/refresh`)
+      .then((response) => {
+        setAuthState({
+          isAuthenticated: true,
+          accessToken: response.data.accessToken,
+          role: response.data.role,
+        });
+      })
+      .catch((error) => console.error(error));
   };
 
   return (

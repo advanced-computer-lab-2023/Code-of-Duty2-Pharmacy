@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Typography, Container } from "@mui/material";
 import { styled } from "@mui/system";
-import Navbar from "../../components/navigation/Navbar";
 
 const StyledContainer = styled(Container)({
   marginTop: "2rem",
@@ -11,8 +10,6 @@ const StyledContainer = styled(Container)({
 const About: React.FC = () => {
   return (
     <>
-      <Navbar />
-
       <StyledContainer>
         <Typography variant="h2" align="center" gutterBottom>
           About Us

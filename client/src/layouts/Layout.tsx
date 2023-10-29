@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { Box, useMediaQuery } from "@mui/material";
 
+import Navbar from "../components/navigation/Navbar";
 import UserPanel from "../components/navigation/UserPanel";
 import Sidebar from "../components/navigation/Sidebar";
 import Footer from "../components/navigation/Footer";
@@ -11,12 +12,22 @@ import {
   patientSidebarItems,
   adminSidebarItems,
 } from "../data/sidebarItems";
+import {
+  patientLoginRoute,
+  patientRegistrationRoute,
+  pharmacistLoginRoute,
+  pharmacistRegistrationRoute,
+} from "../data/routes/guestRoutes";
 
 interface Props {
   children: React.ReactNode;
 }
 
+/*
+    TODO: Change checking for first path to checking for user role
+*/
 const Layout: React.FC<Props> = ({ children }) => {
+  const location = useLocation();
   const theme = useTheme();
   const isMediumScreenOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const sidebarWidth = "17rem";
@@ -53,6 +64,19 @@ const Layout: React.FC<Props> = ({ children }) => {
           <Footer />
         </Box>
       </Box>
+    );
+  } else if (
+    location.pathname !== patientLoginRoute.path &&
+    location.pathname !== pharmacistLoginRoute.path &&
+    location.pathname !== patientRegistrationRoute.path &&
+    location.pathname !== pharmacistRegistrationRoute.path
+  ) {
+    return (
+      <>
+        <Navbar />
+        <MainPageContent />
+        <Footer />
+      </>
     );
   } else {
     return (
