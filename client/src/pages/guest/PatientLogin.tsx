@@ -11,7 +11,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
 import patientImage from "../../assets/patient.jpg";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import UserRole from "../../types/enums/UserRole";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
@@ -24,6 +24,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
 ));
 
+// TODO: Handle this commented useEffect
+
+// TODO: Handle edge case in routes where if I'm already logged in
+// and I try to enter the URL of the login page, I should be redirected to the
+// dashboard page of the user role I'm logged in as.
 export default function PatientLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,8 +36,23 @@ export default function PatientLogin() {
   const [passwordError, setPasswordError] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  const { login } = useContext(AuthContext);
+  const { authState, login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (authState.isAuthenticated) {
+  //     if (authState.role === UserRole.PATIENT) {
+  //       navigate(patientDashboardRoute.path);
+  //     } else if (authState.role === UserRole.ADMIN) {
+  //       navigate(adminDashboardRoute.path);
+  //     }
+  //   }
+  // }, [
+  //   authState.accessToken,
+  //   authState.isAuthenticated,
+  //   authState.role,
+  //   navigate,
+  // ]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

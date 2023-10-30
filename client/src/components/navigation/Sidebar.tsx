@@ -16,6 +16,7 @@ import { Transition } from "react-transition-group";
 
 import { SidebarItem } from "../../types";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 interface Props {
   sidebarItems: SidebarItem[];
@@ -97,7 +98,7 @@ const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
           >
             <Box>
               <List>
-                <ListItem>
+                <ListItem component={NavLink} to={welcomeRoute.path}>
                   <img
                     src={el7a2niLogo}
                     alt="El7a2ni Logo"

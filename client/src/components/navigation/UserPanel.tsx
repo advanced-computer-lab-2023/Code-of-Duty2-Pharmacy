@@ -21,6 +21,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { SidebarItem } from "../../types";
 import UserTray from "../trays/UserTray";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 interface Props {
   sidebarItems: SidebarItem[];
@@ -126,7 +127,7 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
                   <CloseIcon />
                 </IconButton>
                 <List>
-                  <ListItem>
+                  <ListItem component={NavLink} to={welcomeRoute.path}>
                     <img
                       src={el7a2niLogo}
                       alt="El7a2ni Logo"
