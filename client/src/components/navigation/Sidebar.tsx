@@ -98,7 +98,7 @@ const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
           >
             <Box>
               <List>
-                <ListItem component={NavLink} to={welcomeRoute.path}>
+                <ListItem>
                   <img
                     src={el7a2niLogo}
                     alt="El7a2ni Logo"

@@ -14,7 +14,7 @@ import {
 } from "../../data/routes/guestRoutes";
 import patientImage from "../../assets/patient.jpg";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import UserRole from "../../types/enums/UserRole";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
@@ -35,7 +35,7 @@ export default function PatientLogin() {
   const [showInvalidLoginAlert, setShowInvalidLoginAlert] = useState(false);
   const location = useLocation();
 
-  const { authState, login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const fromOrHome = location.state?.from?.pathname || welcomeRoute.path;

@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import { AppBar, Toolbar, Typography } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { AppBar, Toolbar, Typography, Box, Divider } from "@mui/material";
 
-import { AuthContext } from "../../contexts/AuthContext";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 import UserTray from "../trays/UserTray";
 import AuthTray from "../trays/AuthTray";
+import { AuthContext } from "../../contexts/AuthContext";
+import HomeButton from "./HomeButton";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 const Navbar = () => {
   const { authState } = useContext(AuthContext);
@@ -33,7 +35,7 @@ const Navbar = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href={welcomeRoute.path}
             sx={{
               mr: 2,
               display: { md: "flex" },
@@ -48,9 +50,17 @@ const Navbar = () => {
           </Typography>
 
           {authState.isAuthenticated ? (
-            <div style={{ marginLeft: "auto" }}>
+            <Box sx={{ marginLeft: "auto", display: "flex" }}>
               <UserTray />
-            </div>
+
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ bgcolor: "white", width: "1px", mx: 2 }}
+              />
+
+              <HomeButton />
+            </Box>
           ) : (
             <div style={{ marginLeft: "auto" }}>
               <AuthTray />
