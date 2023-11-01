@@ -16,10 +16,10 @@ const Welcome = () => {
     <>
       <Box sx={{ m: 4 }}>
         <Typography variant="h4" gutterBottom>
-          Welcome. Temporary buttons until login works.
+          Welcome
         </Typography>
 
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           onClick={() => navigate(patientRegistrationRoute.path)}
@@ -62,7 +62,7 @@ const Welcome = () => {
           sx={{ m: 1 }}
         >
           Login as Patient
-        </Button>
+        </Button> */}
       </Box>
     </>
   );
