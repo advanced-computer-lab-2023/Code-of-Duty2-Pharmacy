@@ -22,7 +22,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AlertTitle } from "@mui/material";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
-import getRouteFirstPath from "../../utils/getRouteFirstPath";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
