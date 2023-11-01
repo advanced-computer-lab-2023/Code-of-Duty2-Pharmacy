@@ -1,20 +1,19 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
-import UserRole from "../../types/enums/UserRole";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Box } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import {
   patientLoginRoute,
   pharmacistLoginRoute,
 } from "../../data/routes/loginRoutes";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Box } from "@mui/material";
+import { AuthContext } from "../../contexts/AuthContext";
+import UserRole from "../../types/enums/UserRole";
 
 interface Props {
   role: UserRole;
 }
 
-// TODO:
-// (it's also in the LoginRoutesHandler component)
 const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
   const { authState, refreshAuth } = useContext(AuthContext);
   const patientLoginPath = patientLoginRoute.path;

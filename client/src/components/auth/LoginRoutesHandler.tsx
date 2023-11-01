@@ -14,22 +14,20 @@
  */
 
 import { useContext, useEffect, useState } from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
-import { welcomeRoute } from "../../data/routes/guestRoutes";
 import { Box, CircularProgress } from "@mui/material";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import UserRole from "../../types/enums/UserRole";
+import { pageNotFoundRoute } from "../../data/routes/generalRoutes";
 
 const LoginRoutesHandler = () => {
   const { authState, refreshAuth } = useContext(AuthContext);
   // TODO: Change to true when auth is fully implemented
   const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation();
-  const fromOrWelcome = location.state?.from?.pathname || welcomeRoute.path;
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -61,20 +59,14 @@ const LoginRoutesHandler = () => {
       <CircularProgress />
     </Box>
   ) : authState.isAuthenticated ? (
-    authState.role === UserRole.PATIENT &&
-    !fromOrWelcome.startsWith("/admin") &&
-    !fromOrWelcome.startsWith("/pharmacist") ? (
+    authState.role === UserRole.PATIENT ? (
       <Navigate to={patientDashboardRoute.path} replace />
-    ) : authState.role === UserRole.ADMIN &&
-      !fromOrWelcome.startsWith("/patient") &&
-      !fromOrWelcome.startsWith("/pharmacist") ? (
+    ) : authState.role === UserRole.ADMIN ? (
       <Navigate to={adminDashboardRoute.path} replace />
-    ) : authState.role === UserRole.PHARMACIST &&
-      !fromOrWelcome.startsWith("/patient") &&
-      !fromOrWelcome.startsWith("/admin") ? (
+    ) : authState.role === UserRole.PHARMACIST ? (
       <Navigate to={pharmacistDashboardRoute.path} replace />
     ) : (
-      <Navigate to={fromOrWelcome} replace />
+      <Navigate to={pageNotFoundRoute.path} replace />
     )
   ) : (
     <Outlet />

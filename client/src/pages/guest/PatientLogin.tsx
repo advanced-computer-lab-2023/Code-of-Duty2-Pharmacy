@@ -27,18 +27,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
 ));
 
-// TODO: Handle edge case in routes where if I'm already logged in
-// and I try to enter the URL of the login page, I should be redirected to the
-// dashboard page of the user role I'm logged in as.
-//
-// That won't work in our current complete auth system because the login
-// pages are not protected routes, so we can't check if the user is already
-// logged in or not. We can fix this by making the login pages protected
-// routes, but then we'll have to make sure that the login pages are
-// accessible to guests only, and not to already logged in users.
-// We can do this by checking the authState.isAuthenticated value in the
-// login page, and if it's true, we can redirect the user to the dashboard
-// page of the user role they're logged in as.
 export default function PatientLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -51,35 +39,6 @@ export default function PatientLogin() {
   const navigate = useNavigate();
 
   const fromOrHome = location.state?.from?.pathname || welcomeRoute.path;
-
-  /**
-   * User loads this login page in two cases:
-   * * User navigates to the login page either from the home page or any such link or button, or by changing the URL itself, OR
-   * * User navgiates to a page that requires authentication, but they're not logged in, so they're redirected to the login page.
-   */
-  // useEffect(() => {
-  //   if (authState.isAuthenticated) {
-  //     if (
-  //       authState.role === UserRole.PATIENT &&
-  //       fromOrHome.startsWith("/admin")
-  //     ) {
-  //       navigate(patientDashboardRoute.path);
-  //     } else if (
-  //       authState.role === UserRole.ADMIN &&
-  //       fromOrHome.startsWith("/patient")
-  //     ) {
-  //       navigate(adminDashboardRoute.path);
-  //     } else {
-  //       navigate(fromOrHome);
-  //     }
-  //   }
-  // }, [
-  //   authState.accessToken,
-  //   authState.isAuthenticated,
-  //   authState.role,
-  //   fromOrHome,
-  //   navigate,
-  // ]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
