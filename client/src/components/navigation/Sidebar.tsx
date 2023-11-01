@@ -16,7 +16,6 @@ import { Transition } from "react-transition-group";
 
 import { SidebarItem } from "../../types";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
-import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 interface Props {
   sidebarItems: SidebarItem[];

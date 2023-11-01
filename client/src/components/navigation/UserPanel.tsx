@@ -21,9 +21,9 @@ import PublicIcon from "@mui/icons-material/Public";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 import { SidebarItem } from "../../types";
-import UserTray from "../trays/UserTray";
-import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
+import el7a2niLogo from "../../assets/el7a2ni_logo.png";
+import UserTray from "../trays/UserTray";
 
 interface Props {
   sidebarItems: SidebarItem[];
