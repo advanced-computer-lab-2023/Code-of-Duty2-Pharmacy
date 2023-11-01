@@ -8,13 +8,15 @@ import UserPanel from "../components/navigation/UserPanel";
 import Sidebar from "../components/navigation/Sidebar";
 import Footer from "../components/navigation/Footer";
 import {
-  patientLoginRoute,
   patientRegistrationRoute,
-  pharmacistLoginRoute,
   pharmacistRegistrationRoute,
 } from "../data/routes/guestRoutes";
 import useFirstPath from "../hooks/useFirstPath";
 import getRequiredSidebarItems from "../utils/getRequiredSidebarItems";
+import {
+  patientLoginRoute,
+  pharmacistLoginRoute,
+} from "../data/routes/loginRoutes";
 
 interface Props {
   children: React.ReactNode;

@@ -1,11 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import UserRole from "../../types/enums/UserRole";
 import {
   patientLoginRoute,
   pharmacistLoginRoute,
-} from "../../data/routes/guestRoutes";
+} from "../../data/routes/loginRoutes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 
@@ -13,12 +13,15 @@ interface Props {
   role: UserRole;
 }
 
-// TODO: Fix this navigation spaghetti messed up logic !!!
-const ProtectedRoute: React.FC<Props> = ({ role }) => {
+// TODO:
+// (it's also in the LoginRoutesHandler component)
+const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
   const { authState, refreshAuth } = useContext(AuthContext);
   const patientLoginPath = patientLoginRoute.path;
   const pharmacistLoginPath = pharmacistLoginRoute.path;
-  const [isLoading, setIsLoading] = useState(false); // TODO: Change to true when auth is fully implemented
+  // TODO: Change to true when auth is fully implemented
+  const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -51,10 +54,14 @@ const ProtectedRoute: React.FC<Props> = ({ role }) => {
   ) : authState.isAuthenticated && role === authState.role ? (
     <Outlet />
   ) : role === UserRole.ADMIN || role === UserRole.PATIENT ? (
-    <Navigate to={`${patientLoginPath}`} />
+    <Navigate to={`${patientLoginPath}`} state={{ from: location }} replace />
   ) : (
-    <Navigate to={`${pharmacistLoginPath}`} />
+    <Navigate
+      to={`${pharmacistLoginPath}`}
+      state={{ from: location }}
+      replace
+    />
   );
 };
 
-export default ProtectedRoute;
+export default ProtectedRoutesHandler;

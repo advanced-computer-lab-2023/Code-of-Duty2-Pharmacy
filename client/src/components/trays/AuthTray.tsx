@@ -8,13 +8,12 @@ import { IconButton, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ButtonColor } from "../../types";
+import { aboutRoute, contactUsRoute } from "../../data/routes/guestRoutes";
+import { NavLink } from "react-router-dom";
 import {
-  aboutRoute,
-  contactUsRoute,
   patientLoginRoute,
   pharmacistLoginRoute,
-} from "../../data/routes/guestRoutes";
-import { NavLink } from "react-router-dom";
+} from "../../data/routes/loginRoutes";
 
 const AuthTray = () => {
   const theme = useTheme();

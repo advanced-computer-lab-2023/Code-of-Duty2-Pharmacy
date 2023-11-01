@@ -3,8 +3,11 @@ import guestRoutes from "./guestRoutes";
 import adminRoutes from "./adminRoutes";
 import pharmacistRoutes from "./pharmacistRoutes";
 import patientRoutes from "./patientRoutes";
+import loginRoutes from "./loginRoutes";
 
-export default guestRoutes
-  .concat(patientRoutes)
-  .concat(adminRoutes)
-  .concat(pharmacistRoutes).concat(generalRoutes);
+export default loginRoutes
+                    .concat(guestRoutes)
+                    .concat(patientRoutes)
+                    .concat(adminRoutes)
+                    .concat(pharmacistRoutes)
+                    .concat(generalRoutes);

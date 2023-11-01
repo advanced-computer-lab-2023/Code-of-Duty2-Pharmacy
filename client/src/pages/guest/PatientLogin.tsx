@@ -7,8 +7,11 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { NavLink, useNavigate } from "react-router-dom";
-import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  patientRegistrationRoute,
+  welcomeRoute,
+} from "../../data/routes/guestRoutes";
 import patientImage from "../../assets/patient.jpg";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
@@ -19,50 +22,73 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AlertTitle } from "@mui/material";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
+import getRouteFirstPath from "../../utils/getRouteFirstPath";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
 ));
 
-// TODO: Handle this commented useEffect
-
 // TODO: Handle edge case in routes where if I'm already logged in
 // and I try to enter the URL of the login page, I should be redirected to the
 // dashboard page of the user role I'm logged in as.
+//
+// That won't work in our current complete auth system because the login
+// pages are not protected routes, so we can't check if the user is already
+// logged in or not. We can fix this by making the login pages protected
+// routes, but then we'll have to make sure that the login pages are
+// accessible to guests only, and not to already logged in users.
+// We can do this by checking the authState.isAuthenticated value in the
+// login page, and if it's true, we can redirect the user to the dashboard
+// page of the user role they're logged in as.
 export default function PatientLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showInvalidLoginAlert, setShowInvalidLoginAlert] = useState(false);
+  const location = useLocation();
 
   const { authState, login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const fromOrHome = location.state?.from?.pathname || welcomeRoute.path;
+
+  /**
+   * User loads this login page in two cases:
+   * * User navigates to the login page either from the home page or any such link or button, or by changing the URL itself, OR
+   * * User navgiates to a page that requires authentication, but they're not logged in, so they're redirected to the login page.
+   */
   // useEffect(() => {
   //   if (authState.isAuthenticated) {
-  //     if (authState.role === UserRole.PATIENT) {
+  //     if (
+  //       authState.role === UserRole.PATIENT &&
+  //       fromOrHome.startsWith("/admin")
+  //     ) {
   //       navigate(patientDashboardRoute.path);
-  //     } else if (authState.role === UserRole.ADMIN) {
+  //     } else if (
+  //       authState.role === UserRole.ADMIN &&
+  //       fromOrHome.startsWith("/patient")
+  //     ) {
   //       navigate(adminDashboardRoute.path);
+  //     } else {
+  //       navigate(fromOrHome);
   //     }
   //   }
   // }, [
   //   authState.accessToken,
   //   authState.isAuthenticated,
   //   authState.role,
+  //   fromOrHome,
   //   navigate,
   // ]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Reset error state
     setUsernameError(false);
     setPasswordError(false);
-    setShowAlert(false);
+    setShowInvalidLoginAlert(false);
 
-    // Basic form validation
     if (username === "") {
       setUsernameError(true);
       return;
@@ -73,15 +99,54 @@ export default function PatientLogin() {
       return;
     }
 
-    if (username === "patient" && password === "123") {
+    // TODO: Replace this code block with the one below it.
+    if (
+      username === "patient" &&
+      password === "123" &&
+      fromOrHome.startsWith("/patient")
+    ) {
+      login("TEMP-PATIENT-ACCESS-TOKEN", UserRole.PATIENT);
+      navigate(fromOrHome);
+    } else if (
+      username === "admin" &&
+      password === "123" &&
+      fromOrHome.startsWith("/admin")
+    ) {
+      login("TEMP-ADMIN-ACCESS-TOKEN", UserRole.ADMIN);
+      navigate(fromOrHome);
+    } else if (username === "patient" && password === "123") {
       login("TEMP-PATIENT-ACCESS-TOKEN", UserRole.PATIENT);
       navigate(patientDashboardRoute.path);
     } else if (username === "admin" && password === "123") {
       login("TEMP-ADMIN-ACCESS-TOKEN", UserRole.ADMIN);
       navigate(adminDashboardRoute.path);
     } else {
-      setShowAlert(true);
+      setShowInvalidLoginAlert(true);
     }
+
+    // // TODO: Use the actual login endpoint and values/options to be sent.
+    // const response = await fetch("/login", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ username, password }),
+    // });
+
+    // if (response.ok) {
+    //   const data = await response.json();
+    //   login(data.accessToken, data.role);
+
+    //   if (data.role === UserRole.PATIENT && from.startsWith("/patient")) {
+    //     navigate(from);
+    //   } else if (data.role === UserRole.ADMIN && from.startsWith("/admin")) {
+    //     navigate(from);
+    //   } else if (data.role === UserRole.PATIENT) {
+    //     navigate(patientDashboardRoute.path);
+    //   } else if (data.role === UserRole.ADMIN) {
+    //     navigate(adminDashboardRoute.path);
+    //   }
+    // } else {
+    //   setShowInvalidLoginAlert(true);
+    // }
   };
 
   return (
@@ -121,7 +186,7 @@ export default function PatientLogin() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            {showAlert && (
+            {showInvalidLoginAlert && (
               <Alert
                 variant="outlined"
                 severity="error"
@@ -132,7 +197,7 @@ export default function PatientLogin() {
                     color="inherit"
                     size="small"
                     onClick={() => {
-                      setShowAlert(false);
+                      setShowInvalidLoginAlert(false);
                     }}
                   >
                     <CloseIcon fontSize="inherit" />

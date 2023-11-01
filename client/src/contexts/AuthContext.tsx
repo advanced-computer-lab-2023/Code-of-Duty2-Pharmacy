@@ -89,7 +89,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
-  // TODO: Call API logout endpoint to invalidate refresh token.
+  // TODO: Call backend '/logout' endpoint to invalidate refresh token.
   const logout = () => {
     setAuthState({
       isAuthenticated: false,
@@ -103,7 +103,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
-  // TODO: Verify this works and use real API endpoint.
+  // TODO: Test that this works and use the real API endpoint
   const refreshAuth = async () => {
     const refreshEndpoint = import.meta.env.API_REFRESH_ENDPOINT;
 
