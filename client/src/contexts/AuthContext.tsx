@@ -89,13 +89,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
-  // TODO: Call backend '/logout' endpoint to invalidate refresh token.
   const logout = () => {
     setAuthState({
       isAuthenticated: false,
       accessToken: null,
       role: UserRole.GUEST,
     });
+
+    // TODO: Call backend '/logout' endpoint here to invalidate refresh token.
 
     axios.interceptors.request.use((config) => {
       config.headers.Authorization = null;
