@@ -13,10 +13,12 @@ export const registerPatient = async (req: Request, res: Response) => {
     // in users collection.
 
     const existingUserName = await Patient.findOne({ username });
+    console.log("existingUserName:", existingUserName);
     if (existingUserName) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'username already exists' });
     }
     const existingMail = await Patient.findOne({ email });
+    console.log("existingMail:", existingMail);
     if (existingMail) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'email already exists' });
     }
@@ -28,7 +30,7 @@ export const registerPatient = async (req: Request, res: Response) => {
       username,
       name,
       email,
-      password: hashedPassword,
+      password,
       dateOfBirth,
       gender,
       mobileNumber,
@@ -38,9 +40,14 @@ export const registerPatient = async (req: Request, res: Response) => {
         relationToPatient: emergencyContact.relationToPatient,
       },
     });
-
-    const savedPatient = await newPatient.save();
-    res.status(StatusCodes.CREATED).json(savedPatient);
+    console.log("newPatient:", newPatient);
+    try{const savedPatient = await newPatient.save();
+      console.log("savedPatient:", savedPatient);
+      res.status(StatusCodes.CREATED).json(savedPatient);}
+      catch(err){
+        console.error("err:", err);
+      }
+    
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }  
@@ -69,7 +76,7 @@ export const registerPharmacist = async (req: Request, res: Response) => {
       username,
       name,
       email,
-      password: hashedPassword,
+      password,
       dateOfBirth,
       hourlyRate,
       affiliation,

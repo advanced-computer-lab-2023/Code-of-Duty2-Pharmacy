@@ -27,7 +27,7 @@ import { pageNotFoundRoute } from "../../data/routes/generalRoutes";
 const LoginRoutesHandler = () => {
   const { authState, refreshAuth } = useContext(AuthContext);
   // TODO: Change to true when auth is fully implemented
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -39,13 +39,8 @@ const LoginRoutesHandler = () => {
     };
 
     // TODO: Uncomment this line when auth is fully implemented
-    //checkAuth();
-  }, [
-    authState.isAuthenticated,
-    authState.accessToken,
-    authState.role,
-    refreshAuth,
-  ]);
+    checkAuth();
+  }, [authState.isAuthenticated, authState.accessToken, authState.role]);
 
   return isLoading ? (
     <Box

@@ -19,7 +19,7 @@ const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
   const patientLoginPath = patientLoginRoute.path;
   const pharmacistLoginPath = pharmacistLoginRoute.path;
   // TODO: Change to true when auth is fully implemented
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
@@ -31,13 +31,8 @@ const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
     };
 
     // TODO: Uncomment this line when auth is fully implemented
-    //checkAuth();
-  }, [
-    authState.isAuthenticated,
-    authState.accessToken,
-    authState.role,
-    refreshAuth,
-  ]);
+    checkAuth();
+  }, [authState.isAuthenticated, authState.accessToken, authState.role]);
 
   return isLoading ? (
     <Box

@@ -56,10 +56,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
-          if (error.response.data.accessTokenExpired) {
+          if (
+            error.response.data.accessTokenExpired &&
+            !originalRequest.url.endsWith("/auth/refresh-token")
+          ) {
             await refreshAuth();
           } else {
             logout();
@@ -109,9 +112,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const refreshEndpoint = import.meta.env.API_REFRESH_ENDPOINT;
 
     try {
-      const response = await axios.get(`${config.API_URL}${refreshEndpoint}`, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${config.API_URL}/auth/refresh-token`,
+        {
+          withCredentials: true,
+        }
+      );
       setAuthState({
         isAuthenticated: true,
         accessToken: response.data.accessToken,

@@ -1,0 +1,18 @@
+import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+import { authenticatePharmacist } from "../../services/auth";
+
+export const pharmacistLogin = async (req: Request, res: Response) => {
+    const { username, password } = req.body;
+    if(! username || ! password) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Username and password are required' });
+    }
+    try {
+        const { accessToken, refreshToken } = await authenticatePharmacist(username, password);
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' });
+        res.status(StatusCodes.OK).json(accessToken);
+    }
+    catch (error: any) {
+        res.status(StatusCodes.BAD_REQUEST).json(error.message);
+    }
+}
