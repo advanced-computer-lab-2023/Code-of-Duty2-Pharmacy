@@ -1,7 +1,7 @@
 import { Route } from "../types";
 
 /**
- * Returns the first path from a route path.
+ * Returns the first path from an input route path.
  */
 const getRouteFirstPath = (route: Route) => {
   const parts = route.path.split("/");

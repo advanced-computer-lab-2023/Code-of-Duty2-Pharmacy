@@ -6,8 +6,6 @@ import {
   Switch,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { ThemeContext } from "../../contexts/ThemeContext";
-import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
   AccountCircle,
@@ -15,12 +13,15 @@ import {
   Brightness7,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
-import UserRole from "../../types/enums/UserRole";
+
+import { ThemeContext } from "../../contexts/ThemeContext";
+import { AuthContext } from "../../contexts/AuthContext";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 const Avatar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { authState, logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,7 +34,7 @@ const Avatar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate(welcomeRoute.path);
     handleClose();
   };
 
@@ -55,9 +56,6 @@ const Avatar = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {/* TODO: Remove this (used for testing only) */}
-        <MenuItem>{authState.role === UserRole.GUEST && "Guest"}</MenuItem>
-
         <MenuItem>
           <FormControlLabel
             control={

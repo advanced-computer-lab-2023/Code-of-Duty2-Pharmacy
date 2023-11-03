@@ -19,7 +19,6 @@ interface IAuthContext {
 
 /**
  * Create the auth context with default values.
- *
  * */
 const AuthContext = createContext<IAuthContext>({
   authState: {
@@ -34,8 +33,9 @@ const AuthContext = createContext<IAuthContext>({
 
 /**
  * Create a provider for the auth context.
- *
  * */
+// TODO: Make sure that withCredentials is set to true for
+// all requests that need to send the refresh token.
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -59,7 +59,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (error.response.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
-          if (error.response.data.redirectTo) {
+          if (error.response.data.accessTokenExpired) {
             await refreshAuth();
           } else {
             logout();

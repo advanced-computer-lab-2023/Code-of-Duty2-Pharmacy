@@ -93,7 +93,7 @@ export default function PharmacistLogin() {
   };
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="lg" sx={{ pb: 6 }}>
       <Grid container columnSpacing={7}>
         <Grid item xs={12} md={6}>
           <img
@@ -118,7 +118,7 @@ export default function PharmacistLogin() {
             }}
           >
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(welcomeRoute.path)}
               sx={{ mb: 5, fontSize: "1.2rem" }}
             >
               Back to Home
@@ -198,7 +198,7 @@ export default function PharmacistLogin() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  {/* TODO: Add Forgot password href here */}
+                  {/* TODO: Add Forgot password href here but use Navigate instead */}
                   <NavLink to="/" style={{ color: "inherit" }}>
                     Forgot password?
                   </NavLink>

@@ -1,4 +1,4 @@
-import { adminSidebarItems, patientSidebarItems, pharmacistSidebarItems } from "../data/sidebarItems";
+import { adminSidebarItems, patientSidebarItems, pharmacistSidebarItems } from "../data/sidebar";
 
 function getRequiredSidebarItems(firstPath: string) {
     switch (firstPath) {

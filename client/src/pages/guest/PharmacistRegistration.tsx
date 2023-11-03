@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import config from "../../config/config";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 
 const PharmacistRegistrationRequest = () => {
   const [username, setUsername] = useState("");
@@ -60,7 +61,10 @@ const PharmacistRegistrationRequest = () => {
   return (
     <>
       {/* TODO: Fix this file's styling, form validation and submit handling */}
-      <Button onClick={() => navigate("/")} sx={{ mb: 5, fontSize: "1.2rem" }}>
+      <Button
+        onClick={() => navigate(welcomeRoute.path)}
+        sx={{ mb: 5, fontSize: "1.2rem" }}
+      >
         Back to Home
       </Button>
       <form onSubmit={handleSubmit}>

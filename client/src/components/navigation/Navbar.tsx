@@ -1,16 +1,29 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Box, Divider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Divider,
+  Button,
+  IconButton,
+} from "@mui/material";
+import HomeOutlinedIcon from "@mui/icons-material/Home";
 
-import el7a2niLogo from "../../assets/el7a2ni_logo.png";
+import { AuthContext } from "../../contexts/AuthContext";
+import { patientDashboardRoute } from "../../data/routes/patientRoutes";
+import { adminDashboardRoute } from "../../data/routes/adminRoutes";
+import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
+import { welcomeRoute } from "../../data/routes/guestRoutes";
 import UserTray from "../trays/UserTray";
 import AuthTray from "../trays/AuthTray";
-import { AuthContext } from "../../contexts/AuthContext";
-import HomeButton from "./HomeButton";
-import { welcomeRoute } from "../../data/routes/guestRoutes";
+import el7a2niLogo from "../../assets/el7a2ni_logo.png";
+import UserRole from "../../types/enums/UserRole";
 
 const Navbar = () => {
-  const { authState } = useContext(AuthContext);
+  const { authState, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   return (
     <nav>
@@ -23,31 +36,29 @@ const Navbar = () => {
         }}
       >
         <Toolbar>
-          <NavLink to="/">
+          <Button onClick={() => navigate(welcomeRoute.path)}>
             <img
               src={el7a2niLogo}
               alt="Logo"
               style={{ height: "2rem", paddingRight: "1rem" }}
             />
-          </NavLink>
-
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href={welcomeRoute.path}
-            sx={{
-              mr: 2,
-              display: { md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            EL7A2NI PHARMACY
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { md: "flex" },
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                textDecoration: "none",
+                color: "white",
+              }}
+            >
+              EL7A2NI PHARMACY
+            </Typography>
+          </Button>
 
           {authState.isAuthenticated ? (
             <Box sx={{ marginLeft: "auto", display: "flex" }}>
@@ -59,7 +70,32 @@ const Navbar = () => {
                 sx={{ bgcolor: "white", width: "1px", mx: 2 }}
               />
 
-              <HomeButton />
+              <IconButton
+                color="inherit"
+                onClick={() => {
+                  let path;
+                  switch (authState.role) {
+                    case UserRole.PATIENT:
+                      path = patientDashboardRoute.path;
+                      break;
+                    case UserRole.ADMIN:
+                      path = adminDashboardRoute.path;
+                      break;
+                    case UserRole.PHARMACIST:
+                      path = pharmacistDashboardRoute.path;
+                      break;
+                    default:
+                      logout();
+                      navigate(welcomeRoute.path);
+                      return;
+                  }
+                  if (path) {
+                    navigate(path);
+                  }
+                }}
+              >
+                <HomeOutlinedIcon />
+              </IconButton>
             </Box>
           ) : (
             <div style={{ marginLeft: "auto" }}>

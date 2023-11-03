@@ -11,6 +11,7 @@ const UserTray = () => {
       }}
     >
       <Notifications />
+
       <Avatar />
     </Box>
   );

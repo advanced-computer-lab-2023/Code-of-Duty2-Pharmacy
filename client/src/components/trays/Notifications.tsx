@@ -3,8 +3,7 @@ import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const Notifications = () => {
-  // TODO: Add this
-  // const [notifications, setNotifications] = useState({});
+  // TODO: Add another state for actual notifications
   const [numberOfNotifications, setNumberOfNotifications] = useState<number>(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -46,7 +45,7 @@ const Notifications = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {/* TODO: Replace 'Notification 1', 'Notification 2', etc. with your actual notifications */}
+        {/* TODO: Replace with actual notifications */}
         <MenuItem>Notification 1</MenuItem>
         <MenuItem>Notification 2</MenuItem>
         <MenuItem>Notification 3</MenuItem>

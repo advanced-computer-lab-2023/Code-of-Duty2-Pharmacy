@@ -22,19 +22,16 @@ interface Props {
   children: React.ReactNode;
 }
 
-/*
-    TODO: Change checking for first path to checking for user role
-*/
 const Layout: React.FC<Props> = ({ children }) => {
   const location = useLocation();
   const theme = useTheme();
   const isMediumScreenOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const sidebarWidth = "17rem";
+
   // We apply a left margin to the main content in the layout of
-  // authenticated users (because only they have a sidebar) when the sidebar
-  // is open (on medium screens and larger) to prevent the main content
-  // from being hidden behind the sidebar. We don't apply this margin
-  // on small screens because the sidebar is hidden on small screens.
+  // authenticated user pages when the sidebar is open (on medium screens and larger)
+  // to prevent the main content from being hidden behind the sidebar. We don't apply
+  //this margin on small screens because the sidebar is hidden on small screens.
   const marginLeft = isMediumScreenOrLarger ? sidebarWidth : "0";
   const firstPath = useFirstPath();
 
