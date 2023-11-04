@@ -14,12 +14,9 @@ interface IAuthContext {
   authState: IAuthState;
   login: (accessToken: string, role: UserRole) => void;
   logout: () => void;
-  refreshAuth: () => Promise<void>;
+  refreshAuth: () => Promise<string>;
 }
 
-/**
- * Create the auth context with default values.
- * */
 const AuthContext = createContext<IAuthContext>({
   authState: {
     isAuthenticated: false,
@@ -28,12 +25,9 @@ const AuthContext = createContext<IAuthContext>({
   },
   login: () => {},
   logout: () => {},
-  refreshAuth: () => Promise.resolve(),
+  refreshAuth: () => Promise.resolve(""),
 });
 
-/**
- * Create a provider for the auth context.
- * */
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -45,8 +39,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role: UserRole.GUEST,
   });
 
-  // Sets up axios response interceptor to automatically
-  // refresh the access token if the server returns a 401 Error.
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
@@ -61,12 +53,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             error.response.data.accessTokenExpired &&
             !originalRequest.url.endsWith("/auth/refresh-token")
           ) {
-            await refreshAuth();
+            const newToken = await refreshAuth();
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return axios(originalRequest);
           } else {
             logout();
           }
-
-          return axios(originalRequest);
         }
         return Promise.reject(error);
       }
@@ -77,16 +69,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (authState.isAuthenticated) {
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${authState.accessToken}`;
+    }
+  }, [authState]);
+
   const login = (accessToken: string, role: UserRole) => {
     setAuthState({
       isAuthenticated: true,
       accessToken,
       role,
     });
-
-    console.log("Set token:", accessToken);
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   };
 
   const logout = async () => {
@@ -97,7 +93,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     try {
-      axios.post(
+      await axios.post(
         `${config.API_URL}/auth/logout`,
         {},
         { withCredentials: true }
@@ -123,12 +119,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           withCredentials: true,
         }
       );
-      console.log("Refreshed token:", response.data.accessToken);
 
       login(response.data.accessToken, response.data.role);
+      return response.data.accessToken;
     } catch (error) {
-      console.error("Error refreshing token", error);
       logout();
+      return Promise.reject(error);
     }
   };
 
