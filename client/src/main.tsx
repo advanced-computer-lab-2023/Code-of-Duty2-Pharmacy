@@ -7,6 +7,9 @@ import App from "./App.tsx";
 import "./index.css";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { CustomThemeProvider } from "./contexts/ThemeContext.tsx";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

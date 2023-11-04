@@ -59,7 +59,6 @@ export default function PatientLogin() {
       return;
     }
 
-    // TODO: Use the actual login endpoint and values/options to be sent.
     try {
       const response = await axios.post(`${config.API_URL}/auth/login`, {
         username,
@@ -67,6 +66,7 @@ export default function PatientLogin() {
       });
 
       const data = response.data;
+      console.log(data.accessToken, data.role);
       login(data.accessToken, data.role);
 
       if (

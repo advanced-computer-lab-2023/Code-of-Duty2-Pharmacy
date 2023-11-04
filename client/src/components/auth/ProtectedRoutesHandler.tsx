@@ -18,7 +18,6 @@ const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
   const { authState, refreshAuth } = useContext(AuthContext);
   const patientLoginPath = patientLoginRoute.path;
   const pharmacistLoginPath = pharmacistLoginRoute.path;
-  // TODO: Change to true when auth is fully implemented
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
@@ -30,7 +29,6 @@ const ProtectedRoutesHandler: React.FC<Props> = ({ role }) => {
       setIsLoading(false);
     };
 
-    // TODO: Uncomment this line when auth is fully implemented
     checkAuth();
   }, [authState.isAuthenticated, authState.accessToken, authState.role]);
 

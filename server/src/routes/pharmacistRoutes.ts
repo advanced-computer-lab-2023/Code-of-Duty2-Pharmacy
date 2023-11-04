@@ -7,7 +7,6 @@ import UserRole from '../types/UserRole';
 const router = express.Router();
 
 router.use(authenticateUser);
-router.use(authorizeUser(UserRole.PHARMACIST));
 
 router.delete('/:id', deletePharmacist);
 router.get('/', getPharmacists);
