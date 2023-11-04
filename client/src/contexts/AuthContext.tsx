@@ -3,6 +3,7 @@ import { createContext, useState, ReactNode, useEffect } from "react";
 
 import UserRole from "../types/enums/UserRole";
 import config from "../config/config";
+import { useNavigate } from "react-router-dom";
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -38,6 +39,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     accessToken: null,
     role: UserRole.GUEST,
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
@@ -83,6 +85,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       accessToken,
       role,
     });
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   };
 
   const logout = async () => {
@@ -109,8 +113,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const refreshAuth = async () => {
-    const refreshEndpoint = import.meta.env.API_REFRESH_ENDPOINT;
-
     try {
       const response = await axios.post(
         `${config.API_URL}/auth/refresh-token`,
@@ -124,6 +126,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return response.data.accessToken;
     } catch (error) {
       logout();
+      navigate("/");
       return Promise.reject(error);
     }
   };
