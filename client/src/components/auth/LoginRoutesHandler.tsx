@@ -13,33 +13,20 @@
  *
  */
 
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
-import { Box, CircularProgress } from "@mui/material";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import UserRole from "../../types/enums/UserRole";
 import { pageNotFoundRoute } from "../../data/routes/generalRoutes";
 
 const LoginRoutesHandler = () => {
-  const { authState, refreshAuth } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const { authState } = useContext(AuthContext);
 
-  return isLoading ? (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  ) : authState.isAuthenticated ? (
+  return authState.isAuthenticated ? (
     authState.role === UserRole.PATIENT ? (
       <Navigate to={patientDashboardRoute.path} replace />
     ) : authState.role === UserRole.ADMIN ? (

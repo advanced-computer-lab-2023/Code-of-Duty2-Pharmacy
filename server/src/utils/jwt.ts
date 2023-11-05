@@ -1,4 +1,4 @@
-import config from "../configurations";
+import config from "../config";
 import jwt from 'jsonwebtoken';
 import { User } from "../types/User";
 

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import connectToDB from './utils/database';
 
-import config from './configurations';
+import config from './config';
 import medicineRouter from './routes/medicineRoutes';
 import patientRouter from './routes/patientRoutes';
 import registrationRouter from './routes/registrationRoutes';

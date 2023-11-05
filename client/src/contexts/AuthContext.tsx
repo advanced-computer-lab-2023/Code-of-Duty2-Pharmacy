@@ -112,7 +112,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const refreshAuth = async () => {
     try {
       const response = await axios.post(
-        `${config.API_URL}/auth/refresh-token`,
+        `${config.API_URL}${config.API_REFRESH_ENDPOINT}`,
         {},
         {
           withCredentials: true,
