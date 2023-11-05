@@ -66,7 +66,6 @@ export default function PatientLogin() {
       });
 
       const data = response.data;
-      console.log(data.accessToken, data.role);
       login(data.accessToken, data.role);
 
       if (
