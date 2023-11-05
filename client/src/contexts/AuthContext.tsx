@@ -14,12 +14,9 @@ interface IAuthContext {
   authState: IAuthState;
   login: (accessToken: string, role: UserRole) => void;
   logout: () => void;
-  refreshAuth: () => void;
+  refreshAuth: () => Promise<string>;
 }
 
-/**
- * Create the auth context with default values.
- * */
 const AuthContext = createContext<IAuthContext>({
   authState: {
     isAuthenticated: false,
@@ -28,14 +25,9 @@ const AuthContext = createContext<IAuthContext>({
   },
   login: () => {},
   logout: () => {},
-  refreshAuth: () => {},
+  refreshAuth: () => Promise.resolve(""),
 });
 
-/**
- * Create a provider for the auth context.
- * */
-// TODO: Make sure that withCredentials is set to true for
-// all requests that need to send the refresh token.
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -47,25 +39,27 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     role: UserRole.GUEST,
   });
 
-  // Sets up axios response interceptor to automatically
-  // refresh the access token if the server returns a 401 Error.
+  // Used to setup a response interceptor to attempt to refresh the access token
+  // if we get a 401 response from the server.
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
-
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
 
-          if (error.response.data.accessTokenExpired) {
-            await refreshAuth();
+          if (
+            error.response.data.accessTokenExpired &&
+            !originalRequest.url.endsWith("/auth/refresh-token")
+          ) {
+            const newToken = await refreshAuth();
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return axios(originalRequest);
           } else {
             logout();
           }
-
-          return axios(originalRequest);
         }
         return Promise.reject(error);
       }
@@ -76,49 +70,57 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
+  // Used for extra assurance that the access token being sent in the request headers
+  // is always in sync with the most up to date access token.
+  useEffect(() => {
+    if (authState.isAuthenticated) {
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${authState.accessToken}`;
+    }
+  }, [authState]);
+
   const login = (accessToken: string, role: UserRole) => {
     setAuthState({
       isAuthenticated: true,
       accessToken,
       role,
     });
-
-    axios.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-      return config;
-    });
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   };
 
-  const logout = () => {
+  const logout = async () => {
     setAuthState({
       isAuthenticated: false,
       accessToken: null,
       role: UserRole.GUEST,
     });
 
-    // TODO: Call backend '/logout' endpoint here to invalidate refresh token.
+    try {
+      await axios.post(
+        `${config.API_URL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Error during logout", error);
+    }
 
-    axios.interceptors.request.use((config) => {
-      config.headers.Authorization = null;
-      return config;
-    });
+    delete axios.defaults.headers.common["Authorization"];
   };
 
-  // TODO: Test that this works and use the real API endpoint
   const refreshAuth = async () => {
-    const refreshEndpoint = import.meta.env.API_REFRESH_ENDPOINT;
-
     try {
-      const response = await axios.get(`${config.API_URL}${refreshEndpoint}`, {
-        withCredentials: true,
-      });
-      setAuthState({
-        isAuthenticated: true,
-        accessToken: response.data.accessToken,
-        role: response.data.role,
-      });
+      const response = await axios.post(
+        `${config.API_URL}/auth/refresh-token`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      login(response.data.accessToken, response.data.role);
+      return response.data.accessToken;
     } catch (error) {
-      console.error("Error refreshing token", error);
       logout();
     }
   };

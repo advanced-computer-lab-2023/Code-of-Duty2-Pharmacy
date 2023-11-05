@@ -18,7 +18,7 @@ export const addAdmin = async (req: Request, res: Response) => {
         // in users collection.
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newAdmin = new Admin({username,password: hashedPassword});
+        const newAdmin = new Admin({username, password});
         const savedAdmin = await newAdmin.save();
         res.status(StatusCodes.CREATED).json(savedAdmin);
       } catch (err) {

@@ -21,6 +21,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { AlertTitle } from "@mui/material";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
+import axios from "axios";
+import config from "../../config/config";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
@@ -37,7 +39,7 @@ export default function PharmacistLogin() {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const fromOrHome = location.state?.from?.pathname || welcomeRoute.path;
+  const fromOrWelcome = location.state?.from?.pathname || welcomeRoute.path;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,40 +58,30 @@ export default function PharmacistLogin() {
       return;
     }
 
-    // TODO: Replace this code block with the one below it.
-    if (
-      username === "pharmacist" &&
-      password === "123" &&
-      fromOrHome.startsWith("/pharmacist")
-    ) {
-      login("TEMP-PHARMACIST-ACCESS-TOKEN", UserRole.PHARMACIST);
-      navigate(fromOrHome);
-    } else if (username === "pharmacist" && password === "123") {
-      login("TEMP-PHARMACIST-ACCESS-TOKEN", UserRole.PHARMACIST);
-      navigate(pharmacistDashboardRoute.path);
-    } else {
+    // TODO: Use the actual login endpoint and values/options to be sent.
+    try {
+      const response = await axios.post(
+        `${config.API_URL}/auth/pharmacist-login`,
+        {
+          username,
+          password,
+        }
+      );
+
+      const data = response.data;
+      login(data.accessToken, data.role);
+
+      if (
+        data.role === UserRole.PHARMACIST &&
+        fromOrWelcome.startsWith("/pharmacist")
+      ) {
+        navigate(fromOrWelcome);
+      } else if (data.role === UserRole.PHARMACIST) {
+        navigate(pharmacistDashboardRoute.path);
+      }
+    } catch (error) {
       setShowInvalidLoginAlert(true);
     }
-
-    // // TODO: Use the actual login endpoint and values/options to be sent.
-    // const response = await fetch("/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ username, password }),
-    // });
-
-    // if (response.ok) {
-    //   const data = await response.json();
-    //   login(data.accessToken, data.role);
-
-    //   if (data.role === UserRole.PHARMACIST && from.startsWith("/pharmacist")) {
-    //     navigate(from);
-    //   } else if (data.role === UserRole.PHARMACIST) {
-    //     navigate(pharmacistDashboardRoute.path);
-    //   }
-    // } else {
-    //   setShowInvalidLoginAlert(true);
-    // }
   };
 
   return (
