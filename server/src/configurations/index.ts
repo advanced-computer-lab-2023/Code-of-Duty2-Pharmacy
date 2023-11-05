@@ -17,7 +17,7 @@ const corsOptions: cors.CorsOptions = {
   origin: 'http://localhost:5173', // or '*' to allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true  // Add this line
+  credentials: true
 };
 
 const config = {

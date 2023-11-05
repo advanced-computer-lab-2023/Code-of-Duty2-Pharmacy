@@ -3,7 +3,6 @@ import { createContext, useState, ReactNode, useEffect } from "react";
 
 import UserRole from "../types/enums/UserRole";
 import config from "../config/config";
-import { useNavigate } from "react-router-dom";
 
 interface IAuthState {
   isAuthenticated: boolean;
@@ -39,12 +38,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     accessToken: null,
     role: UserRole.GUEST,
   });
-  const navigate = useNavigate();
 
+  // Used to setup a response interceptor to attempt to refresh the access token
+  // if we get a 401 response from the server.
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
-
       async (error) => {
         const originalRequest = error.config;
 
@@ -71,6 +70,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
   }, []);
 
+  // Used for extra assurance that the access token being sent in the request headers
+  // is always in sync with the most up to date access token.
   useEffect(() => {
     if (authState.isAuthenticated) {
       axios.defaults.headers.common[
@@ -85,7 +86,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       accessToken,
       role,
     });
-
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
   };
 
@@ -106,10 +106,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error("Error during logout", error);
     }
 
-    axios.interceptors.request.use((config) => {
-      config.headers.Authorization = null;
-      return config;
-    });
+    delete axios.defaults.headers.common["Authorization"];
   };
 
   const refreshAuth = async () => {
@@ -121,13 +118,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           withCredentials: true,
         }
       );
-
       login(response.data.accessToken, response.data.role);
       return response.data.accessToken;
     } catch (error) {
       logout();
-      navigate("/");
-      return Promise.reject(error);
     }
   };
 
