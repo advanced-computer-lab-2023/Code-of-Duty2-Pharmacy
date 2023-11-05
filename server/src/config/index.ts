@@ -13,8 +13,9 @@ const ACCESS_TOKEN_EXPIRATION_TIME = process.env.ACCESS_TOKEN_EXPIRATION_TIME ||
 const REFRESH_TOKEN_EXPIRATION_TIME = process.env.REFRESH_TOKEN_EXPIRATION_TIME || "40s";
 
 const FRONT_END_URL = process.env.FRONT_END_URL || "http://localhost:5173";
+
 const corsOptions: cors.CorsOptions = {
-  origin: 'http://localhost:5173', // or '*' to allow all origins
+  origin: FRONT_END_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

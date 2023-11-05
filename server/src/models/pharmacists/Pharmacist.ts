@@ -1,12 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import isEmail from 'validator/lib/isEmail';
 import { IPharmacist } from './interfaces/IPharmacist';
+import bcrypt from 'mongoose-bcrypt';
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
 export const PharmacistSchema = new Schema<IPharmacistModel>({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, bcrypt: true },
   email:{ type: String, validate: [ isEmail, 'invalid email' ], unique: true},
   name: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
@@ -21,5 +22,7 @@ export const PharmacistSchema = new Schema<IPharmacistModel>({
 }, 
     {timestamps: true}
 );
+
+PharmacistSchema.plugin(bcrypt);
 
 export default mongoose.model<IPharmacistModel>('Pharmacist', PharmacistSchema);

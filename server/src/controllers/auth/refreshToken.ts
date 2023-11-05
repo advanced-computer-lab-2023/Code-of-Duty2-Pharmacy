@@ -15,6 +15,8 @@ export const refreshAccessToken = (req: AuthorizedRequest, res: Response) => {
     const accessToken = signAndGetAccessToken({ id: decodedToken.id, role: decodedToken.role });
     res.status(StatusCodes.OK).json({ accessToken, role: decodedToken.role });
   } catch (error) {
+    res.clearCookie('refreshToken', { httpOnly: true });
+    req.user = undefined;
     res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Refresh token is invalid' });
   }
 };
