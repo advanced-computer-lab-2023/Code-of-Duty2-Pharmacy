@@ -52,7 +52,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           if (
             error.response.data.accessTokenExpired &&
-            !originalRequest.url.endsWith("/auth/refresh-token")
+            !originalRequest.url.endsWith(`${config.API_REFRESH_ENDPOINT}`)
           ) {
             const newToken = await refreshAuth();
             originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
