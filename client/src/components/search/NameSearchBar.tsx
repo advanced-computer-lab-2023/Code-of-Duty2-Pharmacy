@@ -66,6 +66,12 @@ const NameSearchBar: React.FC<Props> = ({
         <TextField
           label={labelName}
           onChange={handleTextChange}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+              e.preventDefault();
+            }
+          }}
           id="filled-start-adornment"
           placeholder={initialValue}
           size="small"
