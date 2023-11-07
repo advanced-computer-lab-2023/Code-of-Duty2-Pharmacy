@@ -30,7 +30,6 @@ const Navbar = () => {
       <AppBar
         position="sticky"
         sx={{
-          background: (theme) => theme.palette.gradient,
           height: "4rem",
           justifyContent: "center",
         }}

@@ -36,7 +36,7 @@ const lightTheme = createTheme({
     secondary: {
       main: '#064C5B',
     },
-    gradient: 'linear-gradient(to left bottom, #064C5B, #064C5B)',
+    gradient: 'linear-gradient(to bottom, #064C5B, #16758a)',
   },
 });
 

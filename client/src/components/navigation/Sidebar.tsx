@@ -85,14 +85,23 @@ const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
               minWidth: sidebarWidth,
               maxWidth: sidebarWidth,
               background: (theme) => theme.palette.gradient,
-              ...defaultStyle,
-              ...transitionStyles[state],
               position: "fixed",
               top: 0,
               left: 0,
               bottom: 0,
               right: 0,
               boxShadow: "4px 4px 4px rgba(0, 0, 0, 0.25)",
+              ...defaultStyle,
+              ...transitionStyles[state],
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                background: "rgba(0, 0, 0, 0.5)",
+              },
             }}
           >
             <Box>

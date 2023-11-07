@@ -126,12 +126,15 @@ const MedicineList: React.FC<Props> = ({
       : medicines;
 
   return (
-    <Grid container>
-      <Grid item sm={12} md={2}>
-        <Box mt={1} />
-        <Typography variant="h6" gutterBottom>
-          Medicine Usages
-        </Typography>
+    <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Typography variant="h6">Filter by usages</Typography>
+
         {(showMore ? filterOptions : filterOptions.slice(0, 10)).map(
           (option) => (
             <Box marginBottom={-1} key={option}>
@@ -149,58 +152,62 @@ const MedicineList: React.FC<Props> = ({
             </Box>
           )
         )}
+
         {!showMore && filterOptions.length > 10 && (
           <Button onClick={handleShowMoreClick} color="secondary">
             Show more
           </Button>
         )}
+
         {showMore && (
           <Button onClick={handleShowLessClick} color="secondary">
             Show less
           </Button>
         )}
-      </Grid>
-      <Grid
-        item
-        sm={12}
-        md={10}
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "start",
-        }}
-      >
+      </Box>
+
+      <Box>
         <NameSearchBar
           searchCollection="medicines"
           onSearch={handleSearch}
           initialValue="(or leave empty for all)"
         />
         {filteredMedicines.length === 0 && <p>No medicines found.</p>}
-        {filteredMedicines.map((medicine) => (
-          <div
-            key={medicine._id}
-            style={{ padding: "0rem", boxSizing: "border-box" }}
-          >
-            <MedicineCard
-              medicine={medicine}
-              canBuy={canBuy}
-              canEdit={canEdit}
-              canViewSales={canViewSales}
-              canViewQuantity={canViewQuantity}
-              sales={medSales[medicine._id]}
-              handleEditClick={handleEditClick}
-            />
-            {selectedMedicine && selectedMedicine._id === medicine._id && (
-              <EditMedicineModal
-                open={!!selectedMedicine}
-                medicine={selectedMedicine}
-                onClose={handleClose}
+        <Box
+          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "start" }}
+        >
+          {filteredMedicines.map((medicine) => (
+            <div
+              key={medicine._id}
+              style={{
+                padding: "0rem",
+                boxSizing: "border-box",
+                marginRight: "1rem",
+                marginBottom: "1rem",
+              }}
+            >
+              <MedicineCard
+                medicine={medicine}
+                canBuy={canBuy}
+                canEdit={canEdit}
+                canViewSales={canViewSales}
+                canViewQuantity={canViewQuantity}
+                sales={medSales[medicine._id]}
+                handleEditClick={handleEditClick}
               />
-            )}
-          </div>
-        ))}
-      </Grid>
-    </Grid>
+
+              {selectedMedicine && selectedMedicine._id === medicine._id && (
+                <EditMedicineModal
+                  open={!!selectedMedicine}
+                  medicine={selectedMedicine}
+                  onClose={handleClose}
+                />
+              )}
+            </div>
+          ))}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

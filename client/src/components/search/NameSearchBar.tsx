@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 
 import config from "../../config/config";
+import { IconButton } from "@mui/material";
 
 interface Props {
   searchCollection?: string;
@@ -56,29 +57,35 @@ const NameSearchBar: React.FC<Props> = ({
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          backgroundColor: "#f1f3f4",
+          borderRadius: "2px",
+        }}
+      >
         <TextField
           label={labelName}
           onChange={handleTextChange}
           id="filled-start-adornment"
           placeholder={initialValue}
           size="small"
-          sx={{ m: 1, width: "80vw" }}
+          sx={{ m: 1, width: "30vw" }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">{attribute}:</InputAdornment>
             ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleSearch}>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
           variant="filled"
         />
-
-        <Button
-          variant="contained"
-          endIcon={<SearchIcon />}
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
       </div>
     </Box>
   );
