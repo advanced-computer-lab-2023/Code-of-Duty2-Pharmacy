@@ -20,6 +20,11 @@ export const OrderSchema = new Schema<IOrderModel>(
       },
     ],
     paidAmount: { type: Number, required: true },
+    paymentMethod: {
+      type: String,
+      enum: ["wallet", "card", "cod"],
+      required: true,
+    },
     timestamp: { type: Date, default: Date.now },
     orderStatus: {
       type: String,

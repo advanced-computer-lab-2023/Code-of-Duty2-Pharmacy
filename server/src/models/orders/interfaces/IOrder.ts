@@ -7,6 +7,7 @@ export interface IOrder {
   patientMobileNumber: string;
   medicines: Array<{ medicine_id: Schema.Types.ObjectId; quantity: number }>;
   paidAmount: number;
+  paymentMethod: "wallet" | "card" | "cod";
   timestamp: Date;
   orderStatus: "successful" | "pending" | "failed";
 }
