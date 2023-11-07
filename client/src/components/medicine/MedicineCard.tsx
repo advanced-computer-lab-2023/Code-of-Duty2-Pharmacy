@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 
 import Medicine from "../../types/Medicine";
+import EditMedicineModal from "./EditMedicineModal";
 
 interface MedicineCardProps {
   medicine: Medicine;
@@ -19,18 +20,32 @@ interface MedicineCardProps {
   canViewSales: boolean;
   canViewQuantity: boolean;
   sales?: number;
-  handleEditClick?: (medicine: Medicine) => void;
 }
 
 const MedicineCard: React.FC<MedicineCardProps> = ({
   medicine,
-  sales = 0,
-  canViewQuantity,
-  canViewSales,
   canBuy,
   canEdit,
-  handleEditClick = () => {},
+  canViewSales,
+  canViewQuantity,
+  sales = 0,
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editedMedicine, setEditedMedicine] = useState(medicine);
+
+  const handleEditClick = () => {
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
+  const handleSave = (updatedMedicine: Medicine) => {
+    setEditedMedicine(updatedMedicine);
+    setModalOpen(false);
+  };
+
   return (
     <Card
       sx={{
@@ -45,30 +60,30 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
             component="img"
             sx={{ objectFit: "contain" }}
             height={140}
-            image={medicine.pictureUrl}
-            alt={`${medicine.name} image`}
+            image={editedMedicine.pictureUrl}
+            alt={`${editedMedicine.name} image`}
           />
           <CardContent sx={{ height: "450px" }}>
             <Typography gutterBottom variant="h5" component="div">
-              {medicine.name}
+              {editedMedicine.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {medicine.description}
+              {editedMedicine.description}
             </Typography>
             <Box mt={3}>
               <Typography variant="body2" color="text.secondary">
                 Usages
               </Typography>
-              {medicine.usages &&
-                medicine.usages.map((usage, index) => (
+              {editedMedicine.usages &&
+                editedMedicine.usages.map((usage, index) => (
                   <Chip label={usage} key={index} />
                 ))}
               <Box mt={2}>
                 <Typography variant="body2" color="text.secondary">
                   Active Ingredients
                 </Typography>
-                {medicine.activeIngredients &&
-                  medicine.activeIngredients.map((ingredient, index) => (
+                {editedMedicine.activeIngredients &&
+                  editedMedicine.activeIngredients.map((ingredient, index) => (
                     <Chip label={ingredient} key={index} />
                   ))}
                 <Box mt={2}>
@@ -76,7 +91,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
                     Price
                   </Typography>
                   <Typography variant="h6">
-                    {`${medicine.price} EGP`}
+                    {`${editedMedicine.price} EGP`}
                   </Typography>
                   {canViewQuantity && (
                     <Box mt={2}>
@@ -84,7 +99,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
                         Available Quantity
                       </Typography>
                       <Typography variant="h6">
-                        {medicine.availableQuantity}
+                        {editedMedicine.availableQuantity}
                       </Typography>
                     </Box>
                   )}
@@ -110,7 +125,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
         )}
         {canEdit && (
           <Button
-            onClick={() => handleEditClick(medicine)}
+            onClick={handleEditClick}
             startIcon={<EditIcon />}
             color="secondary"
             variant="contained"
@@ -119,6 +134,13 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
           </Button>
         )}
       </CardActions>
+
+      <EditMedicineModal
+        open={modalOpen}
+        medicine={editedMedicine}
+        onClose={handleClose}
+        onSave={handleSave}
+      />
     </Card>
   );
 };

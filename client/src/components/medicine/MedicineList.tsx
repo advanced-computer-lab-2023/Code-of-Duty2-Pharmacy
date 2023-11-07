@@ -3,7 +3,6 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  Grid,
   Button,
   Box,
 } from "@mui/material";
@@ -12,7 +11,6 @@ import config from "../../config/config";
 
 import { Medicine } from "../../types";
 import { MedicineUsages } from "../../data/medicines";
-import EditMedicineModal from "./EditMedicineModal";
 import MedicineCard from "./MedicineCard";
 import { NameSearchBar, goSearch } from "../../components/search/NameSearchBar";
 
@@ -32,9 +30,6 @@ const MedicineList: React.FC<Props> = ({
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [showMore, setShowMore] = useState(false);
-  const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(
-    null
-  );
   const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
 
   const filterOptions = MedicineUsages;
@@ -85,14 +80,6 @@ const MedicineList: React.FC<Props> = ({
         console.log(err);
       }
     }
-  };
-
-  const handleEditClick = (medicine: Medicine) => {
-    setSelectedMedicine(medicine);
-  };
-
-  const handleClose = () => {
-    setSelectedMedicine(null);
   };
 
   const handleShowMoreClick = () => {
@@ -193,16 +180,7 @@ const MedicineList: React.FC<Props> = ({
                 canViewSales={canViewSales}
                 canViewQuantity={canViewQuantity}
                 sales={medSales[medicine._id]}
-                handleEditClick={handleEditClick}
               />
-
-              {selectedMedicine && selectedMedicine._id === medicine._id && (
-                <EditMedicineModal
-                  open={!!selectedMedicine}
-                  medicine={selectedMedicine}
-                  onClose={handleClose}
-                />
-              )}
             </div>
           ))}
         </Box>
