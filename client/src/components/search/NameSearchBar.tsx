@@ -60,8 +60,6 @@ const NameSearchBar: React.FC<Props> = ({
       <div
         style={{
           display: "flex",
-          width: "100%",
-          backgroundColor: "#f1f3f4",
           borderRadius: "2px",
         }}
       >

@@ -128,7 +128,6 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
             onClick={handleEditClick}
             startIcon={<EditIcon />}
             color="secondary"
-            variant="contained"
           >
             Edit
           </Button>
