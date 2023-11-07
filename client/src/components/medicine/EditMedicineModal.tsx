@@ -17,7 +17,6 @@ import { MedicineUsages } from "../../data/medicines";
 import { Medicine } from "../../types";
 import { Box, styled } from "@mui/material";
 import { uploadMedicineImage } from "../../services/upload";
-import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   medicine: Medicine;
@@ -205,7 +204,7 @@ const EditMedicineModal: React.FC<Props> = ({
               </Button>
             </Box>
             {imagePreviewUrl && (
-              <Box mt={2} position="relative" width={200} height={200}>
+              <Box mt={2} position="relative" width={200}>
                 <img
                   src={imagePreviewUrl}
                   alt="Preview"
