@@ -23,6 +23,7 @@ import { AlertTitle } from "@mui/material";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import axios from "axios";
 import config from "../../config/config";
+import { forgetPasswordRoute } from "../../data/routes/loginRoutes";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
@@ -191,7 +192,10 @@ export default function PharmacistLogin() {
               <Grid container>
                 <Grid item xs>
                   {/* TODO: Add Forgot password href here but use Navigate instead */}
-                  <NavLink to="/" style={{ color: "inherit" }}>
+                  <NavLink
+                    to={forgetPasswordRoute.path}
+                    style={{ color: "inherit" }}
+                  >
                     Forgot password?
                   </NavLink>
                 </Grid>

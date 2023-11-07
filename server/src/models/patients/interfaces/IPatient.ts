@@ -1,9 +1,10 @@
-import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
-import { ISubscribedPackage } from "./subinterfaces/ISubscribedPackage";
-import { IDependentFamilyMember } from "./subinterfaces/IDependentFamilyMember";
-import { IRegisteredFamilyMember } from "./subinterfaces/IRegisteredFamilyMember";
-import { IEmergencyContact } from "./subinterfaces/IEmergencyContact";
 import UserRole from "../../../types/UserRole";
+import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
+import { IDependentFamilyMember } from "./subinterfaces/IDependentFamilyMember";
+import { IEmergencyContact } from "./subinterfaces/IEmergencyContact";
+import { IRegisteredFamilyMember } from "./subinterfaces/IRegisteredFamilyMember";
+import { ISubscribedPackage } from "./subinterfaces/ISubscribedPackage";
+
 
 export interface IPatient extends IUserBaseInfo {
   role?: UserRole.PATIENT;
