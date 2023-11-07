@@ -193,16 +193,7 @@ const MedicineList: React.FC<Props> = ({
                 canViewSales={canViewSales}
                 canViewQuantity={canViewQuantity}
                 sales={medSales[medicine._id]}
-                handleEditClick={handleEditClick}
               />
-
-              {selectedMedicine && selectedMedicine._id === medicine._id && (
-                <EditMedicineModal
-                  open={!!selectedMedicine}
-                  medicine={selectedMedicine}
-                  onClose={handleClose}
-                />
-              )}
             </div>
           ))}
         </Box>

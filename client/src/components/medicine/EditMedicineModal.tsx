@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,19 +8,30 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import config from "../../config/config";
 import { MedicineUsages } from "../../data/medicines";
 import { Medicine } from "../../types";
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
+import { uploadMedicineImage } from "../../services/upload";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Props {
   medicine: Medicine;
   open: boolean;
   onClose: () => void;
+  onSave: (updatedMedicine: Medicine) => void;
 }
 
-const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
+const EditMedicineModal: React.FC<Props> = ({
+  medicine,
+  open,
+  onClose,
+  onSave,
+}) => {
   const [name, setName] = useState(medicine.name);
   const [price, setPrice] = useState(medicine.price);
   const [description, setDescription] = useState(medicine.description || "");
@@ -30,6 +41,12 @@ const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
     medicine.activeIngredients || []
   );
   const [newActiveIngredient, setNewActiveIngredient] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    setImagePreviewUrl(medicine.pictureUrl || "");
+  }, [medicine.pictureUrl]);
 
   const handleDeleteActiveIngredient = (ingredientToDelete: string) => () => {
     setActiveIngredients((ingredients) =>
@@ -52,17 +69,48 @@ const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
     }
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setSelectedImage(event.target.files[0]);
+      setImagePreviewUrl(URL.createObjectURL(event.target.files[0]));
+    }
+    event.target.value = "";
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setImagePreviewUrl(null);
+    if (medicine.pictureUrl) {
+      setPictureUrl("");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      let finalPictureUrl = pictureUrl;
+      if (selectedImage) {
+        finalPictureUrl = await uploadMedicineImage(selectedImage);
+      }
       await axios.patch(`${config.API_URL}/medicines/${medicine._id}`, {
         name,
         price,
         description,
         usages,
         activeIngredients,
-        pictureUrl,
+        pictureUrl: finalPictureUrl,
       });
+
+      const updatedMedicine = {
+        ...medicine,
+        name,
+        price,
+        description,
+        usages,
+        activeIngredients,
+        pictureUrl: finalPictureUrl,
+      };
+      onSave(updatedMedicine);
       onClose();
     } catch (err) {
       console.error(err);
@@ -87,14 +135,6 @@ const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
               label="Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              fullWidth
-            />
-          </Box>
-          <Box mt={3}>
-            <TextField
-              label="Image URL"
-              value={pictureUrl}
-              onChange={(e) => setPictureUrl(e.target.value)}
               fullWidth
             />
           </Box>
@@ -147,6 +187,39 @@ const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
               fullWidth
             />
           </Box>
+
+          <Box mt={3}>
+            <Box mt={3}>
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload Medicine Image
+                <VisuallyHiddenInput
+                  accept="image/*"
+                  id="upload-image"
+                  type="file"
+                  onChange={handleImageUpload}
+                />
+              </Button>
+            </Box>
+            {imagePreviewUrl && (
+              <Box mt={2} position="relative" width={200} height={200}>
+                <img
+                  src={imagePreviewUrl}
+                  alt="Preview"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+                <IconButton
+                  style={{ position: "absolute", top: 0, right: 0 }}
+                  onClick={handleRemoveImage}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            )}
+          </Box>
         </form>
       </DialogContent>
 
@@ -159,5 +232,17 @@ const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose }) => {
     </Dialog>
   );
 };
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 export default EditMedicineModal;
