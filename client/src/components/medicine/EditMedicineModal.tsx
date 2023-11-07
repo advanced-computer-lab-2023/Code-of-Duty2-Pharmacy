@@ -47,6 +47,17 @@ const EditMedicineModal: React.FC<Props> = ({
     setImagePreviewUrl(medicine.pictureUrl || "");
   }, [medicine.pictureUrl]);
 
+  useEffect(() => {
+    if (!open) {
+      resetImagePreview();
+    }
+  }, [open]);
+
+  const resetImagePreview = () => {
+    setSelectedImage(null);
+    setImagePreviewUrl(medicine.pictureUrl || "");
+  };
+
   const handleDeleteActiveIngredient = (ingredientToDelete: string) => () => {
     setActiveIngredients((ingredients) =>
       ingredients.filter((ingredient) => ingredient !== ingredientToDelete)
