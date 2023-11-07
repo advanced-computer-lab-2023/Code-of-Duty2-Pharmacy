@@ -1,5 +1,3 @@
-const MedicineActiveIngredients = [
-    ""
-];
+const MedicineActiveIngredients = [""];
 
 export default MedicineActiveIngredients;

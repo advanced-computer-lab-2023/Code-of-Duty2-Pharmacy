@@ -1,8 +1,8 @@
-import { UserBaseInfo } from './UserBaseInfo';
-import { SubscribedPackage } from './SubscribedPackage';
-import { DependentFamilyMember } from './DependentFamilyMember';
-import { RegisteredFamilyMember } from './RegisteredFamilyMember';
-import { EmergencyContact } from './EmergencyContact';
+import { UserBaseInfo } from "./UserBaseInfo";
+import { SubscribedPackage } from "./SubscribedPackage";
+import { DependentFamilyMember } from "./DependentFamilyMember";
+import { RegisteredFamilyMember } from "./RegisteredFamilyMember";
+import { EmergencyContact } from "./EmergencyContact";
 
 interface Patient extends UserBaseInfo {
   emergencyContact: EmergencyContact;
