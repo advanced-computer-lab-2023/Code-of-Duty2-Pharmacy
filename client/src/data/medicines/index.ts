@@ -1,7 +1,4 @@
 import MedicineUsages from "./MedicineUsages";
 import MedicineActiveIngredients from "./MedicineActiveIngredients";
 
-export {
-    MedicineUsages,
-    MedicineActiveIngredients
-}
+export { MedicineUsages, MedicineActiveIngredients };

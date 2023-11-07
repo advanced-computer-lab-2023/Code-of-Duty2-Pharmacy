@@ -6,6 +6,6 @@ import { Route } from "../types";
 const getRouteFirstPath = (route: Route) => {
   const parts = route.path.split("/");
   return parts[1];
-}
+};
 
 export default getRouteFirstPath;

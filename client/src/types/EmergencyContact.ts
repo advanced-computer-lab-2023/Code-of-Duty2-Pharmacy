@@ -1,5 +1,5 @@
 export interface EmergencyContact {
-    fullname: string;
-    mobileNumber: string;
-    relationToPatient: string;
-};
+  fullname: string;
+  mobileNumber: string;
+  relationToPatient: string;
+}

@@ -1,9 +1,9 @@
 enum UserRole {
-    GUEST,
-    ADMIN,
-    PATIENT,
-    PHARMACIST,
-    DOCTOR
+  GUEST,
+  ADMIN,
+  PATIENT,
+  PHARMACIST,
+  DOCTOR,
 }
 
 export default UserRole;

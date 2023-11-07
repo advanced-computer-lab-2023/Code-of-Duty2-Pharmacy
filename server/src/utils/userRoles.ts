@@ -1,1 +1,1 @@
-export const applicationRoles = ['admins', 'pharmacists', 'patients']
+export const applicationRoles = ["admins", "pharmacists", "patients"];

@@ -1,5 +1,5 @@
 export interface IEmergencyContact {
-    fullname: string;
-    mobileNumber: string;
-    relationToPatient: string;
-};
+  fullname: string;
+  mobileNumber: string;
+  relationToPatient: string;
+}

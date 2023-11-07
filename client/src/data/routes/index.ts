@@ -6,8 +6,8 @@ import patientRoutes from "./patientRoutes";
 import loginRoutes from "./loginRoutes";
 
 export default loginRoutes
-                    .concat(guestRoutes)
-                    .concat(patientRoutes)
-                    .concat(adminRoutes)
-                    .concat(pharmacistRoutes)
-                    .concat(generalRoutes);
+  .concat(guestRoutes)
+  .concat(patientRoutes)
+  .concat(adminRoutes)
+  .concat(pharmacistRoutes)
+  .concat(generalRoutes);

@@ -12,17 +12,16 @@ import Route from "./Route";
 import SidebarItem from "./SidebarItem";
 
 export {
-    type Medicine,
-    type Admin,
-    type Notification,
-    type Order,
-    type Patient,
-    type Pharmacist,
-    type PharmacistRegistrationRequest,
-    type Prescription,
-    type Doctor,
-
-    type ButtonColor,
-    type Route,
-    type SidebarItem
-}
+  type Medicine,
+  type Admin,
+  type Notification,
+  type Order,
+  type Patient,
+  type Pharmacist,
+  type PharmacistRegistrationRequest,
+  type Prescription,
+  type Doctor,
+  type ButtonColor,
+  type Route,
+  type SidebarItem,
+};
