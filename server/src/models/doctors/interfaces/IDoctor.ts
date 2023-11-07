@@ -11,4 +11,10 @@ export interface IDoctor extends IDoctorBaseInfo {
   };
   contract?: Buffer;
   contractStatus?: "pending" | "accepted" | "rejected";
+  passwordReset?: {
+    otp: string;
+    expiryDate: Date;
+  };
+  verifyPasswordResetOtp?: (otp: string) => Promise<boolean>;
+  verifyPassword?: (password: string) => Promise<boolean>;
 }
