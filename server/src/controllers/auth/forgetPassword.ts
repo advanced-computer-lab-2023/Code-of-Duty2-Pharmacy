@@ -10,7 +10,7 @@ import {
   verifyAndDecodePasswordResetToken,
 } from "../../utils/jwt";
 import { User } from "../../types/User";
-import { findUserByEmail, updatePassword } from "../../services/auth/users";
+import { findUserByEmail, updatePassword } from "../../services/users";
 
 export const resetPasswordRequestHandler = async (
   req: Request,

@@ -12,6 +12,7 @@ import pharmacistRouter from "./routes/pharmacistRoutes";
 import pharmacistRegistrationRequestRouter from "./routes/pharmacistRegistrationRequestRoutes";
 import authRouter from "./routes/authRoutes";
 import cookieParser from "cookie-parser";
+import forgetPasswordRouter from "./routes/ForgetPassword";
 
 export const app = express();
 
@@ -43,3 +44,4 @@ app.use(
   pharmacistRegistrationRequestRouter
 );
 app.use("/auth", authRouter);
+app.use("/auth", forgetPasswordRouter);

@@ -5,3 +5,6 @@ export const entityIdDoesNotExistError = (
 
 export const usernameOrPasswordIncorrectErrorMessage =
   "Username or password is incorrect";
+export const entityEmailDoesNotExistError = (entityName: string, entityEmail: string) =>
+    `${entityName} with email ${entityEmail} does not exist`;
+       

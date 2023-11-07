@@ -1,9 +1,9 @@
 import { IPasswordResetInfo } from "../../../models/users/interfaces/IPasswordReset";
-import { sendEmail } from "../../../utils/email";
-import { generateOTP, getOTPExpirationDate } from "../../../utils/OTP";
-import { findUser, findUserByEmail } from "../../users";
 import { User } from "../../../types/User";
 import { IUserModel } from "../../../types/UserModel";
+import { generateOTP, getOTPExpirationDate } from "../../../utils/OTP";
+import { sendEmail } from "../../../utils/email";
+import { findUserByEmail, findUser } from "../../users";
 
 export const sendPasswordResetOTPIfUserExists = async (
   email: string

@@ -1,34 +1,17 @@
 import { User } from "../../types/User";
 import { IUserModel } from "../../types/UserModel";
-import { UserRole } from "../../types/UserRole";
-import {
-  deleteAdminById,
-  findAdminByEmail,
-  findAdminById,
-  findAdminByUsername,
-  findAllAdmins,
-} from "../admins";
-import {
-  deleteDoctorById,
-  findAllDoctors,
-  findDoctorByEmail,
-  findDoctorById,
-  findDoctorByUsername,
-} from "../doctors";
-import {
-  deletePatientById,
-  findAllPatients,
-  findPatientByEmail,
-  findPatientById,
-  findPatientByUsername,
-} from "../patients";
+import UserRole from "../../types/UserRole";
+import { findAllAdmins, deleteAdminById, findAdminById, findAdminByUsername, findAdminByEmail } from "../admins";
+import { findAllPatients, deletePatientById, findPatientById, findPatientByUsername, findPatientByEmail } from "../patients";
+import { findAllPharmacists, findPharmacistByEmail, findPharmacistById, findPharmacistByUsername } from "../pharmacists";
+
 
 export const findAllUsersByType = async (Type: string) => {
   switch (Type.toLowerCase()) {
     case "patient":
       return await findAllPatients();
-    case "doctor":
-      return await findAllDoctors();
+    case "pharmacist":
+      return await findAllPharmacists();
     case "admin":
       return await findAllAdmins();
     default:
@@ -36,33 +19,12 @@ export const findAllUsersByType = async (Type: string) => {
   }
 };
 
-export const removeUser = async (username: string, Type: string) => {
-  const user = await findUserByUsername(username, Type);
-
-  if (!user) throw new Error("User not found");
-
-  switch (Type.toLowerCase()) {
-    case "patient":
-      await deletePatientById(user._id);
-      break;
-    case "doctor":
-      await deleteDoctorById(user._id);
-      break;
-    case "admin":
-      await deleteAdminById(user._id);
-      break;
-    default:
-      throw new Error("Invalid user type");
-  }
-  return user;
-};
-
 export const findUser = async (user: User, elementsToSelect?: any) => {
   switch (user.role) {
     case UserRole.PATIENT:
       return await findPatientById(user.id, elementsToSelect);
     case UserRole.DOCTOR:
-      return await findDoctorById(user.id);
+      return await findPharmacistById(user.id);
     case UserRole.ADMIN:
       return await findAdminById(user.id, elementsToSelect);
     default:
@@ -74,8 +36,8 @@ export const findUserByUsername = async (username: string, Type: string) => {
   switch (Type.toLowerCase()) {
     case "patient":
       return await findPatientByUsername(username);
-    case "doctor":
-      return await findDoctorByUsername(username);
+    case "pharmacist":
+      return await findPharmacistByUsername(username);
     case "admin":
       return await findAdminByUsername(username);
     default:
@@ -92,10 +54,10 @@ export const findUserByEmail = async (
     return admin;
   }
 
-  const doctor = await findDoctorByEmail(email, elementsToSelect);
-  if (doctor) {
-    doctor.role = UserRole.DOCTOR;
-    return doctor;
+  const pharmacist = await findPharmacistByEmail(email, elementsToSelect);
+  if (pharmacist) {
+    pharmacist.role = UserRole.PHARMACIST;
+    return pharmacist;
   }
 
   const patient = await findPatientByEmail(email, elementsToSelect);

@@ -1,5 +1,6 @@
 import PatientLogin from "../../pages/guest/PatientLogin";
 import PharmacistLogin from "../../pages/guest/PharmacistLogin";
+import ForgetPassword from "../../pages/guest/forget-password/ForgetPassword";
 import { Route } from "../../types";
 
 export const patientLoginRoute: Route = {
@@ -12,6 +13,15 @@ export const pharmacistLoginRoute: Route = {
   element: <PharmacistLogin />,
 };
 
-const routes: Route[] = [patientLoginRoute, pharmacistLoginRoute];
+export const forgetPasswordRoute: Route = {
+  path: "/forget-password",
+  element: <ForgetPassword />,
+};
+
+const routes: Route[] = [
+  patientLoginRoute,
+  pharmacistLoginRoute,
+  forgetPasswordRoute,
+];
 
 export default routes;
