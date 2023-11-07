@@ -75,7 +75,7 @@ const NameSearchBar: React.FC<Props> = ({
           id="filled-start-adornment"
           placeholder={initialValue}
           size="small"
-          sx={{ m: 1, width: "30vw" }}
+          sx={{ m: 1, minWidth: "30vw" }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">{attribute}:</InputAdornment>
