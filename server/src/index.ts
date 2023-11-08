@@ -1,9 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import connectToDB from "./utils/database";
+import cookieParser from "cookie-parser";
 
 import config from "./config";
+import connectToDB from "./utils/database";
 import medicineRouter from "./routes/medicineRoutes";
 import patientRouter from "./routes/patientRoutes";
 import registrationRouter from "./routes/registrationRoutes";
@@ -11,7 +12,7 @@ import adminRouter from "./routes/adminRoutes";
 import pharmacistRouter from "./routes/pharmacistRoutes";
 import pharmacistRegistrationRequestRouter from "./routes/pharmacistRegistrationRequestRoutes";
 import authRouter from "./routes/authRoutes";
-import cookieParser from "cookie-parser";
+import paymentRouter from "./routes/paymentRoutes";
 import forgetPasswordRouter from "./routes/ForgetPassword";
 
 export const app = express();
@@ -45,3 +46,4 @@ app.use(
 );
 app.use("/auth", authRouter);
 app.use("/auth", forgetPasswordRouter);
+app.use("/payments", paymentRouter);
