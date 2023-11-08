@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcrypt";
 import Patient from "../models/patients/Patient";
 import PharmacistRegistrationRequest from "../models/pharmacist_registration_requests/PharmacistRegistrationRequest";
+import Pharmacist from "../models/pharmacists/Pharmacist";
 
 export const registerPatient = async (req: Request, res: Response) => {
   try {
@@ -113,4 +114,35 @@ export const registerPharmacist = async (req: Request, res: Response) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }
+};
+
+export const acceptPharmacistRegistrationRequest = async (req: Request, res: Response) => {
+  const request = await PharmacistRegistrationRequest.findOne({username: req.params.username});
+  if(!request){
+    return res.status(StatusCodes.NOT_FOUND).json({message: 'request not found'});
+  }
+  const newPharmacist = new Pharmacist({username: request.username, password: request.password, 
+                                      email: request.email, name: request.name, dateOfBirth: request.dateOfBirth, 
+                                      hourlyRate: request.hourlyRate, affiliation: request.affiliation, 
+                                      educationalBackground: request.educationalBackground});
+  const savedPharmacist = await newPharmacist.save();
+  await PharmacistRegistrationRequest.findOneAndDelete({username: req.params.username});
+
+  //TODO: send an email to the pharmacist with the acceptance message and ask them to complete their info
+
+
+  // return the saved pharmacist
+  return res.status(StatusCodes.OK).json(savedPharmacist);
+};
+
+export const rejectPharmacistRegistrationRequest = async (req: Request, res: Response) => {
+  //delete the request from the database by username
+  const deletedRequest = await PharmacistRegistrationRequest.findOneAndDelete({username: req.params.username});
+
+  //TODO: send an email to the pharmacist with the reason of rejection
+
+
+  // return the deleted request and deletion message
+  res.status(StatusCodes.OK).json(deletedRequest);
+
 };
