@@ -11,6 +11,8 @@ import { StatusCodes } from "http-status-codes";
 
 const router = express.Router();
 
+// --> Path: /pharmacists/
+
 router.use(authenticateUser);
 
 router.delete("/:id", deletePharmacist);

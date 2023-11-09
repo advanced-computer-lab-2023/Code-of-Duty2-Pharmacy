@@ -12,8 +12,8 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     email: { type: String, validate: [isEmail, "invalid email"], unique: true },
     name: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
-    gender: { type: String, required: true, enum: ["male", "female"] },
-    mobileNumber: { type: String, required: true },
+    gender: { type: String, required: false, enum: ["male", "female"] }, //TO BE REQUIRED
+    mobileNumber: { type: String, required: false }, //TO BE REQUIRED
     hourlyRate: { type: Number, required: true },
     affiliation: { type: String, required: true },
     educationalBackground: { type: String, required: true },
