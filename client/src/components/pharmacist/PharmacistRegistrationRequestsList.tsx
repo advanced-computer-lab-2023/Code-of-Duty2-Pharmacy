@@ -4,6 +4,9 @@ import axios from "axios";
 import config from "../../config/config";
 
 import { PharmacistRegistrationRequest } from "../../types";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+import { Padding } from "@mui/icons-material";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
@@ -11,6 +14,7 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
     PharmacistRegistrationRequest[]
   >([]);
   const [filter, setFilter] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -62,29 +66,38 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
               borderRadius: "5px",
             }}
           >
+            <Button
+              style={{ float: "right" }}
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                navigate(
+                  `/admin/view-pharmacist-request/?request=${JSON.stringify(
+                    request
+                  )}`
+                )
+              }
+            >
+              View
+            </Button>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Name:</strong> {request.name}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Username:</strong> {request.username}
+              <strong>Name: </strong> {request.name}{" "}
+              <span style={{ color: "#949494" }}>, ({request.username})</span>
             </p>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Email:</strong> {request.email}
             </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Date of Birth:</strong>{" "}
-              {new Date(request.dateOfBirth).toLocaleDateString()}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Hourly Rate:</strong> {request.hourlyRate}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Affiliation:</strong> {request.affiliation}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Educational Background:</strong>{" "}
-              {request.educationalBackground}
-            </p>
+            <div style={{ float: "right" }}>
+              <div style={{ paddingRight: "1.0rem", display: "inline" }}>
+                <Button variant="outlined" color="success">
+                  Accept
+                </Button>
+              </div>
+              <Button variant="outlined" color="error">
+                Reject
+              </Button>
+            </div>
+
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Status:</strong> {request.status}
             </p>
