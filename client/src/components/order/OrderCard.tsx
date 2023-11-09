@@ -10,23 +10,38 @@ interface OrderCardProps {
   order: Order;
   canViewStatus: boolean;
 }
-
 const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus }) => {
   return (
-    <Card>
+    <Card sx={{ width: "500px" }}>
       <CardActionArea>
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: "1.5em" }}
+          >
             Medicines :
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: "1.5em" }}
+          >
             Paid Amount : {order.paidAmount}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: "1.5em" }}
+          >
             Payment Method : {order.paymentMethod}
           </Typography>
           {canViewStatus && (
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontSize: "1.5em" }}
+            >
               Order Status : {order.orderStatus}
             </Typography>
           )}

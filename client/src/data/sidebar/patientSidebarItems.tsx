@@ -1,6 +1,6 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HealingIcon from "@mui/icons-material/Healing";
-import ListAltIcon from "@mui/icons-material/ListAlt";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 import { SidebarItem } from "../../types";
 import {
@@ -26,8 +26,7 @@ export const patientSidebarItems: SidebarItem[] = [
   {
     title: "View Orders",
     href: viewOrdersRoute.path,
-    icon: <ListAltIcon />,
+    icon: <AssignmentIcon />,
   },
 ];
-
 export default patientSidebarItems;
