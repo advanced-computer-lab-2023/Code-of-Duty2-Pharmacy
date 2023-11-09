@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
+import Order from "../models/orders/Order";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -91,6 +92,82 @@ export const addDeliveryAddress = async (
     res.status(StatusCodes.OK).json(patient.deliveryAddresses);
   } catch (err) {
     res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getPatientDetails = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    const patient = await Patient.findById(userId).select(
+      "_id name mobileNumber"
+    );
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res.status(StatusCodes.OK).json(patient);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    const patient = await Patient.findById(userId).select("cart");
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res.status(StatusCodes.OK).json(patient.cart);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const {
+      patientId,
+      patientName,
+      patientAddress,
+      patientMobileNumber,
+      medicines,
+      paidAmount,
+      paymentMethod,
+    } = req.body;
+
+    const newOrder = new Order({
+      patientId,
+      patientName,
+      patientAddress,
+      patientMobileNumber,
+      medicines,
+      paidAmount,
+      paymentMethod,
+    });
+
+    const savedOrder = await newOrder.save();
+
+    return res.status(StatusCodes.CREATED).json(savedOrder);
+  } catch (err) {
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }

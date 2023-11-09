@@ -98,6 +98,16 @@ const Address: FC = () => {
         My Addresses
       </Typography>
 
+      {addresses.length > 0 ? (
+        <Typography variant="body1" gutterBottom>
+          Select a billing and delivery address.
+        </Typography>
+      ) : (
+        <Typography variant="body1" gutterBottom>
+          Please enter an address above to proceed.
+        </Typography>
+      )}
+
       <FormControl component="fieldset">
         <RadioGroup value={selectedAddress} onChange={handleRadioChange}>
           {addresses &&

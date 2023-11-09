@@ -4,6 +4,9 @@ import {
   deletePatient,
   getDeliveryAddresses,
   addDeliveryAddress,
+  getPatientDetails,
+  getCartItems,
+  createOrder,
 } from "../controllers/patientController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -15,5 +18,8 @@ router.get("/", getAllPatients);
 router.delete("/:id", deletePatient);
 router.get("/addresses", getDeliveryAddresses);
 router.post("/addresses", addDeliveryAddress);
+router.get("/me", getPatientDetails);
+router.get("/me/cart", getCartItems);
+router.post("/orders", createOrder);
 
 export default router;

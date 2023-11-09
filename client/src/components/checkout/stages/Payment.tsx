@@ -4,8 +4,11 @@ import Tab from "@mui/material/Tab";
 import Wallet from "./payment/Wallet";
 import CreditCard from "./payment/CreditCard";
 import CashOnDelivery from "./payment/CashOnDelivery";
+import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import CashOnDeliveryIcon from "@mui/icons-material/LocalAtm";
 import { useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 
 export default function Payment() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -27,14 +30,34 @@ export default function Payment() {
 
         <Grid item xs={12} md={6}>
           <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth">
-            <Tab label="Wallet" />
-            <Tab label="Credit Card" />
-            <Tab label="Cash on Delivery" />
+            <Tab
+              icon={
+                <Tooltip title="Wallet">
+                  <WalletIcon />
+                </Tooltip>
+              }
+            />
+            <Tab
+              icon={
+                <Tooltip title="Credit Card">
+                  <CreditCardIcon />
+                </Tooltip>
+              }
+            />
+            <Tab
+              icon={
+                <Tooltip title="Cash on Delivery">
+                  <CashOnDeliveryIcon />
+                </Tooltip>
+              }
+            />
           </Tabs>
 
-          {tabIndex === 0 && <Wallet />}
-          {tabIndex === 1 && <CreditCard />}
-          {tabIndex === 2 && <CashOnDelivery />}
+          <Box mt={2}>
+            {tabIndex === 0 && <Wallet />}
+            {tabIndex === 1 && <CreditCard />}
+            {tabIndex === 2 && <CashOnDelivery />}
+          </Box>
         </Grid>
       </Grid>
     </>

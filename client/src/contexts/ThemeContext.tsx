@@ -1,8 +1,8 @@
 import { createContext, useState, ReactNode } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 
-import lightTheme from "../themes/LightTheme";
-import darkTheme from "../themes/DarkTheme";
+import lightTheme from "../themes/lightTheme";
+import darkTheme from "../themes/darkTheme";
 
 interface IThemeContext {
   theme: string;

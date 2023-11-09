@@ -12,7 +12,11 @@ const CreditCard: FC = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const { handleNext } = useContext(CheckoutContext);
+  const {
+    handleNext,
+    handleCreateOrder,
+    total: subtotal,
+  } = useContext(CheckoutContext);
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -41,18 +45,14 @@ const CreditCard: FC = () => {
       }
     } else {
       setMessage("Payment Success!");
+      await handleCreateOrder(subtotal + 0, "card");
+      setIsProcessing(false);
       handleNext();
     }
-
-    setIsProcessing(false);
   };
 
   return (
-    <form
-      id="payment-form"
-      onSubmit={handleSubmit}
-      style={{ width: "50%", margin: "0 auto", padding: "2rem" }}
-    >
+    <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
