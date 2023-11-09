@@ -8,6 +8,8 @@ import {
 
 const router = Router();
 
+// --> Path: /auth/forget-password/
+
 router
   .post("/reset-password-request", resetPasswordRequestHandler)
   .delete("/delete-password-reset-info", deletePasswordResetInfoHandler)

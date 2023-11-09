@@ -7,6 +7,8 @@ import UserRole from "../types/UserRole";
 
 const router = express.Router();
 
+// --> Path: /admins/
+
 router.use(authenticateUser);
 
 router.post("/", addAdmin);

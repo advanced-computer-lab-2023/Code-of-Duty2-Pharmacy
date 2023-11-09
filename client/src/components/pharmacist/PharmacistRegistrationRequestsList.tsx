@@ -6,7 +6,6 @@ import config from "../../config/config";
 import { PharmacistRegistrationRequest } from "../../types";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { Padding } from "@mui/icons-material";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
@@ -29,6 +28,45 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
       .catch((error) => console.error(error));
   }, []);
 
+  const handleAccept = (username: string) => {
+    axios
+      .post(
+        `${config.API_URL}/pharmacist-registration-requests/accept-pharmacist-request`,
+        {
+          username: username,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setRequests(
+            requests.filter((request) => request.username !== username)
+          );
+          setFilteredRequests(
+            filteredRequests.filter((request) => request.username !== username)
+          );
+        }
+      });
+  };
+  const handleReject = (username: string) => {
+    axios
+      .post(
+        `${config.API_URL}/pharmacist-registration-requests/reject-pharmacist-request`,
+        {
+          username: username,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setRequests(
+            requests.filter((request) => request.username !== username)
+          );
+          setFilteredRequests(
+            filteredRequests.filter((request) => request.username !== username)
+          );
+        }
+      });
+  };
+
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = event.target.value;
     setFilter(newFilter);
@@ -38,7 +76,7 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "2.0rem" }}>
       <hr />
       <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>
         Pharmacist Registration Requests
@@ -89,11 +127,19 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
             </p>
             <div style={{ float: "right" }}>
               <div style={{ paddingRight: "1.0rem", display: "inline" }}>
-                <Button variant="outlined" color="success">
+                <Button
+                  variant="outlined"
+                  color="success"
+                  onClick={() => handleAccept(request.username)}
+                >
                   Accept
                 </Button>
               </div>
-              <Button variant="outlined" color="error">
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleReject(request.username)}
+              >
                 Reject
               </Button>
             </div>

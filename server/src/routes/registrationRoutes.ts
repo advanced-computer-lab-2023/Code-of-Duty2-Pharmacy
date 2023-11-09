@@ -5,6 +5,8 @@ import {
 } from "../controllers/registrationController";
 const router = express.Router();
 
+// --> Path: /registration/
+
 router.post("/patient", registerPatient);
 router.post("/pharmacist", registerPharmacist);
 

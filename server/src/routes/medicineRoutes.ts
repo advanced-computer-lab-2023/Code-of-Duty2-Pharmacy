@@ -11,6 +11,8 @@ import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
 
+// --> Path: /medicines/
+
 router.use(authenticateUser);
 
 router.get("/", getAllMedicines);
