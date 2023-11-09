@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Grid,
   List,
   ListItem,
   Typography,
@@ -17,7 +16,7 @@ import config from "../../config/config";
 
 const CartReview = () => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<any>([]);
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -40,45 +39,64 @@ const CartReview = () => {
       alignItems="center"
       gap="1rem"
     >
-      <Typography component="h1" variant="h4" align="center">
+      <Typography component="h1" variant="h4" align="center" gutterBottom>
         Review your cart
       </Typography>
 
-      <List>
-        {cartItems.map((item, index) => (
-          <ListItem key={index}>
-            <Card>
-              <Grid container>
-                <Grid item xs={4}>
+      {cartItems.length === 0 ? (
+        <Typography>It looks like your cart is currently empty.</Typography>
+      ) : (
+        <List>
+          {cartItems.map((item: any, index: any) => (
+            <Card key={index} elevation={0}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                p={1}
+              >
+                <Box
+                  sx={{
+                    height: "5rem",
+                    width: "5rem",
+                    objectFit: "contain",
+                  }}
+                >
                   <CardMedia
                     component="img"
-                    height="140"
+                    sx={{
+                      objectFit: "contain",
+                    }}
                     image={item.medicineId.pictureUrl}
                     alt={item.medicineId.name}
                   />
-                </Grid>
-                <Grid item xs={8}>
-                  <CardContent>
-                    <Typography variant="h5">{item.medicineId.name}</Typography>
-                    <Typography variant="body1">
-                      Quantity: {item.quantity}
-                    </Typography>
-                    <Typography variant="body1">
-                      Price: {item.medicineId.price}
-                    </Typography>
-                  </CardContent>
-                </Grid>
-              </Grid>
+                </Box>
+
+                <Box p={1}>
+                  <Typography variant="body1" fontWeight={"bold"}>
+                    {item.medicineId.name}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    Quantity: {item.quantity}
+                  </Typography>
+                </Box>
+                <Box p={1} ml="auto">
+                  <Typography variant="body1" fontWeight={"bold"}>
+                    EGP {item.medicineId.price}
+                  </Typography>
+                </Box>
+              </Box>
             </Card>
-          </ListItem>
-        ))}
-      </List>
+          ))}
+        </List>
+      )}
 
       <Button
         onClick={() => {
           navigate(checkoutRoute.path);
         }}
         variant="outlined"
+        disabled={cartItems.length === 0}
       >
         Proceed to Checkout
       </Button>

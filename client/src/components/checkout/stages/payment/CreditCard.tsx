@@ -1,12 +1,19 @@
-import { FC, FormEvent, useContext, useState } from "react";
+import { FC, FormEvent, useContext, useState, forwardRef, Ref } from "react";
 import {
   useStripe,
   useElements,
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { StripeElements } from "@stripe/stripe-js";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Snackbar } from "@mui/material";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { CheckoutContext } from "../../Checkout";
+
+function Alert(props: AlertProps, ref: Ref<any>) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
+}
+
+const AlertRef = forwardRef(Alert);
 
 const CreditCard: FC = () => {
   const stripe = useStripe();
@@ -15,6 +22,8 @@ const CreditCard: FC = () => {
   const { handleNext, handleCreateOrder, total } = useContext(CheckoutContext);
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [cardComplete, setCardComplete] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -39,11 +48,14 @@ const CreditCard: FC = () => {
       } else {
         setMessage("An unexpected error occurred.");
       }
+      setIsProcessing(false);
+      setOpenSnackbar(true);
     } else {
       setMessage("Payment Success!");
       await handleCreateOrder(total + 0, "card");
       setIsProcessing(false);
       handleNext();
+      setOpenSnackbar(true);
     }
   };
 
@@ -55,13 +67,16 @@ const CreditCard: FC = () => {
 
       <Box sx={{ mb: 2 }} />
 
-      <PaymentElement id="payment-element" />
+      <PaymentElement
+        id="payment-element"
+        onChange={(e) => setCardComplete(e.complete)}
+      />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           onClick={handleSubmit}
           variant="outlined"
-          disabled={isProcessing || !stripe || !elements}
+          disabled={!cardComplete || isProcessing || !stripe || !elements}
           id="submit"
           sx={{ mt: 3, ml: 1 }}
         >
@@ -71,7 +86,19 @@ const CreditCard: FC = () => {
         </Button>
       </Box>
 
-      {message && <div id="payment-message">{message}</div>}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4500}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <AlertRef
+          onClose={() => setOpenSnackbar(false)}
+          severity={message === "Payment Success!" ? "success" : "error"}
+        >
+          {message}
+        </AlertRef>
+      </Snackbar>
     </form>
   );
 };

@@ -131,8 +131,6 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
       select: "name price pictureUrl",
     });
 
-    console.log("[+++] Patient is", patient);
-
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
@@ -146,8 +144,6 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    // console.log(req.body);
-
     const {
       patientId,
       patientName,
@@ -166,15 +162,13 @@ export const createOrder = async (req: Request, res: Response) => {
       medicines,
       paidAmount,
       paymentMethod,
+      status: "successful", // set status directly to successful as we are not using any payment gateway or delivery service
     });
-
-    // TODO: Change order status directly to successful
 
     const savedOrder = await newOrder.save();
 
     return res.status(StatusCodes.CREATED).json(savedOrder);
   } catch (err) {
-    // console.log(err);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });

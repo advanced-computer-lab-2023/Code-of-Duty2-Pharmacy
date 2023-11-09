@@ -7,11 +7,20 @@ import CashOnDelivery from "./payment/CashOnDelivery";
 import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import CashOnDeliveryIcon from "@mui/icons-material/LocalAtm";
-import { useState } from "react";
-import { Box, Tooltip } from "@mui/material";
+import { useState, useContext } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { CheckoutContext } from "../Checkout";
 
 export default function Payment() {
   const [tabIndex, setTabIndex] = useState(0);
+  const { cartItems } = useContext(CheckoutContext);
 
   const handleTabChange = (
     event: React.ChangeEvent<{}>,
@@ -24,8 +33,47 @@ export default function Payment() {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          {/* Cart Items here */}
-          <Box>Cart Items here . . .</Box>
+          {cartItems.map((item: any, index: any) => (
+            <Card key={index} elevation={0}>
+              <Box
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                p={1}
+              >
+                <Box
+                  sx={{
+                    height: "5rem",
+                    width: "5rem",
+                    objectFit: "contain",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      objectFit: "contain",
+                    }}
+                    image={item.medicineId.pictureUrl}
+                    alt={item.medicineId.name}
+                  />
+                </Box>
+
+                <Box p={1}>
+                  <Typography variant="body1" fontWeight={"bold"}>
+                    {item.medicineId.name}
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    Quantity: {item.quantity}
+                  </Typography>
+                </Box>
+                <Box p={1} ml="auto">
+                  <Typography variant="body1" fontWeight={"bold"}>
+                    EGP {item.medicineId.price}
+                  </Typography>
+                </Box>
+              </Box>
+            </Card>
+          ))}
         </Grid>
 
         <Grid item xs={12} md={6}>

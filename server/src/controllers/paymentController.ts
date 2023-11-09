@@ -14,6 +14,7 @@ export const configurePayment = (req: Request, res: Response) => {
   res.send({ publishableKey: process.env.STRIPE_PUBLISHABLE_KEY });
 };
 
+// TODO: Make sure the amount is correct here
 export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;

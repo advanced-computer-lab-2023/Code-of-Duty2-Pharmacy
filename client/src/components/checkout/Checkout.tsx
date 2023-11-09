@@ -1,4 +1,9 @@
-import { createContext, useEffect, useState } from "react";
+import { Ref, forwardRef, useEffect, useState } from "react";
+import { Stripe, loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
+import { AlertProps, CircularProgress, Snackbar } from "@mui/material";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stepper from "@mui/material/Stepper";
@@ -6,109 +11,93 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import MuiAlert from "@mui/material/Alert";
+
 import Address from "./stages/Address";
 import Payment from "./stages/Payment";
-import { Stripe, loadStripe } from "@stripe/stripe-js";
 import config from "../../config/config";
-import { Elements } from "@stripe/react-stripe-js";
-import axios from "axios";
+import CheckoutContext from "../../contexts/CheckoutContext";
 import { PaymentMethod } from "../../types";
+import { cartReviewRoute } from "../../data/routes/patientRoutes";
 
-interface Config {
-  publishableKey: string;
+function Alert(props: AlertProps, ref: Ref<any>) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
 }
 
-interface PaymentIntent {
-  clientSecret: string;
-}
-
-interface ICheckoutContext {
-  cartItems: any;
-  total: any;
-  addressData: any;
-  setAddressData: any;
-  paymentData: any;
-  setPaymentData: any;
-  handleCreateOrder: any;
-  handleNext: any;
-}
-
-const CheckoutContext = createContext<ICheckoutContext>({
-  cartItems: null,
-  total: 1,
-  addressData: "",
-  setAddressData: () => {},
-  paymentData: null,
-  setPaymentData: () => {},
-  handleCreateOrder: () => {},
-  handleNext: () => {},
-});
+const AlertRef = forwardRef(Alert);
 
 const checkoutStages = ["Shipping Address", "Payment Details"];
 
 const Checkout = () => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
   const [stripePromise, setStripePromise] =
     useState<null | Promise<Stripe | null>>(null);
   const [clientSecret, setClientSecret] = useState<string>("");
   const [activeStage, setActiveStage] = useState(0);
-
   const [cartItems, setCartItems] = useState([]);
   const [addressData, setAddressData] = useState("");
   const [paymentData, setPaymentData] = useState(null);
-
-  // TODO: Make this 0 and just check elsewhere that there are items in the cart
-  // before allowing the user to even attempt to checkout.
-  const [total, setTotal] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
-    const setupPayment = async () => {
-      await fetchStripePublishableKey();
-      const total = await fetchCartItemsAndSetTotal();
-      if (total !== undefined) {
-        fetchPaymentIntentClientSecret(total);
-      }
-    };
-
-    setupPayment();
+    (async () => {
+      await setupPayment();
+      setLoading(false);
+    })();
   }, []);
 
+  const setupPayment = async () => {
+    const total = await fetchCartItemsAndSetTotal();
+    if (total !== undefined) {
+      await fetchStripePublishableKey();
+      await fetchPaymentIntentClientSecret(total);
+    }
+  };
+
   const fetchStripePublishableKey = async () => {
-    fetch(`${config.API_URL}/payments/config`).then(async (response) => {
-      const { publishableKey } = (await response.json()) as Config;
-      setStripePromise(loadStripe(publishableKey));
-    });
+    const response = await axios.get(`${config.API_URL}/payments/config`);
+    const publishableKey = response.data.publishableKey;
+    setStripePromise(loadStripe(publishableKey));
   };
 
   const fetchPaymentIntentClientSecret = async (total: number) => {
-    fetch(`${config.API_URL}/payments/create-payment-intent`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ amount: total }),
-    }).then(async (response) => {
-      var { clientSecret } = (await response.json()) as PaymentIntent;
-      setClientSecret(clientSecret);
-    });
+    const response = await axios.post(
+      `${config.API_URL}/payments/create-payment-intent`,
+      { amount: total }
+    );
+    const clientSecret = response.data.clientSecret;
+    setClientSecret(clientSecret);
   };
 
   const fetchCartItemsAndSetTotal = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
-      setCartItems(response.data);
-      console.log("Cart Items: ", response.data);
-
-      // TODO: Make this 0 and just check elsewhere that there are items in the cart
-      // before allowing the user to even attempt to checkout.
-      let sum = 1;
-      response.data.forEach((item: any) => {
-        sum += item.medicineId.price * item.quantity;
-      });
-      setTotal(sum);
-      return sum;
+      const cartItems = response.data;
+      if (cartItems.length === 0) {
+        navigate(cartReviewRoute.path);
+        return;
+      }
+      setCartItems(cartItems);
+      const total = cartItems.reduce(
+        (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
+        0
+      );
+      setTotal(total);
+      return total;
     } catch (error) {
       console.error("Failed to fetch cart items", error);
     }
+  };
+
+  const handleNext = () => {
+    setActiveStage(activeStage + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStage(activeStage - 1);
   };
 
   const handleCreateOrder = async (
@@ -129,26 +118,14 @@ const Checkout = () => {
         paymentMethod,
       };
 
-      const orderResponse = await axios.post(
-        `${config.API_URL}/patients/orders`,
-        orderData
-      );
-
-      const newOrder = orderResponse.data;
-      console.log("New Order: ", newOrder);
+      await axios.post(`${config.API_URL}/patients/orders`, orderData);
 
       // TODO: Clear cart items here
+
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Failed to create order", error);
     }
-  };
-
-  const handleNext = () => {
-    setActiveStage(activeStage + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStage(activeStage - 1);
   };
 
   function getStepContent(stage: number) {
@@ -160,6 +137,19 @@ const Checkout = () => {
       default:
         throw new Error("Unexpected payment stage");
     }
+  }
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
@@ -197,6 +187,19 @@ const Checkout = () => {
               Your order has been confirmed, and will send you shipping updates
               via email.
             </Typography>
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4500}
+              onClose={() => setOpenSnackbar(false)}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+              <AlertRef
+                onClose={() => setOpenSnackbar(false)}
+                severity="success"
+              >
+                Order placed successfully!
+              </AlertRef>
+            </Snackbar>
           </>
         ) : (
           <>
@@ -205,11 +208,11 @@ const Checkout = () => {
                 {getStepContent(activeStage)}
               </Elements>
             ) : (
-              <div>Loading...</div>
+              <CircularProgress />
             )}
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {activeStage !== 0 && (
-                <Button onClick={handleBack} sx={{ mt: 3, mr: "auto" }}>
+                <Button onClick={handleBack} sx={{ mt: -6, mr: "auto" }}>
                   Back
                 </Button>
               )}
