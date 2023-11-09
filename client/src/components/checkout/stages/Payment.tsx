@@ -1,4 +1,3 @@
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -6,8 +5,9 @@ import Wallet from "./payment/Wallet";
 import CreditCard from "./payment/CreditCard";
 import CashOnDelivery from "./payment/CashOnDelivery";
 import { useState } from "react";
+import { Box } from "@mui/material";
 
-export default function PaymentForm() {
+export default function Payment() {
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabChange = (
@@ -21,10 +21,10 @@ export default function PaymentForm() {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>
-            Cart Items here!
-          </Typography>
+          {/* Cart Items here */}
+          <Box>Cart Items here . . .</Box>
         </Grid>
+
         <Grid item xs={12} md={6}>
           <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth">
             <Tab label="Wallet" />

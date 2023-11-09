@@ -4,9 +4,9 @@ import isMobileNumber from "validator/lib/isMobilePhone";
 import { IPatient } from "./interfaces/IPatient";
 import PasswordResetSchema from "../users/PasswordReset";
 import bcrypt from "bcrypt";
-import  WalletSchema  from "../wallets/Wallet";
+import WalletSchema from "../wallets/Wallet";
 
-export interface IPatientModel extends IPatient, Document {} 
+export interface IPatientModel extends IPatient, Document {}
 
 export const PatientSchema = new Schema<IPatientModel>(
   {
@@ -32,7 +32,11 @@ export const PatientSchema = new Schema<IPatientModel>(
       relationToPatient: { type: String, required: true },
     },
 
-    deliveryAddresses: { type: Array<{ type: String }>, select: false },
+    deliveryAddresses: {
+      type: Array<String>,
+      select: false,
+      default: [],
+    },
     imageUrl: String,
     healthRecords: {
       type: Array<{
@@ -125,8 +129,8 @@ export const PatientSchema = new Schema<IPatientModel>(
       select: false,
     },
   },
-  
-{timestamps: true}
+
+  { timestamps: true }
 );
 
 PatientSchema.plugin(require("mongoose-bcrypt"), { rounds: 10 });
@@ -138,24 +142,26 @@ PatientSchema.methods.verifyWalletPinCode = function (pinCode: string) {
   return bcrypt.compare(pinCode, this.wallet.pinCode);
 };
 
-PatientSchema.methods.verifyPasswordResetOtp = function(otp: string) {
+PatientSchema.methods.verifyPasswordResetOtp = function (otp: string) {
   return bcrypt.compare(otp, this.passwordReset.otp);
-}
-PatientSchema.methods.verifyWalletPinCode = function(pinCode: string) {
+};
+PatientSchema.methods.verifyWalletPinCode = function (pinCode: string) {
   return bcrypt.compare(pinCode, this.wallet.pinCode);
-}
+};
 
-
-PatientSchema.virtual('age').get(function() {
+PatientSchema.virtual("age").get(function () {
   let today = new Date();
   let birthDate: Date = this.dateOfBirth;
   let age = today.getFullYear() - birthDate.getFullYear();
   let monthDifference = today.getMonth() - birthDate.getMonth();
-  
-  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
     age--;
   }
   return age;
 });
 
-export default mongoose.model<IPatientModel>('Patient', PatientSchema);
+export default mongoose.model<IPatientModel>("Patient", PatientSchema);
