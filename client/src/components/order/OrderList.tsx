@@ -19,6 +19,8 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/orders`);
       setOrders(response.data);
+      console.log(response.data);
+      console.log(response.data[0].medicines[2].medicineId.name);
     } catch (err) {
       console.error("Error fetching orders:", err);
     }

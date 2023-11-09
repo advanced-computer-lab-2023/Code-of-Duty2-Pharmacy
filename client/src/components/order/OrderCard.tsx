@@ -21,7 +21,20 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus }) => {
             sx={{ fontSize: "1.5em" }}
           >
             Medicines :
+            {order.medicines.map((medicine, index) => {
+              return (
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ fontSize: "1.5em" }}
+                  key={index}
+                >
+                  {medicine?.medicineId.name}
+                </Typography>
+              );
+            })}
           </Typography>
+
           <Typography
             variant="body2"
             color="text.secondary"

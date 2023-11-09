@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import Order, { IOrderModel} from "../models/orders/Order"; 
+import Order, { IOrderModel } from "../models/orders/Order";
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
@@ -43,11 +43,19 @@ export const deletePatient = async (req: Request, res: Response) => {
   }
 };
 
-export const getPatientOrders = async (req:AuthorizedRequest, res: Response) => {
+export const getPatientOrders = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
     const patientId = req.user?.id;
 
-    const orders: IOrderModel[] = await Order.find({ patientId: patientId });
+    const orders: IOrderModel[] = await Order.find({
+      patientId: patientId,
+    }).populate({
+      path: "medicines.medicineId",
+      select: "name",
+    });
 
     if (!orders) {
       return res
