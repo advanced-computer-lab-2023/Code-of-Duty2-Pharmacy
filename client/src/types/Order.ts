@@ -6,7 +6,7 @@ interface Order {
   patientName: string;
   patientAddress: string;
   patientMobileNumber: string;
-  medicines: Array<{ medicine_id: string; quantity: number }>;
+  medicines: Array<{ medicineId: string; quantity: number }>;
   paidAmount: number;
   paymentMethod: PaymentMethod;
   timestamp: Date;

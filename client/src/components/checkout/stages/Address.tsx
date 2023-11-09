@@ -23,7 +23,7 @@ import axios from "axios";
 import config from "../../../config/config";
 
 const Address: FC = () => {
-  const { handleNext } = useContext(CheckoutContext);
+  const { handleNext, setAddressData } = useContext(CheckoutContext);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [newAddress, setNewAddress] = useState("");
@@ -67,6 +67,8 @@ const Address: FC = () => {
     e.preventDefault();
     setIsProcessing(true);
 
+    setAddressData(selectedAddress);
+
     setIsProcessing(false);
     handleNext();
   };
@@ -104,7 +106,7 @@ const Address: FC = () => {
         </Typography>
       ) : (
         <Typography variant="body1" gutterBottom>
-          Please enter an address above to proceed.
+          Please enter a new address above to proceed.
         </Typography>
       )}
 

@@ -5,18 +5,14 @@ import {
   PaymentElement,
 } from "@stripe/react-stripe-js";
 import { StripeElements } from "@stripe/stripe-js";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { CheckoutContext } from "../../Checkout";
 
 const CreditCard: FC = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const {
-    handleNext,
-    handleCreateOrder,
-    total: subtotal,
-  } = useContext(CheckoutContext);
+  const { handleNext, handleCreateOrder, total } = useContext(CheckoutContext);
   const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
@@ -45,7 +41,7 @@ const CreditCard: FC = () => {
       }
     } else {
       setMessage("Payment Success!");
-      await handleCreateOrder(subtotal + 0, "card");
+      await handleCreateOrder(total + 0, "card");
       setIsProcessing(false);
       handleNext();
     }
@@ -53,6 +49,12 @@ const CreditCard: FC = () => {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
+      <Typography variant="h6" gutterBottom>
+        Pay via Credit Card
+      </Typography>
+
+      <Box sx={{ mb: 2 }} />
+
       <PaymentElement id="payment-element" />
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>

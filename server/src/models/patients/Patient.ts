@@ -51,16 +51,16 @@ export const PatientSchema = new Schema<IPatientModel>(
       required: false,
     },
     cart: {
-      type: Array<{
-        type: {
+      type: [
+        {
           medicineId: {
-            type: Schema.Types.ObjectId;
-            ref: "Medicine";
-            required: true;
-          };
-          quantity: { type: Number; required: true };
-        };
-      }>,
+            type: Schema.Types.ObjectId,
+            ref: "Medicine",
+            required: true,
+          },
+          quantity: { type: Number, required: true },
+        },
+      ],
       required: false,
       default: [],
     },

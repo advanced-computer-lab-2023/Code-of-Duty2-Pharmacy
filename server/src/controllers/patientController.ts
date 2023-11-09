@@ -126,23 +126,28 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
   try {
     const userId = req.user?.id;
 
-    const patient = await Patient.findById(userId).select("cart");
+    const patient = await Patient.findById(userId).populate({
+      path: "cart.medicineId",
+      select: "name price pictureUrl",
+    });
+
+    console.log("[+++] Patient is", patient);
 
     if (!patient) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Patient not found" });
+      return res.status(404).json({ message: "Patient not found" });
     }
 
-    return res.status(StatusCodes.OK).json(patient.cart);
+    return res.json(patient.cart);
   } catch (err) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
+
 export const createOrder = async (req: Request, res: Response) => {
   try {
+    // console.log(req.body);
+
     const {
       patientId,
       patientName,
@@ -163,10 +168,13 @@ export const createOrder = async (req: Request, res: Response) => {
       paymentMethod,
     });
 
+    // TODO: Change order status directly to successful
+
     const savedOrder = await newOrder.save();
 
     return res.status(StatusCodes.CREATED).json(savedOrder);
   } catch (err) {
+    // console.log(err);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });

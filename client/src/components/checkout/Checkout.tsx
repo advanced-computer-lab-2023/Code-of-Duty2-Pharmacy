@@ -55,6 +55,7 @@ const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [addressData, setAddressData] = useState("");
   const [paymentData, setPaymentData] = useState(null);
+
   // TODO: Make this 0 and just check elsewhere that there are items in the cart
   // before allowing the user to even attempt to checkout.
   const [total, setTotal] = useState(1);
@@ -63,7 +64,9 @@ const Checkout = () => {
     const setupPayment = async () => {
       await fetchStripePublishableKey();
       const total = await fetchCartItemsAndSetTotal();
-      fetchPaymentIntentClientSecret(total);
+      if (total !== undefined) {
+        fetchPaymentIntentClientSecret(total);
+      }
     };
 
     setupPayment();
@@ -93,18 +96,19 @@ const Checkout = () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
       setCartItems(response.data);
+      console.log("Cart Items: ", response.data);
+
+      // TODO: Make this 0 and just check elsewhere that there are items in the cart
+      // before allowing the user to even attempt to checkout.
+      let sum = 1;
+      response.data.forEach((item: any) => {
+        sum += item.medicineId.price * item.quantity;
+      });
+      setTotal(sum);
+      return sum;
     } catch (error) {
       console.error("Failed to fetch cart items", error);
     }
-
-    // TODO: Make this 0 and just check elsewhere that there are items in the cart
-    // before allowing the user to even attempt to checkout.
-    let sum = 1;
-    cartItems.forEach((item: any) => {
-      sum += item.price * item.quantity;
-    });
-    setTotal(sum);
-    return sum;
   };
 
   const handleCreateOrder = async (
@@ -132,6 +136,8 @@ const Checkout = () => {
 
       const newOrder = orderResponse.data;
       console.log("New Order: ", newOrder);
+
+      // TODO: Clear cart items here
     } catch (error) {
       console.error("Failed to create order", error);
     }
