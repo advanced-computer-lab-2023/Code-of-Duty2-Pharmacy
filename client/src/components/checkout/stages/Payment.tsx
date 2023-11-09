@@ -8,14 +8,7 @@ import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import CashOnDeliveryIcon from "@mui/icons-material/LocalAtm";
 import { useState, useContext } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardMedia, Tooltip, Typography } from "@mui/material";
 import { CheckoutContext } from "../Checkout";
 
 export default function Payment() {
@@ -23,7 +16,7 @@ export default function Payment() {
   const { cartItems } = useContext(CheckoutContext);
 
   const handleTabChange = (
-    event: React.ChangeEvent<{}>,
+    _event: React.ChangeEvent<{}>,
     newTabIndex: number
   ) => {
     setTabIndex(newTabIndex);

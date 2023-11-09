@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  List,
-  ListItem,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardMedia, List, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { checkoutRoute } from "../../data/routes/patientRoutes";
 import { useEffect, useState } from "react";
