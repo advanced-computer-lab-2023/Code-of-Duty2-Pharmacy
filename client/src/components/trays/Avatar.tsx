@@ -13,10 +13,14 @@ import {
   Brightness7,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
-
+import LockResetIcon from '@mui/icons-material/LockReset';
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
+import { changePatientPasswordsRoute } from "../../data/routes/patientRoutes";
+import { changePharmacistPasswordsRoute } from "../../data/routes/pharmacistRoutes";
+import { changeAdminPasswordsRoute } from "../../data/routes/adminRoutes";
+import UserRole from "../../types/enums/UserRole";
 
 const Avatar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,6 +41,16 @@ const Avatar = () => {
     navigate(welcomeRoute.path);
     handleClose();
   };
+
+  const { authState } = useContext(AuthContext);
+  var changePasswordPath = "";
+  if (authState.role === UserRole.PATIENT ) {
+    changePasswordPath = changePatientPasswordsRoute.path;
+  } else if (authState.role === UserRole.ADMIN) {
+    changePasswordPath = changeAdminPasswordsRoute.path;
+  } else if (authState.role === UserRole.PHARMACIST) {
+    changePasswordPath = changePharmacistPasswordsRoute.path;
+  }
 
   return (
     <>
@@ -69,6 +83,13 @@ const Avatar = () => {
           <LogoutIcon />
           Logout
         </MenuItem>
+
+         {/* change password the menu item */}
+        <MenuItem onClick={() => navigate(changePasswordPath)}>
+          <LockResetIcon />
+            Change Password
+        </MenuItem>
+
       </Menu>
     </>
   );

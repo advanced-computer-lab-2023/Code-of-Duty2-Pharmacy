@@ -1,7 +1,8 @@
 import PharmacistDashboard from "../../pages/pharmacist/PharmacistDashboard";
 import { Route } from "../../types";
 import PharmacistViewMedicinesPage from "../../pages/pharmacist/PharmacistViewMedicinesPage";
-import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage";
+import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage"; 
+import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
@@ -18,10 +19,16 @@ export const addMedicineRoute: Route = {
   element: <PharmacistAddMedicinePage />,
 };
 
+export const changePharmacistPasswordsRoute: Route = {
+  path: "/pharmacist/change-password",
+  element: <ChangePasswordPage />,
+};
+
 const pharmacistRoutes: Route[] = [
   pharmacistDashboardRoute,
   viewMedicinesRoute,
   addMedicineRoute,
+  changePharmacistPasswordsRoute,
 ];
 
 export default pharmacistRoutes;

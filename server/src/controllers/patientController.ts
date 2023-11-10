@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Patient, { IPatientModel } from "../models/patients/Patient";
+import { findPatientById , updatePatientPasswordById } from "../services/patients";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -41,3 +43,30 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+
+export const changePatientPassword = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const patientId = req.user?.id!;
+    const patient = await findPatientById(patientId);
+
+    if (!patient) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: 'patient not found' });
+    }
+    
+    const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
+    if (!isPasswordCorrect) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });
+    }
+
+    await updatePatientPasswordById(patientId, newPassword);
+    return res.status(StatusCodes.OK).json({ message: 'Password updated successfully!' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(StatusCodes.BAD_REQUEST).json({ message: 'An error occurred while updating the password' });
+  }
+};
+
+
+

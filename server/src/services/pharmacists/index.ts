@@ -52,7 +52,7 @@ export const updatePharmacistPasswordByEmail = async (
   await updatePharmacistPassword(pharmacist, newPassword);
 };
 
-export const updatePasswordById = async (
+export const updatePharmacistPasswordById = async (
   pharmacistId: string,
   newPassword: string
 ) => {

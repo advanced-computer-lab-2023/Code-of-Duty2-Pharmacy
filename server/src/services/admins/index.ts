@@ -6,7 +6,8 @@ import {
 
 export const findAllAdmins = async () => await Admin.find();
 
-export const findAdminById = async (id: string, elementsToSelect?: any) => {
+export const 
+findAdminById = async (id: string, elementsToSelect?: any) => {
   const PromisedAdmin = Admin.findById(id);
   if (!elementsToSelect)
     return await PromisedAdmin.select({ _id: 1, password: 1 });
@@ -44,7 +45,7 @@ export const updateAdminPasswordByEmail = async (
   await updateAdminPassword(admin, newPassword);
 };
 
-export const updatePasswordById = async (
+export const updateAdminPasswordById = async (
   adminId: string,
   newPassword: string
 ) => {
