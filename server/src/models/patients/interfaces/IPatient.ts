@@ -1,4 +1,4 @@
-import UserRole from "../../../types/UserRole";
+import UserRole from "../../../types/enums/UserRole";
 import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
 import { ICartItem } from "./subinterfaces/ICartItem";
 import { IDependentFamilyMember } from "./subinterfaces/IDependentFamilyMember";

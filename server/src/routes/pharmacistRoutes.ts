@@ -6,7 +6,7 @@ import {
 } from "../controllers/pharmacistController";
 import { authenticateUser } from "../middlewares/authentication";
 import { authorizeUser } from "../middlewares/authorization";
-import UserRole from "../types/UserRole";
+import UserRole from "../types/enums/UserRole";
 import { StatusCodes } from "http-status-codes";
 
 const router = express.Router();
