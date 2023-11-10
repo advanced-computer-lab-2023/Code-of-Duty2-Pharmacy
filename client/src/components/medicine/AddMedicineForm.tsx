@@ -38,7 +38,6 @@ const AddMedicineForm = () => {
         price,
         availableQuantity,
       });
-      console.log(response.data);
     } catch (err) {
       console.error(err);
     }

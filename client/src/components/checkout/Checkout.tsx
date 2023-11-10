@@ -50,7 +50,7 @@ const Checkout = () => {
   }, []);
 
   const setupPayment = async () => {
-    const total = await fetchCartItemsAndSetTotal();
+    const total = await fetchCartItemsAndTotalPrice();
     if (total !== undefined) {
       await fetchStripePublishableKey();
       await fetchPaymentIntentClientSecret(total);
@@ -72,19 +72,22 @@ const Checkout = () => {
     setClientSecret(clientSecret);
   };
 
-  const fetchCartItemsAndSetTotal = async () => {
+  const fetchCartItemsAndTotalPrice = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
       const cartItems = response.data;
+
       if (cartItems.length === 0) {
         navigate(cartReviewRoute.path);
         return;
       }
+
       setCartItems(cartItems);
       const total = cartItems.reduce(
         (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
         0
       );
+
       setTotal(total);
       return total;
     } catch (error) {
@@ -120,11 +123,11 @@ const Checkout = () => {
 
       await axios.post(`${config.API_URL}/patients/orders`, orderData);
 
-      // TODO: Clear cart items here
+      await axios.delete(`${config.API_URL}/patients/me/cart`);
 
       setOpenSnackbar(true);
     } catch (error) {
-      console.error("Failed to create order", error);
+      console.error(error);
     }
   };
 

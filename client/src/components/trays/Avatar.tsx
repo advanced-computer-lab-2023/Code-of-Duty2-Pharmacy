@@ -47,6 +47,7 @@ const Avatar = () => {
         aria-haspopup="true"
         color="inherit"
         onClick={handleMenu}
+        sx={{ padding: "0" }}
       >
         <AccountCircle />
       </IconButton>

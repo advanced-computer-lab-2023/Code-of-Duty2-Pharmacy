@@ -174,3 +174,29 @@ export const createOrder = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+
+export const clearCart = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    // Update the patient's cart to an empty array
+    const result = await Patient.updateOne(
+      { _id: userId },
+      { $set: { cart: [] } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Cart not found or already empty" });
+    }
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};

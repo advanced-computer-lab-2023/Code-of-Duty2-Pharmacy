@@ -13,7 +13,7 @@ import { CheckoutContext } from "../Checkout";
 
 export default function Payment() {
   const [tabIndex, setTabIndex] = useState(0);
-  const { cartItems } = useContext(CheckoutContext);
+  const { cartItems, total } = useContext(CheckoutContext);
 
   const handleTabChange = (
     _event: React.ChangeEvent<{}>,
@@ -26,6 +26,12 @@ export default function Payment() {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
+          <Box sx={{ ml: 1, mb: 1 }}>
+            <Typography variant="body2" color="text.secondary">
+              Pay El7a2ni LLC
+            </Typography>
+            <Typography variant="h4">EGP {total.toFixed(2)}</Typography>
+          </Box>
           {cartItems.map((item: any, index: any) => (
             <Card key={index} elevation={0}>
               <Box
@@ -55,13 +61,19 @@ export default function Payment() {
                   <Typography variant="body1" fontWeight={"bold"}>
                     {item.medicineId.name}
                   </Typography>
+
                   <Typography variant="body1" color="text.secondary">
-                    Quantity: {item.quantity}
+                    Qty {item.quantity}
                   </Typography>
                 </Box>
+
                 <Box p={1} ml="auto">
                   <Typography variant="body1" fontWeight={"bold"}>
-                    EGP {item.medicineId.price}
+                    EGP {(item.medicineId.price * item.quantity).toFixed(2)}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary">
+                    EGP {item.medicineId.price.toFixed(2)} each
                   </Typography>
                 </Box>
               </Box>

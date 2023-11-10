@@ -108,8 +108,6 @@ export const getAllMedicinesSales = async (req: Request, res: Response) => {
       );
     }
   }
-  // console.log(orders);
-  // console.log(JSON.stringify(Object.fromEntries(medsMap)));
 
   return res.status(StatusCodes.OK).json(Object.fromEntries(medsMap));
 };

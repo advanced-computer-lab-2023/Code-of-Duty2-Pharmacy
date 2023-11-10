@@ -18,7 +18,6 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
         `${config.API_URL}/pharmacist-registration-requests`
       )
       .then((response) => {
-        console.log(response.data);
         setRequests(response.data);
         setFilteredRequests(response.data);
       })

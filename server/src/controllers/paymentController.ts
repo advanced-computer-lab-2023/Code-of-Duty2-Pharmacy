@@ -18,7 +18,7 @@ export const configurePayment = (req: Request, res: Response) => {
 export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
-    console.log("amount", amount);
+
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "eur", // we will assume that this is EGP
       amount: amount * 100, // we will asume that this is amount in qoroosh
@@ -26,7 +26,6 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
 
     res.send({ clientSecret: paymentIntent.client_secret });
   } catch (err) {
-    console.log(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
