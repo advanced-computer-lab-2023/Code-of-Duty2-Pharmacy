@@ -75,17 +75,32 @@ export const cancelOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
 
-    const deletedOrder: IOrderModel | null = await Order.findByIdAndDelete(
-      orderId
-    );
-
-    if (!deletedOrder) {
+    // Fetch the order
+    const order: IOrderModel | null = await Order.findById(orderId);
+    if (!order) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Order not found" });
     }
 
-    res.status(StatusCodes.OK).json(deletedOrder);
+    // Check the payment method
+    if (order.paymentMethod === "wallet") {
+      // Fetch the patient
+      const patient = await Patient.findById(order.patientId).select("wallet");
+      if (!patient || !patient.wallet) {
+        console.error("Wallet not found for patient:", order.patientId);
+        return;
+      }
+
+      // Update the wallet balance
+      patient.wallet.amount += order.paidAmount;
+      await patient.save();
+    }
+
+    // Delete the order
+    await Order.deleteOne({ _id: orderId });
+
+    res.status(StatusCodes.OK).json(order);
   } catch (err) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
