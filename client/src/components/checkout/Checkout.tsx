@@ -127,6 +127,7 @@ const Checkout = () => {
         medicineId: item.medicineId._id,
         boughtQuantity: item.quantity,
       }));
+
       await axios.patch(`${config.API_URL}/medicines/bulk-update`, updates);
 
       await axios.delete(`${config.API_URL}/patients/me/cart`);

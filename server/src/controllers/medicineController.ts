@@ -127,7 +127,7 @@ export const bulkUpdateMedicineQuantities = async (
       },
     }));
 
-    const r = await Medicine.bulkWrite(bulkOps);
+    await Medicine.bulkWrite(bulkOps);
 
     res.status(200).send();
   } catch (err) {
