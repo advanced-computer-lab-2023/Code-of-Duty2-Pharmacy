@@ -10,13 +10,21 @@ import Layout from "./layouts/Layout";
 import generalRoutes from "./data/routes/generalRoutes";
 import PublicRoutesHandler from "./components/auth/PublicRoutesHandler";
 import LoginRoutesHandler from "./components/auth/LoginRoutesHandler";
+import UnverifiedRoutesHandler from "./components/auth/UnverifiedRoutesHandler";
 import loginRoutes from "./data/routes/loginRoutes";
+import unverifiedRoutes from "./data/routes/unverifiedRoutes";
 
 const App = () => {
   return (
     <Routes>
       <Route element={<LoginRoutesHandler />}>
         {loginRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Route>
+
+      <Route element={<UnverifiedRoutesHandler />}>
+        {unverifiedRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
       </Route>

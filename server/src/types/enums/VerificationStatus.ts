@@ -1,7 +1,8 @@
 enum VerificationStatus {
-  completedRegistration,
-  documentsVerified,
-  grantedFullAccess,
+  rejected,
+  pendingDocumentUploads,
+  pendingContractAcceptance,
+  verified,
 }
 
 export default VerificationStatus;
