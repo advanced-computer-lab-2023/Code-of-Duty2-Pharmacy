@@ -7,6 +7,6 @@ export interface UserBaseInfo {
   email: string;
   password: string;
   dateOfBirth: Date;
-  gender: "male" | "female";
+  gender: "male" | "female" | "unspecified";
   mobileNumber: string;
 }

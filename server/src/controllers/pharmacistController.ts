@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Pharmacist, { IPharmacistModel } from "../models/pharmacists/Pharmacist";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 export const deletePharmacist = async (req: Request, res: Response) => {
   try {
@@ -31,6 +32,28 @@ export const getPharmacists = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).json(pharmacists);
   } catch (err) {
     res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getPharmacistInfo = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(
+      pharmacistId
+    );
+    if (!pharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Not Logged In" });
+    }
+    return res.status(StatusCodes.OK).json(pharmacist);
+  } catch (err) {
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }

@@ -22,9 +22,9 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     hourlyRate: { type: Number, required: true },
     affiliation: { type: String, required: true },
     educationalBackground: { type: String, required: true },
-    identification: { type: Buffer },
-    pharmacyDegree: { type: Buffer },
-    workingLicense: { type: Buffer },
+    identification: { type: String },
+    pharmacyDegree: { type: String },
+    workingLicense: { type: String },
   },
   { timestamps: true }
 );
