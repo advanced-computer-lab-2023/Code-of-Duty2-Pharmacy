@@ -40,8 +40,6 @@ export const searchPharmacists = async (req: Request, res: Response) => {
   try {
     const username = req.query.username as string;
     const email = req.query.email as string;
-    // console.log(username);
-    // console.log(email);
 
     const pharmacists: IPharmacistModel[] =
       (!username || username.length === 0) && (!email || email.length === 0)

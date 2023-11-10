@@ -1,125 +1,231 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
+import { Ref, forwardRef, useEffect, useState } from "react";
+import { Stripe, loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
+import { AlertProps, CircularProgress, Snackbar } from "@mui/material";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
-import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import AddressForm from "./AddressForm";
-import PaymentForm from "./PaymentForm";
-import Review from "./Review";
+import MuiAlert from "@mui/material/Alert";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
+import Address from "./stages/Address";
+import Payment from "./stages/Payment";
+import config from "../../config/config";
+import CheckoutContext from "../../contexts/CheckoutContext";
+import { PaymentMethod } from "../../types";
+import { cartReviewRoute } from "../../data/routes/patientRoutes";
+
+function Alert(props: AlertProps, ref: Ref<any>) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
 }
 
-const steps = ["Shipping address", "Payment details", "Review your order"];
+const AlertRef = forwardRef(Alert);
 
-function getStepContent(step: number) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
+const checkoutStages = ["Shipping Address", "Payment Details"];
 
-export default function Checkout() {
-  const [activeStep, setActiveStep] = React.useState(0);
+const Checkout = () => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+  const [stripePromise, setStripePromise] =
+    useState<null | Promise<Stripe | null>>(null);
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const [activeStage, setActiveStage] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [addressData, setAddressData] = useState("");
+  const [paymentData, setPaymentData] = useState(null);
+  const [total, setTotal] = useState(0);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await setupPayment();
+      setLoading(false);
+    })();
+  }, []);
+
+  const setupPayment = async () => {
+    const total = await fetchCartItemsAndTotalPrice();
+    if (total !== undefined) {
+      await fetchStripePublishableKey();
+      await fetchPaymentIntentClientSecret(total);
+    }
+  };
+
+  const fetchStripePublishableKey = async () => {
+    const response = await axios.get(`${config.API_URL}/payments/config`);
+    const publishableKey = response.data.publishableKey;
+    setStripePromise(loadStripe(publishableKey));
+  };
+
+  const fetchPaymentIntentClientSecret = async (total: number) => {
+    const response = await axios.post(
+      `${config.API_URL}/payments/create-payment-intent`,
+      { amount: total }
+    );
+    const clientSecret = response.data.clientSecret;
+    setClientSecret(clientSecret);
+  };
+
+  const fetchCartItemsAndTotalPrice = async () => {
+    try {
+      const response = await axios.get(`${config.API_URL}/patients/me/cart`);
+      const cartItems = response.data;
+
+      if (cartItems.length === 0) {
+        navigate(cartReviewRoute.path);
+        return;
+      }
+
+      setCartItems(cartItems);
+      const total = cartItems.reduce(
+        (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
+        0
+      );
+
+      setTotal(total);
+      return total;
+    } catch (error) {
+      console.error("Failed to fetch cart items", error);
+    }
+  };
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    setActiveStage(activeStage + 1);
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStage(activeStage - 1);
   };
 
-  return (
-    <React.Fragment>
-      <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: "relative",
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
+  const handleCreateOrder = async (
+    paidAmount: number,
+    paymentMethod: PaymentMethod
+  ) => {
+    try {
+      const patientResponse = await axios.get(`${config.API_URL}/patients/me`);
+      const patientData = patientResponse.data;
+
+      const orderData = {
+        patientId: patientData._id,
+        patientName: patientData.name,
+        patientAddress: addressData,
+        patientMobileNumber: patientData.mobileNumber,
+        medicines: cartItems,
+        paidAmount,
+        paymentMethod,
+      };
+
+      await axios.post(`${config.API_URL}/patients/orders`, orderData);
+
+      await axios.delete(`${config.API_URL}/patients/me/cart`);
+
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function getStepContent(stage: number) {
+    switch (stage) {
+      case 0:
+        return <Address />;
+      case 1:
+        return <Payment />;
+      default:
+        throw new Error("Unexpected payment stage");
+    }
+  }
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="70vh"
       >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
-        <Paper
-          variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
-        >
-          <Typography component="h1" variant="h4" align="center">
-            Checkout
-          </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
-              </Typography>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              {getStepContent(activeStep)}
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === steps.length - 1 ? "Place order" : "Next"}
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <CheckoutContext.Provider
+      value={{
+        total: total,
+        cartItems,
+        addressData,
+        setAddressData,
+        paymentData,
+        setPaymentData,
+        handleCreateOrder,
+        handleNext,
+      }}
+    >
+      <Container component="main" sx={{ mb: 4 }}>
+        <Typography component="h1" variant="h4" align="center">
+          Checkout
+        </Typography>
+
+        <Stepper activeStep={activeStage} sx={{ pt: 3, pb: 5 }}>
+          {checkoutStages.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+
+        {activeStage === checkoutStages.length ? (
+          <>
+            <Typography variant="h5" gutterBottom>
+              Thank you for your order.
+            </Typography>
+            <Typography variant="subtitle1">
+              Your order has been confirmed, and will send you shipping updates
+              via email.
+            </Typography>
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={4500}
+              onClose={() => setOpenSnackbar(false)}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+              <AlertRef
+                onClose={() => setOpenSnackbar(false)}
+                severity="success"
+              >
+                Order placed successfully!
+              </AlertRef>
+            </Snackbar>
+          </>
+        ) : (
+          <>
+            {clientSecret && stripePromise ? (
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
+                {getStepContent(activeStage)}
+              </Elements>
+            ) : (
+              <CircularProgress />
+            )}
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              {activeStage !== 0 && (
+                <Button onClick={handleBack} sx={{ mt: -6, mr: "auto" }}>
+                  Back
                 </Button>
-              </Box>
-            </React.Fragment>
-          )}
-        </Paper>
-        <Copyright />
+              )}
+            </Box>
+          </>
+        )}
       </Container>
-    </React.Fragment>
+    </CheckoutContext.Provider>
   );
-}
+};
+
+export { CheckoutContext };
+export default Checkout;

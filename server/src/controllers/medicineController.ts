@@ -80,12 +80,12 @@ export const searchMedicines = async (req: Request, res: Response) => {
 };
 
 export const getMedicineSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicine_id as string) || "";
+  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let totalSales = 0;
   for (let i = 0; i < orders.length; i++) {
     for (let j = 0; j < orders[i].medicines.length; j++) {
-      if (orders[i].medicines[j].medicine_id.toString() == medicineId) {
+      if (orders[i].medicines[j].medicineId.toString() == medicineId) {
         totalSales += orders[i].medicines[j].quantity;
       }
     }
@@ -94,22 +94,20 @@ export const getMedicineSales = async (req: Request, res: Response) => {
 };
 
 export const getAllMedicinesSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicine_id as string) || "";
+  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let medsMap: Map<string, number> = new Map<string, number>();
 
   for (let i = 0; i < orders.length; i++) {
     for (let j = 0; j < orders[i].medicines.length; j++) {
       let quantity =
-        medsMap.get(orders[i].medicines[j].medicine_id.toString()) || 0;
+        medsMap.get(orders[i].medicines[j].medicineId.toString()) || 0;
       medsMap.set(
-        orders[i].medicines[j].medicine_id.toString(),
+        orders[i].medicines[j].medicineId.toString(),
         quantity + orders[i].medicines[j].quantity
       );
     }
   }
-  // console.log(orders);
-  // console.log(JSON.stringify(Object.fromEntries(medsMap)));
 
   return res.status(StatusCodes.OK).json(Object.fromEntries(medsMap));
 };

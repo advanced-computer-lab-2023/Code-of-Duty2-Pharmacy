@@ -5,7 +5,7 @@ export interface IOrder {
   patientName: string;
   patientAddress: string;
   patientMobileNumber: string;
-  medicines: Array<{ medicine_id: Schema.Types.ObjectId; quantity: number }>;
+  medicines: Array<{ medicineId: Schema.Types.ObjectId; quantity: number }>;
   paidAmount: number;
   paymentMethod: "wallet" | "card" | "cod";
   timestamp: Date;

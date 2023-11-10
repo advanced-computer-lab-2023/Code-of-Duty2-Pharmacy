@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Patient, { IPatientModel } from "../models/patients/Patient";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
+import Order from "../models/orders/Order";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -37,6 +39,163 @@ export const deletePatient = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).json(deletedPatient);
   } catch (err) {
     res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getDeliveryAddresses = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    const deliveryAddresses = await Patient.findById(userId).select(
+      "deliveryAddresses"
+    );
+
+    if (!deliveryAddresses) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Delivery addresses not found" });
+    }
+
+    res.status(StatusCodes.OK).json(deliveryAddresses);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const addDeliveryAddress = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+    const { address } = req.body;
+
+    const patient = await Patient.findById(userId).select("+deliveryAddresses");
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    patient.deliveryAddresses?.push(address);
+
+    await patient.save();
+
+    res.status(StatusCodes.OK).json(patient.deliveryAddresses);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getPatientDetails = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    const patient = await Patient.findById(userId).select(
+      "_id name mobileNumber"
+    );
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res.status(StatusCodes.OK).json(patient);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    const patient = await Patient.findById(userId).populate({
+      path: "cart.medicineId",
+      select: "name price pictureUrl",
+    });
+
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    return res.json(patient.cart);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const createOrder = async (req: Request, res: Response) => {
+  try {
+    const {
+      patientId,
+      patientName,
+      patientAddress,
+      patientMobileNumber,
+      medicines,
+      paidAmount,
+      paymentMethod,
+    } = req.body;
+
+    const newOrder = new Order({
+      patientId,
+      patientName,
+      patientAddress,
+      patientMobileNumber,
+      medicines,
+      paidAmount,
+      paymentMethod,
+      status: "successful", // set status directly to successful as we are not using any payment gateway or delivery service
+    });
+
+    const savedOrder = await newOrder.save();
+
+    return res.status(StatusCodes.CREATED).json(savedOrder);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const clearCart = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+
+    // Update the patient's cart to an empty array
+    const result = await Patient.updateOne(
+      { _id: userId },
+      { $set: { cart: [] } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Cart not found or already empty" });
+    }
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }

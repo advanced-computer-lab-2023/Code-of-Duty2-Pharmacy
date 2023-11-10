@@ -40,7 +40,6 @@ const PharmacistListModal: React.FC<Props> = ({ canDelete }) => {
     try {
       const response = await goSearch("", "pharmacists", "username");
       setPharmacists(response);
-      console.log("---------" + response);
     } catch (err) {
       console.error("Error fetching pharmacists:", err);
     }
@@ -57,17 +56,12 @@ const PharmacistListModal: React.FC<Props> = ({ canDelete }) => {
         searchCollection,
         attribute
       );
-      console.log("========" + responseData);
+
       setPharmacists(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
-        console.log("Get All Meds");
         fetchPharmacists();
         return;
-      }
-      if (err.response?.status === 404) {
-        console.log("No Pharmacists with this name");
-        setPharmacists([]);
       } else {
         console.log(err);
       }

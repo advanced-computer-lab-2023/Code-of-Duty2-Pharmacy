@@ -38,10 +38,7 @@ const PatientRegistration = () => {
     axios
       .post(`${config.API_URL}/register/patient`, requestBody)
       .then((response) => {
-        console.log(response.data);
         alert("Patient registered successfully!");
-        // make http request to localhost:5173/Home
-        // window.location.href = "http://localhost:5173/";
       })
       .catch((error) => {
         console.error(error);
