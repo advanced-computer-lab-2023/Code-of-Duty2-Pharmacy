@@ -1,15 +1,17 @@
 import Grid from "@mui/material/Grid";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Wallet from "./payment/Wallet";
-import CreditCard from "./payment/CreditCard";
-import CashOnDelivery from "./payment/CashOnDelivery";
 import WalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import CashOnDeliveryIcon from "@mui/icons-material/LocalAtm";
 import { useState, useContext } from "react";
 import { Box, Card, CardMedia, Tooltip, Typography } from "@mui/material";
+
+import Wallet from "./payment/Wallet";
+import CreditCard from "./payment/CreditCard";
+import CashOnDelivery from "./payment/CashOnDelivery";
 import { CheckoutContext } from "../Checkout";
+import { COD_FEE } from "../../../data/payment/cashOnDeliveryFee";
 
 export default function Payment() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -22,6 +24,8 @@ export default function Payment() {
     setTabIndex(newTabIndex);
   };
 
+  const codFee = tabIndex === 2 ? COD_FEE : 0;
+
   return (
     <>
       <Grid container spacing={3}>
@@ -30,7 +34,16 @@ export default function Payment() {
             <Typography variant="body2" color="text.secondary">
               Pay El7a2ni LLC
             </Typography>
-            <Typography variant="h4">EGP {total.toFixed(2)}</Typography>
+
+            <Typography variant="h4">
+              EGP {(total + codFee).toFixed(2)}
+            </Typography>
+
+            {codFee > 0 && (
+              <Typography variant="body2" color="text.secondary">
+                Includes EGP {codFee.toFixed(2)} COD fee
+              </Typography>
+            )}
           </Box>
           {cartItems.map((item: any, index: any) => (
             <Card key={index} elevation={0}>
@@ -90,6 +103,7 @@ export default function Payment() {
                 </Tooltip>
               }
             />
+
             <Tab
               icon={
                 <Tooltip title="Credit Card">
@@ -97,6 +111,7 @@ export default function Payment() {
                 </Tooltip>
               }
             />
+
             <Tab
               icon={
                 <Tooltip title="Cash on Delivery">

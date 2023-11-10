@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
 import { CheckoutContext } from "../../Checkout";
+import { COD_FEE } from "../../../../data/payment/cashOnDeliveryFee";
 
 const CashOnDelivery = () => {
   const { handleNext, handleCreateOrder, total } = useContext(CheckoutContext);
@@ -9,7 +10,7 @@ const CashOnDelivery = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-    await handleCreateOrder(total + 0, "cod");
+    await handleCreateOrder(total + COD_FEE, "cod");
     setIsProcessing(false);
     handleNext();
   };

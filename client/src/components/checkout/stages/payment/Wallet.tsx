@@ -1,10 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 import { FormEvent, useContext, useState } from "react";
+
 import { CheckoutContext } from "../../Checkout";
 
 const Wallet = () => {
   const { handleNext, handleCreateOrder, total } = useContext(CheckoutContext);
-  const [message, setMessage] = useState<string | null>(null);
+  // const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -23,7 +24,8 @@ const Wallet = () => {
       <p>Experience the convenience of digital wallet payments.</p>
       <p>
         No need for cash or cards. Just place your order and pay using your
-        digital wallet. Enjoy this modern and reliable method of payment.
+        El7a2ni digital wallet. Enjoy this modern and reliable method of
+        payment.
       </p>
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
