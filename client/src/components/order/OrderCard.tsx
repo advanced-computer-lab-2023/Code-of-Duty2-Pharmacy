@@ -3,14 +3,21 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 import Order from "../../types/Order";
 
 interface OrderCardProps {
   order: Order;
   canViewStatus: boolean;
+  onCancel: (orderId: string) => void;
 }
-const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus }) => {
+
+const OrderCard: React.FC<OrderCardProps> = ({
+  order,
+  canViewStatus,
+  onCancel,
+}) => {
   return (
     <Card sx={{ width: "500px" }}>
       <CardActionArea>
@@ -58,6 +65,13 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus }) => {
               Order Status : {order.orderStatus}
             </Typography>
           )}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => onCancel(order._id)}
+          >
+            Cancel Order
+          </Button>
         </CardContent>
       </CardActionArea>
     </Card>

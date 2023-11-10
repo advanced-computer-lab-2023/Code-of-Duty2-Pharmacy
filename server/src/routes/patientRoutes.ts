@@ -2,7 +2,8 @@ import express from "express";
 import {
   getAllPatients,
   deletePatient,
-  getPatientOrders
+  getPatientOrders,
+  cancelOrder,
 } from "../controllers/patientController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -12,6 +13,7 @@ router.use(authenticateUser);
 
 router.get("/", getAllPatients);
 router.get("/orders", getPatientOrders);
+router.delete("/orders/:orderId", cancelOrder);
 
 router.delete("/:id", deletePatient);
 

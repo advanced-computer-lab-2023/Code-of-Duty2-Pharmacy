@@ -70,3 +70,25 @@ export const getPatientOrders = async (
       .json({ message: (err as Error).message });
   }
 };
+
+export const cancelOrder = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.orderId;
+
+    const deletedOrder: IOrderModel | null = await Order.findByIdAndDelete(
+      orderId
+    );
+
+    if (!deletedOrder) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Order not found" });
+    }
+
+    res.status(StatusCodes.OK).json(deletedOrder);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
