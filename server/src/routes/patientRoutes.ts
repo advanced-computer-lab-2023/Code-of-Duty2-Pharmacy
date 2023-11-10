@@ -14,7 +14,6 @@ import { authenticateUser } from "../middlewares/authentication";
 const router = express.Router();
 
 router.use(authenticateUser);
-
 router.get("/", getAllPatients);
 router.delete("/:id", deletePatient);
 router.get("/addresses", getDeliveryAddresses);

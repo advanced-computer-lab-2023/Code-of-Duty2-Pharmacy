@@ -72,6 +72,14 @@ const CreditCard: FC = () => {
         onChange={(e) => setCardComplete(e.complete)}
       />
 
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ opacity: 0.5, mt: 2 }}
+      >
+        Powered by <span style={{ fontWeight: "bold" }}>Stripe</span>
+      </Typography>
+
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           onClick={handleSubmit}
