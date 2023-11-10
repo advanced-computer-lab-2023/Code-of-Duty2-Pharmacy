@@ -123,6 +123,12 @@ const Checkout = () => {
 
       await axios.post(`${config.API_URL}/patients/orders`, orderData);
 
+      const updates = cartItems.map((item: any) => ({
+        medicineId: item.medicineId._id,
+        boughtQuantity: item.quantity,
+      }));
+      await axios.patch(`${config.API_URL}/medicines/bulk-update`, updates);
+
       await axios.delete(`${config.API_URL}/patients/me/cart`);
 
       setOpenSnackbar(true);
