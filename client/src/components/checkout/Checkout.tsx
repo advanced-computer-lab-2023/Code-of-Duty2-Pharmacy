@@ -222,7 +222,7 @@ const Checkout = () => {
             )}
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               {activeStage !== 0 && (
-                <Button onClick={handleBack} sx={{ mt: -6, mr: "auto" }}>
+                <Button onClick={handleBack} sx={{ mr: "auto" }}>
                   Back
                 </Button>
               )}
