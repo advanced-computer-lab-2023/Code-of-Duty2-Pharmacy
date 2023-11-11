@@ -31,6 +31,7 @@ const VisuallyHiddenInput = styled("input")`
   white-space: nowrap;
   width: 1px;
 `;
+let myblack: string = "black";
 
 const PharmacistAdditionalInfoForm = () => {
   // get current pharmacist
@@ -57,6 +58,7 @@ const PharmacistAdditionalInfoForm = () => {
 
   const [pharmacist, setPharmacist] = useState<Pharmacist | null>(null);
   const theme = useContext(ThemeContext).theme;
+  myblack = theme === "dark" ? "white" : "black";
   const [gender, setGender] = React.useState<"male" | "female" | "unspecified">(
     "unspecified"
   );
@@ -79,13 +81,13 @@ const PharmacistAdditionalInfoForm = () => {
   const [policy, setPolicy] = useState(false);
   const [viewAlert, setViewAlert] = useState(false);
 
-  const [nameColor, setNameColor] = useState("black");
-  const [phoneColor, setPhoneColor] = useState("black");
-  const [genderColor, setGenderColor] = useState("black");
-  const [dobColor, setDobColor] = useState("black");
-  const [idColor, setIdColor] = useState("black");
-  const [degreeColor, setDegreeColor] = useState("black");
-  const [licenseColor, setLicenseColor] = useState("black");
+  const [nameColor, setNameColor] = useState(myblack);
+  const [phoneColor, setPhoneColor] = useState(myblack);
+  const [genderColor, setGenderColor] = useState(myblack);
+  const [dobColor, setDobColor] = useState(myblack);
+  const [idColor, setIdColor] = useState(myblack);
+  const [degreeColor, setDegreeColor] = useState(myblack);
+  const [licenseColor, setLicenseColor] = useState(myblack);
   const [loadopen, setLoadOpen] = React.useState(false);
   const handleLoadClose = () => {
     setLoadOpen(false);
@@ -138,41 +140,41 @@ const PharmacistAdditionalInfoForm = () => {
           setNameColor("red");
           console.log("name is null");
         } else {
-          setNameColor("black");
+          setNameColor(myblack);
           console.log("name is not null '" + pharmacist?.name + "'");
         }
         if (!pharmacist?.mobileNumber || pharmacist?.mobileNumber === "") {
           setPhoneColor("red");
         } else {
-          setPhoneColor("black");
+          setPhoneColor(myblack);
         }
         if (!pharmacist?.dateOfBirth || pharmacist?.dateOfBirth === null) {
           setDobColor("red");
         } else {
-          setDobColor("black");
+          setDobColor(myblack);
         }
         if (gender === "unspecified") {
           setGenderColor("red");
         } else {
-          setGenderColor("black");
+          setGenderColor(myblack);
         }
 
         if (!finalIDUrl || finalIDUrl === "") {
           setIdColor("red");
         } else {
-          setIdColor("black");
+          setIdColor(myblack);
         }
 
         if (!finalPharmacyDegreeUrl || finalPharmacyDegreeUrl === "") {
           setDegreeColor("red");
         } else {
-          setDegreeColor("black");
+          setDegreeColor(myblack);
         }
 
         if (!finalWorkingLicenseUrl || finalWorkingLicenseUrl === "") {
           setLicenseColor("red");
         } else {
-          setLicenseColor("black");
+          setLicenseColor(myblack);
         }
 
         return;
@@ -357,6 +359,7 @@ const PharmacistAdditionalInfoForm = () => {
               <input
                 name="field2"
                 disabled
+                style={{ cursor: "not-allowed" }}
                 type="text"
                 defaultValue={pharmacist?.username || ""}
               />
@@ -381,6 +384,7 @@ const PharmacistAdditionalInfoForm = () => {
                 type="email"
                 name="field3"
                 disabled
+                style={{ cursor: "not-allowed" }}
                 defaultValue={pharmacist?.email}
               />
             </label>
