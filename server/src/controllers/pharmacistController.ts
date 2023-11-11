@@ -90,26 +90,28 @@ export const updatePharmacist = async (
   req: AuthorizedRequest,
   res: Response
 ) => {
-  // update by a patch request
-
   try {
     const pharmacistId = req.user?.id;
     const pharmacist = await Pharmacist.findById(pharmacistId);
+
     if (!pharmacist) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Pharmacist not found" });
     }
+
     const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
       pharmacistId,
       req.body,
       { new: true }
     );
+
     if (!updatedPharmacist) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Pharmacist not found" });
     }
+
     res.status(StatusCodes.OK).json(updatedPharmacist);
   } catch (err) {
     res

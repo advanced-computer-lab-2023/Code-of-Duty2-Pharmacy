@@ -20,8 +20,12 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
     const { amount } = req.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
-      currency: "eur", // we will assume that this is EGP
-      amount: amount * 100, // we will asume that this is amount in qoroosh
+      // We will assume that this is EGP.
+      currency: "eur",
+
+      // We will asume that amount is initially in qoroosh
+      // then converted to EGP by applying *100.
+      amount: amount * 100,
     });
 
     res.send({ clientSecret: paymentIntent.client_secret });
