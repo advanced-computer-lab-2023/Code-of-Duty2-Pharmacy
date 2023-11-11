@@ -90,8 +90,9 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
   return (
     <Card
       sx={{
-        m: 2,
-        width: "250px",
+        maxwidth: "250px",
+        minWidth: "200px",
+        width: "18vw",
         height: "auto",
       }}
     >
