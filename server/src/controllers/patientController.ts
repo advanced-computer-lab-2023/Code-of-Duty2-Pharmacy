@@ -223,13 +223,30 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
         .json({ message: "Medicine is not OTC" });
     }
 
+    if (quantity <= 0) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity must be greater than 0" });
+    } else if (quantity > medicine.availableQuantity) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity exceeds the available quantity" });
+    }
+
     // Update the patient's cart to an empty array if it doesn't exist
-    const result = await Patient.updateOne(
-      { _id: userId },
+    let result = await Patient.updateOne(
+      { _id: userId, "cart.medicineId": { $ne: medicineId } },
       { $push: { cart: { medicineId, quantity } } }
     );
 
-    if (result.matchedCount === 0) {
+    if (result.modifiedCount === 0) {
+      result = await Patient.updateOne(
+        { _id: userId, "cart.medicineId": medicineId },
+        { $inc: { "cart.$.quantity": quantity } }
+      );
+    }
+
+    if (result.matchedCount === 0 && result.modifiedCount === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Patient not found" });
