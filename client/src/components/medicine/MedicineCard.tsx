@@ -18,7 +18,6 @@ import { AttachMoney } from "@mui/icons-material";
 import axios from "axios";
 import config from "../../config/config";
 import { Alert, AlertTitle, Stack } from "@mui/material";
-import { set } from "react-hook-form";
 
 interface MedicineCardProps {
   medicine: Medicine;
