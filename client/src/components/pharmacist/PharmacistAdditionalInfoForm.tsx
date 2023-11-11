@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../../public/pharmacistForm.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -16,7 +11,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
 import config from "../../config/config";
 import { Pharmacist } from "../../types";
-import { set } from "react-hook-form";
+import { uploadPharmacistDocument } from "../../services/upload";
 
 const VisuallyHiddenInput = styled("input")`
   clip: rect(0 0 0 0);
@@ -47,25 +42,90 @@ const PharmacistAdditionalInfoForm = () => {
   const [pharmacist, setPharmacist] = useState<Pharmacist | null>(null);
   const theme = useContext(ThemeContext).theme;
   const [gender, setGender] = React.useState("unspecified");
-  const [selectedDocument, setSelectedDocument] = useState<File | null>(null);
+  const [phoneNum, setPhoneNum] = React.useState(
+    pharmacist?.mobileNumber || ""
+  );
+  const [dateOfBirth, setDateOfBirth] = React.useState<Date | null>(null);
+  const [pharmacyDegree, setPharmacyDegree] = React.useState<File | null>(null);
+  const [workingLicense, setWorkingLicense] = React.useState<File | null>(null);
+  const [selectedIdDocument, setSelectedIdDocument] = useState<File | null>(
+    null
+  );
   const [idPreviewUrl, setIDPreviewUrl] = useState<string | null>(null);
 
-  const resetIDPreview = () => {
-    setSelectedDocument(null);
-    setIDPreviewUrl(pharmacist?.identification || "");
+  // const resetIDPreview = () => {
+  //   setSelectedIdDocument(null);
+  //   setIDPreviewUrl(pharmacist?.identification || "");
+  // };
+  // const resetPharmacyDegreePreview = () => {
+  //   setPharmacyDegree(null);
+  // };
+  // const resetWorkingLicensePreview = () => {
+  //   setWorkingLicense(null);
+  // };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      let finalIDUrl = idPreviewUrl;
+      if (selectedIdDocument) {
+        finalIDUrl = await uploadPharmacistDocument(selectedIdDocument);
+      }
+      let finalPharmacyDegreeUrl = pharmacist?.pharmacyDegree;
+      if (pharmacyDegree) {
+        finalPharmacyDegreeUrl = await uploadPharmacistDocument(pharmacyDegree);
+      }
+      let finalWorkingLicenseUrl = pharmacist?.workingLicense;
+      if (workingLicense) {
+        finalWorkingLicenseUrl = await uploadPharmacistDocument(workingLicense);
+      }
+
+      pharmacist!.mobileNumber = phoneNum;
+      pharmacist!.dateOfBirth = dateOfBirth!;
+      pharmacist!.identification = finalIDUrl!;
+      pharmacist!.pharmacyDegree = finalPharmacyDegreeUrl!;
+      pharmacist!.workingLicense = finalWorkingLicenseUrl!;
+      // name is handled down below in the input field itself
+
+      //patch request to update pharmacist
+      // await axios.patch(`${config.API_URL}/pharmacists/me`, pharmacist);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   const handleIDUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setSelectedDocument(event.target.files[0]);
+      setSelectedIdDocument(event.target.files[0]);
       setIDPreviewUrl(URL.createObjectURL(event.target.files[0]));
+      console.log("selectedIdDocument", selectedIdDocument);
     }
     event.target.value = "";
   };
+  const handlePharmacyDegreeUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      setPharmacyDegree(event.target.files[0]);
+    }
+    event.target.value = "";
+  };
+  const handleWorkingLicenseUpload = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      setWorkingLicense(event.target.files[0]);
+    }
+    event.target.value = "";
+  };
+
   const required = () => {
     return <span style={{ color: "red" }}>*</span>;
   };
 
-  const uploadButton = () => {
+  const uploadButton = (
+    label: string,
+    handleUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  ) => {
     return (
       <Button
         component="label"
@@ -79,12 +139,12 @@ const PharmacistAdditionalInfoForm = () => {
         }}
       >
         <div>
-          Upload Identification
+          {label}
           <VisuallyHiddenInput
             accept="image/*,.pdf"
             id="upload-document"
             type="file"
-            onChange={handleIDUpload}
+            onChange={handleUpload}
           />
         </div>
       </Button>
@@ -213,6 +273,11 @@ const PharmacistAdditionalInfoForm = () => {
               <input
                 type="date"
                 name="field6"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (pharmacist)
+                    pharmacist.dateOfBirth = new Date(e.target.value);
+                  setDateOfBirth(new Date(e.target.value));
+                }}
                 defaultValue={
                   pharmacist ? formatDate(pharmacist.dateOfBirth) : ""
                 }
@@ -224,15 +289,22 @@ const PharmacistAdditionalInfoForm = () => {
           </div>
           <div>
             <label>
-              Identifcation {required()} {uploadButton()}
+              Identifcation {required()}{" "}
+              {uploadButton("Upload Identification", handleIDUpload)}
             </label>
             <label>
               Pharmacy Degree {required()}
-              <input type="password" name="field6" />
+              {uploadButton(
+                "Upload Pharmacy Degree",
+                handlePharmacyDegreeUpload
+              )}
             </label>
             <label>
               Working License {required()}
-              <input type="password" name="field6" />
+              {uploadButton(
+                "Upload Working License",
+                handleWorkingLicenseUpload
+              )}
             </label>
           </div>
           <div className="button-section">
