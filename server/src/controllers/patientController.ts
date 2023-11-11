@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
+import Medicine from "../models/medicines/Medicine";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -194,6 +195,47 @@ export const clearCart = async (req: AuthorizedRequest, res: Response) => {
     return res
       .status(StatusCodes.OK)
       .json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const addToCart = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const OTCpurchase = req.body.OTC === "true";
+    const userId = req.user?.id;
+    const { medicineId, quantity } = req.body;
+
+    // Check if the medicine is actually OTC
+    const medicine = await Medicine.findById(medicineId).select(
+      "isOverTheCounter"
+    );
+
+    if (!medicine) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Medicine not found" });
+    } else if (!medicine.isOverTheCounter && OTCpurchase) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Medicine is not OTC" });
+    }
+
+    // Update the patient's cart to an empty array if it doesn't exist
+    const result = await Patient.updateOne(
+      { _id: userId },
+      { $push: { cart: { medicineId, quantity } } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res.status(StatusCodes.OK).json({ message: "Added to cart" });
   } catch (err) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
