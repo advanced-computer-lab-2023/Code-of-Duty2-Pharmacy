@@ -110,7 +110,14 @@ const MedicineList: React.FC<Props> = ({
       : medicines;
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 3 }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-start",
+        gap: 3,
+        padding: "2.0rem",
+      }}
+    >
       <Box
         sx={{
           display: "flex",

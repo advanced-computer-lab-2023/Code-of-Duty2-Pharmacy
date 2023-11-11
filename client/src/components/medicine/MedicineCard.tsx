@@ -9,9 +9,15 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import Medicine from "../../types/Medicine";
 import EditMedicineModal from "./EditMedicineModal";
+import { useNavigate } from "react-router-dom";
+import { AttachMoney } from "@mui/icons-material";
+import axios from "axios";
+import config from "../../config/config";
+import { Alert, AlertTitle, Stack } from "@mui/material";
 
 interface MedicineCardProps {
   medicine: Medicine;
@@ -32,6 +38,8 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleEditClick = () => {
     setModalOpen(true);
@@ -46,11 +54,44 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
     setModalOpen(false);
   };
 
+  const handleAddingToCart = async (
+    _id: string,
+    navigateToCart: boolean
+  ): Promise<void> => {
+    const body = {
+      medicineId: _id,
+      quantity: 1,
+      OTC: true,
+    };
+
+    await axios
+      .post(`${config.API_URL}/patients/me/cart`, body)
+      .then(() => {
+        if (navigateToCart) {
+          navigate(`/patient/review-cart`);
+        }
+      })
+      .catch((err) => {
+        if (
+          err.response.data.message ===
+          "Quantity exceeds the available quantity"
+        ) {
+          setAlertVisible(true);
+          setTimeout(() => {
+            setAlertVisible(false);
+          }, 5000);
+        } else {
+          console.log(err);
+        }
+      });
+  };
+
   return (
     <Card
       sx={{
-        m: 2,
-        width: "250px",
+        maxwidth: "250px",
+        minWidth: "200px",
+        width: "18vw",
         height: "auto",
       }}
     >
@@ -115,13 +156,58 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
               </Box>
             </Box>
           </CardContent>
+
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            {alertVisible && (
+              <Alert
+                severity="warning"
+                // onClose={() => {
+                //   setAlertVisible(false);
+                // }}
+              >
+                <AlertTitle>Warning</AlertTitle>
+                Your total amount in cart cannot exceed the maximum quantity —{" "}
+                <strong onClick={() => navigate(`/patient/review-cart`)}>
+                  check cart!
+                </strong>
+              </Alert>
+            )}
+          </Stack>
         </Box>
       </CardActionArea>
       <CardActions>
         {canBuy && (
-          <Button size="small" color="primary">
-            Buy
-          </Button>
+          <>
+            <input
+              type="number"
+              min="1"
+              max={editedMedicine.availableQuantity}
+              defaultValue="1"
+              style={{
+                width: "50px",
+                height: "30px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                padding: "5px",
+              }}
+            />
+            <Button
+              size="small"
+              color="primary"
+              startIcon={<AddShoppingCartIcon />}
+              onClick={() => handleAddingToCart(editedMedicine._id, false)}
+            >
+              Add to Cart
+            </Button>
+            <Button
+              size="small"
+              color="primary"
+              startIcon={<AttachMoney />}
+              onClick={() => handleAddingToCart(editedMedicine._id, true)}
+            >
+              Buy Now
+            </Button>
+          </>
         )}
         {canEdit && (
           <Button

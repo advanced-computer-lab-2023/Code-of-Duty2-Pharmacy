@@ -4,6 +4,8 @@ import { StatusCodes } from "http-status-codes";
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
+import Medicine from "../models/medicines/Medicine";
+import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -194,6 +196,82 @@ export const clearCart = async (req: AuthorizedRequest, res: Response) => {
     return res
       .status(StatusCodes.OK)
       .json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const addToCart = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const OTCpurchase = req.body.OTC === "true";
+    const userId = req.user?.id;
+    const { medicineId, quantity } = req.body;
+
+    // Check if the medicine is actually OTC
+    const medicine = await Medicine.findById(medicineId);
+
+    if (!medicine) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Medicine not found" });
+    } else if (!medicine.isOverTheCounter && OTCpurchase) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Medicine is not OTC" });
+    }
+
+    if (quantity <= 0) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity must be greater than 0" });
+    }
+
+    const patient = await Patient.findOne({
+      _id: userId,
+      "cart.medicineId": medicineId,
+    });
+
+    let currentQuantity = 0;
+    if (patient) {
+      const item: ICartItem | undefined = patient.cart?.find(
+        (item) => item.medicineId.toString() === medicineId
+      );
+      if (item) {
+        currentQuantity = item.quantity;
+      }
+    }
+
+    console.log(currentQuantity, quantity, medicine.availableQuantity);
+    // Check if the total quantity exceeds the available quantity
+    if (currentQuantity + quantity > medicine.availableQuantity) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity exceeds the available quantity" });
+    }
+
+    // Update the patient's cart and add the medicine to it if it is not already present
+    let result = await Patient.updateOne(
+      { _id: userId, "cart.medicineId": { $ne: medicineId } },
+      { $push: { cart: { medicineId, quantity } } }
+    );
+
+    // if the medicine is already present in the cart, increment the quantity
+    if (result.modifiedCount === 0) {
+      result = await Patient.updateOne(
+        { _id: userId, "cart.medicineId": medicineId },
+        { $inc: { "cart.$.quantity": quantity } }
+      );
+    }
+
+    if (result.matchedCount === 0 && result.modifiedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res.status(StatusCodes.OK).json({ message: "Added to cart" });
   } catch (err) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
