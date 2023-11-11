@@ -112,6 +112,7 @@ const MedicineList: React.FC<Props> = ({
   return (
     <Box
       sx={{
+        m: 2,
         display: "flex",
         justifyContent: "flex-start",
         gap: 3,
