@@ -195,7 +195,7 @@ const EditMedicineModal: React.FC<Props> = ({
                   fullWidth
                 />
               )}
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 setUsages(newValue as string[]);
               }}
             />
