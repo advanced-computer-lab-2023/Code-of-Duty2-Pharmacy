@@ -17,7 +17,6 @@ export const login = async (req: Request, res: Response) => {
     res.cookie("refreshToken", refreshToken, { httpOnly: true, path: "/" });
     res.status(StatusCodes.OK).json({ accessToken, role });
   } catch (error) {
-    console.log(error);
     res.status(StatusCodes.BAD_REQUEST).json(error);
   }
 };
