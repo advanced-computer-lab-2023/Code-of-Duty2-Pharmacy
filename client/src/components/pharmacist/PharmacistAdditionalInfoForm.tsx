@@ -5,7 +5,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import { styled } from "@mui/joy";
+import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
@@ -615,7 +615,10 @@ const PharmacistAdditionalInfoForm = () => {
           </div>
         </form>
         <Backdrop
-          sx={{ color: "#fff", zIndex: (themee) => themee.zIndex.drawer + 1 }}
+          sx={{
+            color: "#fff",
+            zIndex: (themee: any) => themee.zIndex.drawer + 1,
+          }}
           open={loadopen}
           // onClick={handleClose}
         >
