@@ -1,8 +1,12 @@
-import Pharmacist, { IPharmacistModel } from "../../models/pharmacists/Pharmacist";
+import Pharmacist, {
+  IPharmacistModel,
+} from "../../models/pharmacists/Pharmacist";
 import Patient from "../../models/patients/Patient";
-import { entityEmailDoesNotExistError, entityIdDoesNotExistError } from "../../utils/ErrorMessages";
+import {
+  entityEmailDoesNotExistError,
+  entityIdDoesNotExistError,
+} from "../../utils/ErrorMessages";
 import { getRequestedTimePeriod } from "../../utils/getRequestedTimePeriod";
-
 
 export const findAllPharmacists = async () => await Pharmacist.find();
 
@@ -11,12 +15,13 @@ export const findPharmacistById = async (id: string) =>
     _id: 1,
     name: 1,
     email: 1,
+    username: 1,
     mobileNumber: 1,
     hourlyRate: 1,
     affiliation: 1,
-    speciality: 1,
     educationalBackground: 1,
-    availableSlots: 1,
+    identification: 1,
+    pharmacyDegree: 1,
   });
 
 export const findPharmacistByUsername = async (username: string) =>
@@ -35,11 +40,13 @@ export const findPharmacistByEmail = async (
 export const deletePharmacistById = async (id: string) =>
   await Pharmacist.findByIdAndDelete(id);
 
-export const createNewPharmacist = async (username: string, password: string) => {
+export const createNewPharmacist = async (
+  username: string,
+  password: string
+) => {
   const newPharmacist = new Pharmacist({ username, password });
   await newPharmacist.save();
 };
-
 
 export const updatePharmacistPasswordByEmail = async (
   email: string,
@@ -77,8 +84,3 @@ type PharmacistInfo = {
   speciality: string | undefined;
   sessionPrice: number;
 };
-
-
-
-
-

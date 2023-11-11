@@ -17,14 +17,14 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
       required: true,
       enum: ["unspecified", "male", "female"],
       default: "unspecified",
-    }, //TO BE REQUIRED
+    },
     mobileNumber: { type: String, required: false }, //TO BE REQUIRED
     hourlyRate: { type: Number, required: true },
     affiliation: { type: String, required: true },
     educationalBackground: { type: String, required: true },
-    identification: { type: Buffer },
-    pharmacyDegree: { type: Buffer },
-    workingLicense: { type: Buffer },
+    identification: { type: String },
+    pharmacyDegree: { type: String },
+    workingLicense: { type: String },
   },
   { timestamps: true }
 );

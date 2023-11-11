@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Pharmacist, { IPharmacistModel } from "../models/pharmacists/Pharmacist";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 export const deletePharmacist = async (req: Request, res: Response) => {
   try {
@@ -36,6 +37,28 @@ export const getPharmacists = async (req: Request, res: Response) => {
   }
 };
 
+export const getPharmacistInfo = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(
+      pharmacistId
+    );
+    if (!pharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Not Logged In" });
+    }
+    return res.status(StatusCodes.OK).json(pharmacist);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
 export const searchPharmacists = async (req: Request, res: Response) => {
   try {
     const username = req.query.username as string;
@@ -56,6 +79,38 @@ export const searchPharmacists = async (req: Request, res: Response) => {
         .json({ message: "No pharmacists found" });
     }
     res.status(StatusCodes.OK).json(pharmacists);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const updatePharmacist = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  // update by a patch request
+
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Pharmacist not found" });
+    }
+    const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
+      pharmacistId,
+      req.body,
+      { new: true }
+    );
+    if (!updatedPharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Pharmacist not found" });
+    }
+    res.status(StatusCodes.OK).json(updatedPharmacist);
   } catch (err) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
