@@ -12,7 +12,12 @@ import axios from "axios";
 import config from "../../config/config";
 import { Pharmacist } from "../../types";
 import { uploadPharmacistDocument } from "../../services/upload";
-import { IconButton, Typography } from "@mui/material";
+import {
+  Backdrop,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 const VisuallyHiddenInput = styled("input")`
@@ -34,7 +39,16 @@ const PharmacistAdditionalInfoForm = () => {
       .get<Pharmacist>(`${config.API_URL}/pharmacists/me/complete-info`)
       .then((res) => {
         setPharmacist(res.data);
-        // console.log("----", res.data);
+        console.log("----", res.data);
+
+        setGender(res.data.gender || "unspecified");
+        console.log(res.data.gender);
+        console.log(gender);
+        setPhoneNum(res.data.mobileNumber || "");
+        setDateOfBirth(res.data.dateOfBirth || null);
+        setIDPreviewUrl(res.data.identification || "");
+        setPharmacyDegreePreviewUrl(res.data.pharmacyDegree || "");
+        setWorkingLicensePreviewUrl(res.data.workingLicense || "");
       })
       .catch((err) => {
         console.log(err);
@@ -72,6 +86,13 @@ const PharmacistAdditionalInfoForm = () => {
   const [idColor, setIdColor] = useState("black");
   const [degreeColor, setDegreeColor] = useState("black");
   const [licenseColor, setLicenseColor] = useState("black");
+  const [loadopen, setLoadOpen] = React.useState(false);
+  const handleLoadClose = () => {
+    setLoadOpen(false);
+  };
+  const handleLoadOpen = () => {
+    setLoadOpen(true);
+  };
 
   // const resetIDPreview = () => {
   //   setSelectedIdDocument(null);
@@ -157,6 +178,7 @@ const PharmacistAdditionalInfoForm = () => {
         return;
       }
       setViewAlert(false);
+      handleLoadOpen();
 
       pharmacist!.mobileNumber = phoneNum;
       pharmacist!.dateOfBirth = dateOfBirth!;
@@ -167,10 +189,11 @@ const PharmacistAdditionalInfoForm = () => {
       // name is handled down below in the input field itself
 
       //patch request to update pharmacist
-      await axios.patch(
-        `${config.API_URL}/pharmacists/me/complete-info`,
-        pharmacist
-      );
+      await axios
+        .patch(`${config.API_URL}/pharmacists/me/complete-info`, pharmacist)
+        .then(() => {
+          handleLoadClose();
+        });
     } catch (err) {
       console.log(err);
     }
@@ -178,6 +201,12 @@ const PharmacistAdditionalInfoForm = () => {
 
   const handleIDUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
+      const maxSize = 12 * 1024 * 1024; // 12 MB
+
+      if (event.target.files[0].size > maxSize) {
+        alert("File is too large, please select a file smaller than 12 MB.");
+        return;
+      }
       setSelectedIdDocument(event.target.files[0]);
       setIDPreviewUrl(URL.createObjectURL(event.target.files[0]));
       console.log("selectedIdDocument", selectedIdDocument);
@@ -188,6 +217,12 @@ const PharmacistAdditionalInfoForm = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
+      const maxSize = 12 * 1024 * 1024; // 12 MB
+
+      if (event.target.files[0].size > maxSize) {
+        alert("File is too large, please select a file smaller than 12 MB.");
+        return;
+      }
       setPharmacyDegree(event.target.files[0]);
       setPharmacyDegreePreviewUrl(URL.createObjectURL(event.target.files[0]));
     }
@@ -197,6 +232,12 @@ const PharmacistAdditionalInfoForm = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
+      const maxSize = 12 * 1024 * 1024; // 12 MB
+
+      if (event.target.files[0].size > maxSize) {
+        alert("File is too large, please select a file smaller than 12 MB.");
+        return;
+      }
       setWorkingLicense(event.target.files[0]);
       setWorkingLicensePreviewUrl(URL.createObjectURL(event.target.files[0]));
     }
@@ -267,7 +308,6 @@ const PharmacistAdditionalInfoForm = () => {
 
   useEffect(() => {
     setLoggedInPharmacist();
-    setGender(pharmacist?.gender || "unspecified");
   }, []);
 
   return (
@@ -362,7 +402,7 @@ const PharmacistAdditionalInfoForm = () => {
                   if (pharmacist) pharmacist.mobileNumber = e.target.value;
                   setPhoneNum(e.target.value);
                 }}
-                defaultValue={pharmacist?.mobileNumber}
+                defaultValue={pharmacist?.mobileNumber || phoneNum || ""}
               />
             </label>
           </div>
@@ -445,7 +485,24 @@ const PharmacistAdditionalInfoForm = () => {
                   selected: {selectedIdDocument.name}
                 </p>
               )}
-              {uploadButton("Upload Identification", handleIDUpload)}{" "}
+              {uploadButton("Upload Identification", handleIDUpload)}
+              {idPreviewUrl && (
+                <>
+                  <a href={idPreviewUrl} download>
+                    <IconButton
+                      style={{ display: "inline", padding: "1px" }}
+                      aria-label="delete"
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  </a>{" "}
+                  {!selectedIdDocument && idPreviewUrl && (
+                    <p style={{ color: "#c0c0c0", display: "inline-block" }}>
+                      (view already uploaded document)
+                    </p>
+                  )}
+                </>
+              )}
             </label>
             <label>
               <Typography
@@ -467,6 +524,23 @@ const PharmacistAdditionalInfoForm = () => {
                 "Upload Pharmacy Degree",
                 handlePharmacyDegreeUpload
               )}
+              {pharmacyDegreePreviewUrl && (
+                <>
+                  <a href={pharmacyDegreePreviewUrl} download>
+                    <IconButton
+                      style={{ display: "inline", padding: "1px" }}
+                      aria-label="delete"
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  </a>{" "}
+                  {!pharmacyDegree && pharmacyDegreePreviewUrl && (
+                    <p style={{ color: "#c0c0c0", display: "inline-block" }}>
+                      (view already uploaded document)
+                    </p>
+                  )}
+                </>
+              )}
             </label>
             <label>
               <Typography
@@ -487,6 +561,23 @@ const PharmacistAdditionalInfoForm = () => {
               {uploadButton(
                 "Upload Working License",
                 handleWorkingLicenseUpload
+              )}
+              {workingLicensePreviewUrl && (
+                <>
+                  <a href={workingLicensePreviewUrl} download>
+                    <IconButton
+                      style={{ display: "inline", padding: "1px" }}
+                      aria-label="delete"
+                    >
+                      <FileDownloadIcon />
+                    </IconButton>
+                  </a>{" "}
+                  {!workingLicense && workingLicensePreviewUrl && (
+                    <p style={{ color: "#c0c0c0", display: "inline-block" }}>
+                      (view already uploaded document)
+                    </p>
+                  )}
+                </>
               )}
             </label>
           </div>
@@ -519,6 +610,13 @@ const PharmacistAdditionalInfoForm = () => {
             />
           </div>
         </form>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (themee) => themee.zIndex.drawer + 1 }}
+          open={loadopen}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
     </>
   );
