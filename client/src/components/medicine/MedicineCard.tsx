@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { AttachMoney } from "@mui/icons-material";
 import axios from "axios";
 import config from "../../config/config";
+import { Alert, AlertTitle, Stack } from "@mui/material";
+import { set } from "react-hook-form";
 
 interface MedicineCardProps {
   medicine: Medicine;
@@ -37,6 +39,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
+  const [alertVisible, setAlertVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleEditClick = () => {
@@ -70,7 +73,17 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (
+          err.response.data.message ===
+          "Quantity exceeds the available quantity"
+        ) {
+          setAlertVisible(true);
+          setTimeout(() => {
+            setAlertVisible(false);
+          }, 5000);
+        } else {
+          console.log(err);
+        }
       });
   };
 
@@ -143,11 +156,41 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
               </Box>
             </Box>
           </CardContent>
+
+          <Stack sx={{ width: "100%" }} spacing={2}>
+            {alertVisible && (
+              <Alert
+                severity="warning"
+                // onClose={() => {
+                //   setAlertVisible(false);
+                // }}
+              >
+                <AlertTitle>Warning</AlertTitle>
+                Your total amount in cart cannot exceed the maximum quantity —{" "}
+                <strong onClick={() => navigate(`/patient/review-cart`)}>
+                  check cart!
+                </strong>
+              </Alert>
+            )}
+          </Stack>
         </Box>
       </CardActionArea>
       <CardActions>
         {canBuy && (
           <>
+            <input
+              type="number"
+              min="1"
+              max={editedMedicine.availableQuantity}
+              defaultValue="1"
+              style={{
+                width: "50px",
+                height: "30px",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                padding: "5px",
+              }}
+            />
             <Button
               size="small"
               color="primary"

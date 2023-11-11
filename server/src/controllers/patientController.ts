@@ -5,6 +5,7 @@ import Patient, { IPatientModel } from "../models/patients/Patient";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
 import Medicine from "../models/medicines/Medicine";
+import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -209,9 +210,7 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
     const { medicineId, quantity } = req.body;
 
     // Check if the medicine is actually OTC
-    const medicine = await Medicine.findById(medicineId).select(
-      "isOverTheCounter"
-    );
+    const medicine = await Medicine.findById(medicineId);
 
     if (!medicine) {
       return res
@@ -227,18 +226,38 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Quantity must be greater than 0" });
-    } else if (quantity > medicine.availableQuantity) {
+    }
+
+    const patient = await Patient.findOne({
+      _id: userId,
+      "cart.medicineId": medicineId,
+    });
+
+    let currentQuantity = 0;
+    if (patient) {
+      const item: ICartItem | undefined = patient.cart?.find(
+        (item) => item.medicineId.toString() === medicineId
+      );
+      if (item) {
+        currentQuantity = item.quantity;
+      }
+    }
+
+    console.log(currentQuantity, quantity, medicine.availableQuantity);
+    // Check if the total quantity exceeds the available quantity
+    if (currentQuantity + quantity > medicine.availableQuantity) {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: "Quantity exceeds the available quantity" });
     }
 
-    // Update the patient's cart to an empty array if it doesn't exist
+    // Update the patient's cart and add the medicine to it if it is not already present
     let result = await Patient.updateOne(
       { _id: userId, "cart.medicineId": { $ne: medicineId } },
       { $push: { cart: { medicineId, quantity } } }
     );
 
+    // if the medicine is already present in the cart, increment the quantity
     if (result.modifiedCount === 0) {
       result = await Patient.updateOne(
         { _id: userId, "cart.medicineId": medicineId },
