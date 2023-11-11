@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../../../public/pharmacistForm.css";
+import "../../css/pharmacistForm.css";
 import { ThemeContext } from "../../contexts/ThemeContext";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
