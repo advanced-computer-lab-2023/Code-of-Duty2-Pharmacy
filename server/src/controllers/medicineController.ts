@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import Order, { IOrderModel } from "../models/orders/Order";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 export const getAllMedicines = async (req: Request, res: Response) => {
   try {
@@ -110,4 +111,28 @@ export const getAllMedicinesSales = async (req: Request, res: Response) => {
   }
 
   return res.status(StatusCodes.OK).json(Object.fromEntries(medsMap));
+};
+
+export const bulkUpdateMedicineQuantities = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const updates = req.body;
+
+    const bulkOps = updates.map((update: any) => ({
+      updateOne: {
+        filter: { _id: update.medicineId },
+        update: { $inc: { availableQuantity: -update.boughtQuantity } },
+      },
+    }));
+
+    await Medicine.bulkWrite(bulkOps);
+
+    res.status(200).send();
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
 };

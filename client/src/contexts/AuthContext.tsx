@@ -1,19 +1,26 @@
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { createContext, useState, ReactNode, useEffect } from "react";
 
 import UserRole from "../types/enums/UserRole";
 import config from "../config/config";
+import { useNavigate } from "react-router-dom";
+import { adminDashboardRoute } from "../data/routes/adminRoutes";
+import { pharmacistDashboardRoute } from "../data/routes/pharmacistRoutes";
+import { patientDashboardRoute } from "../data/routes/patientRoutes";
+import { welcomeRoute } from "../data/routes/guestRoutes";
+import { VerificationStatus } from "../types";
 
 interface IAuthState {
   isAuthenticated: boolean;
   accessToken: string | null;
   role: UserRole;
+  verificationStatus?: VerificationStatus;
 }
 
 interface IAuthContext {
   authState: IAuthState;
   login: (accessToken: string, role: UserRole) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   refreshAuth: () => Promise<string>;
 }
 
@@ -24,7 +31,7 @@ const AuthContext = createContext<IAuthContext>({
     role: UserRole.GUEST,
   },
   login: () => {},
-  logout: () => {},
+  logout: () => Promise.resolve(),
   refreshAuth: () => Promise.resolve(""),
 });
 
@@ -38,55 +45,88 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     accessToken: null,
     role: UserRole.GUEST,
   });
+  const navigate = useNavigate();
 
-  // Used to setup a response interceptor to attempt to refresh the access token
-  // if we get a 401 response from the server.
   useEffect(() => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
+        if (originalRequest._retry) {
+          return Promise.reject(error);
+        }
+        originalRequest._retry = true;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
+        switch (error.response?.status) {
+          case HttpStatusCode.Forbidden:
+            navigateToUserDashboardPage();
+            break;
 
-          if (
-            error.response.data.accessTokenExpired &&
-            !originalRequest.url.endsWith(`${config.API_REFRESH_ENDPOINT}`)
-          ) {
-            const newToken = await refreshAuth();
-            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-            return axios(originalRequest);
-          } else {
-            logout();
-          }
+          case HttpStatusCode.Unauthorized:
+            if (isRefreshTokenExpired(error, originalRequest)) {
+              await logout();
+            } else {
+              return await resendRequestWithNewAccessToken(
+                refreshAuth,
+                originalRequest
+              );
+            }
+            break;
+
+          default:
+            break;
         }
         return Promise.reject(error);
       }
     );
-
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
   }, []);
 
-  // Used for extra assurance that the access token being sent in the request headers
-  // is always in sync with the most up to date access token.
+  function navigateToUserDashboardPage() {
+    switch (authState.role) {
+      case UserRole.ADMIN:
+        navigate(adminDashboardRoute.path);
+        break;
+      case UserRole.PHARMACIST:
+        navigate(pharmacistDashboardRoute.path);
+        break;
+      case UserRole.PATIENT:
+        navigate(patientDashboardRoute.path);
+        break;
+      default:
+        navigate(welcomeRoute.path);
+        break;
+    }
+  }
+
   useEffect(() => {
     if (authState.isAuthenticated) {
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${authState.accessToken}`;
+      setAuthorizationHeader(authState.accessToken!);
     }
   }, [authState]);
 
-  const login = (accessToken: string, role: UserRole) => {
-    setAuthState({
-      isAuthenticated: true,
-      accessToken,
-      role,
-    });
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  const login = (
+    accessToken: string,
+    role: UserRole,
+    verificationStatus?: VerificationStatus
+  ) => {
+    if (role === UserRole.UNVERIFIED_PHARMACIST && verificationStatus) {
+      setAuthState({
+        isAuthenticated: true,
+        accessToken,
+        role,
+        verificationStatus,
+      });
+    } else {
+      setAuthState({
+        isAuthenticated: true,
+        accessToken,
+        role,
+      });
+    }
+    setAuthorizationHeader(accessToken);
   };
 
   const logout = async () => {
@@ -105,8 +145,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Error during logout", error);
     }
-
-    delete axios.defaults.headers.common["Authorization"];
+    clearAuthorizationHeader();
   };
 
   const refreshAuth = async () => {
@@ -114,9 +153,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await axios.post(
         `${config.API_URL}${config.API_REFRESH_ENDPOINT}`,
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       login(response.data.accessToken, response.data.role);
       return response.data.accessToken;
@@ -131,5 +168,28 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+function setAuthorizationHeader(accessToken: string) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+}
+function clearAuthorizationHeader() {
+  delete axios.defaults.headers.common["Authorization"];
+}
+
+async function resendRequestWithNewAccessToken(
+  refreshAuth: () => Promise<any>,
+  originalRequest: any
+) {
+  const newToken = await refreshAuth();
+  originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+  return axios(originalRequest);
+}
+
+function isRefreshTokenExpired(error: any, originalRequest: any) {
+  return (
+    !error.response.data.accessTokenExpired ||
+    originalRequest.url.endsWith(`${config.API_REFRESH_ENDPOINT}`)
+  );
+}
 
 export { AuthContext, AuthProvider };

@@ -11,6 +11,7 @@ import ButtonColor from "./ButtonColor";
 import Route from "./Route";
 import SidebarItem from "./SidebarItem";
 import PaymentMethod from "./PaymentMethod";
+import VerificationStatus from "./enums/VerificationStatus";
 
 export {
   type Medicine,
@@ -26,4 +27,5 @@ export {
   type Route,
   type SidebarItem,
   type PaymentMethod,
+  type VerificationStatus,
 };

@@ -24,6 +24,7 @@ import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import axios from "axios";
 import config from "../../config/config";
 import { forgetPasswordRoute } from "../../data/routes/loginRoutes";
+import { pharmacistUnverifiedRoute } from "../../data/routes/unverifiedRoutes";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
@@ -59,7 +60,6 @@ export default function PharmacistLogin() {
       return;
     }
 
-    // TODO: Use the actual login endpoint and values/options to be sent.
     try {
       const response = await axios.post(
         `${config.API_URL}/auth/pharmacist-login`,
@@ -72,7 +72,9 @@ export default function PharmacistLogin() {
       const data = response.data;
       login(data.accessToken, data.role);
 
-      if (
+      if (data.role === UserRole.UNVERIFIED_PHARMACIST) {
+        navigate(pharmacistUnverifiedRoute.path);
+      } else if (
         data.role === UserRole.PHARMACIST &&
         fromOrWelcome.startsWith("/pharmacist")
       ) {

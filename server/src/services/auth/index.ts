@@ -1,6 +1,6 @@
 import { usernameOrPasswordIncorrectErrorMessage } from "../../utils/ErrorMessages";
 import { signAndGetAccessToken, signAndGetRefreshToken } from "../../utils/jwt";
-import UserRole from "../../types/UserRole";
+import UserRole from "../../types/enums/UserRole";
 import { User } from "../../types/User";
 import Pharmacist from "../../models/pharmacists/Pharmacist";
 import Admin from "../../models/admins/Admin";
