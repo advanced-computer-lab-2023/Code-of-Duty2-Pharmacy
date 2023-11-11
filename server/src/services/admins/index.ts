@@ -214,7 +214,9 @@ export const sendAcceptanceEmailToPharmacist = async (
       <p>We were impressed with your qualifications and believe that you will be a valuable addition to our team. We look forward to working with you and achieving great success together.</p>
       <p>To proceed with the onboarding process, please complete the necessary documentation and provide any additional information required. Your prompt attention to these matters will help ensure a smooth transition into your new role.</p>
       <p>Click the button below to access the required documents and complete the remaining information:</p>
-      <a class="cta-button" href="http://localhost:5173/pharmacist/dashboard">Complete Onboarding</a>
+      <a class="cta-button" href="${
+        env.FRONT_END_URL || "http://localhost:5173"
+      }/pharmacist/complete-additional-info">Complete Onboarding</a>
       <p>If you have any questions or need further assistance, feel free to reply to this email or contact us.</p>
       <p>Welcome to the 'El7a2ni' team, and we look forward to a successful collaboration!</p>
       <p>Best regards,</p>
