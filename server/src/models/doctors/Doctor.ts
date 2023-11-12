@@ -43,7 +43,7 @@ export const DoctorSchema = new Schema<IDoctorModel>(
       select: false,
     },
     wallet: {
-      type: { WalletSchema },
+      type: WalletSchema,
       select: false,
     },
     passwordReset: {

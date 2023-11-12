@@ -1,28 +1,38 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import bcrypt from "bcrypt";
+
 import Admin from "../models/admins/Admin";
 import PharmacistRegistrationRequest from "../models/pharmacist_registration_requests/PharmacistRegistrationRequest";
 import { findAdminById, updateAdminPasswordById } from "../services/admins";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
+import Pharmacist from "../models/pharmacists/Pharmacist";
+import Patient from "../models/patients/Patient";
+import Doctor from "../models/doctors/Doctor";
 
 export const addAdmin = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
-    // check if username exists in admin collection
+
     const existingAdmin = await Admin.findOne({ username });
-    if (existingAdmin) {
+    const existingPharmacist = await Pharmacist.findOne({ username });
+    const existingPatient = await Patient.findOne({ username });
+    const existingDoctor = await Doctor.findOne({ username });
+
+    if (
+      existingAdmin ||
+      existingPharmacist ||
+      existingPatient ||
+      existingDoctor
+    ) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "username already exists" });
+        .json({ message: "Username already taken" });
     }
 
-    // TODO: Check for username duplication
-    // in users collection.
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newAdmin = new Admin({ username, password });
+
     const savedAdmin = await newAdmin.save();
+
     res.status(StatusCodes.CREATED).json(savedAdmin);
   } catch (err) {
     res
@@ -36,9 +46,9 @@ export const getAllPharmacistRegistrationRequests = async (
   res: Response
 ) => {
   try {
-    const allPharmacistRegistrationRequests =
-      await PharmacistRegistrationRequest.find();
-    res.status(StatusCodes.OK).json(allPharmacistRegistrationRequests);
+    const requests = await PharmacistRegistrationRequest.find();
+
+    res.status(StatusCodes.OK).json(requests);
   } catch (err) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

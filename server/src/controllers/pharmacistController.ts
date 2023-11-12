@@ -40,12 +40,32 @@ export const getPharmacists = async (req: Request, res: Response) => {
   }
 };
 
+export const getPharmacistInfo = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(
+      pharmacistId
+    );
+    if (!pharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Not Logged In" });
+    }
+    return res.status(StatusCodes.OK).json(pharmacist);
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
 export const searchPharmacists = async (req: Request, res: Response) => {
   try {
     const username = req.query.username as string;
     const email = req.query.email as string;
-    // console.log(username);
-    // console.log(email);
 
     const pharmacists: IPharmacistModel[] =
       (!username || username.length === 0) && (!email || email.length === 0)
@@ -90,3 +110,36 @@ export const changePharmacistPassword = async (req: AuthorizedRequest, res: Resp
   }
 };
 
+export const updatePharmacist = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+
+    if (!pharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Pharmacist not found" });
+    }
+
+    const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
+      pharmacistId,
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedPharmacist) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Pharmacist not found" });
+    }
+
+    res.status(StatusCodes.OK).json(updatedPharmacist);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};

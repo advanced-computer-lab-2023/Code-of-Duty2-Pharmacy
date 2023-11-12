@@ -20,8 +20,9 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
-import UserRole from "../../types/enums/UserRole";
+import { pharmacistUnverifiedRoute } from "../../data/routes/unverifiedRoutes";
 import { pageNotFoundRoute } from "../../data/routes/generalRoutes";
+import UserRole from "../../types/enums/UserRole";
 
 const LoginRoutesHandler = () => {
   const { authState } = useContext(AuthContext);
@@ -33,6 +34,8 @@ const LoginRoutesHandler = () => {
       <Navigate to={adminDashboardRoute.path} replace />
     ) : authState.role === UserRole.PHARMACIST ? (
       <Navigate to={pharmacistDashboardRoute.path} replace />
+    ) : authState.role === UserRole.UNVERIFIED_PHARMACIST ? (
+      <Navigate to={pharmacistUnverifiedRoute.path} replace />
     ) : (
       <Navigate to={pageNotFoundRoute.path} replace />
     )
@@ -40,5 +43,4 @@ const LoginRoutesHandler = () => {
     <Outlet />
   );
 };
-
 export default LoginRoutesHandler;

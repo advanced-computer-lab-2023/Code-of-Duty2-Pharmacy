@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import UserRole from "../types/UserRole";
+import UserRole from "../types/enums/UserRole";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 // TODO: Implement another authorization middleware for multiple roles

@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import Order, { IOrderModel } from "../models/orders/Order";
+import { AuthorizedRequest } from "../types/AuthorizedRequest";
 
 export const getAllMedicines = async (req: Request, res: Response) => {
   try {
@@ -80,12 +81,12 @@ export const searchMedicines = async (req: Request, res: Response) => {
 };
 
 export const getMedicineSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicine_id as string) || "";
+  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let totalSales = 0;
   for (let i = 0; i < orders.length; i++) {
     for (let j = 0; j < orders[i].medicines.length; j++) {
-      if (orders[i].medicines[j].medicine_id.toString() == medicineId) {
+      if (orders[i].medicines[j].medicineId.toString() == medicineId) {
         totalSales += orders[i].medicines[j].quantity;
       }
     }
@@ -94,22 +95,44 @@ export const getMedicineSales = async (req: Request, res: Response) => {
 };
 
 export const getAllMedicinesSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicine_id as string) || "";
+  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let medsMap: Map<string, number> = new Map<string, number>();
 
   for (let i = 0; i < orders.length; i++) {
     for (let j = 0; j < orders[i].medicines.length; j++) {
       let quantity =
-        medsMap.get(orders[i].medicines[j].medicine_id.toString()) || 0;
+        medsMap.get(orders[i].medicines[j].medicineId.toString()) || 0;
       medsMap.set(
-        orders[i].medicines[j].medicine_id.toString(),
+        orders[i].medicines[j].medicineId.toString(),
         quantity + orders[i].medicines[j].quantity
       );
     }
   }
-  // console.log(orders);
-  // console.log(JSON.stringify(Object.fromEntries(medsMap)));
 
   return res.status(StatusCodes.OK).json(Object.fromEntries(medsMap));
+};
+
+export const bulkUpdateMedicineQuantities = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const updates = req.body;
+
+    const bulkOps = updates.map((update: any) => ({
+      updateOne: {
+        filter: { _id: update.medicineId },
+        update: { $inc: { availableQuantity: -update.boughtQuantity } },
+      },
+    }));
+
+    await Medicine.bulkWrite(bulkOps);
+
+    res.status(200).send();
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
 };

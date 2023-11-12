@@ -46,10 +46,13 @@ const Sidebar: React.FC<Props> = ({ sidebarItems, sidebarWidth }) => {
             color: "white",
             textDecoration: "none",
             padding: 1.5,
+            paddingLeft: 4,
           }}
         >
           {item.icon && (
-            <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: "white", marginRight: -2 }}>
+              {item.icon}
+            </ListItemIcon>
           )}
 
           <ListItemText

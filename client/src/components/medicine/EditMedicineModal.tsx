@@ -39,6 +39,9 @@ const EditMedicineModal: React.FC<Props> = ({
   const [activeIngredients, setActiveIngredients] = useState(
     medicine.activeIngredients || []
   );
+  const [availableQuantity, setAvailableQuantity] = useState(
+    medicine.availableQuantity || 0
+  );
   const [newActiveIngredient, setNewActiveIngredient] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
@@ -109,6 +112,7 @@ const EditMedicineModal: React.FC<Props> = ({
         usages,
         activeIngredients,
         pictureUrl: finalPictureUrl,
+        availableQuantity,
       });
 
       const updatedMedicine = {
@@ -119,7 +123,9 @@ const EditMedicineModal: React.FC<Props> = ({
         usages,
         activeIngredients,
         pictureUrl: finalPictureUrl,
+        availableQuantity,
       };
+
       onSave(updatedMedicine);
       onClose();
     } catch (err) {
@@ -140,6 +146,7 @@ const EditMedicineModal: React.FC<Props> = ({
               fullWidth
             />
           </Box>
+
           <Box mt={3}>
             <TextField
               label="Description"
@@ -148,6 +155,7 @@ const EditMedicineModal: React.FC<Props> = ({
               fullWidth
             />
           </Box>
+
           <Box mt={3}>
             <TextField
               label="Active Ingredients"
@@ -158,7 +166,9 @@ const EditMedicineModal: React.FC<Props> = ({
               fullWidth
             />
           </Box>
+
           {activeIngredients && <Box mt={2}></Box>}
+
           {activeIngredients.map((ingredient, index) => (
             <Chip
               key={index}
@@ -167,7 +177,9 @@ const EditMedicineModal: React.FC<Props> = ({
               onDelete={handleDeleteActiveIngredient(ingredient)}
             />
           ))}
+
           {activeIngredients && <Box mt={4}></Box>}
+
           <Box mt={3}>
             <Autocomplete
               multiple
@@ -183,11 +195,22 @@ const EditMedicineModal: React.FC<Props> = ({
                   fullWidth
                 />
               )}
-              onChange={(event, newValue) => {
+              onChange={(_event, newValue) => {
                 setUsages(newValue as string[]);
               }}
             />
           </Box>
+
+          <Box mt={3}>
+            <TextField
+              label="Available Quantity"
+              type="number"
+              value={availableQuantity}
+              onChange={(e) => setAvailableQuantity(Number(e.target.value))}
+              fullWidth
+            />
+          </Box>
+
           <Box mt={3}>
             <TextField
               label="Price"
@@ -214,6 +237,7 @@ const EditMedicineModal: React.FC<Props> = ({
                 />
               </Button>
             </Box>
+
             {imagePreviewUrl && (
               <Box mt={2} position="relative" width={200}>
                 <img

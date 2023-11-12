@@ -6,7 +6,17 @@ import bcrypt from "mongoose-bcrypt";
 
 export interface IDoctorRegistrationRequestModel
   extends IDoctorBaseInfo,
-    Document {}
+    Document {
+  identificationUrl?: string;
+  medicalLicenseUrl?: string;
+  medicalDegreeUrl?: string;
+  contractUrl?: string;
+  status:
+    | "accepted"
+    | "pending documents upload"
+    | "pending contract acceptance"
+    | "rejected";
+}
 
 export const DoctorRegistrationRequestSchema =
   new Schema<IDoctorRegistrationRequestModel>(
@@ -32,11 +42,20 @@ export const DoctorRegistrationRequestSchema =
       educationalBackground: { type: String, required: true },
       status: {
         type: String,
-        enum: ["accepted", "pending", "rejected"],
-        default: "pending",
+        enum: [
+          "accepted",
+          "pending documents upload",
+          "pending contract acceptance",
+          "rejected",
+        ],
+        default: "pending documents upload",
         required: true,
       },
       speciality: { type: String, required: true },
+      identificationUrl: { type: String, select: false },
+      medicalLicenseUrl: { type: String, select: false },
+      medicalDegreeUrl: { type: String, select: false },
+      contractUrl: { type: String, select: false },
     },
     { timestamps: true }
   );

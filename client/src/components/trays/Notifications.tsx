@@ -33,7 +33,7 @@ const Notifications = () => {
 
   return (
     <div>
-      <IconButton color="inherit" onClick={handleClick}>
+      <IconButton color="inherit" onClick={handleClick} sx={{ padding: "0" }}>
         <Badge badgeContent={numberOfNotifications} color="error">
           <NotificationsIcon />
         </Badge>

@@ -4,9 +4,9 @@ interface Pharmacist extends UserBaseInfo {
   hourlyRate: number;
   affiliation: string;
   educationalBackground: string;
-  identification?: Buffer;
-  pharmacyDegree?: Buffer;
-  workingLicense?: Buffer;
+  identification?: string;
+  pharmacyDegree?: string;
+  workingLicense?: string;
 }
 
 export default Pharmacist;

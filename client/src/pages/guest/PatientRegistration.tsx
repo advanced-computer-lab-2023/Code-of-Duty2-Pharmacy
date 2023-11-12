@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import axios from "axios";
 
 import config from "../../config/config";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
+import { AuthContext } from "../../contexts/AuthContext";
+import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 
 const PatientRegistration = () => {
+  const navigate = useNavigate();
+
+  const { login } = useContext(AuthContext);
+
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,9 +25,9 @@ const PatientRegistration = () => {
     mobileNumber: "",
     relationToPatient: "",
   });
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const requestBody = {
@@ -35,36 +41,43 @@ const PatientRegistration = () => {
       emergencyContact,
     };
 
-    axios
-      .post(`${config.API_URL}/register/patient`, requestBody)
-      .then((response) => {
-        console.log(response.data);
-        alert("Patient registered successfully!");
-        // make http request to localhost:5173/Home
-        // window.location.href = "http://localhost:5173/";
-      })
-      .catch((error) => {
-        console.error(error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message === "username already exists"
-        ) {
-          alert("username already exists!");
-        } else if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message === "email already exists"
-        ) {
-          alert("email already exists!");
-        } else {
-          alert("An error occurred while registering the pharmacist.");
-        }
+    try {
+      await axios.post(`${config.API_URL}/register/patient`, requestBody);
+
+      // Start loading when register succeeded but now attempting to login
+      setLoading(true);
+
+      const response = await axios.post(`${config.API_URL}/auth/login`, {
+        username,
+        password,
       });
+
+      const data = response.data;
+      login(data.accessToken, data.role);
+      navigate(patientDashboardRoute.path);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
-      {/* TODO: Fix this file's styling, form validation and submit handling */}
+      {/* TODO: Fix this file's styling, form validation and error handling */}
       <Button
         onClick={() => navigate(welcomeRoute.path)}
         sx={{ mb: 5, fontSize: "1.2rem" }}

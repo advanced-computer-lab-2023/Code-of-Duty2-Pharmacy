@@ -1,10 +1,26 @@
 import { User } from "../../types/User";
 import { IUserModel } from "../../types/UserModel";
-import UserRole from "../../types/UserRole";
-import { findAllAdmins, deleteAdminById, findAdminById, findAdminByUsername, findAdminByEmail } from "../admins";
-import { findAllPatients, deletePatientById, findPatientById, findPatientByUsername, findPatientByEmail } from "../patients";
-import { findAllPharmacists, findPharmacistByEmail, findPharmacistById, findPharmacistByUsername } from "../pharmacists";
-
+import UserRole from "../../types/enums/UserRole";
+import {
+  findAllAdmins,
+  deleteAdminById,
+  findAdminById,
+  findAdminByUsername,
+  findAdminByEmail,
+} from "../admins";
+import {
+  findAllPatients,
+  deletePatientById,
+  findPatientById,
+  findPatientByUsername,
+  findPatientByEmail,
+} from "../patients";
+import {
+  findAllPharmacists,
+  findPharmacistByEmail,
+  findPharmacistById,
+  findPharmacistByUsername,
+} from "../pharmacists";
 
 export const findAllUsersByType = async (Type: string) => {
   switch (Type.toLowerCase()) {

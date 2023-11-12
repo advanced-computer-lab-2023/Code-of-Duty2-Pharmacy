@@ -65,16 +65,13 @@ const MedicineList: React.FC<Props> = ({
   const handleSearch = async (searchTerm: string, searchCollection: string) => {
     try {
       let responseData = await goSearch(searchTerm, searchCollection);
-      console.log(responseData);
       setMedicines(responseData);
     } catch (err: any) {
       if (err.response?.status === 400) {
-        console.log("Get All Meds");
         fetchMedicines();
         return;
       }
       if (err.response?.status === 404) {
-        console.log("No Medicine with this name");
         setMedicines([]);
       } else {
         console.log(err);
@@ -113,7 +110,15 @@ const MedicineList: React.FC<Props> = ({
       : medicines;
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 3 }}>
+    <Box
+      sx={{
+        m: 2,
+        display: "flex",
+        justifyContent: "flex-start",
+        gap: 3,
+        padding: "2.0rem",
+      }}
+    >
       <Box
         sx={{
           display: "flex",

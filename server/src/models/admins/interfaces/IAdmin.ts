@@ -1,4 +1,4 @@
-import UserRole from "../../../types/UserRole";
+import UserRole from "../../../types/enums/UserRole";
 
 export interface IAdmin {
   role?: UserRole.ADMIN;

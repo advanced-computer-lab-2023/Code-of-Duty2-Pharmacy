@@ -4,6 +4,8 @@ import axios from "axios";
 import config from "../../config/config";
 
 import { PharmacistRegistrationRequest } from "../../types";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
@@ -11,6 +13,7 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
     PharmacistRegistrationRequest[]
   >([]);
   const [filter, setFilter] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -18,12 +21,50 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
         `${config.API_URL}/pharmacist-registration-requests`
       )
       .then((response) => {
-        console.log(response.data);
         setRequests(response.data);
         setFilteredRequests(response.data);
       })
       .catch((error) => console.error(error));
   }, []);
+
+  const handleAccept = (username: string) => {
+    axios
+      .post(
+        `${config.API_URL}/pharmacist-registration-requests/accept-pharmacist-request`,
+        {
+          username: username,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setRequests(
+            requests.filter((request) => request.username !== username)
+          );
+          setFilteredRequests(
+            filteredRequests.filter((request) => request.username !== username)
+          );
+        }
+      });
+  };
+  const handleReject = (username: string) => {
+    axios
+      .post(
+        `${config.API_URL}/pharmacist-registration-requests/reject-pharmacist-request`,
+        {
+          username: username,
+        }
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setRequests(
+            requests.filter((request) => request.username !== username)
+          );
+          setFilteredRequests(
+            filteredRequests.filter((request) => request.username !== username)
+          );
+        }
+      });
+  };
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = event.target.value;
@@ -34,7 +75,7 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "2.0rem" }}>
       <hr />
       <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>
         Pharmacist Registration Requests
@@ -62,29 +103,46 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
               borderRadius: "5px",
             }}
           >
+            <Button
+              style={{ float: "right" }}
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                navigate(
+                  `/admin/view-pharmacist-request/?request=${JSON.stringify(
+                    request
+                  )}`
+                )
+              }
+            >
+              View
+            </Button>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Name:</strong> {request.name}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Username:</strong> {request.username}
+              <strong>Name: </strong> {request.name}{" "}
+              <span style={{ color: "#949494" }}>, ({request.username})</span>
             </p>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Email:</strong> {request.email}
             </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Date of Birth:</strong>{" "}
-              {new Date(request.dateOfBirth).toLocaleDateString()}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Hourly Rate:</strong> {request.hourlyRate}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Affiliation:</strong> {request.affiliation}
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Educational Background:</strong>{" "}
-              {request.educationalBackground}
-            </p>
+            <div style={{ float: "right" }}>
+              <div style={{ paddingRight: "1.0rem", display: "inline" }}>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  onClick={() => handleAccept(request.username)}
+                >
+                  Accept
+                </Button>
+              </div>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleReject(request.username)}
+              >
+                Reject
+              </Button>
+            </div>
+
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Status:</strong> {request.status}
             </p>

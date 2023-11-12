@@ -1,3 +1,4 @@
+import PatientCartReviewPage from "../../pages/patient/PatientCartReviewPage";
 import PatientCheckoutPage from "../../pages/patient/PatientCheckoutPage";
 import PatientDashboard from "../../pages/patient/PatientDashboard";
 import PatientViewMedicinesPage from "../../pages/patient/PatientViewMedicinesPage";
@@ -14,6 +15,11 @@ export const viewMedicinesRoute: Route = {
   element: <PatientViewMedicinesPage />,
 };
 
+export const cartReviewRoute: Route = {
+  path: "/patient/review-cart",
+  element: <PatientCartReviewPage />,
+};
+
 export const checkoutRoute: Route = {
   path: "/patient/checkout",
   element: <PatientCheckoutPage />,
@@ -27,6 +33,7 @@ export const changePatientPasswordsRoute: Route = {
 const patientRoutes: Route[] = [
   patientDashboardRoute,
   viewMedicinesRoute,
+  cartReviewRoute,
   checkoutRoute,
   changePatientPasswordsRoute,
 ];

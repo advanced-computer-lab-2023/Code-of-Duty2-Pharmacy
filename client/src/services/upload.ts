@@ -30,3 +30,29 @@ export const uploadMedicineImage = async (
     );
   });
 };
+
+export const uploadPharmacistDocument = async (
+  file: File,
+  comment?: string
+): Promise<any> => {
+  const ID = generateID();
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(storage, `files/pharmacist-docs/${ID}-${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file, {
+      customMetadata: { comment: "" },
+    });
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          resolve(downloadURL);
+        });
+      }
+    );
+  });
+};

@@ -11,7 +11,7 @@ export const OrderSchema = new Schema<IOrderModel>(
     patientMobileNumber: { type: String, required: true },
     medicines: [
       {
-        medicine_id: {
+        medicineId: {
           type: Schema.Types.ObjectId,
           ref: "Medicine",
           required: true,
