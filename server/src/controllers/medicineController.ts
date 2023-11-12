@@ -24,6 +24,17 @@ export const getAllMedicines = async (req: Request, res: Response) => {
 export const addMedicine = async (req: Request, res: Response) => {
   try {
     const newMedicineData: IMedicineModel = req.body;
+
+    const existingMedicine = await Medicine.findOne({
+      name: newMedicineData.name,
+    });
+
+    if (existingMedicine) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "A medicine with this name already exists." });
+    }
+
     const newMedicine = new Medicine(newMedicineData);
     const savedMedicine = await newMedicine.save();
     res.status(StatusCodes.CREATED).json(savedMedicine);
