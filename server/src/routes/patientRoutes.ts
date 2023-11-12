@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllPatients,
   deletePatient,
+  changePatientPassword,
   getDeliveryAddresses,
   addDeliveryAddress,
   getPatientDetails,
@@ -19,6 +20,7 @@ const router = express.Router();
 router.use(authenticateUser);
 router.get("/", getAllPatients);
 router.delete("/:id", deletePatient);
+router.post("/change-password", changePatientPassword);
 router.get("/addresses", getDeliveryAddresses);
 router.post("/addresses", addDeliveryAddress);
 router.get("/me", getPatientDetails);

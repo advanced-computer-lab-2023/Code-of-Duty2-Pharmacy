@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  changePharmacistPassword,
   deletePharmacist,
   getPharmacistInfo,
   getPharmacists,
@@ -17,6 +18,7 @@ router.use(authenticateUser);
 router.delete("/:id", deletePharmacist);
 router.get("/", getPharmacists);
 router.get("/search", searchPharmacists);
+router.post("/change-password", changePharmacistPassword);
 router.get("/me/complete-info", getPharmacistInfo);
 router.patch("/me/complete-info", updatePharmacist);
 
