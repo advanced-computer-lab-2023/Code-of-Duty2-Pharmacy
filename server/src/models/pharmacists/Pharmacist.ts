@@ -1,7 +1,8 @@
 import mongoose, { Document, Schema } from "mongoose";
 import isEmail from "validator/lib/isEmail";
 import { IPharmacist } from "./interfaces/IPharmacist";
-import bcrypt from "mongoose-bcrypt";
+import bcrypt from "bcrypt";
+import PasswordResetSchema from "../users/PasswordReset";
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
@@ -25,10 +26,20 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     identification: { type: String },
     pharmacyDegree: { type: String },
     workingLicense: { type: String },
+    passwordReset: {
+      type: PasswordResetSchema,
+      select: false,
+    },
   },
   { timestamps: true }
 );
 
-PharmacistSchema.plugin(bcrypt);
+// PharmacistSchema.plugin(bcrypt);
+
+PharmacistSchema.plugin(require("mongoose-bcrypt"), { rounds: 10 });
+
+PharmacistSchema.methods.verifyPasswordResetOtp = function (otp: string) {
+  return bcrypt.compare(otp, this.passwordReset.otp);
+};
 
 export default mongoose.model<IPharmacistModel>("Pharmacist", PharmacistSchema);
