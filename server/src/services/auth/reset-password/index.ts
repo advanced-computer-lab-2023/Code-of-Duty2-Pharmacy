@@ -11,6 +11,7 @@ export const sendPasswordResetOTPIfUserExists = async (
   const user = await findUserByEmail(email, { _id: 1, role: 1 });
   if (!user) throw new Error("User not found");
   const passwordResetInfo = getPasswordResetInfo();
+  console.log(passwordResetInfo);
   await savePasswordResetInfo(user, passwordResetInfo);
   await sendPasswordResetOTPEmail(email, passwordResetInfo.otp);
   return { id: user._id, role: user.role } as User;
@@ -36,7 +37,11 @@ const savePasswordResetInfo = async (
   passwordResetInfo: IPasswordResetInfo
 ) => {
   user.passwordReset = passwordResetInfo;
-  await user.save();
+  try {
+    await user.save();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deletePasswordResetInfo = async (user: IUserModel) => {
@@ -51,12 +56,15 @@ export const validateOTP = async (
 ): Promise<IUserModel> => {
   const user = await findUser(userPayload, { _id: 1, passwordReset: 1 });
   if (!user) throw new Error("User not found");
+  // console.log(user);
 
+  console.log(user.passwordReset);
   if (!user.passwordReset) throw new Error("Password reset info not found");
 
   if (user.passwordReset.expiryDate < new Date())
     throw new Error("OTP expired");
 
+  console.log("CHECK OTP----", otp);
   const isOtpValid: boolean = await user.verifyPasswordResetOtp?.(otp)!;
   if (!isOtpValid) throw new Error("Invalid OTP");
 

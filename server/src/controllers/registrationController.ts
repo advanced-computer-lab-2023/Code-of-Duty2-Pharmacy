@@ -11,6 +11,7 @@ import {
 } from "../services/admins";
 import Admin from "../models/admins/Admin";
 import Doctor from "../models/doctors/Doctor";
+import { error } from "console";
 
 export const registerPatient = async (req: Request, res: Response) => {
   try {

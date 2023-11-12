@@ -6,9 +6,9 @@ export interface IPharmacist extends IUserBaseInfo {
   hourlyRate: number;
   affiliation: string;
   educationalBackground: string;
-  identification?: Buffer;
-  pharmacyDegree?: Buffer;
-  workingLicense?: Buffer;
+  identification?: string;
+  pharmacyDegree?: string;
+  workingLicense?: string;
   passwordReset?: {
     otp: string;
     expiryDate: Date;

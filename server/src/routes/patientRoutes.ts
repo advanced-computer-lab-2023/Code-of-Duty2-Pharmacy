@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllPatients,
   deletePatient,
+  changePatientPassword,
   getDeliveryAddresses,
   addDeliveryAddress,
   getPatientDetails,
@@ -9,6 +10,7 @@ import {
   createOrder,
   clearCart,
   addToCart,
+  deleteCartItem,
 } from "../controllers/patientController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -19,12 +21,15 @@ const router = express.Router();
 router.use(authenticateUser);
 router.get("/", getAllPatients);
 router.delete("/:id", deletePatient);
+router.post("/change-password", changePatientPassword);
 router.get("/addresses", getDeliveryAddresses);
 router.post("/addresses", addDeliveryAddress);
 router.get("/me", getPatientDetails);
 router.get("/me/cart", getCartItems);
 router.delete("/me/cart", clearCart);
 router.post("/me/cart", addToCart);
+router.delete("/me/cart/:itemId", deleteCartItem);
+
 router.post("/orders", createOrder);
 
 export default router;

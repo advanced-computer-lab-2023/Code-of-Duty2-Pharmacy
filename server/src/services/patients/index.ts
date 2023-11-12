@@ -43,7 +43,7 @@ export const updatePatientPasswordByEmail = async (
   await updatePatientPassword(patient, newPassword);
 };
 
-export const updatePasswordById = async (
+export const updatePatientPasswordById = async (
   patientId: string,
   newPassword: string
 ) => {
