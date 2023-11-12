@@ -10,6 +10,7 @@ import {
   createOrder,
   clearCart,
   addToCart,
+  deleteCartItem,
 } from "../controllers/patientController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -27,6 +28,8 @@ router.get("/me", getPatientDetails);
 router.get("/me/cart", getCartItems);
 router.delete("/me/cart", clearCart);
 router.post("/me/cart", addToCart);
+router.delete("/me/cart/:itemId", deleteCartItem);
+
 router.post("/orders", createOrder);
 
 export default router;

@@ -4,7 +4,6 @@ import { StatusCodes } from "http-status-codes";
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import { findPatientById , updatePatientPasswordById } from "../services/patients";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
-import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
 import Medicine from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
@@ -303,3 +302,24 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {            
+  try {                                                                                
+    const patientId = req.user?.id;                                                       
+    const medicineId = req.params.itemId;                                                                                      
+    const result = await Patient.updateOne(                                            
+      { _id: patientId },                                                                 
+      { $pull: { cart: { medicineId: medicineId } } }                                               
+    );                                                                                           
+    if (result.matchedCount === 0) {                                                   
+      return res                                                                        
+        .status(StatusCodes.NOT_FOUND)                                                 
+        .json({ message: "Patient not found" });                                       
+    }                                                                                   
+                                                                                        
+    return res.status(StatusCodes.OK).json({ message: "item Removed from cart successfully" });          
+  } catch (err) {                                                                      
+    return res                                                                          
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)                                        
+      .json({ message: (err as Error).message });                                       
+  }                                                                                     
+}
