@@ -53,7 +53,7 @@ export const changePatientPassword = async (req: AuthorizedRequest, res: Respons
     if (!patient) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: 'patient not found' });
     }
-    
+
     const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });

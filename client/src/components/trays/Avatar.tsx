@@ -85,7 +85,7 @@ const Avatar = () => {
         </MenuItem>
 
          {/* change password the menu item */}
-        <MenuItem onClick={() => navigate(changePasswordPath)}>
+         <MenuItem onClick={() => {navigate(changePasswordPath); handleClose();}}>
           <LockResetIcon />
             Change Password
         </MenuItem>

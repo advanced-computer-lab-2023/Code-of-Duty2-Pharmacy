@@ -1,150 +1,257 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React, { useContext, useState } from "react";
-import zxcvbn from "zxcvbn";
-import { TextField, Button, Typography, Box, Alert } from "@mui/material";
+
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+  IconButton,
+  InputAdornment,
+  Container,
+} from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserRole from "../../types/enums/UserRole";
-import { url } from "inspector";
-import { link } from "fs";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import { set } from "mongoose";
 
 const ChangePassword = () => {
-  const navigate = useNavigate();
+  const [dashboardRoutePath, setDashboardRoutePath] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [success, setSuccess] = useState(false);
   const [generalError, setGeneralError] = useState("");
-  const [newPasswordStrength, setNewPasswordStrength] = useState(0);
-  const [confirmPasswordStrength, setConfirmPasswordStrength] = useState(0);
+  const [oldPasswordError, setOldPasswordError] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { authState } = useContext(AuthContext);
-
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const getDashBoardPath = () => {
+    switch (authState.role) {
+      case UserRole.PATIENT:
+        return "/patient/dashboard";
+      case UserRole.ADMIN:
+        return "/admin/dashboard";
+      case UserRole.PHARMACIST:
+        return "/pharmacist/dashboard";
+      default:
+        return "/";
+    }
+  };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setGeneralError("");
+    setOldPasswordError("");
+    setNewPasswordError("");
+    setConfirmPasswordError("");
+    setSuccess(false);
+
+    if (oldPassword === "") {
+      setOldPasswordError("Old password is required.");
+      return;
+    }
+
+    if (newPassword === "") {
+      setNewPasswordError("New password is required.");
+      return;
+    }
+
+    if (confirmPassword === "") {
+      setConfirmPasswordError("Confirm password is required.");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setGeneralError("New passwords do not match.");
+      return;
+    }
+    if (oldPassword === newPassword) {
+      setGeneralError("New password cannot be the same as old password.");
       return;
     }
 
     var role = "";
     if (authState.role === UserRole.PATIENT) {
       role = "patients";
+      setDashboardRoutePath("/patient/dashboard");
     } else if (authState.role === UserRole.ADMIN) {
       role = "admins";
+      setDashboardRoutePath("/admin/dashboard");
     } else if (authState.role === UserRole.PHARMACIST) {
       role = "pharmacists";
+      setDashboardRoutePath("/pharmacist/dashboard");
     }
+
+    console.log(dashboardRoutePath);
 
     const requestBody = {
       currentPassword: oldPassword,
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     };
-     const url = `${config.API_URL}/${role}/change-password`;
-     console.log(234);
-     console.log(url);
     axios
-      .post(url, requestBody)
-      .then((response) => {
-        // navigate("http://localhost:5173/patient/dashboard");
+      .post(`${config.API_URL}/${role}/change-password`, requestBody)
+      .then(() => {
+        setSuccess(true);
       })
       .catch((error) => {
-        if(error.response && error.response.data && error.response.data.message){
-        alert(error.response.data.message);
+        console.log(error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          setGeneralError(error.response.data.message);
+        } else {
+          alert("Something went wrong !");
         }
-        
       });
-    // axios
-    //   .post(`${config.API_URL}/${role}/change-password`, requestBody)
-    //   .then((response) => {
-    //     if (response.data.error) {
-    //       throw new Error(response.data.message);
-    //     }
-    //     alert("Password changed successfully!");
-    //     navigate("http://localhost:5173/patient/dashboard");
-    //   })
-    //   .catch((error) => {
-    //     alert("An error occurred while changing the password.");
-    //     if (error.response && error.response.data) {
-    //       const message = error.response.data.message;
-    //       alert(message);
-    //     }
-    //   });
   };
 
   return (
     <div>
-      <Box display="flex" flexDirection="column">
+      <Container maxWidth="xs">
+        {/* Your code here */}
+        {/* display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        height="60vh"
+        // width="100%" */}
+        {/* // style={{ transform: "scale(1.2)" }} */}
         {generalError && <Alert severity="error">{generalError} !</Alert>}{" "}
-        <Typography variant="h5" gutterBottom style={{ marginLeft: "16px" }}>
+        {success && (
+          <Alert severity="success">
+            Password changed successfully !
+            <Link
+              to={getDashBoardPath()}
+              style={{
+                // color: theme.palette.primary.main,
+                display: "inline-block",
+                padding: "5px 10px",
+                borderRadius: "4px",
+                fontWeight: "bold",
+                transition: "background-color 0.3s ease",
+              }}
+            >
+              Go to home
+            </Link>{" "}
+          </Alert>
+        )}
+        <Typography
+          variant="h5"
+          gutterBottom
+          style={{ marginTop: "30px", textAlign: "center" }}
+        >
           Change Password
         </Typography>
         <form onSubmit={handleSubmit}>
           <Box display="block">
             <TextField
+              fullWidth
               label="Old Password"
-              type="password"
+              type={showOldPassword ? "text" : "password"}
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
               margin="normal"
-              style={{ marginLeft: "16px" }}
+              error={oldPasswordError !== ""}
+              helperText={oldPasswordError !== "" ? oldPasswordError : ""}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowOldPassword(!showOldPassword)}
+                      onMouseDown={(event) => event.preventDefault()}
+                    >
+                      {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Box>
           <Box display="block">
             <TextField
+              fullWidth
               label="New Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={newPassword}
               onChange={(e) => {
                 setNewPassword(e.target.value);
-                setNewPasswordStrength(zxcvbn(e.target.value).score);
               }}
               margin="normal"
-              style={{ marginLeft: "16px" }}
+              error={newPasswordError !== ""}
+              helperText={newPasswordError !== "" ? newPasswordError : " "}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      onMouseDown={(event) => event.preventDefault()}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Box>
           <Box display="block">
             <TextField
-              label="Confirm New Password"
-              type="password"
+              fullWidth
+              label="Confirm Password"
+              type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                setConfirmPasswordStrength(zxcvbn(e.target.value).score);
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              error={confirmPasswordError !== ""}
+              helperText={
+                confirmPasswordError !== "" ? confirmPasswordError : " "
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      onMouseDown={(event) => event.preventDefault()}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
-              margin="normal"
-              style={{ marginLeft: "16px" }}
             />
           </Box>
-          <Box display="block" width="200px">
+          <Box display="block">
             <Button
+              style={{ marginTop: "20px" }}
+              fullWidth
               size="large"
               variant="contained"
               color="primary"
-              fullWidth
               type="submit"
-              style={{ marginTop: "16px", marginLeft: "16px" }}
             >
               Submit
             </Button>
           </Box>
         </form>
-      </Box>
-      {/* <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message="Password changed successfully!"
-      />
-      <Snackbar
-        open={!!generalError}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={generalError}
-      /> */}
+        {/* </Box> */}
+      </Container>
     </div>
   );
 };
