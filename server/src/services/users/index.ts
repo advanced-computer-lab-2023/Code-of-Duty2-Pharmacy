@@ -1,3 +1,4 @@
+import Pharmacist from "../../models/pharmacists/Pharmacist";
 import { User } from "../../types/User";
 import { IUserModel } from "../../types/UserModel";
 import UserRole from "../../types/enums/UserRole";
@@ -39,8 +40,11 @@ export const findUser = async (user: User, elementsToSelect?: any) => {
   switch (user.role) {
     case UserRole.PATIENT:
       return await findPatientById(user.id, elementsToSelect);
-    case UserRole.DOCTOR:
-      return await findPharmacistById(user.id);
+    case UserRole.PHARMACIST:
+      const usertest = await Pharmacist.findById(user.id).select(
+        elementsToSelect
+      );
+      return usertest;
     case UserRole.ADMIN:
       return await findAdminById(user.id, elementsToSelect);
     default:
