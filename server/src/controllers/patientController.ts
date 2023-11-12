@@ -243,7 +243,6 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       }
     }
 
-    console.log(currentQuantity, quantity, medicine.availableQuantity);
     // Check if the total quantity exceeds the available quantity
     if (currentQuantity + quantity > medicine.availableQuantity) {
       return res
