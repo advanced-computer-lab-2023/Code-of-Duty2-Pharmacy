@@ -1,4 +1,12 @@
-import { Box, Button, Card, CardMedia, List, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardMedia,
+  TextField,
+  Typography,
+} from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import { checkoutRoute } from "../../data/routes/patientRoutes";
 import { useEffect, useState } from "react";
@@ -11,26 +19,61 @@ const CartReview = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetchCartItemsAndTotalPrice();
+    fetchCartItems();
   }, []);
-
-  const fetchCartItemsAndTotalPrice = async () => {
+  
+  useEffect(() => {
+    handleTotalPrice();
+  }, [cartItems]);
+  
+  const fetchCartItems = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
       const cartItems = response.data;
       setCartItems(cartItems);
-
-      const total = cartItems.reduce(
-        (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
-        0
-      );
-
-      setTotal(total);
-      return total;
     } catch (error) {
       console.error("Failed to fetch cart items", error);
     }
   };
+  const handleTotalPrice = () => {
+    const total = cartItems.reduce((sum: number, item: any) => sum + item.medicineId.price * item.quantity, 0);
+    setTotal(total);
+  }
+  const handleQuantityChange = (index: number, newQuantity: number ) => {
+
+      if (newQuantity > 0) {
+        try {
+          // const response = axios.patch(
+          //   `${config.API_URL}/patients/me/cart/${cartItems[index]._id}`,
+          //   {
+          //     quantity: newQuantity,
+          //   }
+          // );
+          fetchCartItems();
+          handleTotalPrice();         
+        } catch (error) {
+          console.log((error as any).response.data.message);
+        }
+      }
+
+  }
+
+  const handleDelete = async (index: number) => {  
+    // console.log("----------------------------------------------------------------" );
+    // console.log("cartItems[index]._id  : ", cartItems[index]._id );
+    // console.log("cartItems[index].medicineId: ", cartItems[index].medicineId);
+    // console.log("cartItems[index].medicineId._id: ", cartItems[index].medicineId._id);
+    // console.log("cartItems[index].medicineId.name: ", cartItems[index].medicineId.name);
+    // console.log("index of item to be deleted : ", index);
+    await axios.delete(`${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`)
+      .catch((error) => {
+        console.log(error);
+        alert("Failed to delete item from cart ! ");
+      });
+    fetchCartItems();
+    handleTotalPrice();
+  };
+
 
   return (
     <Box
@@ -51,11 +94,15 @@ const CartReview = () => {
         ) : (
           <Box>
             <Box sx={{ ml: 1, mb: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                Here's what you're about to buy.
-              </Typography>
-              <Typography variant="h4">EGP {total.toFixed(2)}</Typography>
+              <Typography variant="h5">
+                Subtotal ({cartItems.length}{" "}
+                {cartItems.length > 1 ? "items" : "item"}){" : "}
+                <Typography variant="h5" component="span" fontWeight="bold">
+                  EGP {total.toFixed(2)}
+                </Typography>
+              </Typography>{" "}
             </Box>
+            <hr />
             {cartItems.map((item: any, index: any) => (
               <Card key={index} elevation={0}>
                 <Box
@@ -85,10 +132,35 @@ const CartReview = () => {
                     <Typography variant="body1" fontWeight={"bold"}>
                       {item.medicineId.name}
                     </Typography>
-
-                    <Typography variant="body1" color="text.secondary">
-                      Qty {item.quantity}
-                    </Typography>
+                    <Box display="flex" alignItems="center">
+                      <Typography variant="body1" color="text.secondary">
+                        {"Qty "}
+                      </Typography>
+                      <TextField
+                        type="number"
+                        InputProps={{
+                          inputProps: { min: 1 },
+                          style: {
+                            width: "30%",
+                            height: "5vh",
+                            marginLeft: "10px",
+                          },
+                        }}
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(index, Number(e.target.value))
+                        }
+                      />
+                    </Box>
+                    <br />
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleDelete(index)}
+                      size="small"
+                    >
+                      remove item
+                    </Button>
                   </Box>
 
                   <Box p={1} ml="auto">
@@ -101,6 +173,7 @@ const CartReview = () => {
                     </Typography>
                   </Box>
                 </Box>
+                <hr />
               </Card>
             ))}
           </Box>
@@ -118,6 +191,8 @@ const CartReview = () => {
         </Button>
       </Box>
     </Box>
+
+    // add new line
   );
 };
 
