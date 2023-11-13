@@ -9,6 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import Medicine from "../../types/Medicine";
@@ -17,10 +18,12 @@ import { useNavigate } from "react-router-dom";
 import { AttachMoney } from "@mui/icons-material";
 import axios from "axios";
 import config from "../../config/config";
-import { Alert, AlertTitle, Stack } from "@mui/material";
+import { Alert, AlertTitle, Stack, Tooltip } from "@mui/material";
 
 interface MedicineCardProps {
   medicine: Medicine;
+  discount: number;
+  packageName: string;
   canBuy: boolean;
   canEdit: boolean;
   canViewSales: boolean;
@@ -30,6 +33,8 @@ interface MedicineCardProps {
 
 const MedicineCard: React.FC<MedicineCardProps> = ({
   medicine,
+  discount,
+  packageName,
   canBuy,
   canEdit,
   canViewSales,
@@ -89,10 +94,11 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
   return (
     <Card
       sx={{
-        maxwidth: "250px",
-        minWidth: "200px",
-        width: "18vw",
-        height: "auto",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        height: "100%",
+        maxWidth: "325px",
       }}
     >
       <CardActionArea>
@@ -104,54 +110,107 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
             image={editedMedicine.pictureUrl}
             alt={`${editedMedicine.name} image`}
           />
-          <CardContent sx={{ height: "450px" }}>
+
+          <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {editedMedicine.name}
             </Typography>
+
             <Typography variant="body2" color="text.secondary">
               {editedMedicine.description}
             </Typography>
+
             <Box mt={3}>
               <Typography variant="body2" color="text.secondary">
-                Usages
+                Medical Usages
               </Typography>
+
               {editedMedicine.usages &&
                 editedMedicine.usages.map((usage, index) => (
                   <Chip label={usage} key={index} />
                 ))}
+
               <Box mt={2}>
                 <Typography variant="body2" color="text.secondary">
                   Active Ingredients
                 </Typography>
+
                 {editedMedicine.activeIngredients &&
                   editedMedicine.activeIngredients.map((ingredient, index) => (
                     <Chip label={ingredient} key={index} />
                   ))}
+
                 <Box mt={2}>
-                  <Typography variant="body2" color="text.secondary">
-                    Price
-                  </Typography>
-                  <Typography variant="h6">
-                    {`${editedMedicine.price} EGP`}
-                  </Typography>
                   {canViewQuantity && (
                     <Box mt={2}>
                       <Typography variant="body2" color="text.secondary">
-                        Available Quantity
+                        Available Qty
                       </Typography>
+
                       <Typography variant="h6">
                         {editedMedicine.availableQuantity}
                       </Typography>
                     </Box>
                   )}
+
                   {canViewSales && (
                     <Box mt={2}>
                       <Typography variant="body2" color="text.secondary">
                         Number of Sales
                       </Typography>
+
                       <Typography variant="h6">{sales || 0}</Typography>
                     </Box>
                   )}
+
+                  <Box
+                    mt={2}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="flex-end"
+                  >
+                    {discount > 0 ? (
+                      <>
+                        <Typography variant="h6" sx={{ color: "red" }}>
+                          {`EGP ${editedMedicine.price}`}
+                        </Typography>
+
+                        <Typography variant="body2" color="text.secondary">
+                          <s>{`EGP ${editedMedicine.originalPrice}`}</s>
+                        </Typography>
+
+                        <Typography variant="body2" color="text.secondary">
+                          Save: EGP{" "}
+                          {(
+                            editedMedicine.originalPrice - editedMedicine.price
+                          ).toFixed(2)}{" "}
+                          <span
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            ({discount * 100}%)
+                            <Tooltip
+                              title={`A ${
+                                discount * 100
+                              }% discount on medicines is applied because you are subscribed to the ${packageName}.`}
+                            >
+                              <InfoIcon
+                                sx={{
+                                  fontSize: 17,
+                                  marginLeft: 1,
+                                  color: "gray",
+                                }}
+                              />
+                            </Tooltip>
+                          </span>
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant="h6">{`EGP ${editedMedicine.price}`}</Typography>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </Box>
@@ -175,6 +234,7 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
           </Stack>
         </Box>
       </CardActionArea>
+
       <CardActions>
         {canBuy && (
           <>
@@ -184,8 +244,6 @@ const MedicineCard: React.FC<MedicineCardProps> = ({
               max={editedMedicine.availableQuantity}
               defaultValue="1"
               style={{
-                width: "50px",
-                height: "30px",
                 borderRadius: "5px",
                 border: "1px solid #ccc",
                 padding: "5px",

@@ -63,6 +63,7 @@ export default function Payment() {
                   <CardMedia
                     component="img"
                     sx={{
+                      height: "100%",
                       objectFit: "contain",
                     }}
                     image={item.medicineId.pictureUrl}

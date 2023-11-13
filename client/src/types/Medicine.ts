@@ -4,6 +4,7 @@ interface Medicine {
   activeIngredients: string[];
   price: number;
   availableQuantity: number;
+  originalPrice: number; // not in the database, only sent by server for frontend displays
   pictureUrl?: string;
   description?: string;
   usages?: string[];

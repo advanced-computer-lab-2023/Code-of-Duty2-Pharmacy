@@ -14,7 +14,7 @@ export const patientSidebarItems: SidebarItem[] = [
     icon: <DashboardIcon />,
   },
   {
-    title: "View Medicines",
+    title: "Medicines",
     href: viewMedicinesRoute.path,
     icon: <HealingIcon />,
   },
