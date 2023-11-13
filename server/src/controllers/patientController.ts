@@ -10,6 +10,7 @@ import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
 import Medicine from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
+import HealthPackage from "../models/health_packages/HealthPackage";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -165,19 +166,61 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
   try {
     const userId = req.user?.id;
 
-    const patient = await Patient.findById(userId).populate({
-      path: "cart.medicineId",
-      select: "name price pictureUrl",
-    });
+    const patient = await Patient.findById(userId)
+      .select("subscribedPackage cart")
+      .populate({
+        path: "cart.medicineId",
+        select: "_id name price pictureUrl",
+      });
 
     if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
     }
 
-    return res.json(patient.cart);
+    if (!patient.cart) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Cart not found" });
+    }
+
+    let discount = 0;
+
+    if (
+      patient.subscribedPackage &&
+      patient.subscribedPackage.status === "subscribed"
+    ) {
+      const healthPackage = await HealthPackage.findById(
+        patient.subscribedPackage.packageId
+      );
+
+      if (healthPackage) {
+        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+      }
+    }
+
+    const cartItemsWithAppliedDiscount = patient.cart.map((item: any) => {
+      const discountedPrice = parseFloat(
+        (item.medicineId.price * (1 - discount)).toFixed(2)
+      );
+
+      return {
+        medicineId: {
+          _id: item.medicineId._id,
+          name: item.medicineId.name,
+          price: discountedPrice,
+          pictureUrl: item.medicineId.pictureUrl,
+        },
+        quantity: item.quantity,
+      };
+    });
+
+    return res.json(cartItemsWithAppliedDiscount);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
   }
 };
 
@@ -234,6 +277,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
     return res.status(StatusCodes.CREATED).json(savedOrder);
   } catch (err) {
+    console.log(err);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });

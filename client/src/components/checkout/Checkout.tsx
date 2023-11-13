@@ -110,13 +110,16 @@ const Checkout = () => {
     try {
       const patientResponse = await axios.get(`${config.API_URL}/patients/me`);
       const patientData = patientResponse.data;
-
+      console.log(cartItems);
       const orderData = {
         patientId: patientData._id,
         patientName: patientData.name,
         patientAddress: addressData,
         patientMobileNumber: patientData.mobileNumber,
-        medicines: cartItems,
+        medicines: cartItems.map((item: any) => ({
+          medicineId: item.medicineId._id,
+          quantity: item.quantity,
+        })),
         paidAmount,
         paymentMethod,
       };

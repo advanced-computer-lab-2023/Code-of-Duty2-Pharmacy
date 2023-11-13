@@ -2,12 +2,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
-import Order, { IOrderModel } from "../models/orders/Order";
+import Order from "../models/orders/Order";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Patient from "../models/patients/Patient";
-import HealthPackage, {
-  IHealthPackageModel,
-} from "../models/health_packages/HealthPackage";
+import HealthPackage from "../models/health_packages/HealthPackage";
 
 export const getAllMedicines = async (
   req: AuthorizedRequest,
@@ -23,9 +21,11 @@ export const getAllMedicines = async (
     }
 
     const patientId = req.user?.id;
+
     const patient = await Patient.findById(patientId).select(
       "subscribedPackage"
     );
+
     let discount = 0;
     let packageName = "";
 

@@ -30,18 +30,22 @@ const CartReview = () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
       const cartItems = response.data;
+
       setCartItems(cartItems);
     } catch (error) {
       console.error("Failed to fetch cart items", error);
     }
   };
+
   const handleTotalPrice = () => {
     const total = cartItems.reduce(
       (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
       0
     );
+
     setTotal(total);
   };
+
   const handleQuantityChange = (index: number, newQuantity: number) => {
     if (newQuantity > 0) {
       try {
