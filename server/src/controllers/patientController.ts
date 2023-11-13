@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Patient, { IPatientModel } from "../models/patients/Patient";
-import { findPatientById , updatePatientPasswordById } from "../services/patients";
+import {
+  findPatientById,
+  updatePatientPasswordById,
+} from "../services/patients";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
 import Medicine from "../models/medicines/Medicine";
@@ -46,27 +49,37 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
-export const changePatientPassword = async (req: AuthorizedRequest, res: Response) => {
+export const changePatientPassword = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const patientId = req.user?.id!;
     const patient = await findPatientById(patientId);
 
     if (!patient) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'patient not found' });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "patient not found" });
     }
 
     const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "old password is not correct" });
     }
 
     await updatePatientPasswordById(patientId, newPassword);
-    return res.status(StatusCodes.OK).json({ message: 'Password updated successfully!' });
-
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(StatusCodes.BAD_REQUEST).json({ message: 'An error occurred while updating the password' });
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "An error occurred while updating the password" });
   }
 };
 
@@ -180,6 +193,32 @@ export const createOrder = async (req: Request, res: Response) => {
       paymentMethod,
     } = req.body;
 
+    const exceedingAvailableQuantityMedicines = [];
+
+    for (const medicine of medicines) {
+      const dbMedicine = await Medicine.findById(medicine.medicineId);
+
+      if (!dbMedicine) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          message: `Medicine with id ${medicine.medicineId} not found`,
+        });
+      }
+
+      if (medicine.quantity > dbMedicine.availableQuantity) {
+        exceedingAvailableQuantityMedicines.push(dbMedicine.name);
+      }
+    }
+
+    if (exceedingAvailableQuantityMedicines.length > 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: `The following medicines are out of stock or do not have enough available quantity: 
+        ${exceedingAvailableQuantityMedicines.join(
+          ", "
+        )}. Please go back to your cart and adjust the 
+        quantities or remove these items.`,
+      });
+    }
+
     const newOrder = new Order({
       patientId,
       patientName,
@@ -188,7 +227,7 @@ export const createOrder = async (req: Request, res: Response) => {
       medicines,
       paidAmount,
       paymentMethod,
-      status: "successful", // set status directly to successful as we are not using any payment gateway or delivery service
+      status: "successful", // Set directly to successful as there's no real payment or delivery to process.
     });
 
     const savedOrder = await newOrder.save();
@@ -301,24 +340,26 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
-export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {            
-  try {                                                                                
-    const patientId = req.user?.id;                                                       
-    const medicineId = req.params.itemId;                                                                                      
-    const result = await Patient.updateOne(                                            
-      { _id: patientId },                                                                 
-      { $pull: { cart: { medicineId: medicineId } } }                                               
-    );                                                                                           
-    if (result.matchedCount === 0) {                                                   
-      return res                                                                        
-        .status(StatusCodes.NOT_FOUND)                                                 
-        .json({ message: "Patient not found" });                                       
-    }                                                                                   
-                                                                                        
-    return res.status(StatusCodes.OK).json({ message: "item Removed from cart successfully" });          
-  } catch (err) {                                                                      
-    return res                                                                          
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)                                        
-      .json({ message: (err as Error).message });                                       
-  }                                                                                     
-}
+export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const patientId = req.user?.id;
+    const medicineId = req.params.itemId;
+    const result = await Patient.updateOne(
+      { _id: patientId },
+      { $pull: { cart: { medicineId: medicineId } } }
+    );
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "item Removed from cart successfully" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};

@@ -21,11 +21,11 @@ const CartReview = () => {
   useEffect(() => {
     fetchCartItems();
   }, []);
-  
+
   useEffect(() => {
     handleTotalPrice();
   }, [cartItems]);
-  
+
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
@@ -36,36 +36,40 @@ const CartReview = () => {
     }
   };
   const handleTotalPrice = () => {
-    const total = cartItems.reduce((sum: number, item: any) => sum + item.medicineId.price * item.quantity, 0);
+    const total = cartItems.reduce(
+      (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
+      0
+    );
     setTotal(total);
-  }
-  const handleQuantityChange = (index: number, newQuantity: number ) => {
-
-      if (newQuantity > 0) {
-        try {
-          // const response = axios.patch(
-          //   `${config.API_URL}/patients/me/cart/${cartItems[index]._id}`,
-          //   {
-          //     quantity: newQuantity,
-          //   }
-          // );
-          fetchCartItems();
-          handleTotalPrice();         
-        } catch (error) {
-          console.log((error as any).response.data.message);
-        }
+  };
+  const handleQuantityChange = (index: number, newQuantity: number) => {
+    if (newQuantity > 0) {
+      try {
+        // const response = axios.patch(
+        //   `${config.API_URL}/patients/me/cart/${cartItems[index]._id}`,
+        //   {
+        //     quantity: newQuantity,
+        //   }
+        // );
+        fetchCartItems();
+        handleTotalPrice();
+      } catch (error) {
+        console.log((error as any).response.data.message);
       }
+    }
+  };
 
-  }
-
-  const handleDelete = async (index: number) => {  
+  const handleDelete = async (index: number) => {
     // console.log("----------------------------------------------------------------" );
     // console.log("cartItems[index]._id  : ", cartItems[index]._id );
     // console.log("cartItems[index].medicineId: ", cartItems[index].medicineId);
     // console.log("cartItems[index].medicineId._id: ", cartItems[index].medicineId._id);
     // console.log("cartItems[index].medicineId.name: ", cartItems[index].medicineId.name);
     // console.log("index of item to be deleted : ", index);
-    await axios.delete(`${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`)
+    await axios
+      .delete(
+        `${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`
+      )
       .catch((error) => {
         console.log(error);
         alert("Failed to delete item from cart ! ");
@@ -73,7 +77,6 @@ const CartReview = () => {
     fetchCartItems();
     handleTotalPrice();
   };
-
 
   return (
     <Box
@@ -185,7 +188,7 @@ const CartReview = () => {
           }}
           variant="outlined"
           disabled={cartItems.length === 0}
-          sx={{ mt: 7 }}
+          sx={{ mt: 5 }}
         >
           Proceed to Checkout
         </Button>
