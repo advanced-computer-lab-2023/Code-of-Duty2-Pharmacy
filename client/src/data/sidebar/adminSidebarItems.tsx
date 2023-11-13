@@ -18,9 +18,6 @@ import PeopleIcon from "@mui/icons-material/People";
 
 import { SidebarItem } from "../../types";
 
-/**
- * One href for each admin page route.
- */
 export const adminSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",

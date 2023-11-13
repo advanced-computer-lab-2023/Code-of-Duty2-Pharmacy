@@ -171,9 +171,11 @@ const CartReview = () => {
                       EGP {(item.medicineId.price * item.quantity).toFixed(2)}
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
-                      EGP {item.medicineId.price.toFixed(2)} each
-                    </Typography>
+                    {item.quantity > 1 && (
+                      <Typography variant="body2" color="text.secondary">
+                        EGP {item.medicineId.price.toFixed(2)} each
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
                 <hr />

@@ -7,9 +7,6 @@ import {
   viewMedicinesRoute,
 } from "../routes/patientRoutes";
 
-/**
- * One href for each patient page route.
- */
 export const patientSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",

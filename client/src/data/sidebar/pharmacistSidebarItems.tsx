@@ -9,9 +9,6 @@ import {
   addMedicineRoute,
 } from "../routes/pharmacistRoutes";
 
-/**
- * One href for each pharmacist page route.
- */
 export const pharmacistSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
