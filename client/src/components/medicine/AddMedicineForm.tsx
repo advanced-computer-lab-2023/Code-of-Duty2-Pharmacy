@@ -21,6 +21,10 @@ const AddMedicineForm = () => {
   const [price, setPrice] = useState(0);
   const [availableQuantity, setAvailableQuantity] = useState(0);
 
+  const [nameError, setNameError] = useState(false);
+  const [activeIngredientsError, setActiveIngredientsError] = useState(false);
+  const [priceError, setPriceError] = useState(false);
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
@@ -42,8 +46,33 @@ const AddMedicineForm = () => {
     }
   };
 
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!name) {
+      setNameError(true);
+      isValid = false;
+    }
+
+    if (!price) {
+      setPriceError(true);
+      isValid = false;
+    }
+
+    if (activeIngredients.length === 0) {
+      setActiveIngredientsError(true);
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       await axios.post(`${config.API_URL}/medicines`, {
@@ -53,13 +82,23 @@ const AddMedicineForm = () => {
         availableQuantity,
       });
 
+      setName("");
+      setActiveIngredients([]);
+      setPrice(0);
+      setAvailableQuantity(0);
+
       setSnackbarMessage("Medicine added successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
 
-      setSnackbarMessage("Failed to add medicine");
+      if (err.response && err.response.data && err.response.data.message) {
+        setSnackbarMessage(err.response.data.message);
+      } else {
+        setSnackbarMessage("Failed to add medicine");
+      }
+
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
@@ -98,7 +137,12 @@ const AddMedicineForm = () => {
           placeholder="Enter medicine name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          error={nameError}
+          helperText={nameError ? "Medicine name is required" : ""}
+          onChange={(e) => {
+            setName(e.target.value);
+            setNameError(false);
+          }}
         />
 
         <Box mt={3}>
@@ -107,7 +151,16 @@ const AddMedicineForm = () => {
             placeholder="Separate by spaces"
             value={newIngredient}
             onKeyDown={handleAddIngredient}
-            onChange={(e) => setNewIngredient(e.target.value)}
+            error={activeIngredientsError}
+            helperText={
+              activeIngredientsError
+                ? "At least one active ingredient is required required"
+                : ""
+            }
+            onChange={(e) => {
+              setNewIngredient(e.target.value);
+              setActiveIngredientsError(false);
+            }}
           />
 
           {activeIngredients && <Box mt={2} />}
@@ -126,7 +179,15 @@ const AddMedicineForm = () => {
             label="Price"
             type="number"
             value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            error={priceError}
+            helperText={priceError ? "Price greater than zero is required" : ""}
+            onChange={(e) => {
+              setPrice(Number(e.target.value));
+              setPriceError(false);
+            }}
+            onClick={(e) => {
+              (e.target as HTMLInputElement).select();
+            }}
           />
 
           <Box mt={3} />
@@ -136,6 +197,9 @@ const AddMedicineForm = () => {
             type="number"
             value={availableQuantity}
             onChange={(e) => setAvailableQuantity(Number(e.target.value))}
+            onClick={(e) => {
+              (e.target as HTMLInputElement).select();
+            }}
           />
 
           <Box mt={3} />
