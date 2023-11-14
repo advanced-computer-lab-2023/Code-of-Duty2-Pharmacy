@@ -25,7 +25,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
 
       // We will asume that amount is initially in qoroosh
       // then converted to EGP by applying *100.
-      amount: amount * 100,
+      amount: amount.toFixed(2) * 100,
     });
 
     res.send({ clientSecret: paymentIntent.client_secret });

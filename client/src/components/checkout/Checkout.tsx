@@ -64,12 +64,10 @@ const Checkout = () => {
     setStripePromise(loadStripe(publishableKey));
   };
 
-  // TODO: Change the hardcoded amount we're using for fake stripe payments,
-  // and consider that stripe complains about non-integer amounts
-  const fetchPaymentIntentClientSecret = async (_total: number) => {
+  const fetchPaymentIntentClientSecret = async (total: number) => {
     const response = await axios.post(
       `${config.API_URL}/payments/create-payment-intent`,
-      { amount: 1000 }
+      { amount: total }
     );
     const clientSecret = response.data.clientSecret;
     setClientSecret(clientSecret);
@@ -113,7 +111,7 @@ const Checkout = () => {
     try {
       const patientResponse = await axios.get(`${config.API_URL}/patients/me`);
       const patientData = patientResponse.data;
-      console.log(cartItems);
+
       const orderData = {
         patientId: patientData._id,
         patientName: patientData.name,
@@ -133,7 +131,6 @@ const Checkout = () => {
         medicineId: item.medicineId._id,
         boughtQuantity: item.quantity,
       }));
-
       await axios.patch(`${config.API_URL}/medicines/bulk-update`, updates);
 
       await axios.delete(`${config.API_URL}/patients/me/cart`);
