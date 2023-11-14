@@ -56,26 +56,36 @@ export const getAllPharmacistRegistrationRequests = async (
   }
 };
 
-export const changeAdminPassword = async (req: AuthorizedRequest, res: Response) => {
+export const changeAdminPassword = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const adminId = req.user?.id!;
     const admin = await findAdminById(adminId);
 
     if (!admin) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'admin not found' });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Admin not found" });
     }
-    
+
     const isPasswordCorrect = await admin.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Old password is incorrect" });
     }
 
     await updateAdminPasswordById(adminId, newPassword);
-    return res.status(StatusCodes.OK).json({ message: 'Password updated successfully!' });
-
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(StatusCodes.BAD_REQUEST).json({ message: 'An error occurred while updating the password' });
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "An error occurred while updating the password" });
   }
 };

@@ -18,7 +18,6 @@ import UserRole from "../../types/enums/UserRole";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { set } from "mongoose";
 
 const ChangePassword = () => {
   const [dashboardRoutePath, setDashboardRoutePath] = useState("");
@@ -37,8 +36,10 @@ const ChangePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { authState } = useContext(AuthContext);
-  const theme = useTheme();
-  const navigate = useNavigate();
+
+  // const theme = useTheme();
+  // const navigate = useNavigate();
+
   const getDashBoardPath = () => {
     switch (authState.role) {
       case UserRole.PATIENT:
@@ -117,7 +118,7 @@ const ChangePassword = () => {
         ) {
           setGeneralError(error.response.data.message);
         } else {
-          alert("Something went wrong !");
+          alert("Something went wrong");
         }
       });
   };

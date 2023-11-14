@@ -104,7 +104,7 @@ export const changePharmacistPassword = async (
     if (!pharmacist) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ message: "pharmacist not found" });
+        .json({ message: "Pharmacist not found" });
     }
 
     const isPasswordCorrect = await pharmacist.verifyPassword?.(
@@ -113,7 +113,7 @@ export const changePharmacistPassword = async (
     if (!isPasswordCorrect) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "old password is not correct" });
+        .json({ message: "Old password is incorrect" });
     }
     await updatePharmacistPasswordById(pharmacistId, newPassword);
     return res

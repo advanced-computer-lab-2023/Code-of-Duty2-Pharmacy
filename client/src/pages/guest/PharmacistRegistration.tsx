@@ -35,7 +35,7 @@ const PharmacistRegistrationRequest = () => {
       .then((response) => {
         console.log(response.data);
         alert(
-          "pharmacist registration request done successfully! , the admins will review your request and accept it if you are eligible !"
+          "Pharmacist registration request successful. We will review your request and accept it if you are eligible."
         );
         // window.location.href = "http://localhost:5173/";
       })

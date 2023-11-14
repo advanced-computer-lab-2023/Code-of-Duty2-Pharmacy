@@ -62,14 +62,14 @@ export const changePatientPassword = async (
     if (!patient) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ message: "patient not found" });
+        .json({ message: "Patient not found" });
     }
 
     const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "old password is not correct" });
+        .json({ message: "Old password is incorrect" });
     }
 
     await updatePatientPasswordById(patientId, newPassword);

@@ -6,10 +6,6 @@ import {
   Card,
   CardMedia,
   useTheme,
-  CircularProgress,
-  Container,
-  Divider,
-  Grid,
   LinearProgress,
   Stack,
   TextField,
@@ -71,7 +67,6 @@ const CartReview = () => {
     }
   }, [focusedIndex]);
 
-
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
@@ -99,7 +94,6 @@ const CartReview = () => {
   };
 
   const updateTotalPrice = () => {
-
     const total = cartItems.reduce(
       (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
       0
@@ -212,8 +206,8 @@ const CartReview = () => {
                   item.quantity && (
                   <Alert severity="warning">
                     {cartMedicineQuantites[index] === 0
-                      ? "This medicine is currently out of stock !"
-                      : `Stock has only ${cartMedicineQuantites.availableQuantities[index]} of this medicine !`}
+                      ? "This medicine is currently out of stock"
+                      : `Stock has only ${cartMedicineQuantites.availableQuantities[index]} of this medicine`}
                   </Alert>
                 )}
 
@@ -358,7 +352,6 @@ const CartReview = () => {
             Proceed to Checkout
           </Button>
         )}
-
       </Box>
     </Box>
 
