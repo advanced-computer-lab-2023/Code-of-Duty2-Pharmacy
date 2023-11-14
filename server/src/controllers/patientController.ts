@@ -268,7 +268,6 @@ export const createOrder = async (req: Request, res: Response) => {
       medicines,
       paidAmount,
       paymentMethod,
-      status: "successful", // Set directly to successful as there's no real payment or delivery to process.
     });
 
     const savedOrder = await newOrder.save();
