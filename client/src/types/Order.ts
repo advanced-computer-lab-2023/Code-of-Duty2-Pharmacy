@@ -1,10 +1,4 @@
-import PaymentMethod from "./PaymentMethod";
-import Medicine from "./Medicine"; // import your Medicine interface
-
-interface OrderMedicine {
-  medicineId: Medicine;
-  quantity: number;
-}
+import { PaymentMethod } from ".";
 
 interface Order {
   _id: string;
@@ -12,7 +6,7 @@ interface Order {
   patientName: string;
   patientAddress: string;
   patientMobileNumber: string;
-  medicines: OrderMedicine[];
+  medicines: Array<{ medicineId: string; quantity: number }>;
   paidAmount: number;
   paymentMethod: PaymentMethod;
   timestamp: Date;
