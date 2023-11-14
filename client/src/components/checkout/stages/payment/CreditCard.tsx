@@ -50,12 +50,18 @@ const CreditCard: FC = () => {
       }
       setIsProcessing(false);
       setOpenSnackbar(true);
-    } else {
-      setMessage("Payment Success!");
-      await handleCreateOrder(total + 0, "card");
+      return;
+    }
+
+    try {
+      await handleCreateOrder(total + 0, "card"); // We assume 0 fee for card
       setIsProcessing(false);
       handleNext();
+    } catch (error: any) {
+      setIsProcessing(false);
       setOpenSnackbar(true);
+      if (error.message) setMessage(error.message);
+      else setMessage("An unexpected error occurred.");
     }
   };
 
@@ -96,14 +102,11 @@ const CreditCard: FC = () => {
 
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={4500}
+        autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <AlertRef
-          onClose={() => setOpenSnackbar(false)}
-          severity={message === "Payment Success!" ? "success" : "error"}
-        >
+        <AlertRef onClose={() => setOpenSnackbar(false)} severity={"error"}>
           {message}
         </AlertRef>
       </Snackbar>

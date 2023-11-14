@@ -63,10 +63,12 @@ const Checkout = () => {
     setStripePromise(loadStripe(publishableKey));
   };
 
-  const fetchPaymentIntentClientSecret = async (total: number) => {
+  // TODO: Change the hardcoded amount we're using for fake stripe payments,
+  // and consider that stripe complains about non-integer amounts
+  const fetchPaymentIntentClientSecret = async (_total: number) => {
     const response = await axios.post(
       `${config.API_URL}/payments/create-payment-intent`,
-      { amount: total }
+      { amount: 1000 }
     );
     const clientSecret = response.data.clientSecret;
     setClientSecret(clientSecret);
@@ -136,8 +138,16 @@ const Checkout = () => {
       await axios.delete(`${config.API_URL}/patients/me/cart`);
 
       setOpenSnackbar(true);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw error;
+      }
     }
   };
 

@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-
 import Patient, { IPatientModel } from "../models/patients/Patient";
 import {
   findPatientById,
   updatePatientPasswordById,
 } from "../services/patients";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
-import Order from "../models/orders/Order";
+import Order, { IOrderModel } from "../models/orders/Order";
 import Medicine from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
 import HealthPackage from "../models/health_packages/HealthPackage";
@@ -50,6 +49,7 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+
 export const changePatientPassword = async (
   req: AuthorizedRequest,
   res: Response
@@ -254,11 +254,9 @@ export const createOrder = async (req: Request, res: Response) => {
 
     if (exceedingAvailableQuantityMedicines.length > 0) {
       return res.status(StatusCodes.BAD_REQUEST).json({
-        message: `The following medicines are out of stock or do not have enough available quantity: 
-        ${exceedingAvailableQuantityMedicines.join(
+        message: `The following medicines are out of stock or do not have enough available quantity: ${exceedingAvailableQuantityMedicines.join(
           ", "
-        )}. Please go back to your cart and adjust the 
-        quantities or remove these items.`,
+        )}. Please go back to your cart and adjust the quantities or remove these items`,
       });
     }
 
@@ -384,6 +382,7 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+
 export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
   try {
     const patientId = req.user?.id;
@@ -403,6 +402,71 @@ export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
       .json({ message: "item Removed from cart successfully" });
   } catch (err) {
     return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const getPatientOrders = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const patientId = req.user?.id;
+
+    const orders: IOrderModel[] = await Order.find({
+      patientId: patientId,
+    }).populate({
+      path: "medicines.medicineId",
+      select: "name",
+    });
+
+    if (!orders) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "No orders found" });
+    }
+
+    res.status(StatusCodes.OK).json(orders);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+
+export const cancelOrder = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.orderId;
+
+    // Fetch the order
+    const order: IOrderModel | null = await Order.findById(orderId);
+    if (!order) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Order not found" });
+    }
+
+    // Check the payment method
+    if (order.paymentMethod === "wallet") {
+      // Fetch the patient
+      const patient = await Patient.findById(order.patientId).select("wallet");
+      if (!patient || !patient.wallet) {
+        console.error("Wallet not found for patient:", order.patientId);
+        return;
+      }
+
+      // Update the wallet balance
+      patient.wallet.amount += order.paidAmount;
+      await patient.save();
+    }
+
+    // Delete the order
+    await Order.deleteOne({ _id: orderId });
+
+    res.status(StatusCodes.OK).json(order);
+  } catch (err) {
+    res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }
