@@ -198,7 +198,7 @@ const MedicineCard: React.FC<Props> = ({
         flexDirection="column"
         justifyContent="center"
         alignItems="flex-end"
-        mb={4}
+        style={{ textAlign: "right", marginRight: 12, marginBottom: 12 }}
       >
         {discount > 0 ? (
           <>
