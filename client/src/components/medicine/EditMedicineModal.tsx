@@ -239,14 +239,14 @@ const EditMedicineModal: React.FC<Props> = ({
             </Box>
 
             {imagePreviewUrl && (
-              <Box mt={2} position="relative" width={200}>
+              <Box mt={5} position="relative" width={200}>
                 <img
                   src={imagePreviewUrl}
                   alt="Preview"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
                 <IconButton
-                  style={{ position: "absolute", top: 0, right: 0 }}
+                  style={{ position: "absolute", top: -30, right: -30 }}
                   onClick={handleRemoveImage}
                 >
                   <CloseIcon />

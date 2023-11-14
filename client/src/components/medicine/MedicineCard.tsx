@@ -164,7 +164,7 @@ const MedicineCard: React.FC<Props> = ({
                         <Typography variant="body2" color="text.secondary">
                           Number of Sales
                         </Typography>
-                        <Typography variant="h6">{sales || 0}</Typography>
+                        <Typography variant="body1">{sales || 0}</Typography>
                       </Box>
                     )}
                   </Box>
