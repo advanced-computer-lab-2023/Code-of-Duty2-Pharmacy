@@ -4,10 +4,13 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 
 import { SidebarItem } from "../../types";
 import {
+  createPatientWalletRoute,
   patientDashboardRoute,
+  patientWalletRoute,
   viewMedicinesRoute,
   viewOrdersRoute,
 } from "../routes/patientRoutes";
+import { Wallet } from "@mui/icons-material";
 
 export const patientSidebarItems: SidebarItem[] = [
   {
@@ -24,6 +27,11 @@ export const patientSidebarItems: SidebarItem[] = [
     title: "View Orders",
     href: viewOrdersRoute.path,
     icon: <AssignmentIcon />,
+  },
+  {
+    title: "Wallet",
+    href: patientWalletRoute.path,
+    icon: <Wallet />,
   },
 ];
 export default patientSidebarItems;

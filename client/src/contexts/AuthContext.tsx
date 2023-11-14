@@ -59,6 +59,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         switch (error.response?.status) {
           case HttpStatusCode.Forbidden:
+            if (isAWalletRequest(originalRequest)) {
+              break;
+            }
             navigateToUserDashboardPage();
             break;
 
@@ -168,6 +171,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+function isAWalletRequest(originalRequest: any) {
+  return (originalRequest.url as string).includes("/wallets");
+}
 
 function setAuthorizationHeader(accessToken: string) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;

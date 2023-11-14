@@ -3,9 +3,9 @@ import bcrypt from "mongoose-bcrypt";
 import { IWallet } from "./interfaces/IWallet";
 
 const WalletSchema = new Schema<IWallet>({
-  amount: Number,
-  currency: { type: String, default: "EGP" },
-  pinCode: { type: String, bcrypt: true },
+  amount: { type: Number, required: true },
+  currency: { type: String, default: "EGP", required: true },
+  pinCode: { type: String, bcrypt: true, select: false },
 });
 WalletSchema.plugin(bcrypt, { rounds: 10 });
 

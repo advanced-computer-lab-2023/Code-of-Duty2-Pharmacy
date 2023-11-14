@@ -64,10 +64,11 @@ const Checkout = () => {
     setStripePromise(loadStripe(publishableKey));
   };
 
-  const fetchPaymentIntentClientSecret = async (total: number) => {
+  // TODO: Fix this arbitrary amount
+  const fetchPaymentIntentClientSecret = async (_total: number) => {
     const response = await axios.post(
       `${config.API_URL}/payments/create-payment-intent`,
-      { amount: total }
+      { amount: 1000 }
     );
     const clientSecret = response.data.clientSecret;
     setClientSecret(clientSecret);

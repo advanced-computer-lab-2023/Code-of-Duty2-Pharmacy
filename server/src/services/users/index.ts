@@ -1,3 +1,4 @@
+import { IPatientModel } from "../../models/patients/Patient";
 import Pharmacist from "../../models/pharmacists/Pharmacist";
 import { User } from "../../types/User";
 import { IUserModel } from "../../types/UserModel";
@@ -110,4 +111,17 @@ export const updatePassword = async (
 
   updateUserPassword(user, newPassword);
   return user;
+};
+
+export const findUserByIdAndRole = async (
+  id: string,
+  role: UserRole,
+  elementsToSelect?: any
+): Promise<IPatientModel | null> => {
+  switch (role) {
+    case UserRole.PATIENT:
+      return await findPatientById(id, elementsToSelect);
+    default:
+      throw new Error("Invalid user type");
+  }
 };

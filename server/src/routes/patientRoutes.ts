@@ -11,13 +11,10 @@ import {
   clearCart,
   addToCart,
   deleteCartItem,
-
   changeMedicineQuantity,
   getCartMedicinesStock,
-
   getPatientOrders,
   cancelOrder,
-
 } from "../controllers/patientController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -46,5 +43,30 @@ router.patch(
 router.get("/me/cart-medicines-stock", getCartMedicinesStock);
 
 router.post("/orders", createOrder);
+
+//  --------------------------------------------------------------------------------------------
+
+import {
+  addPatientAWalletHandler,
+  authenticateWalletPatientHandler,
+  doesAPatientHaveAWalletHandler,
+  getPatientWalletHandler,
+  performAWalletTransactionHandler,
+  rechargePatientWalletHandler,
+} from "../controllers/payments/wallets/Patient";
+import { authenticateWalletUser } from "../middlewares/walletAuthentication";
+
+router
+  .get("/wallets/exists", doesAPatientHaveAWalletHandler)
+
+  .post("/validate-wallet-pin-code", authenticateWalletPatientHandler)
+
+  .post("/wallets", addPatientAWalletHandler)
+
+  .get("/wallets", authenticateWalletUser, getPatientWalletHandler)
+
+  .patch("/wallet-transactions", performAWalletTransactionHandler)
+
+  .patch("/wallet-recharge", rechargePatientWalletHandler);
 
 export default router;

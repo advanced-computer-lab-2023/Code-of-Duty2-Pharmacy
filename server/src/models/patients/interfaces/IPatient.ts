@@ -25,5 +25,6 @@ export interface IPatient extends IUserBaseInfo {
     expiryDate: Date;
   };
   verifyPasswordResetOtp?: (otp: string) => Promise<boolean>;
+  verifyWalletPinCode?: (pinCode: string) => Promise<boolean>;
   verifyPassword?: (password: string) => Promise<boolean>;
 }
