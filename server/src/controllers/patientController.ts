@@ -453,6 +453,7 @@ export const changeMedicineQuantity = async (
       .json({ message: (err as Error).message });
   }
 };
+
 export const getCartMedicinesStock = async (
   req: AuthorizedRequest,
   res: Response
@@ -521,7 +522,6 @@ export const cancelOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
 
-    // Fetch the order
     const order: IOrderModel | null = await Order.findById(orderId);
     if (!order) {
       return res
@@ -529,21 +529,28 @@ export const cancelOrder = async (req: Request, res: Response) => {
         .json({ message: "Order not found" });
     }
 
-    // Check the payment method
     if (order.paymentMethod === "wallet") {
-      // Fetch the patient
       const patient = await Patient.findById(order.patientId).select("wallet");
+
       if (!patient || !patient.wallet) {
         console.error("Wallet not found for patient:", order.patientId);
         return;
       }
 
-      // Update the wallet balance
       patient.wallet.amount += order.paidAmount;
       await patient.save();
     }
 
-    // Delete the order
+    for (const item of order.medicines) {
+      const medicine: IMedicineModel | null = await Medicine.findById(
+        item.medicineId
+      );
+      if (medicine) {
+        medicine.availableQuantity += item.quantity;
+        await medicine.save();
+      }
+    }
+
     await Order.deleteOne({ _id: orderId });
 
     res.status(StatusCodes.OK).json(order);
