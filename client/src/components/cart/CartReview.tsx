@@ -1,21 +1,46 @@
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   Card,
   CardMedia,
+  useTheme,
+  CircularProgress,
+  Container,
+  Divider,
+  Grid,
+  LinearProgress,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { checkoutRoute } from "../../data/routes/patientRoutes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import config from "../../config/config";
 
 const CartReview = () => {
+  const theme = useTheme();
+  const textFieldRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<any>([]);
+  const [isEditable, setIsEditable] = useState(
+    new Array(cartItems.length).fill(false)
+  );
+  const [isLoading, setIsLoading] = useState(
+    new Array(cartItems.length).fill(false)
+  );
+  const [textFieldValue, setTextFieldValue] = useState(
+    new Array(cartItems.length).fill(0)
+  );
+
+  const [cartMedicineQuantites, setCartMedicineQuantites] = useState<any>({
+    availableQuantities: [],
+  });
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -23,8 +48,29 @@ const CartReview = () => {
   }, []);
 
   useEffect(() => {
-    handleTotalPrice();
+    updateTotalPrice();
   }, [cartItems]);
+
+  useEffect(() => {
+    fetchCartMedicineQuantities();
+  }, []);
+
+  useEffect(() => {
+    setIsEditable(new Array(cartItems.length).fill(false));
+  }, [cartItems]);
+  useEffect(() => {
+    setIsLoading(new Array(cartItems.length).fill(false));
+  }, [cartItems]);
+  useEffect(() => {
+    setTextFieldValue(cartItems.map((item: any) => item.quantity));
+  }, [cartItems]);
+
+  useEffect(() => {
+    if (focusedIndex !== null && textFieldRefs.current[focusedIndex] !== null) {
+      textFieldRefs.current[focusedIndex]?.focus();
+    }
+  }, [focusedIndex]);
+
 
   const fetchCartItems = async () => {
     try {
@@ -36,27 +82,61 @@ const CartReview = () => {
       console.error("Failed to fetch cart items", error);
     }
   };
+  const fetchCartMedicineQuantities = async () => {
+    // try dummy data
+    // setCartMedicineQuantites([0, 1, 0, 4, 0]);
 
-  const handleTotalPrice = () => {
+    try {
+      const response = await axios.get(
+        `${config.API_URL}/patients/me/cart-medicines-stock`
+      );
+      const availableQuantities = response.data;
+      setCartMedicineQuantites(availableQuantities);
+    } catch (error) {
+      console.error("Failed to fetch cart medicine quantities", error);
+      alert("Failed to fetch cart medicine quantities");
+    }
+  };
+
+  const updateTotalPrice = () => {
+
     const total = cartItems.reduce(
       (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
       0
     );
-
     setTotal(total);
   };
 
-  const handleQuantityChange = (index: number, newQuantity: number) => {
+  const handleQuantityChange = async (index: number, newQuantity: number) => {
     if (newQuantity > 0) {
+      var success = true;
+      const medicineId = cartItems[index].medicineId._id;
+      let newIsLoading = [...isLoading];
+      newIsLoading[index] = true;
+      setIsLoading(newIsLoading);
       try {
-        // const response = axios.patch(
-        //   `${config.API_URL}/patients/me/cart/${cartItems[index]._id}`,
-        //   {
-        //     quantity: newQuantity,
-        //   }
-        // );
-        fetchCartItems();
-        handleTotalPrice();
+        await axios
+          // "/me/cart/:itemId/change-quantity/:newQuantity",
+          .patch(
+            `${config.API_URL}/patients/me/cart/${medicineId}/change-quantity/${newQuantity}`
+          )
+          .catch((error) => {
+            console.log(error);
+            success = false;
+            alert("Failed to change item quantity ! ");
+          })
+          .finally(() => {
+            newIsLoading[index] = false;
+            setIsLoading(newIsLoading);
+            // let newIsEditable = [...isEditable];
+            // newIsEditable[index] = !newIsEditable[index];
+            // setIsEditable(newIsEditable);
+          });
+
+        if (success) {
+          fetchCartItems();
+          updateTotalPrice();
+        }
       } catch (error) {
         console.log((error as any).response.data.message);
       }
@@ -64,12 +144,9 @@ const CartReview = () => {
   };
 
   const handleDelete = async (index: number) => {
-    // console.log("----------------------------------------------------------------" );
-    // console.log("cartItems[index]._id  : ", cartItems[index]._id );
-    // console.log("cartItems[index].medicineId: ", cartItems[index].medicineId);
-    // console.log("cartItems[index].medicineId._id: ", cartItems[index].medicineId._id);
-    // console.log("cartItems[index].medicineId.name: ", cartItems[index].medicineId.name);
-    // console.log("index of item to be deleted : ", index);
+    let newIsLoading = [...isLoading];
+    newIsLoading[index] = true;
+    setIsLoading(newIsLoading);
     await axios
       .delete(
         `${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`
@@ -77,9 +154,15 @@ const CartReview = () => {
       .catch((error) => {
         console.log(error);
         alert("Failed to delete item from cart ! ");
+        return;
+      })
+      .finally(() => {
+        newIsLoading[index] = false;
+        setIsLoading(newIsLoading);
+        return;
       });
     fetchCartItems();
-    handleTotalPrice();
+    updateTotalPrice();
   };
 
   return (
@@ -94,6 +177,15 @@ const CartReview = () => {
       <Typography component="h1" variant="h4" align="center" gutterBottom>
         Review your cart
       </Typography>
+      {cartItems.some(
+        (item: { quantity: number }, index: number) =>
+          item.quantity > cartMedicineQuantites.availableQuantities[index]
+      ) && (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          Some medicines in your cart can't be bought due to stock shortage !
+        </Alert>
+      )}
 
       <Box>
         {cartItems.length === 0 ? (
@@ -102,7 +194,7 @@ const CartReview = () => {
           <Box>
             <Box sx={{ ml: 1, mb: 1 }}>
               <Typography variant="h5">
-                Subtotal ({cartItems.length}{" "}
+                Total ({cartItems.length}{" "}
                 {cartItems.length > 1 ? "items" : "item"}){" : "}
                 <Typography variant="h5" component="span" fontWeight="bold">
                   EGP {total.toFixed(2)}
@@ -112,6 +204,21 @@ const CartReview = () => {
             <hr />
             {cartItems.map((item: any, index: any) => (
               <Card key={index} elevation={0}>
+                {isLoading[index] && <LinearProgress color="success" />}
+                {/* {isLoading[index] && <CircularProgress />} */}
+                {isLoading[index] && <br />}
+
+                {cartMedicineQuantites.availableQuantities[index] <
+                  item.quantity && (
+                  <Alert severity="warning">
+                    {cartMedicineQuantites[index] === 0
+                      ? "This medicine is currently out of stock !"
+                      : `Stock has only ${cartMedicineQuantites.availableQuantities[index]} of this medicine !`}
+                  </Alert>
+                )}
+
+                {/* {isLoading[index] && <CircularProgress />} */}
+
                 <Box
                   display="flex"
                   justifyContent="flex-start"
@@ -140,35 +247,82 @@ const CartReview = () => {
                     <Typography variant="body1" fontWeight={"bold"}>
                       {item.medicineId.name}
                     </Typography>
-                    <Box display="flex" alignItems="center">
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      spacing={2}
+                    >
                       <Typography variant="body1" color="text.secondary">
                         {"Qty "}
                       </Typography>
                       <TextField
                         type="number"
                         InputProps={{
+                          size: "small",
+
                           inputProps: { min: 1 },
+                          readOnly: !isEditable[index],
                           style: {
                             width: "30%",
-                            height: "5vh",
-                            marginLeft: "10px",
+                            // flexGrow: 1,
                           },
                         }}
-                        value={item.quantity}
-                        onChange={(e) =>
-                          handleQuantityChange(index, Number(e.target.value))
+                        // value={item.quantity}
+                        value={
+                          isEditable[index]
+                            ? textFieldValue[index]
+                            : item.quantity
                         }
+                        onChange={(e) => {
+                          let newValue = Number(e.target.value);
+                          if (newValue !== 0) {
+                            let newTextFieldValue = [...textFieldValue];
+                            newTextFieldValue[index] = newValue;
+                            setTextFieldValue(newTextFieldValue);
+                          }
+                        }}
+                        inputRef={(ref) => (textFieldRefs.current[index] = ref)}
                       />
-                    </Box>
+                      <Button
+                        // variant="contained"
+                        // variant="outlined"
+                        color="error"
+                        onClick={() => handleDelete(index)}
+                        // size="small"
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        sx={{
+                          color: isEditable[index]
+                            ? theme.palette.common.white
+                            : theme.palette.mode === "dark"
+                            ? theme.palette.common.white
+                            : theme.palette.common.black,
+                        }}
+                        variant={isEditable[index] ? "contained" : "outlined"}
+                        onClick={() => {
+                          setTextFieldValue(
+                            cartItems.map((item: any) => item.quantity)
+                          );
+                          if (!isEditable[index]) {
+                            setFocusedIndex(null);
+                            setTimeout(() => setFocusedIndex(index), 0);
+                          } else {
+                            handleQuantityChange(index, textFieldValue[index]);
+                          }
+                          let newIsEditable = isEditable.map(() => false);
+                          newIsEditable[index] = !newIsEditable[index];
+                          setIsEditable(newIsEditable);
+                        }}
+                      >
+                        {isEditable[index]
+                          ? "Confirm Quantity"
+                          : "Change Quantity"}
+                      </Button>
+                    </Stack>
                     <br />
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => handleDelete(index)}
-                      size="small"
-                    >
-                      remove item
-                    </Button>
                   </Box>
 
                   <Box p={1} ml="auto">
@@ -189,16 +343,22 @@ const CartReview = () => {
           </Box>
         )}
 
-        <Button
-          onClick={() => {
-            navigate(checkoutRoute.path);
-          }}
-          variant="outlined"
-          disabled={cartItems.length === 0}
-          sx={{ mt: 5 }}
-        >
-          Proceed to Checkout
-        </Button>
+        {cartItems.length > 0 && (
+          <Button
+            onClick={() => {
+              navigate(checkoutRoute.path);
+            }}
+            variant="contained"
+            disabled={cartItems.some(
+              (item: { quantity: number }, index: number) =>
+                item.quantity > cartMedicineQuantites.availableQuantities[index]
+            )}
+            sx={{ mt: 7 }}
+          >
+            Proceed to Checkout
+          </Button>
+        )}
+
       </Box>
     </Box>
 

@@ -6,9 +6,10 @@ import {
   updatePatientPasswordById,
 } from "../services/patients";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
-import Order, { IOrderModel } from "../models/orders/Order";
-import Medicine from "../models/medicines/Medicine";
+import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
+import { STATUS_CODES } from "http";
+import Order, { IOrderModel } from "../models/orders/Order";
 import HealthPackage from "../models/health_packages/HealthPackage";
 
 export const getAllPatients = async (req: Request, res: Response) => {
@@ -49,7 +50,6 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
-
 export const changePatientPassword = async (
   req: AuthorizedRequest,
   res: Response
@@ -405,9 +405,90 @@ export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }
-};
+};export const changeMedicineQuantity = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+    const { medicineId, newQuantity } = req.params;
+    // console.log(req.params);
+    // console.log("medicineId", medicineId);
+    // console.log("newQuantity", newQuantity);
 
-export const getPatientOrders = async (
+    const newQuantityNumber = Number(newQuantity);
+
+    if (isNaN(newQuantityNumber) || newQuantityNumber <= 0) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity must be a positive number" });
+    }
+
+    const patient = await Patient.findOne({
+      _id: userId,
+      "cart.medicineId": medicineId,
+    });
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "didn't find a patient with that item in cart" });
+    }
+
+    const result = await Patient.updateOne(
+      { _id: userId, "cart.medicineId": medicineId },
+      { $set: { "cart.$.quantity": newQuantityNumber } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Medicine not found in cart" });
+    }
+
+    return res.status(StatusCodes.OK).json({ message: "Quantity updated" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+export const getCartMedicinesStock = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    try {
+      const patient = await Patient.findById(userId).populate({
+        path: "cart.medicineId",
+        select: "availableQuantity",
+      });
+
+      if (!patient) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: "Patient not found" });
+      }
+
+      const availableQuantities = patient.cart
+        ? patient.cart.map((item: any) => item.medicineId.availableQuantity)
+        : [];
+
+      return res.status(StatusCodes.OK).json({ availableQuantities });
+    } catch (err) {
+      console.error(err);
+      return res.status(StatusCodes.OK).json({ message: "Server error" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server error" });
+
+
+    export const getPatientOrders = async (
   req: AuthorizedRequest,
   res: Response
 ) => {
@@ -434,7 +515,7 @@ export const getPatientOrders = async (
       .json({ message: (err as Error).message });
   }
 };
-
+    
 export const cancelOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
@@ -469,5 +550,6 @@ export const cancelOrder = async (req: Request, res: Response) => {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
+
   }
 };
