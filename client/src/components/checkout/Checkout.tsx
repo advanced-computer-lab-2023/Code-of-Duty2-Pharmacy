@@ -12,6 +12,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import MuiAlert from "@mui/material/Alert";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Address from "./stages/Address";
 import Payment from "./stages/Payment";
@@ -63,10 +64,12 @@ const Checkout = () => {
     setStripePromise(loadStripe(publishableKey));
   };
 
-  const fetchPaymentIntentClientSecret = async (total: number) => {
+  // TODO: Change the hardcoded amount we're using for fake stripe payments,
+  // and consider that stripe complains about non-integer amounts
+  const fetchPaymentIntentClientSecret = async (_total: number) => {
     const response = await axios.post(
       `${config.API_URL}/payments/create-payment-intent`,
-      { amount: total }
+      { amount: 1000 }
     );
     const clientSecret = response.data.clientSecret;
     setClientSecret(clientSecret);
@@ -110,13 +113,16 @@ const Checkout = () => {
     try {
       const patientResponse = await axios.get(`${config.API_URL}/patients/me`);
       const patientData = patientResponse.data;
-
+      console.log(cartItems);
       const orderData = {
         patientId: patientData._id,
         patientName: patientData.name,
         patientAddress: addressData,
         patientMobileNumber: patientData.mobileNumber,
-        medicines: cartItems,
+        medicines: cartItems.map((item: any) => ({
+          medicineId: item.medicineId._id,
+          quantity: item.quantity,
+        })),
         paidAmount,
         paymentMethod,
       };
@@ -133,8 +139,16 @@ const Checkout = () => {
       await axios.delete(`${config.API_URL}/patients/me/cart`);
 
       setOpenSnackbar(true);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -176,6 +190,14 @@ const Checkout = () => {
       }}
     >
       <Container component="main" sx={{ mb: 4 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(cartReviewRoute.path)}
+          sx={{ mt: 0 }}
+        >
+          Back to Cart
+        </Button>
+
         <Typography component="h1" variant="h4" align="center">
           Checkout
         </Typography>

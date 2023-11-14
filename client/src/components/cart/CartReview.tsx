@@ -54,6 +54,7 @@ const CartReview = () => {
   useEffect(() => {
     fetchCartMedicineQuantities();
   }, []);
+
   useEffect(() => {
     setIsEditable(new Array(cartItems.length).fill(false));
   }, [cartItems]);
@@ -70,10 +71,12 @@ const CartReview = () => {
     }
   }, [focusedIndex]);
 
+
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/patients/me/cart`);
       const cartItems = response.data;
+
       setCartItems(cartItems);
     } catch (error) {
       console.error("Failed to fetch cart items", error);
@@ -96,6 +99,7 @@ const CartReview = () => {
   };
 
   const updateTotalPrice = () => {
+
     const total = cartItems.reduce(
       (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
       0
@@ -143,7 +147,6 @@ const CartReview = () => {
     let newIsLoading = [...isLoading];
     newIsLoading[index] = true;
     setIsLoading(newIsLoading);
-
     await axios
       .delete(
         `${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`
@@ -232,6 +235,7 @@ const CartReview = () => {
                     <CardMedia
                       component="img"
                       sx={{
+                        height: "100%",
                         objectFit: "contain",
                       }}
                       image={item.medicineId.pictureUrl}
@@ -326,9 +330,11 @@ const CartReview = () => {
                       EGP {(item.medicineId.price * item.quantity).toFixed(2)}
                     </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
-                      EGP {item.medicineId.price.toFixed(2)} each
-                    </Typography>
+                    {item.quantity > 1 && (
+                      <Typography variant="body2" color="text.secondary">
+                        EGP {item.medicineId.price.toFixed(2)} each
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
                 <hr />
@@ -352,6 +358,7 @@ const CartReview = () => {
             Proceed to Checkout
           </Button>
         )}
+
       </Box>
     </Box>
 

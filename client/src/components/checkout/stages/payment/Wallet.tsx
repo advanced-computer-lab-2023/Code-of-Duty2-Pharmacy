@@ -1,19 +1,35 @@
-import { Box, Button, Typography } from "@mui/material";
-import { FormEvent, useContext, useState } from "react";
+import { AlertProps, Box, Button, Snackbar, Typography } from "@mui/material";
+import { FormEvent, Ref, forwardRef, useContext, useState } from "react";
+import MuiAlert from "@mui/material/Alert";
 
 import { CheckoutContext } from "../../Checkout";
 
+function Alert(props: AlertProps, ref: Ref<any>) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
+}
+
+const AlertRef = forwardRef(Alert);
+
 const Wallet = () => {
   const { handleNext, handleCreateOrder, total } = useContext(CheckoutContext);
-  // const [message, setMessage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-    await handleCreateOrder(total + 0, "wallet");
-    setIsProcessing(false);
-    handleNext();
+
+    try {
+      await handleCreateOrder(total + 0, "wallet"); // We assume 0 fee for wallet
+      setIsProcessing(false);
+      handleNext();
+    } catch (error: any) {
+      setIsProcessing(false);
+      setOpenSnackbar(true);
+      if (error.message) setMessage(error.message);
+      else setMessage("An unexpected error occurred.");
+    }
   };
 
   return (
@@ -41,6 +57,17 @@ const Wallet = () => {
           </span>
         </Button>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <AlertRef onClose={() => setOpenSnackbar(false)} severity={"error"}>
+          {message}
+        </AlertRef>
+      </Snackbar>
     </form>
   );
 };

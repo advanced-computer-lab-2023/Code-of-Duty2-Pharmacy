@@ -1,4 +1,4 @@
-import PaymentMethod from "./PaymentMethod";
+import { PaymentMethod } from ".";
 
 interface Order {
   _id: string;

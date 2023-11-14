@@ -1,15 +1,14 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HealingIcon from "@mui/icons-material/Healing";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 
 import { SidebarItem } from "../../types";
 import {
   patientDashboardRoute,
   viewMedicinesRoute,
+  viewOrdersRoute,
 } from "../routes/patientRoutes";
 
-/**
- * One href for each patient page route.
- */
 export const patientSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
@@ -17,10 +16,14 @@ export const patientSidebarItems: SidebarItem[] = [
     icon: <DashboardIcon />,
   },
   {
-    title: "View Medicines",
+    title: "Medicines",
     href: viewMedicinesRoute.path,
     icon: <HealingIcon />,
   },
+  {
+    title: "View Orders",
+    href: viewOrdersRoute.path,
+    icon: <AssignmentIcon />,
+  },
 ];
-
 export default patientSidebarItems;

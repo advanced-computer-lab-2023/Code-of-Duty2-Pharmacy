@@ -2,28 +2,82 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
-import Order, { IOrderModel } from "../models/orders/Order";
+import Order from "../models/orders/Order";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
+import Patient from "../models/patients/Patient";
+import HealthPackage from "../models/health_packages/HealthPackage";
 
-export const getAllMedicines = async (req: Request, res: Response) => {
+export const getAllMedicines = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
-    const allMedicines: IMedicineModel[] = await Medicine.find();
-    if (allMedicines.length === 0) {
+    const medicines = await Medicine.find();
+
+    if (medicines.length === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "No medicines found" });
     }
-    res.status(StatusCodes.OK).json(allMedicines);
-  } catch (err) {
+
+    const patientId = req.user?.id;
+
+    const patient = await Patient.findById(patientId).select(
+      "subscribedPackage"
+    );
+
+    let discount = 0;
+    let packageName = "";
+
+    if (
+      patient &&
+      patient.subscribedPackage &&
+      patient.subscribedPackage.status === "subscribed"
+    ) {
+      const healthPackage = await HealthPackage.findById(
+        patient.subscribedPackage.packageId
+      );
+
+      if (healthPackage) {
+        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        packageName = healthPackage.name;
+      }
+    }
+
+    const medicinesWithDiscount = medicines.map((medicine) => {
+      const medicineObject = medicine.toObject();
+      const discountedPrice = (medicine.price * (1 - discount)).toFixed(2);
+      return {
+        ...medicineObject,
+        price: discountedPrice,
+        originalPrice: medicine.price.toFixed(2),
+      };
+    });
+
+    res
+      .status(StatusCodes.OK)
+      .json({ medicines: medicinesWithDiscount, discount, packageName });
+  } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+      .json({ message: (error as Error).message });
   }
 };
 
 export const addMedicine = async (req: Request, res: Response) => {
   try {
     const newMedicineData: IMedicineModel = req.body;
+
+    const existingMedicine = await Medicine.findOne({
+      name: newMedicineData.name,
+    });
+
+    if (existingMedicine) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "A medicine with this name already exists." });
+    }
+
     const newMedicine = new Medicine(newMedicineData);
     const savedMedicine = await newMedicine.save();
     res.status(StatusCodes.CREATED).json(savedMedicine);

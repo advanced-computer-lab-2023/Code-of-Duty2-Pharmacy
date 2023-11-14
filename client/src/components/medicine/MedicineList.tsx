@@ -28,6 +28,8 @@ const MedicineList: React.FC<Props> = ({
   canViewQuantity,
 }) => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [discount, setDiscount] = useState<number>(0);
+  const [packageName, setPackageName] = useState<string>("");
   const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [showMore, setShowMore] = useState(false);
   const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
@@ -53,10 +55,10 @@ const MedicineList: React.FC<Props> = ({
 
   const fetchMedicines = async () => {
     try {
-      const response = await axios.get<Medicine[]>(
-        `${config.API_URL}/medicines`
-      );
-      setMedicines(response.data);
+      const response = await axios.get(`${config.API_URL}/medicines`);
+      setMedicines(response.data.medicines);
+      setDiscount(response.data.discount);
+      setPackageName(response.data.packageName);
     } catch (err) {
       console.error("Error fetching medicines:", err);
     }
@@ -166,12 +168,17 @@ const MedicineList: React.FC<Props> = ({
         />
         {filteredMedicines.length === 0 && <p>No medicines found.</p>}
         <Box
-          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "start" }}
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "stretch",
+          }}
         >
           {filteredMedicines.map((medicine) => (
             <div
               key={medicine._id}
               style={{
+                flex: "1 0 auto",
                 padding: "0rem",
                 boxSizing: "border-box",
                 marginRight: "1rem",
@@ -180,6 +187,8 @@ const MedicineList: React.FC<Props> = ({
             >
               <MedicineCard
                 medicine={medicine}
+                discount={discount}
+                packageName={packageName}
                 canBuy={canBuy}
                 canEdit={canEdit}
                 canViewSales={canViewSales}

@@ -63,6 +63,7 @@ export default function Payment() {
                   <CardMedia
                     component="img"
                     sx={{
+                      height: "100%",
                       objectFit: "contain",
                     }}
                     image={item.medicineId.pictureUrl}
@@ -85,9 +86,11 @@ export default function Payment() {
                     EGP {(item.medicineId.price * item.quantity).toFixed(2)}
                   </Typography>
 
-                  <Typography variant="body2" color="text.secondary">
-                    EGP {item.medicineId.price.toFixed(2)} each
-                  </Typography>
+                  {item.quantity > 1 && (
+                    <Typography variant="body2" color="text.secondary">
+                      EGP {item.medicineId.price.toFixed(2)} each
+                    </Typography>
+                  )}
                 </Box>
               </Box>
             </Card>

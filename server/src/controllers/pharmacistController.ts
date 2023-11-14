@@ -2,8 +2,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Pharmacist, { IPharmacistModel } from "../models/pharmacists/Pharmacist";
-import { SsidChartSharp } from "@mui/icons-material";
-import { findPharmacistById, updatePharmacistPasswordById } from "../services/pharmacists";
+import {
+  findPharmacistById,
+  updatePharmacistPasswordById,
+} from "../services/pharmacists";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import { updatePatientPasswordById } from "../services/patients";
 
@@ -89,24 +91,39 @@ export const searchPharmacists = async (req: Request, res: Response) => {
   }
 };
 
-export const changePharmacistPassword = async (req: AuthorizedRequest, res: Response) => {
+export const changePharmacistPassword = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const pharmacistId = req.user?.id!;
-    const pharmacist = await Pharmacist.findById(pharmacistId).select('+password');
+    const pharmacist = await Pharmacist.findById(pharmacistId).select(
+      "+password"
+    );
     if (!pharmacist) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'pharmacist not found' });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "pharmacist not found" });
     }
-    
-    const isPasswordCorrect = await pharmacist.verifyPassword?.(currentPassword);
+
+    const isPasswordCorrect = await pharmacist.verifyPassword?.(
+      currentPassword
+    );
     if (!isPasswordCorrect) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "old password is not correct" });
     }
     await updatePharmacistPasswordById(pharmacistId, newPassword);
-    return res.status(StatusCodes.OK).json({ message: 'Password updated successfully!' });
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Password updated successfully!" });
   } catch (error) {
-    console.error(error); 
-    res.status(StatusCodes.BAD_REQUEST).json({ message: 'An error occurred while updating the password' });
+    console.error(error);
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "An error occurred while updating the password" });
   }
 };
 
