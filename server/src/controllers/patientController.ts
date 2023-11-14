@@ -405,7 +405,8 @@ export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
   }
-};export const changeMedicineQuantity = async (
+};
+export const changeMedicineQuantity = async (
   req: AuthorizedRequest,
   res: Response
 ) => {
@@ -486,9 +487,10 @@ export const getCartMedicinesStock = async (
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: "Server error" });
+  }
+};
 
-
-    export const getPatientOrders = async (
+export const getPatientOrders = async (
   req: AuthorizedRequest,
   res: Response
 ) => {
@@ -515,7 +517,7 @@ export const getCartMedicinesStock = async (
       .json({ message: (err as Error).message });
   }
 };
-    
+
 export const cancelOrder = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.orderId;
@@ -550,6 +552,5 @@ export const cancelOrder = async (req: Request, res: Response) => {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: (err as Error).message });
-
   }
 };
