@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -18,50 +17,58 @@ const OrderCard: React.FC<OrderCardProps> = ({
   onCancel,
 }) => {
   return (
-    <Card sx={{ width: "500px", m: 3 }}>
+    <Card sx={{ width: "40%", ml: 5, mb: 5 }}>
       <CardContent>
-        <Box sx={{ fontSize: "1.5em" }}>
-          Medicines :
+        <Box>
+          <Typography variant="h6">Order Number</Typography>
+          {order._id}
+
+          <Box mt={2} />
+
+          <Typography variant="h6">Medicines</Typography>
+
           {order.medicines.map((medicine: any, index: any) => {
             return (
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ fontSize: "1.5em" }}
-                key={index}
-              >
-                {medicine?.medicineId.name}
-              </Typography>
+              <Box mb={1} pl={1}>
+                <Typography variant="body1" key={index}>
+                  {medicine?.medicineId.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Qty {medicine?.quantity}
+                </Typography>
+              </Box>
             );
           })}
         </Box>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontSize: "1.5em" }}
-        >
-          Paid Amount : {order.paidAmount}
-        </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontSize: "1.5em" }}
-        >
-          Payment Method : {order.paymentMethod}
-        </Typography>
+        <Box mt={2} />
+
+        <Typography variant="h6">Paid Amount</Typography>
+        {order.paidAmount}
+
+        <Box mt={2} />
+
+        <Typography variant="h6">Payment Method</Typography>
+        {order.paymentMethod.charAt(0).toUpperCase() +
+          order.paymentMethod.slice(1)}
+
+        <Box mt={2} />
+
         {canViewStatus && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ fontSize: "1.5em" }}
-          >
-            Order Status : {order.orderStatus}
-          </Typography>
+          <>
+            <Typography variant="h6">Order Status</Typography>
+            {order.orderStatus.charAt(0).toUpperCase() +
+              order.orderStatus.slice(1)}{" "}
+          </>
         )}
+
+        <br />
+
+        <Box mt={2} />
+
         <Button
-          variant="contained"
-          color="secondary"
+          color="error"
+          variant="outlined"
           onClick={() => onCancel(order._id)}
         >
           Cancel Order

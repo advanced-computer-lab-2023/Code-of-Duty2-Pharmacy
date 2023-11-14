@@ -1,4 +1,12 @@
-import { AlertProps, Box, Button, Snackbar, Typography } from "@mui/material";
+import {
+  AlertProps,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import {
   FormEvent,
   Ref,
@@ -24,22 +32,43 @@ const Wallet = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isCheckingWallet, setIsCheckingWallet] = useState<boolean>(true);
   const [walletExists, setWalletExists] = useState<boolean | null>(null);
+  const [walletAmount, setWalletAmount] = useState<number>(0);
 
   useEffect(() => {
-    const checkWalletExists = async () => {
-      try {
-        const response = await axios.get(
-          `${config.API_URL}/patients/wallets/exists`
-        );
-        setWalletExists(response.data.exists);
-      } catch (error) {
-        console.error("Error:", error);
+    const initializeWallet = async () => {
+      const walletExists = await checkWalletExists();
+      if (walletExists) {
+        fetchWalletAmount();
       }
+      setIsCheckingWallet(false);
     };
 
-    checkWalletExists();
+    initializeWallet();
   }, []);
+
+  const checkWalletExists = async () => {
+    try {
+      const response = await axios.get(
+        `${config.API_URL}/patients/wallets/exists`
+      );
+      setWalletExists(response.data.exists);
+      return response.data.exists;
+    } catch (error) {
+      console.error("Error:", error);
+      return false;
+    }
+  };
+
+  const fetchWalletAmount = async () => {
+    try {
+      const response = await axios.get(`${config.API_URL}/patients/wallets`);
+      setWalletAmount(response.data.amount);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -48,13 +77,9 @@ const Wallet = () => {
     try {
       await handleCreateOrder(total + 0, "wallet"); // We assume 0 fee for wallet
 
-      const walletResponse = await axios.patch(
-        `${config.API_URL}/patients/wallet-transactions`,
-        {
-          transactionAmount: total + 0, // We assume 0 fee for wallet
-        }
-      );
-      console.log(walletResponse.data.message);
+      await axios.patch(`${config.API_URL}/patients/wallet-transactions`, {
+        transactionAmount: total + 0, // We assume 0 fee for wallet
+      });
 
       setIsProcessing(false);
       handleNext();
@@ -78,11 +103,27 @@ const Wallet = () => {
         payment.
       </p>
 
-      {!walletExists && (
-        <p>
+      {!walletExists && !isCheckingWallet && (
+        <MuiAlert severity="error">
           You currently don't have an El7a2ni Wallet. Please create one before
           attempting to pay via wallet.
-        </p>
+        </MuiAlert>
+      )}
+
+      {walletExists && !isCheckingWallet && (
+        <Card sx={{ marginTop: 2, marginBottom: 2 }}>
+          <CardContent>
+            <Typography variant="body1">
+              Current Wallet Balance:{" "}
+              <strong>EGP {walletAmount.toFixed(2)}</strong>
+            </Typography>
+            <Typography variant="body1">
+              Balance After Transaction:{" "}
+              <strong>EGP {(walletAmount - total).toFixed(2)}</strong> (-EGP{" "}
+              {total.toFixed(2)})
+            </Typography>
+          </CardContent>
+        </Card>
       )}
 
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
