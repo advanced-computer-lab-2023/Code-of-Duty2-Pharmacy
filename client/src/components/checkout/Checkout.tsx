@@ -12,6 +12,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import MuiAlert from "@mui/material/Alert";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import Address from "./stages/Address";
 import Payment from "./stages/Payment";
@@ -189,6 +190,14 @@ const Checkout = () => {
       }}
     >
       <Container component="main" sx={{ mb: 4 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(cartReviewRoute.path)}
+          sx={{ mt: 0 }}
+        >
+          Back to Cart
+        </Button>
+
         <Typography component="h1" variant="h4" align="center">
           Checkout
         </Typography>
