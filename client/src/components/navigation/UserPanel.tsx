@@ -153,7 +153,9 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
         <Box sx={{ width: "100%" }} /> // Empty box to reserve space
       )}
       <Box sx={{ marginRight: theme.spacing(1), display: "flex" }}>
-        <UserTray />
+        <IconButton color="inherit" onClick={() => navigate(welcomeRoute.path)}>
+          <PublicIcon />
+        </IconButton>
 
         <Divider
           orientation="vertical"
@@ -161,9 +163,7 @@ const UserPanel: React.FC<Props> = ({ sidebarItems }) => {
           sx={{ bgcolor: "white", width: "1px", mx: 2 }}
         />
 
-        <IconButton color="inherit" onClick={() => navigate(welcomeRoute.path)}>
-          <PublicIcon />
-        </IconButton>
+        <UserTray />
       </Box>
     </Box>
   );

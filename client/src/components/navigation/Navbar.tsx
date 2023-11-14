@@ -61,14 +61,6 @@ const Navbar = () => {
 
           {authState.isAuthenticated ? (
             <Box sx={{ marginLeft: "auto", display: "flex" }}>
-              <UserTray />
-
-              <Divider
-                orientation="vertical"
-                flexItem
-                sx={{ bgcolor: "white", width: "1px", mx: 2 }}
-              />
-
               <IconButton
                 color="inherit"
                 onClick={() => {
@@ -95,6 +87,14 @@ const Navbar = () => {
               >
                 <HomeOutlinedIcon />
               </IconButton>
+
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ bgcolor: "white", width: "1px", mx: 2 }}
+              />
+
+              <UserTray />
             </Box>
           ) : (
             <div style={{ marginLeft: "auto" }}>
