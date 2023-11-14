@@ -2,11 +2,15 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Patient, { IPatientModel } from "../models/patients/Patient";
-import { findPatientById , updatePatientPasswordById } from "../services/patients";
+import {
+  findPatientById,
+  updatePatientPasswordById,
+} from "../services/patients";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Order from "../models/orders/Order";
-import Medicine from "../models/medicines/Medicine";
+import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
+import { STATUS_CODES } from "http";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -46,27 +50,37 @@ export const deletePatient = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
-export const changePatientPassword = async (req: AuthorizedRequest, res: Response) => {
+export const changePatientPassword = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const patientId = req.user?.id!;
     const patient = await findPatientById(patientId);
 
     if (!patient) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'patient not found' });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "patient not found" });
     }
 
     const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'old password is not correct' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "old password is not correct" });
     }
 
     await updatePatientPasswordById(patientId, newPassword);
-    return res.status(StatusCodes.OK).json({ message: 'Password updated successfully!' });
-
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
-    res.status(StatusCodes.BAD_REQUEST).json({ message: 'An error occurred while updating the password' });
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "An error occurred while updating the password" });
   }
 };
 
@@ -301,24 +315,109 @@ export const addToCart = async (req: AuthorizedRequest, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
-export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {            
-  try {                                                                                
-    const patientId = req.user?.id;                                                       
-    const medicineId = req.params.itemId;                                                                                      
-    const result = await Patient.updateOne(                                            
-      { _id: patientId },                                                                 
-      { $pull: { cart: { medicineId: medicineId } } }                                               
-    );                                                                                           
-    if (result.matchedCount === 0) {                                                   
-      return res                                                                        
-        .status(StatusCodes.NOT_FOUND)                                                 
-        .json({ message: "Patient not found" });                                       
-    }                                                                                   
-                                                                                        
-    return res.status(StatusCodes.OK).json({ message: "item Removed from cart successfully" });          
-  } catch (err) {                                                                      
-    return res                                                                          
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)                                        
-      .json({ message: (err as Error).message });                                       
-  }                                                                                     
-}
+export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const patientId = req.user?.id;
+    const medicineId = req.params.itemId;
+    const result = await Patient.updateOne(
+      { _id: patientId },
+      { $pull: { cart: { medicineId: medicineId } } }
+    );
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Patient not found" });
+    }
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "item Removed from cart successfully" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+export const changeMedicineQuantity = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+    const { medicineId, newQuantity } = req.params;
+    // console.log(req.params);
+    // console.log("medicineId", medicineId);
+    // console.log("newQuantity", newQuantity);
+
+    const newQuantityNumber = Number(newQuantity);
+
+    if (isNaN(newQuantityNumber) || newQuantityNumber <= 0) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Quantity must be a positive number" });
+    }
+
+    const patient = await Patient.findOne({
+      _id: userId,
+      "cart.medicineId": medicineId,
+    });
+
+    if (!patient) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "didn't find a patient with that item in cart" });
+    }
+
+    const result = await Patient.updateOne(
+      { _id: userId, "cart.medicineId": medicineId },
+      { $set: { "cart.$.quantity": newQuantityNumber } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Medicine not found in cart" });
+    }
+
+    return res.status(StatusCodes.OK).json({ message: "Quantity updated" });
+  } catch (err) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+export const getCartMedicinesStock = async (
+  req: AuthorizedRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user?.id;
+
+    try {
+      const patient = await Patient.findById(userId).populate({
+        path: "cart.medicineId",
+        select: "availableQuantity",
+      });
+
+      if (!patient) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: "Patient not found" });
+      }
+
+      const availableQuantities = patient.cart
+        ? patient.cart.map((item: any) => item.medicineId.availableQuantity)
+        : [];
+
+      return res.status(StatusCodes.OK).json({ availableQuantities });
+    } catch (err) {
+      console.error(err);
+      return res.status(StatusCodes.OK).json({ message: "Server error" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Server error" });
+  }
+};
