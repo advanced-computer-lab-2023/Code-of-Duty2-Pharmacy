@@ -98,7 +98,8 @@ const MedicineCard: React.FC<Props> = ({
         flexDirection: "column",
         justifyContent: "space-between",
         height: "100%",
-        maxWidth: "325px",
+        minWidth: "300px",
+        maxWidth: "300px",
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
