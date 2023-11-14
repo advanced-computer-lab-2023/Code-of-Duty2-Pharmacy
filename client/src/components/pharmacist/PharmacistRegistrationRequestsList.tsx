@@ -119,7 +119,7 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
             </Button>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Name: </strong> {request.name}{" "}
-              <span style={{ color: "#949494" }}>, ({request.username})</span>
+              <span style={{ color: "#949494" }}>({request.username})</span>
             </p>
             <p style={{ margin: "0", fontSize: "1.2rem" }}>
               <strong>Email:</strong> {request.email}
