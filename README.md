@@ -135,6 +135,17 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 
 ## Authors 🖋️
 
+From the **_Pharmacy_** Team
+
+- [@MoTammaa](https://github.com/MoTammaa)
+- [@hosain-ghoraba](https://github.com/hosain-ghoraba)
+- [@Ahmedsherif74](https://github.com/Ahmedsherif74)
+- [@mahmoudaboueleneen](https://github.com/mahmoudaboueleneen)
+
+From the **_Clinic_** Team
+
+- [@AbdelrahmanRewaished](https://github.com/AbdelrahmanRewaished)
+
 ## Contribute 👥
 
 Contributions are always welcome!
@@ -145,6 +156,6 @@ Please adhere to this project's `code of conduct`.
 
 ## Credits 🙏
 
-- [Linear Depression Project](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
+- [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
 
 ## License 📄
