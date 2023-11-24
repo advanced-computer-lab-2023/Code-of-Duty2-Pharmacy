@@ -1,29 +1,31 @@
 # El7a2ni Pharmacy
 
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+<!-- ![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png) -->
 
 A web application which allows **_Pharmacists_** to manage their medicine stock, **_Patients_** to order medications, and **_Admins_** to manage the users and system as a whole.
 
 It is part of the larger _El7a2ni Healthcare Platform_, which also includes the [El7a2ni Clinic](https://github.com/advanced-computer-lab-2023/Code-of-Duty2-Clinic) web application.
 
+<!--
 ## Table of Contents
 
-1. [Badges](#badges-🎖️)
-1. [Motivation](#motivation-💡)
-1. [Build Status](#build-status-🏗️)
-1. [Code Style](#code-style-💻)
-1. [Screenshots](#screenshots-📸)
-1. [Tech/Framework used](#techframework-used-🛠️)
-1. [Features](#features-✨)
-1. [Code Examples](#code-examples-📝)
-1. [Installation](#installation-⬇️)
-1. [API Reference](#api-reference-📚)
-1. [Tests](#tests-✔️)
-1. [How to Use?](#how-to-use-❓)
-1. [Authors](#authors-🖋️)
-1. [Contribute](#contribute-👥)
-1. [Credits](#credits-🙏)
-1. [License](#license-📄)
+- [Badges](#badges-🎖️)
+- [Motivation](#motivation-💡)
+- [Build Status](#build-status-🏗️)
+- [Code Style](#code-style-💻)
+- [Screenshots](#screenshots-📸)
+- [Tech/Framework used](#techframework-used-🛠️)
+- [Features](#features-✨)
+- [Code Examples](#code-examples-📝)
+- [Installation](#installation-⬇️)
+- [API Reference](#api-reference-📚)
+- [Tests](#tests-✔️)
+- [How to Use](#how-to-use-❓)
+- [Authors](#authors-🖋️)
+- [Contribute](#contribute-👥)
+- [Credits](#credits-🙏)
+- [License](#license-📄)
+-->
 
 ## Badges 🎖️
 
