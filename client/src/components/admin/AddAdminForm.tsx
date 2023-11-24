@@ -11,21 +11,17 @@ const AddAdminForm = () => {
 
     const requestBody = {
       username,
-      password,
+      password
     };
 
     axios
       .post(`${config.API_URL}/admins`, requestBody)
-      .then((response) => {
+      .then((_response) => {
         alert("Admin added successfully!");
       })
       .catch((error) => {
         console.error(error);
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message === "username already exists"
-        ) {
+        if (error.response && error.response.data && error.response.data.message === "username already exists") {
           alert("An admin with this username already exists!");
         } else {
           alert("An error occurred while adding the admin.");
