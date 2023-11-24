@@ -125,11 +125,24 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 
 ## Code Examples 📝
 
+<details>
+    <summary>
+    Print Hello World
+    </summary>
+
+```typescript
+console.log("Hello, World");
+```
+
+</details>
+
 ## Installation ⬇️
 
 ## API reference 📚
 
 ## Tests ✔️
+
+There are currently no tests in place for this software.
 
 ## How to Use ❓
 
