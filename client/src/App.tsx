@@ -31,47 +31,29 @@ const App = () => {
 
       <Route element={<PublicRoutesHandler />}>
         {generalRoutes.map((route, index) => {
-          return (
-            <Route key={index} path={route.path} element={route.element} />
-          );
+          return <Route key={index} path={route.path} element={route.element} />;
         })}
 
         {guestRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<Layout>{route.element}</Layout>}
-          />
+          <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
         ))}
       </Route>
 
       <Route element={<ProtectedRoutesHandler role={UserRole.ADMIN} />}>
         {adminRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<Layout>{route.element}</Layout>}
-          />
+          <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
         ))}
       </Route>
 
       <Route element={<ProtectedRoutesHandler role={UserRole.PATIENT} />}>
         {patientRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<Layout>{route.element}</Layout>}
-          />
+          <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
         ))}
       </Route>
 
       <Route element={<ProtectedRoutesHandler role={UserRole.PHARMACIST} />}>
         {pharmacistRoutes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<Layout>{route.element}</Layout>}
-          />
+          <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
         ))}
       </Route>
     </Routes>
