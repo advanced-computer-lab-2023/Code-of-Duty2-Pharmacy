@@ -152,7 +152,7 @@ Contributions are always welcome!
 
 See `CONTRIBUTING.md` for ways to get started.
 
-Please adhere to this project's `code of conduct`.
+Please adhere to this software's `Code of Conduct`.
 
 ## Credits 🙏
 
