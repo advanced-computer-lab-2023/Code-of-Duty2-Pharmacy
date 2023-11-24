@@ -50,6 +50,7 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 - The project is currently in development.
 - A CI/CD pipeline needs to be implemented.
 - Testing needs to be implemented for the backend using Jest.
+- Authorization middleware needs to be added to the API endpoints.
 
 ## Code Style 💻
 
