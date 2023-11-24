@@ -159,3 +159,5 @@ Please adhere to this software's `Code of Conduct`.
 - [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
 
 ## License 📄
+
+This software currently has no license in place.
