@@ -31,7 +31,7 @@ app.get("/", (_, res) => {
   res.send("Server Online!");
 });
 
-app.listen(config.server.port, async () => {
+app.listen(config.server.port, async () => { 
   console.log(`Server listening on port ${config.server.port}`);
 });
 
