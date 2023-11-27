@@ -16,11 +16,12 @@ import config from "../../config/config";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserRole from "../../types/enums/UserRole";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
+import { patientDashboardRoute } from '../../data/routes/patientRoutes';
+import { adminDashboardRoute } from '../../data/routes/adminRoutes';
+import { pharmacistDashboardRoute } from '../../data/routes/pharmacistRoutes';
+
 
 const ChangePassword = () => {
-  const [dashboardRoutePath, setDashboardRoutePath] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -37,21 +38,32 @@ const ChangePassword = () => {
 
   const { authState } = useContext(AuthContext);
 
-  // const theme = useTheme();
-  // const navigate = useNavigate();
-
   const getDashBoardPath = () => {
     switch (authState.role) {
       case UserRole.PATIENT:
-        return "/patient/dashboard";
+        return patientDashboardRoute.path;
       case UserRole.ADMIN:
-        return "/admin/dashboard";
+        return adminDashboardRoute.path;
       case UserRole.PHARMACIST:
-        return "/pharmacist/dashboard";
+        return pharmacistDashboardRoute.path;
       default:
         return "/";
+      
     }
   };
+  const getRole = () => {
+    switch (authState.role) {
+      case UserRole.PATIENT:
+        return "patients";
+      case UserRole.ADMIN:
+        return "admins";
+      case UserRole.PHARMACIST:
+        return "pharmacists";
+      default:
+        return "";
+    }
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -85,25 +97,20 @@ const ChangePassword = () => {
       return;
     }
 
-    var role = "";
-    if (authState.role === UserRole.PATIENT) {
-      role = "patients";
-      setDashboardRoutePath("/patient/dashboard");
-    } else if (authState.role === UserRole.ADMIN) {
-      role = "admins";
-      setDashboardRoutePath("/admin/dashboard");
-    } else if (authState.role === UserRole.PHARMACIST) {
-      role = "pharmacists";
-      setDashboardRoutePath("/pharmacist/dashboard");
-    }
+    // const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // if (!strongPasswordRegex.test(newPassword)) {
+    //   setNewPasswordError("Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.");
+    //   return; 
+    // }
 
-    console.log(dashboardRoutePath);
 
     const requestBody = {
       currentPassword: oldPassword,
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     };
+
+    const role = getRole();
     axios
       .post(`${config.API_URL}/${role}/change-password`, requestBody)
       .then(() => {
@@ -126,14 +133,6 @@ const ChangePassword = () => {
   return (
     <div>
       <Container maxWidth="xs">
-        {/* Your code here */}
-        {/* display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        height="60vh"
-        // width="100%" */}
-        {/* // style={{ transform: "scale(1.2)" }} */}
         {generalError && <Alert severity="error">{generalError} !</Alert>}{" "}
         {success && (
           <Alert severity="success">
