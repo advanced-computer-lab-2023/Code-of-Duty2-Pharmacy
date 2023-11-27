@@ -96,12 +96,12 @@ const ChangePassword = () => {
       setGeneralError("New password cannot be the same as old password.");
       return;
     }
-
-    // const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    // if (!strongPasswordRegex.test(newPassword)) {
-    //   setNewPasswordError("Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.");
-    //   return; 
-    // }
+    
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!strongPasswordRegex.test(newPassword)) {
+      setNewPasswordError("Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.");
+      return; 
+    }
 
 
     const requestBody = {
