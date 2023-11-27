@@ -4,6 +4,7 @@ import PharmacistViewMedicinesPage from "../../pages/pharmacist/PharmacistViewMe
 import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage"; 
 import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
 import PharmacistAdditionalInfo from "../../pages/pharmacist/PharmacistAdditionalInfo";
+import PharmacistChangePasswordPage from "../../pages/pharmacist/PharmacistChangePasswordPage";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
@@ -22,7 +23,7 @@ export const addMedicineRoute: Route = {
 
 export const changePharmacistPasswordsRoute: Route = {
   path: "/pharmacist/change-password",
-  element: <ChangePasswordPage />,
+  element: <PharmacistChangePasswordPage />,
  };
 export const PharmacistAdditionalInfoRoute: Route = {
   path: "/pharmacist/complete-additional-info",

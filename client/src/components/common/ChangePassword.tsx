@@ -16,12 +16,15 @@ import config from "../../config/config";
 import { AuthContext } from "../../contexts/AuthContext";
 import UserRole from "../../types/enums/UserRole";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { patientDashboardRoute } from '../../data/routes/patientRoutes';
-import { adminDashboardRoute } from '../../data/routes/adminRoutes';
-import { pharmacistDashboardRoute } from '../../data/routes/pharmacistRoutes';
+// import { patientDashboardRoute } from '../../data/routes/patientRoutes';
+// import { adminDashboardRoute } from '../../data/routes/adminRoutes';
+// import { pharmacistDashboardRoute } from '../../data/routes/pharmacistRoutes';
 
+interface ChangePasswordProps {
+  dashBoardpath: string;
+}
 
-const ChangePassword = () => {
+const ChangePassword: React.FC<ChangePasswordProps> = ({ dashBoardpath }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -38,19 +41,19 @@ const ChangePassword = () => {
 
   const { authState } = useContext(AuthContext);
 
-  const getDashBoardPath = () => {
-    switch (authState.role) {
-      case UserRole.PATIENT:
-        return patientDashboardRoute.path;
-      case UserRole.ADMIN:
-        return adminDashboardRoute.path;
-      case UserRole.PHARMACIST:
-        return pharmacistDashboardRoute.path;
-      default:
-        return "/";
-      
-    }
-  };
+  // const getDashBoardPath = () => {
+  //   switch (authState.role) {
+  //     case UserRole.PATIENT:
+  //       return patientDashboardRoute.path;
+  //     case UserRole.ADMIN:
+  //       return adminDashboardRoute.path;
+  //     case UserRole.PHARMACIST:
+  //       return pharmacistDashboardRoute.path;
+  //     default:
+  //       return "/";
+  //   }
+            
+  // };
   const getRole = () => {
     switch (authState.role) {
       case UserRole.PATIENT:
@@ -138,7 +141,7 @@ const ChangePassword = () => {
           <Alert severity="success">
             Password changed successfully !
             <Link
-              to={getDashBoardPath()}
+              to={dashBoardpath}
               style={{
                 // color: theme.palette.primary.main,
                 display: "inline-block",

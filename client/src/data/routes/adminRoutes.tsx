@@ -7,6 +7,7 @@ import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
 import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
 import AdminViewPharmacistRegisterationRequest from "../../pages/admin/AdminViewPharmacistRegisterationRequest";
+import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
@@ -44,7 +45,7 @@ export const viewPharmacistRequestRoute: Route = {
 
 export const changeAdminPasswordsRoute: Route = {
   path: "/admin/change-password",
-  element: <ChangePasswordPage />,
+  element: <AdminChangePasswordPage />,
 };
 
 const adminRoutes: Route[] = [

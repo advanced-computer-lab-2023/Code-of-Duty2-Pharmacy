@@ -7,6 +7,7 @@ import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
 import { Route } from "../../types";
 import ViewWallet from "../../pages/wallet/ViewWallet";
 import CreateWallet from "../../pages/wallet/CreateWallet";
+import PatientChangePasswordPage from "../../pages/patient/PatientChangePasswordPage";
 
 export const patientDashboardRoute: Route = {
   path: "/patient/dashboard",
@@ -35,7 +36,7 @@ export const checkoutRoute: Route = {
 
 export const changePatientPasswordsRoute: Route = {
   path: "/patient/change-password",
-  element: <ChangePasswordPage />,
+  element: <PatientChangePasswordPage />,
 };
 
 export const patientWalletRoute: Route = {
