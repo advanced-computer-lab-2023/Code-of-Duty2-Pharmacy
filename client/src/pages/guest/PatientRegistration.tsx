@@ -1,12 +1,33 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from "@mui/material";
 import axios from "axios";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 import config from "../../config/config";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
 import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { patientLoginRoute } from "../../data/routes/loginRoutes";
 
 const PatientRegistration = () => {
   const navigate = useNavigate();
@@ -17,18 +38,106 @@ const PatientRegistration = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState<dayjs.Dayjs | null>(null);
   const [gender, setGender] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [emergencyContact, setEmergencyContact] = useState({
-    fullname: "",
-    mobileNumber: "",
-    relationToPatient: "",
-  });
+  const [emergencyContactFullName, setEmergencyContactFullName] = useState("");
+  const [emergencyContactMobileNumber, setEmergencyContactMobileNumber] = useState("");
+  const [emergencyContactRelation, setEmergencyContactRelation] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [isVerifyingNow, setIsVerifyingNow] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [usernameError, setUsernameError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [dateOfBirthErrorMessage, setDateOfBirthErrorMessage] = useState("");
+  const [genderError, setGenderError] = useState(false);
+  const [mobileNumberErrorMessage, setMobileNumberErrorMessage] = useState("");
+  const [emergencyContactNameError, setEmergencyContactNameError] = useState(false);
+  const [emergencyContactMobileNumberErrorMessage, setEmergencyContactMobileNumberErrorMessage] = useState("");
+  const [emergencyContactRelationError, setEmergencyContactRelationError] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    setUsernameError(false);
+    setNameError(false);
+    setEmailError(false);
+    setPasswordError(false);
+    setDateOfBirthErrorMessage("");
+    setGenderError(false);
+    setMobileNumberErrorMessage("");
+    setEmergencyContactNameError(false);
+    setEmergencyContactMobileNumberErrorMessage("");
+    setEmergencyContactRelationError(false);
+    setIsVerifyingNow(false);
+
+    if (username === "") {
+      setUsernameError(true);
+      return;
+    }
+    if (name === "") {
+      setNameError(true);
+      return;
+    }
+    if (email === "") {
+      setEmailError(true);
+      return;
+    }
+    if (password === "") {
+      setPasswordError(true);
+      return;
+    }
+    const birthDateobject = dateOfBirth?.toDate();
+    // print day month and year
+    const birthDate = birthDateobject?.getDate();
+    const birthMonth = birthDateobject?.getMonth();
+    const birthYear = birthDateobject?.getFullYear();
+    console.log("birthDate: " + birthDate);
+    console.log("birthMonth: " + birthMonth);
+    console.log("birthYear: " + birthYear);
+    // ensure 3 values are not undefined
+    if (birthDate === undefined || birthMonth === undefined || birthYear === undefined) {
+      setDateOfBirthErrorMessage("Date of birth is required");
+      return;
+    }
+    // ensure no nan values
+    if (isNaN(birthDate) || isNaN(birthMonth) || isNaN(birthYear)) {
+      setDateOfBirthErrorMessage("Please enter a valid date of birth");
+      return;
+    }
+
+    if (gender === "") {
+      setGenderError(true);
+      return;
+    }
+    if (mobileNumber === "") {
+      setMobileNumberErrorMessage("Mobile number is required");
+      return;
+    } else if (mobileNumber.length != 11) {
+      setMobileNumberErrorMessage("Mobile number must be 11 digits");
+      return;
+    }
+
+    if (emergencyContactFullName === "") {
+      setEmergencyContactNameError(true);
+      return;
+    }
+    if (emergencyContactMobileNumber === "") {
+      setEmergencyContactMobileNumberErrorMessage("Emergency Contact Mobile Number is required");
+      return;
+    } else if (emergencyContactMobileNumber.length != 11) {
+      setEmergencyContactMobileNumberErrorMessage("Emergency Contact Mobile Number must be 11 digits");
+      return;
+    }
+
+    if (emergencyContactRelation === "") {
+      setEmergencyContactRelationError(true);
+      return;
+    }
 
     const requestBody = {
       username,
@@ -38,18 +147,36 @@ const PatientRegistration = () => {
       dateOfBirth,
       gender,
       mobileNumber,
-      emergencyContact,
+      emergencyContact: {
+        fullname: emergencyContactFullName,
+        mobileNumber: emergencyContactMobileNumber,
+        relationToPatient: emergencyContactRelation
+      }
     };
 
     try {
-      await axios.post(`${config.API_URL}/register/patient`, requestBody);
-
-      // Start loading when register succeeded but now attempting to login
-      setLoading(true);
+      setIsVerifyingNow(true);
+      await axios
+        .post(`${config.API_URL}/register/patient`, requestBody)
+        .then(() => {
+          // Start loading when register succeeded but now attempting to login
+          setLoading(true);
+        })
+        .catch((error) => {
+          if (error.response.data.message) {
+            alert(error.response.data.message);
+          } else {
+            alert("An error occurred while registering the patient ! ");
+          }
+          throw error;
+        })
+        .finally(() => {
+          setIsVerifyingNow(false);
+        });
 
       const response = await axios.post(`${config.API_URL}/auth/login`, {
         username,
-        password,
+        password
       });
 
       const data = response.data;
@@ -67,7 +194,7 @@ const PatientRegistration = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "100vh"
         }}
       >
         <CircularProgress />
@@ -76,143 +203,193 @@ const PatientRegistration = () => {
   }
 
   return (
-    <>
-      {/* TODO: Fix this file's styling, form validation and error handling */}
-      <Button
-        onClick={() => navigate(welcomeRoute.path)}
-        sx={{ mb: 5, fontSize: "1.2rem" }}
-      >
+    <div>
+      <Button onClick={() => navigate(welcomeRoute.path)} sx={{ mb: 5, fontSize: "1.2rem" }}>
         Back to Home
       </Button>
-      <form onSubmit={handleSubmit}>
-        <h1>Patient Registration</h1>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
+      <Container maxWidth="sm" sx={{ marginTop: "-4rem" }}>
+        <form onSubmit={handleSubmit}>
+          <h1 style={{ textAlign: "center" }}>Registration</h1>
+          <TextField
+            margin="normal"
+            fullWidth
             id="username"
+            label="Username"
+            name="username"
+            placeholder="Enter username"
+            autoComplete="username"
+            autoFocus
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            required
+            onChange={(e) => setUsername(e.target.value)}
+            error={usernameError}
+            helperText={usernameError ? "Username is required" : ""}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
+          <TextField
+            margin="normal"
+            fullWidth
             id="name"
+            label="Name"
+            name="name"
+            placeholder="Enter name"
+            autoComplete="name"
+            // autoFocus
             value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
+            onChange={(e) => setName(e.target.value)}
+            error={nameError}
+            helperText={nameError ? "Name is required" : ""}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="email">Email:</label>
-          <input
+          <TextField
             type="email"
+            margin="normal"
+            fullWidth
             id="email"
+            label="Email"
+            name="email"
+            placeholder="Enter email"
+            autoComplete="email"
+            // autoFocus
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
+            onChange={(e) => setEmail(e.target.value)}
+            error={emailError}
+            helperText={emailError ? "Email is required" : ""}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
+          <TextField
+            fullWidth
+            label="Password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
+            onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+            error={passwordError}
+            helperText={passwordError ? "Password is required" : ""}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword(!showPassword)}
+                    onMouseDown={(event) => event.preventDefault()}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="dateOfBirth">Date of Birth:</label>
-          <input
-            type="date"
-            id="dateOfBirth"
-            value={dateOfBirth}
-            onChange={(event) => setDateOfBirth(event.target.value)}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="gender">Gender:</label>
-          <select
-            id="gender"
-            value={gender}
-            onChange={(event) => setGender(event.target.value)}
-            required
-          >
-            <option value="">Select a gender</option>
-            <option value="male">male</option>
-            <option value="female">female</option>
-          </select>
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="mobileNumber">Mobile Number:</label>
-          <input
-            type="tel"
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              disableFuture
+              label="Date of Birth"
+              value={dateOfBirth}
+              onChange={(newValue) => setDateOfBirth(newValue)}
+              slotProps={{
+                textField: {
+                  fullWidth: true,
+                  margin: "normal",
+                  helperText: dateOfBirthErrorMessage !== "" ? dateOfBirthErrorMessage : "",
+                  error: dateOfBirthErrorMessage !== "" ? true : false
+                }
+              }}
+              // onError={() => {setDateOfBirthError(true);} }
+            />
+          </LocalizationProvider>
+
+          <FormControl fullWidth margin="normal" error={genderError}>
+            <InputLabel id="demo-simple-select-label"> Gender </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label="gender"
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              error={genderError}
+              // helperText={genderError ? "Gender is required" : ""}
+            >
+              <MenuItem value={"male"}>Male</MenuItem>
+              <MenuItem value={"female"}>Female</MenuItem>
+            </Select>
+            {genderError && <FormHelperText>Gender is required</FormHelperText>}
+          </FormControl>
+          <TextField
+            margin="normal"
+            fullWidth
             id="mobileNumber"
+            label="Mobile number"
+            name="mobileNumber"
+            placeholder="Enter Mobile number"
+            autoComplete="mobileNumber"
+            // autoFocus
             value={mobileNumber}
-            onChange={(event) => setMobileNumber(event.target.value)}
-            required
+            onChange={(e) => setMobileNumber(e.target.value)}
+            error={mobileNumberErrorMessage !== "" ? true : false}
+            helperText={mobileNumberErrorMessage !== "" ? mobileNumberErrorMessage : ""}
+            onKeyPress={(e) => {
+              if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="emergencyContactFullName">
-            Emergency Contact Full Name:
-          </label>
-          <input
-            type="text"
+          <TextField
+            margin="normal"
+            fullWidth
             id="emergencyContactFullName"
-            value={emergencyContact.fullname}
-            onChange={(event) =>
-              setEmergencyContact({
-                ...emergencyContact,
-                fullname: event.target.value,
-              })
-            }
-            required
+            label="Emergency Contact Full Name"
+            name="emergencyContactFullName"
+            placeholder="Enter Emergency Contact Full Name"
+            autoComplete="emergencyContactFullName"
+            // autoFocus
+            value={emergencyContactFullName}
+            onChange={(e) => setEmergencyContactFullName(e.target.value)}
+            error={emergencyContactNameError}
+            helperText={emergencyContactNameError ? "Emergency Contact Full Name is required" : ""}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="emergencyContactMobileNumber">
-            Emergency Contact Mobile Number:
-          </label>
-          <input
-            type="tel"
+          <TextField
+            margin="normal"
+            fullWidth
             id="emergencyContactMobileNumber"
-            value={emergencyContact.mobileNumber}
-            onChange={(event) =>
-              setEmergencyContact({
-                ...emergencyContact,
-                mobileNumber: event.target.value,
-              })
-            }
-            required
+            label="Emergency Contact Mobile Number"
+            name="emergencyContactMobileNumber"
+            placeholder="Enter Emergency Contact Mobile Number"
+            autoComplete="emergencyContactMobileNumber"
+            // autoFocus
+            value={emergencyContactMobileNumber}
+            onChange={(e) => setEmergencyContactMobileNumber(e.target.value)}
+            error={emergencyContactMobileNumberErrorMessage !== "" ? true : false}
+            helperText={emergencyContactMobileNumberErrorMessage !== "" ? emergencyContactMobileNumberErrorMessage : ""}
+            onKeyPress={(e) => {
+              if (!/[0-9]/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
           />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label htmlFor="emergencyContactRelation">
-            Emergency Contact Relation:
-          </label>
-          <input
-            type="text"
+          <TextField
+            margin="normal"
+            fullWidth
             id="emergencyContactRelation"
-            value={emergencyContact.relationToPatient}
-            onChange={(event) =>
-              setEmergencyContact({
-                ...emergencyContact,
-                relationToPatient: event.target.value,
-              })
-            }
-            required
+            label="Emergency Contact Relation"
+            name="emergencyContactRelation"
+            placeholder="Enter Emergency Contact Relation"
+            autoComplete="emergencyContactRelation"
+            // autoFocus
+            value={emergencyContactRelation}
+            onChange={(e) => setEmergencyContactRelation(e.target.value)}
+            error={emergencyContactRelationError}
+            helperText={emergencyContactRelationError ? "Emergency Contact Relation is required" : ""}
           />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-    </>
+          <Box display="flex" justifyContent="center" sx={{ mt: 2 }}>
+            <LoadingButton type="submit" fullWidth variant="contained" size="large" loading={isVerifyingNow}>
+              Register
+            </LoadingButton>
+          </Box>
+        </form>
+
+        <Box display="flex" justifyContent="center" sx={{ mt: 2 }}>
+          <NavLink to={patientLoginRoute.path} style={{ color: "inherit" }}>
+            Already have an account? Login here
+          </NavLink>
+        </Box>
+      </Container>
+    </div>
   );
 };
 

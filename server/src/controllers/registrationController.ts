@@ -39,7 +39,7 @@ export const registerPatient = async (req: Request, res: Response) => {
     ) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Username already taken" });
+        .json({ message: "Username already taken by another user !" });
     }
 
     const existingMail = await Patient.findOne({ email });
@@ -47,7 +47,7 @@ export const registerPatient = async (req: Request, res: Response) => {
     if (existingMail) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Email already taken by another patient" });
+        .json({ message: "Email already taken by another patient !" });
     }
 
     const newPatient = new Patient({
