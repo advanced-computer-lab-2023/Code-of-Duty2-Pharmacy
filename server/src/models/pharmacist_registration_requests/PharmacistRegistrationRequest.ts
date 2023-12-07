@@ -10,7 +10,7 @@ export const PharmacistRegistrationRequestSchema =
   new Schema<IPharmacistRegistrationRequestModel>(
     {
       username: { type: String, required: true, unique: true },
-      password: { type: String, required: true },
+      password: { type: String, required: true , bcrypt: true},
       email: {
         type: String,
         validate: [isEmail, "invalid email"],
@@ -29,6 +29,8 @@ export const PharmacistRegistrationRequestSchema =
     },
     { timestamps: true }
   );
+
+PharmacistRegistrationRequestSchema.plugin(require("mongoose-bcrypt"), { rounds: 10 });
 
 export default mongoose.model<IPharmacistRegistrationRequestModel>(
   "PharmacistRegistrationRequest",

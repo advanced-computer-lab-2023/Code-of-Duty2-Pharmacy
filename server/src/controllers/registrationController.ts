@@ -89,18 +89,20 @@ export const registerPharmacist = async (req: Request, res: Response) => {
 
     const existingAdmin = await Admin.findOne({ username });
     const existingPharmacist = await Pharmacist.findOne({ username });
+    const existingPharmacistRegistrationRequest = await PharmacistRegistrationRequest.findOne({username});
     const existingPatient = await Patient.findOne({ username });
     const existingDoctor = await Doctor.findOne({ username });
 
     if (
       existingAdmin ||
       existingPharmacist ||
+      existingPharmacistRegistrationRequest ||
       existingPatient ||
       existingDoctor
     ) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Username already taken" });
+        .json({ message: "Username already taken !" });
     }
 
     const existingMail = await PharmacistRegistrationRequest.findOne({ email });
@@ -108,7 +110,7 @@ export const registerPharmacist = async (req: Request, res: Response) => {
     if (existingMail) {
       return res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Email already taken by another pharmacist" });
+        .json({ message: "Email already taken by another pharmacist !" });
     }
 
     const newRequest = new PharmacistRegistrationRequest({
