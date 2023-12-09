@@ -29,6 +29,7 @@ interface Props {
   canViewSales: boolean;
   canViewQuantity: boolean;
   sales?: number;
+  handleArchiveOrUnArchiveButton?: (medicine: Medicine) => void;
 }
 
 const MedicineCard: React.FC<Props> = ({
@@ -39,7 +40,8 @@ const MedicineCard: React.FC<Props> = ({
   canEdit,
   canViewSales,
   canViewQuantity,
-  sales = 0
+  sales = 0,
+  handleArchiveOrUnArchiveButton = () => {}
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
@@ -281,7 +283,9 @@ const MedicineCard: React.FC<Props> = ({
               Edit
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => {
+                handleArchiveOrUnArchiveButton(editedMedicine);
+              }}
               startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
               color="secondary"
             >

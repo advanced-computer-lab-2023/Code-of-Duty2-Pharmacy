@@ -103,6 +103,18 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
     }
   };
 
+  const handleArchiveOrUnArchiveButton = (medicine: Medicine) => {
+    const newMedicine = { ...medicine, isArchived: !medicine.isArchived };
+    axios
+      .post(`${config.API_URL}/medicines/archive-or-unarchive/${medicine._id}`, { archive: !medicine.isArchived })
+      .then(() => {
+        setMedicines((prev) => prev.map((m) => (m._id === medicine._id ? newMedicine : m)));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   let filteredMedicines: Medicine[] = (
     usageFilter.length > 0
       ? medicines.filter((medicine) =>
@@ -228,6 +240,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                 canViewSales={canViewSales}
                 canViewQuantity={canViewQuantity}
                 sales={medSales[medicine._id]}
+                handleArchiveOrUnArchiveButton={canEdit ? handleArchiveOrUnArchiveButton : undefined}
               />
             </div>
           ))}
