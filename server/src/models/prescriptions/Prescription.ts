@@ -3,6 +3,7 @@ import { IPrescription } from "./interfaces/IPrescription";
 
 export interface IPrescriptionModel extends IPrescription, Document {}
 
+// TODO: Fix interface not being enforced for some reason.
 export const PrescriptionSchema = new Schema<IPrescriptionModel>(
   {
     doctorId: { type: Schema.Types.ObjectId, ref: "Doctor", required: true },
