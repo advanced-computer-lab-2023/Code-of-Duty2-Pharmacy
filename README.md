@@ -1,6 +1,8 @@
 # El7a2ni Pharmacy
 
-![Logo](client/src//assets/el7a2ni_logo.png)
+<p align="center">
+  <img height="160" src="client/src/assets/el7a2ni_logo.png">
+</p>
 
 A web application which allows **_Pharmacists_** to manage their medicine stock, **_Patients_** to order medications, and **_Admins_** to manage the users and system as a whole.
 
