@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Ref, forwardRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "@mui/material/Card";
@@ -29,7 +29,7 @@ interface Props {
   canViewSales: boolean;
   canViewQuantity: boolean;
   sales?: number;
-  handleArchiveOrUnArchiveButton?: (medicine: Medicine) => void;
+  handleArchiveOrUnArchiveButton?: (medicine: Medicine) => number;
 }
 
 const MedicineCard: React.FC<Props> = ({
@@ -95,10 +95,17 @@ const MedicineCard: React.FC<Props> = ({
         justifyContent: "space-between",
         height: "100%",
         minWidth: "300px",
-        maxWidth: "300px"
+        maxWidth: "300px",
+        bgcolor: medicine.isArchived ? "rgba(200, 200, 0, 0.17)" : "rgba(0, 0, 0, 0.0)"
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1
+        }}
+      >
         <CardActionArea sx={{ flexGrow: 1 }}>
           <Box m={2}>
             <CardMedia
@@ -284,7 +291,8 @@ const MedicineCard: React.FC<Props> = ({
             </Button>
             <Button
               onClick={() => {
-                handleArchiveOrUnArchiveButton(editedMedicine);
+                if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
+                  editedMedicine.isArchived = !editedMedicine.isArchived;
               }}
               startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
               color="secondary"
