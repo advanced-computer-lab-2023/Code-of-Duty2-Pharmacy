@@ -1,7 +1,7 @@
 import ViewPharmacistRequestForm from "../../components/pharmacist/PharmacistRequestViewForm";
 
-const AdminViewPatientsPage = () => {
+const AdminViewPharmacistRegistrationRequestPage = () => {
   return <ViewPharmacistRequestForm />;
 };
 
-export default AdminViewPatientsPage;
+export default AdminViewPharmacistRegistrationRequestPage;

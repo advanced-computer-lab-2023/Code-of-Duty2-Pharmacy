@@ -1,5 +1,4 @@
 /**
- *
  * This handler ensures login routes are not accessible to already authenticated users.
  *
  * Any login route should be a child of this component, thus forcing any access to a login page
@@ -10,7 +9,6 @@
  *
  * Otherwise, actual redirection after actually logging in with credentials should be handled
  * in the actual login page(s).
- *
  */
 
 import { useContext } from "react";

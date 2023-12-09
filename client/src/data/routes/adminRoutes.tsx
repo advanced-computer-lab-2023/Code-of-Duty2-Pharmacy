@@ -5,47 +5,46 @@ import AdminAddAdminPage from "../../pages/admin/AdminAddAdminPage";
 import AdminViewPharmacistRequestsPage from "../../pages/admin/AdminViewPharmacistRequestsPage";
 import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage";
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
-import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
-import AdminViewPharmacistRegisterationRequest from "../../pages/admin/AdminViewPharmacistRegisterationRequest";
+import AdminViewPharmacistRegistrationRequest from "../../pages/admin/AdminViewPharmacistRegistrationRequest";
 import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
-  element: <AdministratorDashboard />,
+  element: <AdministratorDashboard />
 };
 
 export const viewMedicinesRoute: Route = {
   path: "/admin/view-medicines",
-  element: <AdminViewMedicinesPage />,
+  element: <AdminViewMedicinesPage />
 };
 
 export const addAdminRoute: Route = {
   path: "/admin/add-admins",
-  element: <AdminAddAdminPage />,
+  element: <AdminAddAdminPage />
 };
 
 export const viewPharmacistRegistrationRequestsRoute: Route = {
   path: "/admin/pharmacist-registration-requests",
-  element: <AdminViewPharmacistRequestsPage />,
+  element: <AdminViewPharmacistRequestsPage />
 };
 
 export const viewPharmacistsRoute: Route = {
   path: "/admin/view-pharmacists",
-  element: <AdminViewPharmacistsPage />,
+  element: <AdminViewPharmacistsPage />
 };
 
 export const viewPatientsRoute: Route = {
   path: "/admin/view-patients",
-  element: <AdminViewPatientsPage />,
+  element: <AdminViewPatientsPage />
 };
 export const viewPharmacistRequestRoute: Route = {
   path: "/admin/view-pharmacist-request",
-  element: <AdminViewPharmacistRegisterationRequest />,
+  element: <AdminViewPharmacistRegistrationRequest />
 };
 
 export const changeAdminPasswordsRoute: Route = {
   path: "/admin/change-password",
-  element: <AdminChangePasswordPage />,
+  element: <AdminChangePasswordPage />
 };
 
 const adminRoutes: Route[] = [
@@ -56,7 +55,7 @@ const adminRoutes: Route[] = [
   viewPharmacistsRoute,
   viewPatientsRoute,
   changeAdminPasswordsRoute,
-  viewPharmacistRequestRoute,
+  viewPharmacistRequestRoute
 ];
 
 export default adminRoutes;
