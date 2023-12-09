@@ -1,6 +1,6 @@
 # API Reference
 
-This document
+This document provides a comprehensive reference for the REST API endpoints used in this software.
 
 ## Medicines
 
@@ -49,9 +49,12 @@ This document
 | :-------- | :------- | :-------------------------------------- |
 | `updates` | `object` | **Required**. Updates to the medicines. |
 
-| Attribute | Type     | Description                             |
-| :-------- | :------- | :-------------------------------------- |
-| `updates` | `object` | **Optional**. Updates to the medicines. |
+| Attribute | Type | Description   |
+| :-------- | :--- | :------------ |
+| ``        | ``   | **Optional**. |
+| ``        | ``   | **Optional**. |
+| ``        | ``   | **Optional**. |
+| ``        | ``   | **Optional**. |
 
 #### Update a medicine
 
@@ -62,3 +65,5 @@ This document
 | Parameter | Type     | Description                             |
 | :-------- | :------- | :-------------------------------------- |
 | `id`      | `string` | **Required**. Updates to the medicines. |
+| ``        | ``       | **Optional**.                           |
+| ``        | ``       | **Optional**.                           |
