@@ -22,6 +22,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const [usageFilter, setUsageFilter] = useState<string[]>([]);
   const [showMore, setShowMore] = useState(false);
   const [medSales, setMedSales] = useState<{ [key: string]: number }>({});
+  const [archiveVisibleMeds, setArchiveVisibleMeds] = useState<string>("Unarchived"); // Unarchived, Archived, All or None
 
   const filterOptions = MedicineUsages;
 
@@ -43,7 +44,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/medicines`);
-      setMedicines(response.data.medicines);
+      setMedicines(response.data.medicines.filter((medicine: Medicine) => canEdit || medicine.isArchived === false));
       setDiscount(response.data.discount);
       setPackageName(response.data.packageName);
     } catch (err) {
@@ -84,7 +85,25 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
     }
   };
 
-  let filteredMedicines =
+  const handleArchivedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean): void => {
+    if (/*became*/ checked) {
+      console.log("checked");
+      if (archiveVisibleMeds !== "None") {
+        setArchiveVisibleMeds("All");
+      } else {
+        setArchiveVisibleMeds(event.target.value);
+      }
+    } else {
+      /* became unchecked */
+      if (archiveVisibleMeds !== "All") {
+        setArchiveVisibleMeds("None");
+      } else {
+        setArchiveVisibleMeds(event.target.value === "Unarchived" ? "Archived" : "Unarchived");
+      }
+    }
+  };
+
+  let filteredMedicines: Medicine[] = (
     usageFilter.length > 0
       ? medicines.filter((medicine) =>
           medicine.usages
@@ -93,11 +112,17 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
               )
             : false
         )
-      : medicines;
+      : medicines
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
-  filteredMedicines = filteredMedicines.filter((medicine) => canEdit || medicine.isArchived === false);
-
-  filteredMedicines = filteredMedicines.sort((a, b) => a.name.localeCompare(b.name));
+  filteredMedicines =
+    archiveVisibleMeds === "All"
+      ? filteredMedicines
+      : archiveVisibleMeds === "None"
+        ? []
+        : archiveVisibleMeds === "Archived"
+          ? filteredMedicines.filter((medicine) => medicine.isArchived)
+          : filteredMedicines.filter((medicine) => !medicine.isArchived);
 
   return (
     <Box
@@ -115,6 +140,33 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
           flexDirection: "column"
         }}
       >
+        {canEdit && (
+          <>
+            <Typography variant="h6">Archive Filter</Typography>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={archiveVisibleMeds === "Unarchived" || archiveVisibleMeds === "All"}
+                  onChange={handleArchivedChange}
+                  value="Unarchived"
+                />
+              }
+              label="Unarchived"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={archiveVisibleMeds === "Archived" || archiveVisibleMeds === "All"}
+                  onChange={handleArchivedChange}
+                  value="Archived"
+                />
+              }
+              label="Archived"
+            />
+            <br />
+          </>
+        )}
+
         <Typography variant="h6">Filter by usages</Typography>
 
         {(showMore ? filterOptions : filterOptions.slice(0, 10)).map((option) => (
