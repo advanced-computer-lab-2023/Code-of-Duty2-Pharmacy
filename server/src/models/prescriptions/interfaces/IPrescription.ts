@@ -5,5 +5,11 @@ export interface IPrescription {
   doctorId: Schema.Types.ObjectId;
   patientId: Schema.Types.ObjectId;
   status: "filled" | "unfilled";
-  medicines: { medicineName: string; dosage: string }[];
+  isSubmitted: boolean;
+  medicines: {
+    medicineId: Schema.Types.ObjectId;
+    name: string;
+    dosage: string;
+    quantity: number;
+  }[];
 }
