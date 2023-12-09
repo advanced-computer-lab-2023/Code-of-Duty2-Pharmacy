@@ -439,8 +439,11 @@ To install the project with `npm`, run the following commands in order.
 ```bash
 > git clone https://github.com/advanced-computer-lab-2023/Code-of-Duty2-Pharmacy.git
 > cd Code-of-Duty2-Pharmacy/
-> cd server && npm i && cd -
-> cd client && npm i && cd -
+> cd server
+> npm i
+> cd ../client
+> npm i
+> cd ..
 ```
 
 ## API Reference
@@ -467,13 +470,15 @@ In each of those directories, you will find a `.env.example` file. You must copy
 ### Run the Backend
 
 ```bash
-cd server && npm run dev
+> cd server
+> npm run dev
 ```
 
 ### Run the Frontend
 
 ```bash
-cd client && npm run dev
+> cd client
+> npm run dev
 ```
 
 ### Access the client/server on the specified ports
