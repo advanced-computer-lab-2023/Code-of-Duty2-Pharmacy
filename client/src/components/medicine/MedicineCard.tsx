@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { AttachMoney } from "@mui/icons-material";
+import { Archive, AttachMoney, Unarchive } from "@mui/icons-material";
 import { Alert, AlertTitle, Stack, Tooltip } from "@mui/material";
 
 import config from "../../config/config";
@@ -39,7 +39,7 @@ const MedicineCard: React.FC<Props> = ({
   canEdit,
   canViewSales,
   canViewQuantity,
-  sales = 0,
+  sales = 0
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
@@ -59,14 +59,11 @@ const MedicineCard: React.FC<Props> = ({
     setModalOpen(false);
   };
 
-  const handleAddingToCart = async (
-    _id: string,
-    navigateToCart: boolean
-  ): Promise<void> => {
+  const handleAddingToCart = async (_id: string, navigateToCart: boolean): Promise<void> => {
     const body = {
       medicineId: _id,
       quantity: 1,
-      OTC: true,
+      OTC: true
     };
 
     await axios
@@ -77,10 +74,7 @@ const MedicineCard: React.FC<Props> = ({
         }
       })
       .catch((err) => {
-        if (
-          err.response.data.message ===
-          "Quantity exceeds the available quantity"
-        ) {
+        if (err.response.data.message === "Quantity exceeds the available quantity") {
           setAlertVisible(true);
           setTimeout(() => {
             setAlertVisible(false);
@@ -99,7 +93,7 @@ const MedicineCard: React.FC<Props> = ({
         justifyContent: "space-between",
         height: "100%",
         minWidth: "300px",
-        maxWidth: "300px",
+        maxWidth: "300px"
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
@@ -111,11 +105,8 @@ const MedicineCard: React.FC<Props> = ({
               image={editedMedicine.pictureUrl}
               alt={`${editedMedicine.name} image`}
               sx={{
-                filter:
-                  editedMedicine.availableQuantity === 0
-                    ? "grayscale(100%)"
-                    : "none",
-                objectFit: "contain",
+                filter: editedMedicine.availableQuantity === 0 ? "grayscale(100%)" : "none",
+                objectFit: "contain"
               }}
             />
             <CardContent>
@@ -131,9 +122,7 @@ const MedicineCard: React.FC<Props> = ({
                 </Typography>
 
                 {editedMedicine.usages &&
-                  editedMedicine.usages.map((usage, index) => (
-                    <Chip label={usage} key={index} />
-                  ))}
+                  editedMedicine.usages.map((usage, index) => <Chip label={usage} key={index} />)}
 
                 <Box mt={2}>
                   <Typography variant="body2" color="text.secondary">
@@ -141,24 +130,19 @@ const MedicineCard: React.FC<Props> = ({
                   </Typography>
 
                   {editedMedicine.activeIngredients &&
-                    editedMedicine.activeIngredients.map(
-                      (ingredient, index) => (
-                        <Chip label={ingredient} key={index} />
-                      )
-                    )}
+                    editedMedicine.activeIngredients.map((ingredient, index) => (
+                      <Chip label={ingredient} key={index} />
+                    ))}
 
                   <Box mt={2}>
-                    {canViewQuantity &&
-                      editedMedicine.availableQuantity > 0 && (
-                        <Box mt={2}>
-                          <Typography variant="body2" color="text.secondary">
-                            Available Qty
-                          </Typography>
-                          <Typography variant="body1">
-                            {editedMedicine.availableQuantity}
-                          </Typography>
-                        </Box>
-                      )}
+                    {canViewQuantity && editedMedicine.availableQuantity > 0 && (
+                      <Box mt={2}>
+                        <Typography variant="body2" color="text.secondary">
+                          Available Qty
+                        </Typography>
+                        <Typography variant="body1">{editedMedicine.availableQuantity}</Typography>
+                      </Box>
+                    )}
 
                     {canViewSales && (
                       <Box mt={2}>
@@ -183,9 +167,7 @@ const MedicineCard: React.FC<Props> = ({
                 >
                   <AlertTitle>Warning</AlertTitle>
                   Your total amount in cart cannot exceed the maximum quantity —{" "}
-                  <strong onClick={() => navigate(`/patient/review-cart`)}>
-                    check cart!
-                  </strong>
+                  <strong onClick={() => navigate(`/patient/review-cart`)}>check cart!</strong>
                 </Alert>
               )}
             </Stack>
@@ -211,12 +193,11 @@ const MedicineCard: React.FC<Props> = ({
             </Typography>
 
             <Typography variant="body2" color="text.secondary">
-              Save: EGP{" "}
-              {(editedMedicine.originalPrice - editedMedicine.price).toFixed(2)}{" "}
+              Save: EGP {(editedMedicine.originalPrice - editedMedicine.price).toFixed(2)}{" "}
               <span
                 style={{
                   display: "inline-flex",
-                  alignItems: "center",
+                  alignItems: "center"
                 }}
               >
                 ({discount * 100}%)
@@ -229,7 +210,7 @@ const MedicineCard: React.FC<Props> = ({
                     sx={{
                       fontSize: 17,
                       marginLeft: 1,
-                      color: "gray",
+                      color: "gray"
                     }}
                   />
                 </Tooltip>
@@ -249,14 +230,10 @@ const MedicineCard: React.FC<Props> = ({
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  width: "100%",
+                  width: "100%"
                 }}
               >
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  sx={{ opacity: 0.6 }}
-                >
+                <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.6 }}>
                   <span style={{ fontWeight: "bold" }}>Out of Stock</span>
                 </Typography>
               </Box>
@@ -272,7 +249,7 @@ const MedicineCard: React.FC<Props> = ({
                     border: "1px solid #ccc",
                     padding: "5px",
                     height: "25px",
-                    fontSize: "14px",
+                    fontSize: "14px"
                   }}
                 />
 
@@ -299,22 +276,22 @@ const MedicineCard: React.FC<Props> = ({
         )}
 
         {canEdit && (
-          <Button
-            onClick={handleEditClick}
-            startIcon={<EditIcon />}
-            color="secondary"
-          >
-            Edit
-          </Button>
+          <>
+            <Button onClick={handleEditClick} startIcon={<EditIcon />} color="secondary">
+              Edit
+            </Button>
+            <Button
+              onClick={() => {}}
+              startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
+              color="secondary"
+            >
+              {editedMedicine.isArchived ? "Unarchive" : "Archive"}
+            </Button>
+          </>
         )}
       </CardActions>
 
-      <EditMedicineModal
-        open={modalOpen}
-        medicine={editedMedicine}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
+      <EditMedicineModal open={modalOpen} medicine={editedMedicine} onClose={handleClose} onSave={handleSave} />
     </Card>
   );
 };

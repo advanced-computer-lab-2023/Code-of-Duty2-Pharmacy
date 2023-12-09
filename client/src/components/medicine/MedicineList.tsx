@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Checkbox,
-  FormControlLabel,
-  Typography,
-  Button,
-  Box,
-} from "@mui/material";
+import { Checkbox, FormControlLabel, Typography, Button, Box } from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
 
@@ -21,12 +15,7 @@ interface Props {
   canViewQuantity: boolean;
 }
 
-const MedicineList: React.FC<Props> = ({
-  canBuy,
-  canEdit,
-  canViewSales,
-  canViewQuantity,
-}) => {
+const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQuantity }) => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [discount, setDiscount] = useState<number>(0);
   const [packageName, setPackageName] = useState<string>("");
@@ -47,9 +36,7 @@ const MedicineList: React.FC<Props> = ({
   }, []);
 
   const loadSales = async () => {
-    const response = await axios.get<{ [key: string]: number }>(
-      `${config.API_URL}/medicines/sales`
-    );
+    const response = await axios.get<{ [key: string]: number }>(`${config.API_URL}/medicines/sales`);
     setMedSales(response.data);
   };
 
@@ -89,27 +76,28 @@ const MedicineList: React.FC<Props> = ({
     setShowMore(false);
   };
 
-  const handleUsageFilterChange =
-    (option: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.checked) {
-        setUsageFilter((prev) => [...prev, option]);
-      } else {
-        setUsageFilter((prev) => prev.filter((value) => value !== option));
-      }
-    };
+  const handleUsageFilterChange = (option: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setUsageFilter((prev) => [...prev, option]);
+    } else {
+      setUsageFilter((prev) => prev.filter((value) => value !== option));
+    }
+  };
 
-  const filteredMedicines =
+  let filteredMedicines =
     usageFilter.length > 0
       ? medicines.filter((medicine) =>
           medicine.usages
             ? medicine.usages.some((usage) =>
-                usageFilter.some((filter) =>
-                  usage.toLowerCase().includes(filter.toLowerCase())
-                )
+                usageFilter.some((filter) => usage.toLowerCase().includes(filter.toLowerCase()))
               )
             : false
         )
       : medicines;
+
+  filteredMedicines = filteredMedicines.filter((medicine) => canEdit || medicine.isArchived === false);
+
+  filteredMedicines = filteredMedicines.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <Box
@@ -118,34 +106,32 @@ const MedicineList: React.FC<Props> = ({
         display: "flex",
         justifyContent: "flex-start",
         gap: 3,
-        padding: "2.0rem",
+        padding: "2.0rem"
       }}
     >
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "column"
         }}
       >
         <Typography variant="h6">Filter by usages</Typography>
 
-        {(showMore ? filterOptions : filterOptions.slice(0, 10)).map(
-          (option) => (
-            <Box marginBottom={-1} key={option}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={usageFilter.includes(option)}
-                    onChange={handleUsageFilterChange(option)}
-                    value={option}
-                    size="small"
-                  />
-                }
-                label={option}
-              />
-            </Box>
-          )
-        )}
+        {(showMore ? filterOptions : filterOptions.slice(0, 10)).map((option) => (
+          <Box marginBottom={-1} key={option}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={usageFilter.includes(option)}
+                  onChange={handleUsageFilterChange(option)}
+                  value={option}
+                  size="small"
+                />
+              }
+              label={option}
+            />
+          </Box>
+        ))}
 
         {!showMore && filterOptions.length > 10 && (
           <Button onClick={handleShowMoreClick} color="secondary">
@@ -161,17 +147,13 @@ const MedicineList: React.FC<Props> = ({
       </Box>
 
       <Box>
-        <NameSearchBar
-          searchCollection="medicines"
-          onSearch={handleSearch}
-          initialValue="(or leave empty for all)"
-        />
+        <NameSearchBar searchCollection="medicines" onSearch={handleSearch} initialValue="(or leave empty for all)" />
         {filteredMedicines.length === 0 && <p>No medicines found.</p>}
         <Box
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            alignItems: "stretch",
+            alignItems: "stretch"
           }}
         >
           {filteredMedicines.map((medicine) => (
@@ -182,7 +164,7 @@ const MedicineList: React.FC<Props> = ({
                 padding: "0rem",
                 boxSizing: "border-box",
                 marginRight: "1rem",
-                marginBottom: "1rem",
+                marginBottom: "1rem"
               }}
             >
               <MedicineCard
