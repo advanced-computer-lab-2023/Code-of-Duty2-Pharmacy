@@ -49,6 +49,8 @@ This document provides a comprehensive reference for the REST API endpoints used
 | :-------- | :------- | :-------------------------------------- |
 | `updates` | `object` | **Required**. Updates to the medicines. |
 
+###### `updates` object:
+
 | Attribute | Type | Description   |
 | :-------- | :--- | :------------ |
 | ``        | ``   | **Optional**. |
