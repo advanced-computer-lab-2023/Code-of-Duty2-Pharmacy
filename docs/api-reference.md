@@ -10,6 +10,17 @@ Access tokens are used to authenticate requests to the API. They are sent in the
 
 Refresh tokens are used to obtain a new access token when the current one expires. They are stored in `HttpOnly` cookies that are automatically sent with each request. The server sets the refresh token in a `Set-Cookie` header in the response to the login request.
 
+### Endpoints
+
+The endpoints are categorized herein according to the entity they manipulate or are most closely associated with.
+
+- [Authentication](#authentication)
+- [Medicines](#medicines)
+- [Admins](#admins)
+- [Patients](#patients)
+- [Pharmacists](#pharmacists)
+- [Stripe Payments](#stripe-payments)
+
 ## Authentication
 
 <details>
@@ -21,10 +32,10 @@ Refresh tokens are used to obtain a new access token when the current one expire
 
 Returns a refresh token in a HTTP-Only cookie and an access token in the response body to the user to login.
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `username`        | `string`   | **Required**. Username of the account of a Patient or Admin |
-| `password`        | `string`   | **Required**. Password of the corresponding account. |
+| Body Field | Type     | Description                                                 |
+| :--------- | :------- | :---------------------------------------------------------- |
+| `username` | `string` | **Required**. Username of the account of a Patient or Admin |
+| `password` | `string` | **Required**. Password of the corresponding account.        |
 
 </details>
 
@@ -37,10 +48,10 @@ Returns a refresh token in a HTTP-Only cookie and an access token in the respons
 
 Returns a refresh token in a HTTP-Only cookie and an access token in the response body to the user to login.
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `username`        | `string`   | **Required**. Username of the account of a Pharmacist. |
-| `password`        | `string`   | **Required**. Password of the corresponding account. |
+| Body Field | Type     | Description                                            |
+| :--------- | :------- | :----------------------------------------------------- |
+| `username` | `string` | **Required**. Username of the account of a Pharmacist. |
+| `password` | `string` | **Required**. Password of the corresponding account.   |
 
 </details>
 
@@ -51,9 +62,9 @@ Returns a refresh token in a HTTP-Only cookie and an access token in the respons
   POST /logout/
 ```
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Patient, Pharmacist, Doctor or Admin. |
+| Header Parameter | Type     | Description                                                                                     |
+| :--------------- | :------- | :---------------------------------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Patient, Pharmacist, Doctor or Admin. |
 
 Invalidates the refresh token of the user.
 
@@ -68,9 +79,9 @@ Invalidates the refresh token of the user.
 
 Returns a new access token.
 
-| Header Parameter | Type | Description   |
-| :-------- | :--- | :------------ |
-| `Cookie`        | `string`   | **Required**. Refresh token previously set by the server. |
+| Header Parameter | Type     | Description                                               |
+| :--------------- | :------- | :-------------------------------------------------------- |
+| `Cookie`         | `string` | **Required**. Refresh token previously set by the server. |
 
 </details>
 
@@ -83,23 +94,23 @@ Returns a new access token.
 
 Registers a new patient.
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `username`        | `string`   | **Required**. Username of the new patient. |
-| `name`        | `string`   | **Required**. Name of the new patient. |
-| `email`        | `string`   | **Required**. Email of the new patient. |
-| `password`        | `string`   | **Required**. Password of the new patient. |
-| `dateOfBirth`        | `Date`   | **Required**. Date of birth of the new patient. |
-| `gender`        | `string`   | **Required**. Gender of the new patient. |
-| `mobileNumber`        | `string`   | **Required**. Mobile number of the new patient. |
-| `emergencyContact`        | `object`   | **Required**. Username of the new patient. |
+| Body Field         | Type     | Description                                     |
+| :----------------- | :------- | :---------------------------------------------- |
+| `username`         | `string` | **Required**. Username of the new patient.      |
+| `name`             | `string` | **Required**. Name of the new patient.          |
+| `email`            | `string` | **Required**. Email of the new patient.         |
+| `password`         | `string` | **Required**. Password of the new patient.      |
+| `dateOfBirth`      | `Date`   | **Required**. Date of birth of the new patient. |
+| `gender`           | `string` | **Required**. Gender of the new patient.        |
+| `mobileNumber`     | `string` | **Required**. Mobile number of the new patient. |
+| `emergencyContact` | `object` | **Required**. Username of the new patient.      |
 
 #### `emergencyContact` object:
 
-| Attribute        | Type     | Description                                       |
-| :--------------- | :------- | :------------------------------------------------ |
-| `fullname`     | `string` | **Required**. Full name of the emergency contact.          |
-| `mobileNumber` | `string` | **Required**. Mobile number of the emergency contact |
+| Attribute           | Type     | Description                                                     |
+| :------------------ | :------- | :-------------------------------------------------------------- |
+| `fullname`          | `string` | **Required**. Full name of the emergency contact.               |
+| `mobileNumber`      | `string` | **Required**. Mobile number of the emergency contact            |
 | `relationToPatient` | `string` | **Required**. Relation of the emergency contact to the patient. |
 
 </details>
@@ -113,16 +124,16 @@ Registers a new patient.
 
 Registers a new pharmacist registration request.
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `username`        | `string`   | **Required**. Username of the new pharmacist. |
-| `name`        | `string`   | **Required**. Name of the new pharmacist. |
-| `email`        | `string`   | **Required**. Email of the new pharmacist. |
-| `password`        | `string`   | **Required**. Password of the new pharmacist. |
-| `dateOfBirth`        | `Date`   | **Required**. Date of birth of the new pharmacist. |
-| `hourlyRate`        | `number`   | **Required**. Hourly rate for the pay of the new pharmacist. |
-| `affiliation`        | `string`   | **Required**. Pharmacy to which the new pharmacist is affiliated with. |
-| `educationalBackground`        | `string`   | **Required**. Educational background of the new pharmacist. |
+| Body Field              | Type     | Description                                                            |
+| :---------------------- | :------- | :--------------------------------------------------------------------- |
+| `username`              | `string` | **Required**. Username of the new pharmacist.                          |
+| `name`                  | `string` | **Required**. Name of the new pharmacist.                              |
+| `email`                 | `string` | **Required**. Email of the new pharmacist.                             |
+| `password`              | `string` | **Required**. Password of the new pharmacist.                          |
+| `dateOfBirth`           | `Date`   | **Required**. Date of birth of the new pharmacist.                     |
+| `hourlyRate`            | `number` | **Required**. Hourly rate for the pay of the new pharmacist.           |
+| `affiliation`           | `string` | **Required**. Pharmacy to which the new pharmacist is affiliated with. |
+| `educationalBackground` | `string` | **Required**. Educational background of the new pharmacist.            |
 
 </details>
 
@@ -153,9 +164,9 @@ Registers a new pharmacist registration request.
 
 Returns a list of all medicines.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Patient, Pharmacist, Doctor or Admin. |
+| Header Parameter | Type     | Description                                                                                     |
+| :--------------- | :------- | :---------------------------------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Patient, Pharmacist, Doctor or Admin. |
 
 </details>
 
@@ -168,16 +179,16 @@ Returns a list of all medicines.
 
 Adds a new medicine.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
-| Body Field          | Type       | Description                                                           |
-| :------------------ | :--------- | :-------------------------------------------------------------------- |
-| `name`              | `string`   | **Required**. Name of the medicine.                                   |
-| `activeIngredients` | `string[]` | **Required**. Active ingredients of the medicine.                     |
-| `price`             | `number`   | **Required**. The price of this medicine in EGP.                      |
-| `availableQuantity` | `string`   | **Required**. The initial available stock of this medicine.           |
+| Body Field          | Type       | Description                                                 |
+| :------------------ | :--------- | :---------------------------------------------------------- |
+| `name`              | `string`   | **Required**. Name of the medicine.                         |
+| `activeIngredients` | `string[]` | **Required**. Active ingredients of the medicine.           |
+| `price`             | `number`   | **Required**. The price of this medicine in EGP.            |
+| `availableQuantity` | `string`   | **Required**. The initial available stock of this medicine. |
 
 </details>
 
@@ -187,11 +198,12 @@ Adds a new medicine.
 ```http
   GET /medicines/sales
 ```
+
 Returns an object containing objects of medicine IDs and corresponding bought quantities.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
 </details>
 
@@ -201,15 +213,16 @@ Returns an object containing objects of medicine IDs and corresponding bought qu
 ```http
   POST /medicines/sales
 ```
+
 Returns the total sales of a medicine.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
-| Body Field          | Type       | Description                                                           |
-| :------------------ | :--------- | :-------------------------------------------------------------------- |
-| `medicineId`              | `string`   | **Required**. Database ID of the medicine.                                   |
+| Body Field   | Type     | Description                                |
+| :----------- | :------- | :----------------------------------------- |
+| `medicineId` | `string` | **Required**. Database ID of the medicine. |
 
 </details>
 
@@ -222,13 +235,13 @@ Returns the total sales of a medicine.
 
 Returns medicines that match the medicine name search query.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
-| Body Field       | Type     | Description                                                                             |
-| :-------------- | :------- | :-------------------------------------------------------------------------------------- |
-| `name`          | `string` | **Required**. Name of the medicine(s) being searched for.                               |
+| Body Field | Type     | Description                                               |
+| :--------- | :------- | :-------------------------------------------------------- |
+| `name`     | `string` | **Required**. Name of the medicine(s) being searched for. |
 
 </details>
 
@@ -241,13 +254,13 @@ Returns medicines that match the medicine name search query.
 
 Updates quantities of bought medicines.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
 | Body Field | Type       | Description                             |
-| :-------- | :--------- | :-------------------------------------- |
-| `updates` | `object[]` | **Required**. Updates to the medicines. |
+| :--------- | :--------- | :-------------------------------------- |
+| `updates`  | `object[]` | **Required**. Updates to the medicines. |
 
 #### `updates` array:
 
@@ -269,11 +282,11 @@ Updates quantities of bought medicines.
 
 Updates a medicine's details.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
-| Body Field           | Type       | Description                                                                   |
+| Body Field          | Type       | Description                                                                   |
 | :------------------ | :--------- | :---------------------------------------------------------------------------- |
 | `id`                | `string`   | **Required**. Database ID of a medicine.                                      |
 | `name`              | `string`   | **Optional**. Name of the medicine.                                           |
@@ -297,9 +310,9 @@ Updates a medicine's details.
 
 Returns all admins.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
 
 </details>
 
@@ -312,14 +325,14 @@ Returns all admins.
 
 Creates a new admin.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `username`        | `string`   | **Required**. Username of the new Admin. |
-| `password`        | `string`   | **Required**. Password of the new Admin. |
+| Body Field | Type     | Description                              |
+| :--------- | :------- | :--------------------------------------- |
+| `username` | `string` | **Required**. Username of the new Admin. |
+| `password` | `string` | **Required**. Password of the new Admin. |
 
 </details>
 
@@ -332,14 +345,14 @@ Creates a new admin.
 
 Changes an admin's password.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
 
-| Body Field | Type | Description   |
-| :-------- | :--- | :------------ |
-| `currentPassword`        | `string`   | **Required**. Current password of the Admin. |
-| `newPassword`        | `string`   | **Required**. New password of the Admin. |
+| Body Field        | Type     | Description                                  |
+| :---------------- | :------- | :------------------------------------------- |
+| `currentPassword` | `string` | **Required**. Current password of the Admin. |
+| `newPassword`     | `string` | **Required**. New password of the Admin.     |
 
 </details>
 
@@ -352,13 +365,13 @@ Changes an admin's password.
 
 Deletes an admin.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
 
-| Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `id` | `string` | **Required**. Database ID of the Admin to be deleted. |
+| Parameter | Type     | Description                                           |
+| :-------- | :------- | :---------------------------------------------------- |
+| `id`      | `string` | **Required**. Database ID of the Admin to be deleted. |
 
 </details>
 
@@ -497,9 +510,9 @@ Deletes an admin.
 
 Returns stripe publishable key.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Patient. |
+| Header Parameter | Type     | Description                                                        |
+| :--------------- | :------- | :----------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Patient. |
 
 </details>
 
@@ -512,8 +525,8 @@ Returns stripe publishable key.
 
 Creates a new stripe payment intent and returns the client secret.
 
-| Header Parameter          | Type     | Description                                                                                     |
-| :-------------- | :------- | :---------------------------------------------------------------------------------------------- |
-| `Authorization` | `string` | **Required**. JWT Token signed by a user having a role of Patient. |
+| Header Parameter | Type     | Description                                                        |
+| :--------------- | :------- | :----------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Patient. |
 
 </details>
