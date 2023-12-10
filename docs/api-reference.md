@@ -364,7 +364,127 @@ Deletes an admin.
 
 ## Patients
 
+<details>
+<summary>Get Patients</summary>
+</details>
+
+<details>
+<summary>Get a Patient's Orders</summary>
+</details>
+
+<details>
+<summary>Cancel Order</summary>
+</details>
+
+<details>
+<summary>Delete Patient</summary>
+</details>
+
+<details>
+<summary>Patient Change Password</summary>
+</details>
+
+<details>
+<summary>Get Patient Delivery Addresses</summary>
+</details>
+
+<details>
+<summary>Add Patient Delivery Address</summary>
+</details>
+
+<details>
+<summary>Get Patient Details</summary>
+</details>
+
+<details>
+<summary>Get Cart Items</summary>
+</details>
+
+<details>
+<summary>Clear Cart</summary>
+</details>
+
+<details>
+<summary>Add to Cart</summary>
+</details>
+
+<details>
+<summary>Remove from Cart</summary>
+</details>
+
+<details>
+<summary>Change Cart Item Quantity</summary>
+</details>
+
+<details>
+<summary>Get Cart Medicines Stock</summary>
+</details>
+
+<details>
+<summary>Create Order</summary>
+</details>
+
+<details>
+<summary>Check Patient Wallet Exists</summary>
+</details>
+
+<details>
+<summary>Validate Wallet PIN Code</summary>
+</details>
+
+<details>
+<summary>Add Patient Wallet</summary>
+</details>
+
+<details>
+<summary>Get Patient Wallet</summary>
+</details>
+
+<details>
+<summary>Patient Make Wallet Transaction</summary>
+</details>
+
+<details>
+<summary>Patient Recharge Wallet</summary>
+</details>
+
 ## Pharmacists
+
+<details>
+<summary>Delete Pharmacist</summary>
+</details>
+
+<details>
+<summary>Get Pharmacists</summary>
+</details>
+
+<details>
+<summary>Search Pharmacists</summary>
+</details>
+
+<details>
+<summary>Pharmacist Change Password</summary>
+</details>
+
+<details>
+<summary>Get Pharmacist Info</summary>
+</details>
+
+<details>
+<summary>Update Pharmacist Info</summary>
+</details>
+
+<details>
+<summary>Get Pharmacist Registration Requests</summary>
+</details>
+
+<details>
+<summary>Accept Pharmacist Registration Request</summary>
+</details>
+
+<details>
+<summary>Reject Pharmacist Registration Request</summary>
+</details>
 
 ## Stripe Payments
 

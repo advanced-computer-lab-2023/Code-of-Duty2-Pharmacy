@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   getAllPatients,
   deletePatient,
@@ -16,11 +17,18 @@ import {
   getPatientOrders,
   cancelOrder,
 } from "../controllers/patientController";
+import {
+  addPatientAWalletHandler,
+  authenticateWalletPatientHandler,
+  doesAPatientHaveAWalletHandler,
+  getPatientWalletHandler,
+  performAWalletTransactionHandler,
+  rechargePatientWalletHandler,
+} from "../controllers/payments/wallets/Patient";
+import { authenticateWalletUser } from "../middlewares/walletAuthentication";
 import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
-
-// --> Path: /patients/
 
 router.use(authenticateUser);
 router.get("/", getAllPatients);
@@ -43,18 +51,6 @@ router.patch(
 router.get("/me/cart-medicines-stock", getCartMedicinesStock);
 
 router.post("/orders", createOrder);
-
-//  --------------------------------------------------------------------------------------------
-
-import {
-  addPatientAWalletHandler,
-  authenticateWalletPatientHandler,
-  doesAPatientHaveAWalletHandler,
-  getPatientWalletHandler,
-  performAWalletTransactionHandler,
-  rechargePatientWalletHandler,
-} from "../controllers/payments/wallets/Patient";
-import { authenticateWalletUser } from "../middlewares/walletAuthentication";
 
 router
   .get("/wallets/exists", doesAPatientHaveAWalletHandler)
