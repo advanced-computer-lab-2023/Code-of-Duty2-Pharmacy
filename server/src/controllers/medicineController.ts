@@ -39,7 +39,7 @@ export const getAllMedicines = async (
       );
 
       if (healthPackage) {
-        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
         packageName = healthPackage.name;
       }
     }

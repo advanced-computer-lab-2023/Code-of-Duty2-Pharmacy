@@ -168,7 +168,7 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
       const healthPackage = await HealthPackage.findById(patient.subscribedPackage.packageId);
 
       if (healthPackage) {
-        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
       }
     }
 

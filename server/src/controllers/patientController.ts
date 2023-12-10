@@ -196,7 +196,7 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
       );
 
       if (healthPackage) {
-        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
       }
     }
 
