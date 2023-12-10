@@ -1,20 +1,31 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
-import Admin from "../models/admins/Admin";
+import Admin, { IAdminModel } from "../models/admins/Admin";
 import PharmacistRegistrationRequest from "../models/pharmacist_registration_requests/PharmacistRegistrationRequest";
 import { findAdminById, updateAdminPasswordById } from "../services/admins";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
-import Pharmacist from "../models/pharmacists/Pharmacist";
 import Patient from "../models/patients/Patient";
 import Doctor from "../models/doctors/Doctor";
 
-export const addAdmin = async (req: Request, res: Response) => {
+
+export const getAllAdmins = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const admins = await Admin.find();
+
+    res.status(StatusCodes.OK).json(admins);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+};
+export const addAdmin = async (req: AuthorizedRequest, res: Response) => {
   try {
     const { username, password } = req.body;
 
     const existingAdmin = await Admin.findOne({ username });
-    const existingPharmacist = await Pharmacist.findOne({ username });
+    const existingPharmacist = await Admin.findOne({ username });
     const existingPatient = await Patient.findOne({ username });
     const existingDoctor = await Doctor.findOne({ username });
 
@@ -40,9 +51,30 @@ export const addAdmin = async (req: Request, res: Response) => {
       .json({ message: (err as Error).message });
   }
 };
+ 
+export const deleteAdmin = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const deletedAdmin = await Admin.findByIdAndDelete(id);
+
+    if (!deletedAdmin) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Admin not found" });
+    }
+
+    res.status(StatusCodes.OK).json(deletedAdmin);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: (err as Error).message });
+  }
+
+};
 
 export const getAllPharmacistRegistrationRequests = async (
-  req: Request,
+  req: AuthorizedRequest,
   res: Response
 ) => {
   try {
@@ -89,3 +121,17 @@ export const changeAdminPassword = async (
       .json({ message: "An error occurred while updating the password" });
   }
 };
+
+// export const searchAdmins = async (req: AuthorizedRequest, res: Response) => {
+//   try {
+//     const { query } = req.query;
+//     const admins = await Admin.find({
+//       username: { $regex: query as string, $options: "i" },
+//     });
+//     res.status(StatusCodes.OK).json(admins);
+//   } catch (err) {
+//     res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ message: (err as Error).message });
+//   }
+    
