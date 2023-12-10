@@ -1,7 +1,7 @@
-import AddAdminForm from "../../components/admin/AddAdminForm";
+import ManageAdmins from "../../components/admin/ManageAdmins";
 
-const AdminAddAdminPage = () => {
-  return <AddAdminForm />;
+const ManageAdminsPage = () => {
+  return <ManageAdmins />;
 };
 
-export default AdminAddAdminPage;
+export default ManageAdminsPage;
