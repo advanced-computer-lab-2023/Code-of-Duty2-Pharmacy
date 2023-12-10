@@ -149,7 +149,6 @@ export const getMedicineSales = async (req: Request, res: Response) => {
 };
 
 export const getAllMedicinesSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let medsMap: Map<string, number> = new Map<string, number>();
 
