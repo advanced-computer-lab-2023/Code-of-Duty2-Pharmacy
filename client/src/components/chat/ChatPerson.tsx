@@ -3,7 +3,12 @@ import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import asal from "../../assets/as.png";
-interface Props {}
+interface Props {
+  name: string;
+  lastmessage: string;
+  time: string;
+  unread: number;
+}
 
 function stringToColor(string: string) {
   let hash = 0;
@@ -33,16 +38,17 @@ function stringAvatar(name: string) {
     children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
   };
 }
-const ChatPerson: React.FC<Props> = () => {
+const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
   return (
-    <div>
+    <div style={{ display: "block" }}>
       <Button
+        startIcon={name === "AbdelRahman Saleh" ? <Avatar src={asal} /> : <Avatar {...stringAvatar(name)} />}
         // startIcon={<Avatar {...stringAvatar("AbdelRahman Saleh")} />}
-        startIcon={<Avatar src={asal} />}
         sx={{
           display: "flex",
           flexDirection: "row",
           width: "70vw",
+          borderRadius: "8px",
           justifyContent: "flex-start",
           textTransform: "none",
           "& .MuiBadge-root , & .righttt": {
@@ -52,23 +58,24 @@ const ChatPerson: React.FC<Props> = () => {
       >
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", flexGrow: 1 }}>
           <Typography variant="button" display="block" textTransform="none">
-            AbdelRahman Saleh
+            {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" display="block">
-            Hello Dr Ahmed, I have a question about the dosage of the medicine I am taking.
+            {lastmessage}
           </Typography>
         </div>
         <Typography className="righttt" variant="body2" style={{ marginLeft: "auto", paddingRight: "2.0rem" }}>
-          12:45 PM
+          {time}
         </Typography>
         <Badge
           color="secondary"
-          badgeContent={1}
+          badgeContent={unread}
           max={99}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "right"
           }}
+          sx={{ marginRight: "0.4rem" }}
         />
       </Button>
     </div>
