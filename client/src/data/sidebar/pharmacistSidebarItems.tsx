@@ -1,30 +1,37 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HealingIcon from "@mui/icons-material/Healing";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ChatIcon from "@mui/icons-material/Chat";
 
 import { SidebarItem } from "../../types";
 import {
   pharmacistDashboardRoute,
   viewMedicinesRoute,
   addMedicineRoute,
+  pharmacistChatPageRoute
 } from "../routes/pharmacistRoutes";
 
 export const pharmacistSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
     href: pharmacistDashboardRoute.path,
-    icon: <DashboardIcon />,
+    icon: <DashboardIcon />
   },
   {
     title: "View Medicines",
     href: viewMedicinesRoute.path,
-    icon: <HealingIcon />,
+    icon: <HealingIcon />
   },
   {
     title: "Add Medicine",
     href: addMedicineRoute.path,
-    icon: <AddCircleIcon />,
+    icon: <AddCircleIcon />
   },
+  {
+    title: "Chatting",
+    href: pharmacistChatPageRoute.path,
+    icon: <ChatIcon />
+  }
 ];
 
 export default pharmacistSidebarItems;
