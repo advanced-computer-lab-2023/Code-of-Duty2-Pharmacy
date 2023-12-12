@@ -1,6 +1,8 @@
 import Avatar from "@mui/material/Avatar";
+import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
-
+import Typography from "@mui/material/Typography";
+import asal from "../../assets/as.png";
 interface Props {}
 
 function stringToColor(string: string) {
@@ -34,7 +36,41 @@ function stringAvatar(name: string) {
 const ChatPerson: React.FC<Props> = () => {
   return (
     <div>
-      <Button startIcon={<Avatar {...stringAvatar("AbdelRahman AboulKheir")} />}>AboulKheir</Button>
+      <Button
+        // startIcon={<Avatar {...stringAvatar("AbdelRahman Saleh")} />}
+        startIcon={<Avatar src={asal} />}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          width: "70vw",
+          justifyContent: "flex-start",
+          textTransform: "none",
+          "& .MuiBadge-root , & .righttt": {
+            marginLeft: "auto"
+          }
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", flexGrow: 1 }}>
+          <Typography variant="button" display="block" textTransform="none">
+            AbdelRahman Saleh
+          </Typography>
+          <Typography variant="body2" color="textSecondary" display="block">
+            Hello Dr Ahmed, I have a question about the dosage of the medicine I am taking.
+          </Typography>
+        </div>
+        <Typography className="righttt" variant="body2" style={{ marginLeft: "auto", paddingRight: "2.0rem" }}>
+          12:45 PM
+        </Typography>
+        <Badge
+          color="secondary"
+          badgeContent={1}
+          max={99}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+        />
+      </Button>
     </div>
   );
 };
