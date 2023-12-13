@@ -32,7 +32,7 @@ const roleToRoute: RoleToRoute = {
   [UserRole.ADMIN]: adminDashboardRoute.path,
   [UserRole.PHARMACIST]: pharmacistDashboardRoute.path,
   [UserRole.UNVERIFIED_PHARMACIST]: pharmacistUnverifiedRoute.path,
-  [UserRole.DOCTOR]: doctorIntermediaryRoute.path
+  [UserRole.DOCTOR]: doctorIntermediaryRoute.path // TODO: Get rid of this
 };
 
 const LoginRoutesHandler = () => {

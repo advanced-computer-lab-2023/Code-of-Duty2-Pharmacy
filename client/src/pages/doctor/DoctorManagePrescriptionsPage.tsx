@@ -26,6 +26,7 @@ const DoctorManagePrescriptionsPage = () => {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [search, setSearch] = useState("");
   const [prescriptionMedicines, setPrescriptionMedicines] = useState<Medicine[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { prescriptionId } = useParams();
 
@@ -87,22 +88,24 @@ const DoctorManagePrescriptionsPage = () => {
       )
     : [];
 
+  const handleReturnToClinicClick = () => {
+    setIsModalOpen(true);
+  };
+
   const handleReturnToClinic = async () => {
     window.location.href = "https://www.example.com"; // TODO: Replace with actual URL.
   };
 
   return (
     <Container>
-      {/* <Typography variant="body1">Prescription: {prescription && JSON.stringify(prescription)}</Typography> */}
-
       <Box display="flex" justifyContent="center" alignItems="center">
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 2, mt: 2 }}>
           <Typography variant="h4" gutterBottom>
-            Prescription #{prescriptionId}
+            Manage Prescription Medication
           </Typography>
 
           <Typography variant="body1" sx={{ opacity: 0.6, mt: 2 }}>
-            Registered for Patient:{" "}
+            Prescription registered for:{" "}
             <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
           </Typography>
 
@@ -149,9 +152,17 @@ const DoctorManagePrescriptionsPage = () => {
             </List>
           </Box>
 
-          <Button variant="contained" color="primary" onClick={handleReturnToClinic}>
-            Save and Return
+          <Button variant="contained" color="primary" onClick={handleReturnToClinicClick}>
+            Return to Clinic
           </Button>
+
+          <ConfirmationModal
+            open={isModalOpen}
+            handleClose={() => setIsModalOpen(false)}
+            handleConfirm={handleReturnToClinic}
+            title="Returning to Clinic"
+            description="You are about to return to the clinic application. Are you sure you want to proceed?"
+          />
         </Paper>
       </Box>
     </Container>

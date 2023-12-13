@@ -20,11 +20,11 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({ open, handleClose, hand
     <DialogContent>
       <DialogContentText id="alert-dialog-description">{description}</DialogContentText>
     </DialogContent>
-    <DialogActions>
-      <Button onClick={handleClose} color="primary">
+    <DialogActions sx={{ pt: 2, pr: 4, pb: 3 }}>
+      <Button onClick={handleClose} color="error">
         No
       </Button>
-      <Button onClick={handleConfirm} color="primary" autoFocus>
+      <Button onClick={handleConfirm} color="primary" variant="outlined" autoFocus>
         Yes
       </Button>
     </DialogActions>
