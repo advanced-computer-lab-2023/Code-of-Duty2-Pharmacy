@@ -1,7 +1,7 @@
 import AdministratorDashboard from "../../pages/admin/AdministratorDashboard";
 import { Route } from "../../types";
 import AdminViewMedicinesPage from "../../pages/admin/AdminViewMedicinesPage";
-import AdminAddAdminPage from "../../pages/admin/AdminAddAdminPage";
+import ManageAdminsPage from "../../pages/admin/AdminAddAdminPage";
 import AdminViewPharmacistRequestsPage from "../../pages/admin/AdminViewPharmacistRequestsPage";
 import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage";
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
@@ -20,7 +20,7 @@ export const viewMedicinesRoute: Route = {
 
 export const addAdminRoute: Route = {
   path: "/admin/add-admins",
-  element: <AdminAddAdminPage />
+  element: <ManageAdminsPage />
 };
 
 export const viewPharmacistRegistrationRequestsRoute: Route = {

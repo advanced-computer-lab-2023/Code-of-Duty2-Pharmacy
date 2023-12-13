@@ -6,40 +6,28 @@ import Order from "../models/orders/Order";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Patient from "../models/patients/Patient";
 import HealthPackage from "../models/health_packages/HealthPackage";
+import { UserRole } from "../types";
 
-export const getAllMedicines = async (
-  req: AuthorizedRequest,
-  res: Response
-) => {
+export const getAllMedicines = async (req: AuthorizedRequest, res: Response) => {
   try {
     const medicines = await Medicine.find();
 
     if (medicines.length === 0) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "No medicines found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "No medicines found" });
     }
 
     const patientId = req.user?.id;
 
-    const patient = await Patient.findById(patientId).select(
-      "subscribedPackage"
-    );
+    const patient = await Patient.findById(patientId).select("subscribedPackage");
 
     let discount = 0;
     let packageName = "";
 
-    if (
-      patient &&
-      patient.subscribedPackage &&
-      patient.subscribedPackage.status === "subscribed"
-    ) {
-      const healthPackage = await HealthPackage.findById(
-        patient.subscribedPackage.packageId
-      );
+    if (patient && patient.subscribedPackage && patient.subscribedPackage.status === "subscribed") {
+      const healthPackage = await HealthPackage.findById(patient.subscribedPackage.packageId);
 
       if (healthPackage) {
-        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
         packageName = healthPackage.name;
       }
     }
@@ -50,17 +38,13 @@ export const getAllMedicines = async (
       return {
         ...medicineObject,
         price: discountedPrice,
-        originalPrice: medicine.price.toFixed(2),
+        originalPrice: medicine.price.toFixed(2)
       };
     });
 
-    res
-      .status(StatusCodes.OK)
-      .json({ medicines: medicinesWithDiscount, discount, packageName });
+    res.status(StatusCodes.OK).json({ medicines: medicinesWithDiscount, discount, packageName });
   } catch (error) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (error as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (error as Error).message });
   }
 };
 
@@ -69,22 +53,18 @@ export const addMedicine = async (req: Request, res: Response) => {
     const newMedicineData: IMedicineModel = req.body;
 
     const existingMedicine = await Medicine.findOne({
-      name: newMedicineData.name,
+      name: newMedicineData.name
     });
 
     if (existingMedicine) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "A medicine with this name already exists." });
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "A medicine with this name already exists." });
     }
 
     const newMedicine = new Medicine(newMedicineData);
     const savedMedicine = await newMedicine.save();
     res.status(StatusCodes.CREATED).json(savedMedicine);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
@@ -94,17 +74,13 @@ export const updateMedicine = async (req: Request, res: Response) => {
     const medicineId = req.params.id;
     const medicine = await Medicine.findById(medicineId);
     if (!medicine) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Medicine not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Medicine not found" });
     }
     Object.assign(medicine, updatedMedicineData);
     const updatedMedicine = await medicine.save();
     res.status(StatusCodes.OK).json(updatedMedicine);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
@@ -112,25 +88,19 @@ export const searchMedicines = async (req: Request, res: Response) => {
   let medicineName: string = (req.query.name as string) || "";
 
   if (medicineName.length === 0) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Please provide a medicine name" });
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please provide a medicine name" });
   }
 
   try {
     const medicines: IMedicineModel[] = await Medicine.find({
-      name: { $regex: medicineName, $options: "i" },
+      name: { $regex: medicineName, $options: "i" }
     });
     if (medicines.length === 0) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "No medicines found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "No medicines found" });
     }
     res.status(StatusCodes.OK).json(medicines);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
@@ -149,44 +119,55 @@ export const getMedicineSales = async (req: Request, res: Response) => {
 };
 
 export const getAllMedicinesSales = async (req: Request, res: Response) => {
-  let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
   let medsMap: Map<string, number> = new Map<string, number>();
 
   for (let i = 0; i < orders.length; i++) {
     for (let j = 0; j < orders[i].medicines.length; j++) {
-      let quantity =
-        medsMap.get(orders[i].medicines[j].medicineId.toString()) || 0;
-      medsMap.set(
-        orders[i].medicines[j].medicineId.toString(),
-        quantity + orders[i].medicines[j].quantity
-      );
+      let quantity = medsMap.get(orders[i].medicines[j].medicineId.toString()) || 0;
+      medsMap.set(orders[i].medicines[j].medicineId.toString(), quantity + orders[i].medicines[j].quantity);
     }
   }
 
   return res.status(StatusCodes.OK).json(Object.fromEntries(medsMap));
 };
 
-export const bulkUpdateMedicineQuantities = async (
-  req: AuthorizedRequest,
-  res: Response
-) => {
+export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: Response) => {
   try {
     const updates = req.body;
 
     const bulkOps = updates.map((update: any) => ({
       updateOne: {
         filter: { _id: update.medicineId },
-        update: { $inc: { availableQuantity: -update.boughtQuantity } },
-      },
+        update: { $inc: { availableQuantity: -update.boughtQuantity } }
+      }
     }));
 
     await Medicine.bulkWrite(bulkOps);
 
     res.status(200).send();
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const archiveOrUnarchiveMedicine = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    // check user role
+    if (req.user?.role !== UserRole.PHARMACIST) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: "Unauthorized" });
+    }
+
+    const archive: boolean = req.body.archive;
+    const medicineId = req.params.id;
+    const medicine = await Medicine.findById(medicineId);
+    if (!medicine) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Medicine not found" });
+    }
+    medicine.isArchived = archive;
+    const updatedMedicine = await medicine.save();
+    res.status(StatusCodes.OK).json(updatedMedicine);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };

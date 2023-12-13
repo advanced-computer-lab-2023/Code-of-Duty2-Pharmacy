@@ -168,7 +168,7 @@ export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
       const healthPackage = await HealthPackage.findById(patient.subscribedPackage.packageId);
 
       if (healthPackage) {
-        discount = healthPackage.discounts.gainedPharamcyMedicinesDiscount;
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
       }
     }
 
@@ -452,7 +452,9 @@ Please refer to the `api-reference.md` file under the `docs` directory for a com
 
 ## Tests
 
-There are currently no tests in place for this software.
+Testing was done for this software using Postman.
+
+![Postman](docs/screenshots/postman.png)
 
 ## How to Use
 
