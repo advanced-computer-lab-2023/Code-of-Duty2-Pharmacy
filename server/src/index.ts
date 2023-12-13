@@ -10,6 +10,7 @@ import patientRouter from "./routes/patientRoutes";
 import registrationRouter from "./routes/registrationRoutes";
 import adminRouter from "./routes/adminRoutes";
 import pharmacistRouter from "./routes/pharmacistRoutes";
+import doctorRouter from "./routes/doctorRoutes";
 import pharmacistRegistrationRequestRouter from "./routes/pharmacistRegistrationRequestRoutes";
 import authRouter from "./routes/authRoutes";
 import paymentRouter from "./routes/paymentRoutes";
@@ -31,19 +32,17 @@ app.get("/", (_, res) => {
   res.send("Server Online!");
 });
 
-app.listen(config.server.port, async () => { 
+app.listen(config.server.port, async () => {
   console.log(`Server listening on port ${config.server.port}`);
 });
 
 app.use("/medicines", medicineRouter);
 app.use("/patients", patientRouter);
 app.use("/pharmacists", pharmacistRouter);
+app.use("/doctors", doctorRouter);
 app.use("/register", registrationRouter);
 app.use("/admins", adminRouter);
-app.use(
-  "/pharmacist-registration-requests",
-  pharmacistRegistrationRequestRouter
-);
+app.use("/pharmacist-registration-requests", pharmacistRegistrationRequestRouter);
 app.use("/auth", authRouter);
 app.use("/auth", forgetPasswordRouter);
 app.use("/payments", paymentRouter);
