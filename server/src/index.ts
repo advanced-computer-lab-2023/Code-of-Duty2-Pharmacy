@@ -14,6 +14,7 @@ import pharmacistRegistrationRequestRouter from "./routes/pharmacistRegistration
 import authRouter from "./routes/authRoutes";
 import paymentRouter from "./routes/paymentRoutes";
 import forgetPasswordRouter from "./routes/ForgetPassword";
+import prescriptionRouter from "./routes/prescriptionRoutes";
 
 export const app = express();
 
@@ -31,7 +32,7 @@ app.get("/", (_, res) => {
   res.send("Server Online!");
 });
 
-app.listen(config.server.port, async () => { 
+app.listen(config.server.port, async () => {
   console.log(`Server listening on port ${config.server.port}`);
 });
 
@@ -40,10 +41,8 @@ app.use("/patients", patientRouter);
 app.use("/pharmacists", pharmacistRouter);
 app.use("/register", registrationRouter);
 app.use("/admins", adminRouter);
-app.use(
-  "/pharmacist-registration-requests",
-  pharmacistRegistrationRequestRouter
-);
+app.use("/pharmacist-registration-requests", pharmacistRegistrationRequestRouter);
 app.use("/auth", authRouter);
 app.use("/auth", forgetPasswordRouter);
 app.use("/payments", paymentRouter);
+app.use("/prescriptions", prescriptionRouter);
