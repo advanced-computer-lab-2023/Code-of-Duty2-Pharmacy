@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import {
   Avatar,
   Box,
+  Button,
   Container,
   IconButton,
   List,
@@ -58,7 +59,7 @@ const DoctorManagePrescriptionsPage = () => {
   const handleSelectMedicine = async (medicine: Medicine) => {
     try {
       const response = await axios.post(`${config.API_URL}/prescriptions/${prescriptionId}/medicines`, {
-        medicine
+        medicineId: medicine._id
       });
       setPrescription(response.data.prescription);
       setPrescriptionMedicines([...prescriptionMedicines, medicine]);
@@ -71,7 +72,7 @@ const DoctorManagePrescriptionsPage = () => {
     try {
       const medicineId = medicine._id;
       const response = await axios.delete(`${config.API_URL}/prescriptions/${prescriptionId}/medicines/${medicineId}`);
-      setPrescription(response.data);
+      setPrescription(response.data.prescription);
       setPrescriptionMedicines(prescriptionMedicines.filter((m) => m._id !== medicine._id));
     } catch (error) {
       console.error("Error deleting medicine:", error);
@@ -85,6 +86,10 @@ const DoctorManagePrescriptionsPage = () => {
           !prescriptionMedicines.some((m) => m._id === medicine._id)
       )
     : [];
+
+  const handleReturnToClinic = async () => {
+    window.location.href = "https://www.example.com"; // TODO: Replace with actual URL.
+  };
 
   return (
     <Container>
@@ -101,11 +106,11 @@ const DoctorManagePrescriptionsPage = () => {
             <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
           </Typography>
 
-          <Typography variant="h5" sx={{ mt: 2 }}>
+          <Typography variant="h5" sx={{ mt: 5 }} gutterBottom>
             Prescription Medicines
           </Typography>
 
-          <Box mt={2}>
+          {prescriptionMedicines.length > 0 ? (
             <List>
               {prescriptionMedicines.map((medicine, index) => (
                 <ListItem key={index}>
@@ -119,14 +124,16 @@ const DoctorManagePrescriptionsPage = () => {
                 </ListItem>
               ))}
             </List>
-          </Box>
+          ) : (
+            <Typography variant="body1">There are currently no medicines in this prescription.</Typography>
+          )}
 
           <TextField
             label="Search for a medicine"
             variant="outlined"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            sx={{ mt: 2 }}
+            sx={{ mt: 3 }}
           />
 
           <Box mt={2}>
@@ -141,6 +148,10 @@ const DoctorManagePrescriptionsPage = () => {
               ))}
             </List>
           </Box>
+
+          <Button variant="contained" color="primary" onClick={handleReturnToClinic}>
+            Save and Return
+          </Button>
         </Paper>
       </Box>
     </Container>

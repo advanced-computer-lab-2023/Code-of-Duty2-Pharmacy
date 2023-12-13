@@ -8,7 +8,7 @@ export const PrescriptionSchema = new Schema<IPrescriptionModel>(
     doctorId: { type: Schema.Types.ObjectId, ref: "Doctor", required: true },
     patientId: { type: Schema.Types.ObjectId, ref: "Patient", required: true },
     status: { type: String, enum: ["filled", "unfilled"], required: true },
-    isSubmitted: { type: Boolean, required: true },
+    isSubmitted: { type: Boolean, required: false, default: false },
     medicines: {
       type: [
         {

@@ -44,7 +44,7 @@ export const addMedicineToPrescription = async (req: Request, res: Response) => 
     const newMedicine = {
       medicineId: medicine._id,
       name: medicine.name,
-      dosage: "",
+      dosage: "N/A", // Can't be empty as 'required: true' in the mongoose schema definition doesn't allow empty strings
       quantity: 0
     };
 
