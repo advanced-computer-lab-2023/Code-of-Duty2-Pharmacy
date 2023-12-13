@@ -293,9 +293,9 @@ Returns medicines that match the medicine name search query.
 | :--------------- | :------- | :-------------------------------------------------------------------- |
 | `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
-| Body Field | Type     | Description                                               |
-| :--------- | :------- | :-------------------------------------------------------- |
-| `name`     | `string` | **Required**. Name of the medicine(s) being searched for. |
+| Parameter | Type     | Description                                               |
+| :-------- | :------- | :-------------------------------------------------------- |
+| `name`    | `string` | **Required**. Name of the medicine(s) being searched for. |
 
 </details>
 
@@ -872,39 +872,163 @@ Recharges a patient's wallet. Uses the Patient ID embedded in the Access Token o
 ## Pharmacists
 
 <details>
-<summary>Delete Pharmacist</summary>
-</details>
-
-<details>
-<summary>Get Pharmacists</summary>
-</details>
-
-<details>
-<summary>Search Pharmacists</summary>
-</details>
-
-<details>
-<summary>Pharmacist Change Password</summary>
-</details>
-
-<details>
-<summary>Get Pharmacist Info</summary>
-</details>
-
-<details>
-<summary>Update Pharmacist Info</summary>
-</details>
-
-<details>
 <summary>Get Pharmacist Registration Requests</summary>
+```http
+  GET /pharmacist-registration-requests
+```
+
+Returns all pharmacist registration requests.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
 </details>
 
 <details>
 <summary>Accept Pharmacist Registration Request</summary>
+```http
+  POST /pharmacist-registration-requests/accept-pharmacist-request
+```
+
+Accepts a pharmacist registration request.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+| Body Field | Type     | Description                                                           |
+| :--------- | :------- | :-------------------------------------------------------------------- |
+| `username` | `string` | **Required**. Username of the pharmacist that requested registration. |
+
 </details>
 
 <details>
 <summary>Reject Pharmacist Registration Request</summary>
+```http
+  POST /pharmacist-registration-requests/reject-pharmacist-request
+```
+
+Rejects a pharmacist registration request.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+| Body Field | Type     | Description                                                           |
+| :--------- | :------- | :-------------------------------------------------------------------- |
+| `username` | `string` | **Required**. Username of the pharmacist that requested registration. |
+
+</details>
+
+<details>
+<summary>Delete Pharmacist</summary>
+```http
+  DELETE /pharmacists/:id
+```
+
+Deletes a pharmacist's account.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+| Parameter | Type     | Description                                                |
+| :-------- | :------- | :--------------------------------------------------------- |
+| `id`      | `string` | **Required**. Database ID of the pharmacist to be deleted. |
+
+</details>
+
+<details>
+<summary>Get Pharmacists</summary>
+```http
+  GET /pharmacists
+```
+
+Returns all pharmacists.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+</details>
+
+<details>
+<summary>Search Pharmacists</summary>
+```http
+  GET /pharmacists/search?username={username}&email={email}
+```
+
+Searches for and returns pharmacists that match the provided search parameters.
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+| Parameter  | Type     | Description                                             |
+| :--------- | :------- | :------------------------------------------------------ |
+| `username` | `string` | **Optional**. Username of the pharmacist to search for. |
+| `email`    | `string` | **Optional**. Email of the pharmacist to search for.    |
+
+**Note:** At least **_ONE_** of the above parameters should be supplied.
+
+</details>
+
+<details>
+<summary>Pharmacist Change Password</summary>
+```http
+  POST /pharmacists/change-password
+```
+
+Changes a pharmacist's password. Uses the Pharmacist ID embedded in the Access Token of the logged in pharmacist to change his/her password.
+
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+
+| Parameter         | Type     | Description                                       |
+| :---------------- | :------- | :------------------------------------------------ |
+| `currentPassword` | `string` | **Optional**. Current password of the pharmacist. |
+| `newPassword`     | `string` | **Optional**. New password of the pharmacist.     |
+
+</details>
+
+<details>
+<summary>Get Pharmacist Info</summary>
+```http
+  GET /pharmacists/me/complete-info
+```
+
+Returns a pharmacist's info. Uses the Pharmacist ID embedded in the Access Token of the logged in pharmacist to determine whose info to return.
+
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+
+</details>
+
+<details>
+<summary>Update Pharmacist Info</summary>
+```http
+  PATCH /pharmacists/me/complete-info
+```
+
+Updates a pharmacist's info. Uses the Pharmacist ID embedded in the Access Token of the logged in pharmacist to determine whose info to update.
+
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
+
+| Body Field       | Type     | Description                                                          |
+| :--------------- | :------- | :------------------------------------------------------------------- |
+| `name`           | `string` | **Required**. Name of the pharmacist.                                |
+| `mobileNumber`   | `string` | **Required**. Mobile number of the pharmacist.                       |
+| `dateOfBirth`    | `Date`   | **Required**. Date of birth of the pharmacist.                       |
+| `gender`         | `string` | **Required**. Gender of the pharmacist.                              |
+| `identification` | `string` | **Required**. URL to the identification document of the pharmacist.  |
+| `pharmacyDegree` | `string` | **Required**. URL to the pharmacy degree of the pharmacist.          |
+| `workingLicense` | `string` | **Required**. URL to the working license document of the pharmacist. |
+
 </details>
 
 ## Stripe Payments

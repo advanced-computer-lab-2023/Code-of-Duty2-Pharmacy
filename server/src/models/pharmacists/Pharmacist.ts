@@ -6,6 +6,7 @@ import PasswordResetSchema from "../users/PasswordReset";
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
+// TODO: Add the world "Url" to the end of the needed fields
 export const PharmacistSchema = new Schema<IPharmacistModel>(
   {
     username: { type: String, required: true, unique: true },
@@ -17,7 +18,7 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
       type: String,
       required: true,
       enum: ["unspecified", "male", "female"],
-      default: "unspecified",
+      default: "unspecified"
     },
     mobileNumber: { type: String, required: false }, //TO BE REQUIRED
     hourlyRate: { type: Number, required: true },
@@ -28,8 +29,8 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     workingLicense: { type: String },
     passwordReset: {
       type: PasswordResetSchema,
-      select: false,
-    },
+      select: false
+    }
   },
   { timestamps: true }
 );
