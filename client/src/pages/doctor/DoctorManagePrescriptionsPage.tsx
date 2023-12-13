@@ -5,6 +5,8 @@ import {
   Box,
   Button,
   Container,
+  Divider,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -97,75 +99,85 @@ const DoctorManagePrescriptionsPage = () => {
   };
 
   return (
-    <Container>
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Paper elevation={3} sx={{ padding: 2, borderRadius: 2, mt: 2 }}>
-          <Typography variant="h4" gutterBottom>
-            Manage Prescription Medication
-          </Typography>
+    <Box display="flex" justifyContent="center" alignItems="center" ml={3} mr={3} mt={3} mb={0}>
+      <Paper elevation={3} sx={{ padding: 2, borderRadius: 2, mt: 2, width: "100%", minHeight: "92vh" }}>
+        <Typography variant="h4" gutterBottom>
+          Manage Prescription Medication
+        </Typography>
 
-          <Typography variant="body1" sx={{ opacity: 0.6, mt: 2 }}>
-            Prescription registered for:{" "}
-            <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
-          </Typography>
+        <Typography variant="body1" sx={{ opacity: 0.6, mt: 2 }}>
+          Prescription registered for:{" "}
+          <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
+        </Typography>
 
-          <Typography variant="h5" sx={{ mt: 5 }} gutterBottom>
-            Prescription Medicines
-          </Typography>
+        <Typography variant="h5" sx={{ mt: 5 }} gutterBottom>
+          Prescription Medicines
+        </Typography>
 
-          {prescriptionMedicines.length > 0 ? (
-            <List>
-              {prescriptionMedicines.map((medicine, index) => (
-                <ListItem key={index}>
-                  <ListItemAvatar>
-                    <Avatar src={medicine.pictureUrl} />
-                  </ListItemAvatar>
-                  <ListItemText primary={medicine.name} secondary={medicine.description} />
-                  <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveMedicine(medicine)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body1">There are currently no medicines in this prescription.</Typography>
-          )}
+        <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
+          <Grid item xs={12} sm={6}>
+            {prescriptionMedicines.length > 0 ? (
+              <List>
+                {prescriptionMedicines.map((medicine, index) => (
+                  <ListItem key={index}>
+                    <ListItemAvatar>
+                      <Avatar src={medicine.pictureUrl} />
+                    </ListItemAvatar>
+                    <ListItemText primary={medicine.name} secondary={medicine.description} />
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveMedicine(medicine)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography variant="body1">There are currently no medicines in this prescription.</Typography>
+            )}
+          </Grid>
 
-          <TextField
-            label="Search for a medicine"
-            variant="outlined"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            sx={{ mt: 3 }}
-          />
+          <Grid item xs={false} sm={1}>
+            <Divider orientation="vertical" sx={{ height: "100%", width: "1px" }} />
+          </Grid>
 
-          <Box mt={2}>
-            <List>
-              {filteredMedicines.map((medicine, index) => (
-                <ListItem button key={index} onClick={() => handleSelectMedicine(medicine)}>
-                  <ListItemAvatar>
-                    <Avatar src={medicine.pictureUrl} />
-                  </ListItemAvatar>
-                  <ListItemText primary={medicine.name} secondary={medicine.description} />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
+          <Grid item xs={12} sm={5}>
+            <Box>
+              <TextField
+                label="Search for a medicine"
+                variant="outlined"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                sx={{ mt: 3 }}
+              />
 
-          <Button variant="contained" color="primary" onClick={handleReturnToClinicClick}>
-            Return to Clinic
-          </Button>
+              <Box mt={2}>
+                <List>
+                  {filteredMedicines.map((medicine, index) => (
+                    <ListItem button key={index} onClick={() => handleSelectMedicine(medicine)}>
+                      <ListItemAvatar>
+                        <Avatar src={medicine.pictureUrl} />
+                      </ListItemAvatar>
+                      <ListItemText primary={medicine.name} secondary={medicine.description} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
 
-          <ConfirmationModal
-            open={isModalOpen}
-            handleClose={() => setIsModalOpen(false)}
-            handleConfirm={handleReturnToClinic}
-            title="Returning to Clinic"
-            description="You are about to return to the Clinic application. Are you sure you want to proceed?"
-          />
-        </Paper>
-      </Box>
-    </Container>
+        <Button variant="contained" color="primary" onClick={handleReturnToClinicClick}>
+          Return to Clinic
+        </Button>
+
+        <ConfirmationModal
+          open={isModalOpen}
+          handleClose={() => setIsModalOpen(false)}
+          handleConfirm={handleReturnToClinic}
+          title="Returning to Clinic"
+          description="You are about to return to the Clinic application. Are you sure you want to proceed?"
+        />
+      </Paper>
+    </Box>
   );
 };
 
