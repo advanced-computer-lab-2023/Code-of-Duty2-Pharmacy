@@ -12,10 +12,11 @@ Refresh tokens are used to obtain a new access token when the current one expire
 
 ### Endpoints
 
-The endpoints are categorized herein according to the entity they manipulate or are most closely associated with.
+The endpoints are group herein according to the entity they manipulate or are most closely associated with. This grouping is similar, but not 1:1, to the actual grouping in the code.
 
 - [Authentication](#authentication)
 - [Medicines](#medicines)
+- [Prescriptions](#prescriptions)
 - [Admins](#admins)
 - [Patients](#patients)
 - [Pharmacists](#pharmacists)
@@ -286,9 +287,12 @@ Updates a medicine's details.
 | :--------------- | :------- | :-------------------------------------------------------------------- |
 | `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
+| Parameter | Type     | Description                              |
+| :-------- | :------- | :--------------------------------------- |
+| `id`      | `string` | **Required**. Database ID of a medicine. |
+
 | Body Field          | Type       | Description                                                                   |
 | :------------------ | :--------- | :---------------------------------------------------------------------------- |
-| `id`                | `string`   | **Required**. Database ID of a medicine.                                      |
 | `name`              | `string`   | **Optional**. Name of the medicine.                                           |
 | `price`             | `number`   | **Optional**. Price of the medicine.                                          |
 | `description`       | `number`   | **Optional**. Description of the medicine.                                    |
@@ -296,6 +300,73 @@ Updates a medicine's details.
 | `activeIngredients` | `string[]` | **Optional**. Active Ingredients of the medicine.                             |
 | `pictureUrl`        | `number`   | **Optional**. URL of the medicine's picture, uploaded to the Firebase bucket. |
 | `availableQuantity` | `number`   | **Optional**. Available stock of the medicine.                                |
+
+</details>
+
+## Prescriptions
+
+<details>
+<summary>Get Prescription</summary>
+
+```http
+  GET /prescriptions/:prescriptionId
+```
+
+Returns a prescription with the supplied id.
+
+| Header Parameter | Type     | Description                                                       |
+| :--------------- | :------- | :---------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Doctor. |
+
+| Parameter        | Type     | Description                                                    |
+| :--------------- | :------- | :------------------------------------------------------------- |
+| `prescriptionId` | `string` | **Required**. Database ID of the prescription to be retrieved. |
+
+</details>
+
+<details>
+<summary>Add Medicine To Prescription</summary>
+
+```http
+  POST /prescriptions/:prescriptionId/medicines
+```
+
+Adds a medicine to a prescription.
+
+| Header Parameter | Type     | Description                                                       |
+| :--------------- | :------- | :---------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Doctor. |
+
+| Parameter        | Type     | Description                                    |
+| :--------------- | :------- | :--------------------------------------------- |
+| `prescriptionId` | `string` | **Required**. Database ID of the prescription. |
+
+| Body Field   | Type     | Description                                                              |
+| :----------- | :------- | :----------------------------------------------------------------------- |
+| `medicineId` | `string` | **Required**. Database ID of a medicine to be added to the prescription. |
+
+</details>
+
+<details>
+<summary>Remove Medicine From Prescription</summary>
+
+```http
+  DELETE /prescriptions/:prescriptionId/medicines/:medicineId
+```
+
+Removes a medicine from a prescription.
+
+| Header Parameter | Type     | Description                                                       |
+| :--------------- | :------- | :---------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Doctor. |
+
+| Parameter        | Type     | Description                                    |
+| :--------------- | :------- | :--------------------------------------------- |
+| `prescriptionId` | `string` | **Required**. Database ID of the prescription. |
+
+| Parameter    | Type     | Description                                                                    |
+| :----------- | :------- | :----------------------------------------------------------------------------- |
+| `medicineId` | `string` | **Required**. Database ID of the medicine to be removed from the prescription. |
 
 </details>
 

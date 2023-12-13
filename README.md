@@ -54,8 +54,9 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 - A CI/CD pipeline needs to be implemented.
 - Testing needs to be implemented for the backend using Jest.
 - Authorization middleware needs to be added to the API endpoints.
-- Backend services layer is not fully implemented.
-- Database querying needs to be optimized and security considerations must be made.
+- Backend routes need to be reorganized.
+- Backend service layer is not fully implemented.
+- Database querying needs to be optimized and security considerations must be made with regards to the data being returned.
 
 ## Code Style
 
