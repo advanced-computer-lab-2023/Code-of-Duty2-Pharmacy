@@ -5,24 +5,16 @@ import { User } from "../../types/User";
 import Pharmacist from "../../models/pharmacists/Pharmacist";
 import Admin from "../../models/admins/Admin";
 import Patient from "../../models/patients/Patient";
+import Doctor from "../../models/doctors/Doctor";
 
-export const authenticatePatientOrAdmin = async (
-  username: string,
-  password: string
-) => {
-  const adminAuthenticationTokensAndRole = await authenticateUserIfAdmin(
-    username,
-    password
-  );
+export const authenticatePatientOrAdmin = async (username: string, password: string) => {
+  const adminAuthenticationTokensAndRole = await authenticateUserIfAdmin(username, password);
 
   if (adminAuthenticationTokensAndRole) {
     return adminAuthenticationTokensAndRole;
   }
 
-  const patientAuthenticationTokensAndRole = await authenticateUserIfPatient(
-    username,
-    password
-  );
+  const patientAuthenticationTokensAndRole = await authenticateUserIfPatient(username, password);
 
   if (patientAuthenticationTokensAndRole) {
     return patientAuthenticationTokensAndRole;
@@ -45,10 +37,7 @@ const authenticateUserIfAdmin = async (username: string, password: string) => {
   return { accessToken, refreshToken, role: UserRole.ADMIN };
 };
 
-const authenticateUserIfPatient = async (
-  username: string,
-  password: string
-) => {
+const authenticateUserIfPatient = async (username: string, password: string) => {
   const patient: any = await Patient.findOne({ username }).select("+password");
 
   if (!patient) {
@@ -62,10 +51,7 @@ const authenticateUserIfPatient = async (
   return { accessToken, refreshToken, role: UserRole.PATIENT };
 };
 
-export const authenticatePharmacist = async (
-  username: string,
-  password: string
-) => {
+export const authenticatePharmacist = async (username: string, password: string) => {
   const pharmacist = await Pharmacist.findOne({ username }).select("+password");
 
   if (!pharmacist) {
@@ -77,6 +63,20 @@ export const authenticatePharmacist = async (
   const accessToken = signAndGetAccessToken(user);
   const refreshToken = signAndGetRefreshToken(user);
   return { accessToken, refreshToken, role: UserRole.PHARMACIST };
+};
+
+export const authenticateDoctor = async (username: string, password: string) => {
+  const doctor = await Doctor.findOne({ username }).select("+password");
+
+  if (!doctor) {
+    throw new Error(usernameOrPasswordIncorrectErrorMessage);
+  }
+
+  await validateUserPassword(doctor, password);
+  const user = { id: doctor._id, role: UserRole.DOCTOR };
+  const accessToken = signAndGetAccessToken(user);
+  const refreshToken = signAndGetRefreshToken(user);
+  return { accessToken, refreshToken, role: UserRole.DOCTOR };
 };
 
 const validateUserPassword = async (user: any, password: string) => {

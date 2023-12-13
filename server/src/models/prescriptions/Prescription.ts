@@ -8,21 +8,19 @@ export const PrescriptionSchema = new Schema<IPrescriptionModel>(
     doctorId: { type: Schema.Types.ObjectId, ref: "Doctor", required: true },
     patientId: { type: Schema.Types.ObjectId, ref: "Patient", required: true },
     status: { type: String, enum: ["filled", "unfilled"], required: true },
-    medicines: [
-      {
-        medicineId: {
-          type: Schema.Types.ObjectId,
-          ref: "Medicine",
-          required: true,
-        },
-        dosage: { type: String, required: true },
-      },
-    ],
+    isSubmitted: { type: Boolean, required: false, default: false },
+    medicines: {
+      type: [
+        {
+          medicineId: { type: Schema.Types.ObjectId, ref: "Medicine", required: true },
+          name: { type: String, required: true },
+          dosage: { type: String, required: true },
+          quantity: { type: Number, required: true }
+        }
+      ]
+    }
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IPrescriptionModel>(
-  "Prescription",
-  PrescriptionSchema
-);
+export default mongoose.model<IPrescriptionModel>("Prescription", PrescriptionSchema);

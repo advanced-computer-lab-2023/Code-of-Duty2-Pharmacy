@@ -4,7 +4,13 @@ interface Prescription {
   doctorId: string;
   patientId: string;
   status: "filled" | "unfilled";
-  medicines: { medicineName: string; dosage: string }[];
+  isSubmitted: boolean;
+  medicines: {
+    medicineId: string;
+    name: string;
+    dosage: string;
+    quantity: number;
+  }[];
 }
 
 export default Prescription;

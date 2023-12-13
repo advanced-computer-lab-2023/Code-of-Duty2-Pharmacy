@@ -7,16 +7,10 @@ import Navbar from "../components/navigation/Navbar";
 import UserPanel from "../components/navigation/UserPanel";
 import Sidebar from "../components/navigation/Sidebar";
 import Footer from "../components/navigation/Footer";
-import {
-  patientRegistrationRoute,
-  pharmacistRegistrationRoute,
-} from "../data/routes/guestRoutes";
+import { patientRegistrationRoute, pharmacistRegistrationRoute } from "../data/routes/guestRoutes";
 import useFirstPath from "../hooks/useFirstPath";
 import getRequiredSidebarItems from "../utils/getRequiredSidebarItems";
-import {
-  patientLoginRoute,
-  pharmacistLoginRoute,
-} from "../data/routes/loginRoutes";
+import { patientLoginRoute, pharmacistLoginRoute } from "../data/routes/loginRoutes";
 
 interface Props {
   children: React.ReactNode;
@@ -39,11 +33,9 @@ const Layout: React.FC<Props> = ({ children }) => {
     return <>{children}</>;
   };
 
-  if (
-    firstPath === "admin" ||
-    firstPath === "pharmacist" ||
-    firstPath === "patient"
-  ) {
+  if (firstPath === "doctor") {
+    return <MainPageContent />;
+  } else if (firstPath === "admin" || firstPath === "pharmacist" || firstPath === "patient") {
     const sidebarItems = getRequiredSidebarItems(firstPath);
     return (
       <Box display="flex">
@@ -52,7 +44,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           sx={{
             marginLeft,
             transition: "margin-left 0.2s ease-in-out",
-            flexGrow: 1,
+            flexGrow: 1
           }}
         >
           <UserPanel sidebarItems={sidebarItems} />
