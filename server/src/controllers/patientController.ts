@@ -38,6 +38,7 @@ export const deletePatient = async (req: Request, res: Response) => {
   }
 };
 
+// TODO: Remove this "confirmPassword" as it's unused and unnecessary
 export const changePatientPassword = async (req: AuthorizedRequest, res: Response) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;

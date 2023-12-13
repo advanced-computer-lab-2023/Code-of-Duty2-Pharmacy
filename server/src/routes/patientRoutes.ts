@@ -31,6 +31,7 @@ import { authenticateUser } from "../middlewares/authentication";
 const router = express.Router();
 
 router.use(authenticateUser);
+
 router.get("/", getAllPatients);
 router.get("/orders", getPatientOrders);
 router.delete("/orders/:orderId", cancelOrder);
@@ -46,6 +47,7 @@ router.delete("/me/cart/:itemId", deleteCartItem);
 router.patch("/me/cart/:medicineId/change-quantity/:newQuantity", changeMedicineQuantity);
 router.get("/me/cart-medicines-stock", getCartMedicinesStock);
 router.post("/orders", createOrder);
+
 router.get("/wallets/exists", doesAPatientHaveAWalletHandler);
 router.post("/validate-wallet-pin-code", authenticateWalletPatientHandler);
 router.post("/wallets", addPatientAWalletHandler);

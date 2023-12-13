@@ -53,10 +53,14 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 - The project is currently in development.
 - A CI/CD pipeline needs to be implemented.
 - Testing needs to be implemented for the backend using Jest.
-- Authorization middleware needs to be added to the API endpoints.
+- Authorization middleware needs to be fully added to the API endpoints.
+- Additional authorization middleware/checks need to be implemented to make sure patients can only cancel orders that belong to them, for example.
 - Backend routes need to be reorganized.
 - Backend service layer is not fully implemented.
 - Database querying needs to be optimized and security considerations must be made with regards to the data being returned.
+- API calls in the frontend should be separated from the actual pages.
+- Form validation and more loading indicators need be implemented in a more robust, consistent and reusable way in the frontend, perhaps using React Query.
+- Vitest testing needs to be set up for the API.
 
 ## Code Style
 
@@ -455,7 +459,7 @@ Please refer to the `api-reference.md` file under the `docs` directory for a com
 
 Testing was done for this software using Postman.
 
-![Postman](docs/screenshots/postman.png)
+![Postman](docs/screenshots/test/postman.png)
 
 ## How to Use
 
