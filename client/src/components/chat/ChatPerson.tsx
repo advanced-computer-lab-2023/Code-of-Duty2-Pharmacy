@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import asal from "../../assets/as.png";
 interface Props {
   name: string;
-  lastmessage: string;
-  time: string;
-  unread: number;
+  lastmessage?: string;
+  time?: string;
+  unread?: number;
 }
 
 function stringToColor(string: string) {
@@ -31,14 +31,20 @@ function stringToColor(string: string) {
 }
 
 function stringAvatar(name: string) {
+  if (typeof name !== "string") {
+    return;
+  }
   return {
     sx: {
       bgcolor: stringToColor(name)
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
+    children: `${name.split(" ")[0][0]}${
+      name.split(" ").length > 1 ? name.split(" ")[1][0] : name.split(" ")[0].length > 1 ? name.split(" ")[0][1] : ""
+    }`.toUpperCase()
   };
 }
 const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
+  console.log(name);
   return (
     <div style={{ display: "block" }}>
       <Button
@@ -60,23 +66,29 @@ const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
           <Typography variant="button" display="block" textTransform="none">
             {name}
           </Typography>
-          <Typography variant="body2" color="textSecondary" display="block">
-            {lastmessage}
-          </Typography>
+          {name !== undefined && (
+            <Typography variant="body2" color="textSecondary" display="block">
+              {lastmessage}
+            </Typography>
+          )}
         </div>
-        <Typography className="righttt" variant="body2" style={{ marginLeft: "auto", paddingRight: "2.0rem" }}>
-          {time}
-        </Typography>
-        <Badge
-          color="secondary"
-          badgeContent={unread}
-          max={99}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right"
-          }}
-          sx={{ marginRight: "0.4rem" }}
-        />
+        {time !== undefined && (
+          <Typography className="righttt" variant="body2" style={{ marginLeft: "auto", paddingRight: "2.0rem" }}>
+            {time}
+          </Typography>
+        )}
+        {unread !== undefined && (
+          <Badge
+            color="secondary"
+            badgeContent={unread}
+            max={99}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right"
+            }}
+            sx={{ marginRight: "0.4rem" }}
+          />
+        )}
       </Button>
     </div>
   );

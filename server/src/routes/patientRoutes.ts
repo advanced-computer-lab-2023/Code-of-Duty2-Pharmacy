@@ -15,7 +15,7 @@ import {
   changeMedicineQuantity,
   getCartMedicinesStock,
   getPatientOrders,
-  cancelOrder,
+  cancelOrder
 } from "../controllers/patientController";
 import {
   addPatientAWalletHandler,
@@ -23,12 +23,14 @@ import {
   doesAPatientHaveAWalletHandler,
   getPatientWalletHandler,
   performAWalletTransactionHandler,
-  rechargePatientWalletHandler,
+  rechargePatientWalletHandler
 } from "../controllers/payments/wallets/Patient";
 import { authenticateWalletUser } from "../middlewares/walletAuthentication";
 import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
+
+// --> Path: /patients/
 
 router.use(authenticateUser);
 router.get("/", getAllPatients);
@@ -44,10 +46,7 @@ router.get("/me/cart", getCartItems);
 router.delete("/me/cart", clearCart);
 router.post("/me/cart", addToCart);
 router.delete("/me/cart/:itemId", deleteCartItem);
-router.patch(
-  "/me/cart/:medicineId/change-quantity/:newQuantity",
-  changeMedicineQuantity
-);
+router.patch("/me/cart/:medicineId/change-quantity/:newQuantity", changeMedicineQuantity);
 router.get("/me/cart-medicines-stock", getCartMedicinesStock);
 
 router.post("/orders", createOrder);
