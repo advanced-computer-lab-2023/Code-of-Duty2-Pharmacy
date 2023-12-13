@@ -8,7 +8,10 @@ export const getPrescription = async (req: Request, res: Response) => {
   try {
     const { prescriptionId } = req.params;
 
-    const prescription = await Prescription.findById(prescriptionId);
+    const prescription = await Prescription.findById(prescriptionId)
+      .populate("doctorId", "name")
+      .populate("patientId", "name")
+      .populate("medicines.medicineId", "name description pictureUrl");
 
     if (!prescription) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Prescription not found" });
@@ -76,6 +79,7 @@ export const deleteMedicineFromPrescription = async (req: Request, res: Response
 
     res.status(StatusCodes.OK).json({ message: "Medicine deleted successfully", prescription });
   } catch (error) {
+    console.log(error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
 };
