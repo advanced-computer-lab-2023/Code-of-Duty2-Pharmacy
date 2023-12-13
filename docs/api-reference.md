@@ -4,7 +4,7 @@ This document provides a comprehensive reference for the REST API endpoints used
 
 ### Access Tokens
 
-Access tokens are used to authenticate requests to the API. They are sent in the `Authorization` header with each request. The format of the header is `Bearer {access_token}`.
+Access tokens are used to authenticate requests to the API. They are sent in the `Authorization` header with each request. The format of the authorization header is `Bearer {access_token}`.
 
 ### Refresh Tokens
 
@@ -12,7 +12,7 @@ Refresh tokens are used to obtain a new access token when the current one expire
 
 ### Endpoints
 
-The endpoints are group herein according to the entity they manipulate or are most closely associated with. This grouping is similar, but not 1:1, to the actual grouping in the code.
+The endpoints are grouped herein according to the entity they manipulate or are most closely associated with. This grouping is similar, but not 1:1, to the actual grouping in the code.
 
 - [Authentication](#authentication)
 - [Medicines](#medicines)
