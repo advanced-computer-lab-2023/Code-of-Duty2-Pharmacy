@@ -39,11 +39,11 @@ export const searchDoctors = async (req: AuthorizedRequest, res: Response) => {
   if (/*user?.role !== UserRole.PATIENT &&*/ user?.role !== UserRole.ADMIN && user?.role !== UserRole.PHARMACIST) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: "You are not authorized to perform this action." });
   }
-  const { name, specialization } = req.query;
+  const { name } = req.query;
   try {
     const doctors = await Doctor.find({
-      name: { $regex: name as string, $options: "i" },
-      specialization: { $regex: specialization as string, $options: "i" }
+      name: { $regex: name as string, $options: "i" }
+      // ,specialization: { $regex: specialization as string, $options: "i" }
     });
     res.status(StatusCodes.OK).json(doctors);
   } catch (err) {

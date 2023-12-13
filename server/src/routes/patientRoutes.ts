@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getAllPatients,
+  searchPatients,
   deletePatient,
   changePatientPassword,
   getDeliveryAddresses,
@@ -38,6 +39,7 @@ router.get("/orders", getPatientOrders);
 router.delete("/orders/:orderId", cancelOrder);
 
 router.delete("/:id", deletePatient);
+router.get("/search", searchPatients);
 router.post("/change-password", changePatientPassword);
 router.get("/addresses", getDeliveryAddresses);
 router.post("/addresses", addDeliveryAddress);

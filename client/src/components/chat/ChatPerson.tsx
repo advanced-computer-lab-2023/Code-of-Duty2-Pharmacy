@@ -3,6 +3,7 @@ import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import asal from "../../assets/as.png";
+import React from "react";
 interface Props {
   name: string;
   lastmessage?: string;
@@ -44,6 +45,19 @@ function stringAvatar(name: string) {
   };
 }
 const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
+  const [messageWidth, setMessageWidth] = React.useState<number>(0);
+
+  //   console.log(window.innerWidth);
+  function windowWidth(): void {
+    // get the window width
+    let width = window.innerWidth;
+    // log it to the console
+    console.log(width);
+    setMessageWidth(width < 1100 ? width / 14 : width / 11);
+  }
+
+  // attach the function to the resize event
+  window.addEventListener("resize", windowWidth);
   return (
     <div style={{ display: "block" }}>
       <Button
@@ -65,9 +79,14 @@ const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
           <Typography variant="button" display="block" textTransform="none">
             {name}
           </Typography>
-          {name !== undefined && (
-            <Typography variant="body2" color="textSecondary" display="block">
-              {lastmessage}
+          {lastmessage !== undefined && (
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              display="block"
+              style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
+            >
+              {lastmessage.length > 30 ? `${lastmessage.slice(0, messageWidth)}...` : lastmessage}
             </Typography>
           )}
         </div>

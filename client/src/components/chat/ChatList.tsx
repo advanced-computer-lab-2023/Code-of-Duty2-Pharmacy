@@ -15,6 +15,7 @@ import { TabList, TabPanel } from "@mui/lab";
 import { IconButton, Snackbar, Typography } from "@mui/material";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import ArrowBack from "@mui/icons-material/ArrowBack";
+import { NameSearchBar, goSearch } from "../search/NameSearchBar";
 
 function Alert(props: AlertProps, ref: Ref<any>) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
@@ -99,6 +100,41 @@ const ChatList: React.FC<Props> = () => {
     setSnackbarOpen(false);
   };
 
+  const handleSearch = async (searchTerm: string, searchCollection: string) => {
+    try {
+      let responseData = await goSearch(searchTerm, searchCollection);
+      if (searchCollection === "patients") {
+        setPatients(responseData);
+      } else if (searchCollection === "doctors") {
+        setDoctors(responseData);
+      } else if (searchCollection === "pharmacists") {
+        setPharmacists(responseData);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        if (searchCollection === "patients") {
+          fetchPatients();
+        } else if (searchCollection === "doctors") {
+          fetchDoctors();
+        } else if (searchCollection === "pharmacists") {
+          fetchPharmacists();
+        }
+        return;
+      }
+      if (err.response?.status === 404) {
+        if (searchCollection === "patients") {
+          setPatients([]);
+        } else if (searchCollection === "doctors") {
+          setDoctors([]);
+        } else if (searchCollection === "pharmacists") {
+          setPharmacists([]);
+        }
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <div>
       {!showNewChat && (
@@ -113,6 +149,12 @@ const ChatList: React.FC<Props> = () => {
           }}
         >
           {" "}
+          {/* <NameSearchBar
+            searchCollection="chats"
+            attribute="name"
+            onSearch={() => {}}
+            initialValue="Search for a person"
+          /> */}
           <div style={{ paddingRight: "0.5rem", paddingBottom: "3.0rem", marginTop: "-1.5rem" }}>
             <Button
               variant="contained"
@@ -188,6 +230,12 @@ const ChatList: React.FC<Props> = () => {
               Start New Chat
             </Typography>
           </div>
+          <NameSearchBar
+            searchCollection={value === "pat" ? "patients" : value === "doc" ? "doctors" : "pharmacists"}
+            attribute="name"
+            onSearch={handleSearch}
+            initialValue="Search for a person"
+          />
 
           <TabContext value={value}>
             <TabList
