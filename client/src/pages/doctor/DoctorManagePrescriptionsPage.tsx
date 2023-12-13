@@ -161,7 +161,7 @@ const DoctorManagePrescriptionsPage = () => {
             handleClose={() => setIsModalOpen(false)}
             handleConfirm={handleReturnToClinic}
             title="Returning to Clinic"
-            description="You are about to return to the clinic application. Are you sure you want to proceed?"
+            description="You are about to return to the Clinic application. Are you sure you want to proceed?"
           />
         </Paper>
       </Box>

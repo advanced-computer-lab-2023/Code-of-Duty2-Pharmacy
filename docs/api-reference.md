@@ -140,18 +140,71 @@ Registers a new pharmacist registration request.
 
 <details>
 <summary>Reset Password Request</summary>
+
+```http
+  POST /reset-password-request
+```
+
+Initiates a request for a password reset and sends OTP to the provided email.
+
+| Body Field | Type     | Description                 |
+| :--------- | :------- | :-------------------------- |
+| `email`    | `string` | **Required**. User's email. |
+
 </details>
 
 <details>
 <summary>Delete Password Reset Info</summary>
+
+```http
+  DELETE /delete-password-reset-info
+```
+
+Deletes/Invalidates password reset information/OTP
+
+| Body Field | Type     | Description                 |
+| :--------- | :------- | :-------------------------- |
+| `email`    | `string` | **Required**. User's email. |
+
 </details>
 
 <details>
 <summary>Validate Password Reset Info</summary>
+
+```http
+  POST /validate-password-reset-info
+```
+
+Validates the OTP for password reset.
+
+| Body Field | Type     | Description                           |
+| :--------- | :------- | :------------------------------------ |
+| `userData` | `object` | **Required**. User's data.            |
+| `otp`      | `string` | **Required**. OTP for password reset. |
+
+#### `userData` object:
+
+| Attribute | Type     | Description                                                                 |
+| :-------- | :------- | :-------------------------------------------------------------------------- |
+| `id`      | `object` | **Required**. Database ID of the user.                                      |
+| `role`    | `string` | **Required**. Role of the user (admin, patient, or pharmacist in this case) |
+
 </details>
 
 <details>
 <summary>Reset Password</summary>
+
+```http
+  POST /reset-password
+```
+
+Resets the user’s password.
+
+| Body Field        | Type     | Description                                     |
+| :---------------- | :------- | :---------------------------------------------- |
+| `password`        | `string` | **Required**. New password.                     |
+| `confirmPassword` | `string` | **Required**. Confirmation of the new password. |
+
 </details>
 
 ## Medicines

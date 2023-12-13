@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
+// TODO: Get rid of this
 const DoctorIntermediaryRoutingPage = () => {
   return (
     <>
@@ -8,7 +9,7 @@ const DoctorIntermediaryRoutingPage = () => {
       </Typography>
       <Box>
         <Typography variant="body1">
-          Please go back to the clinic application and access the specific prescription page from there.
+          Please go back to the Clinic application and access the specific prescription page from there.
         </Typography>
       </Box>
     </>
