@@ -44,7 +44,6 @@ function stringAvatar(name: string) {
   };
 }
 const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
-  console.log(name);
   return (
     <div style={{ display: "block" }}>
       <Button
