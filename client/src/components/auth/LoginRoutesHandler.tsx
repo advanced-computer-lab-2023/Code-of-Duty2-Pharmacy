@@ -37,6 +37,7 @@ const roleToRoute: RoleToRoute = {
 
 const LoginRoutesHandler = () => {
   const { authState } = useContext(AuthContext);
+  console.log(authState.isAuthenticated);
 
   const route = roleToRoute[authState.role] || pageNotFoundRoute.path;
 
