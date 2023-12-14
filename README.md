@@ -514,8 +514,15 @@ See `CONTRIBUTING.md` for ways to get started. Please adhere to the `Code of Con
 
 ## Credits
 
-- [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
-
+- Documentation
+  - [ReactJs Documentation](https://react.dev/reference/react)
+  - [Material UI Documentation](https://mui.com/material-ui/getting-started/)
+- Tutorials
+  - [React Stripe.js and the Payment Element](https://www.youtube.com/watch?v=e-whXipfRvg)
+  - [React Tutorial for Beginners](https://www.youtube.com/watch?v=SqcY0GlETPk)
+- Project Repositories
+  - [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
+ 
 ## License
 
 This software currently has no license in place.
