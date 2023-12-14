@@ -99,19 +99,34 @@ const DoctorManagePrescriptionsPage = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" ml={3} mr={3} mt={3} mb={0}>
-      <Paper elevation={3} sx={{ padding: 2, borderRadius: 2, mt: 2, width: "100%", minHeight: "92vh" }}>
-        <Typography variant="h4" gutterBottom>
+    <Box display="flex" justifyContent="center" alignItems="center" m={3}>
+      <Paper
+        elevation={3}
+        sx={{
+          padding: 2,
+          borderRadius: 2,
+          mt: 2,
+          width: "100%",
+          minHeight: "92vh",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
+        <Typography variant="h4" color="text.secondary" gutterBottom>
           Manage Prescription Medication
         </Typography>
 
-        <Typography variant="body1" sx={{ opacity: 0.6, mt: 2 }}>
+        <Typography variant="body1" sx={{ opacity: 0.75, mt: 2 }}>
           Prescription registered for:{" "}
           <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
         </Typography>
 
-        <Typography variant="h5" sx={{ mt: 5 }} gutterBottom>
-          Prescription Medicines
+        <Typography variant="body1" sx={{ opacity: 0.75, mt: 2 }}>
+          Prescription ID: <span style={{ fontWeight: "bold" }}>{prescription && `#${prescription._id}`}</span>
+        </Typography>
+
+        <Typography variant="h5" color="text.secondary" sx={{ mt: 5 }} gutterBottom>
+          Medicines currently in the prescription:
         </Typography>
 
         <Grid container spacing={2} sx={{ display: "flex", alignItems: "stretch" }}>
@@ -136,17 +151,20 @@ const DoctorManagePrescriptionsPage = () => {
           </Grid>
 
           <Grid item xs={false} sm={1}>
-            <Divider orientation="vertical" sx={{ height: "100%", width: "1px" }} />
+            <Divider orientation="vertical" sx={{ height: "100%", width: "1px" }} flexItem />
           </Grid>
 
           <Grid item xs={12} sm={5}>
             <Box>
+              <Typography variant="h5" color="text.secondary" gutterBottom>
+                Add a medicine to the prescription:
+              </Typography>
+
               <TextField
                 label="Search for a medicine"
                 variant="outlined"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                sx={{ mt: 3 }}
               />
 
               <Box mt={2}>
@@ -165,7 +183,12 @@ const DoctorManagePrescriptionsPage = () => {
           </Grid>
         </Grid>
 
-        <Button variant="contained" color="primary" onClick={handleReturnToClinicClick}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleReturnToClinicClick}
+          sx={{ mt: "auto", mb: 2, ml: "auto", mr: "auto", p: 1 }}
+        >
           Return to Clinic
         </Button>
 
