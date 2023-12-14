@@ -14,6 +14,8 @@ Refresh tokens are used to obtain a new access token when the current one expire
 
 The endpoints are grouped herein according to the entity they manipulate or are most closely associated with. This grouping is similar, but not 1:1, to the actual grouping in the code.
 
+**Note:** All endpoint URLs provided should be preceded by the server's URL.
+
 - [Authentication](#authentication)
 - [Medicines](#medicines)
 - [Prescriptions](#prescriptions)
@@ -28,7 +30,7 @@ The endpoints are grouped herein according to the entity they manipulate or are 
 <summary>Patient or Admin Login</summary>
 
 ```http
-  POST /login/
+  POST /auth/login/
 ```
 
 Returns a refresh token in a HTTP-Only cookie and an access token in the response body to the user to login.
@@ -44,7 +46,7 @@ Returns a refresh token in a HTTP-Only cookie and an access token in the respons
 <summary>Pharmacist Login</summary>
 
 ```http
-  POST /pharmacist-login/
+  POST /auth/pharmacist-login/
 ```
 
 Returns a refresh token in a HTTP-Only cookie and an access token in the response body to the user to login.
@@ -60,7 +62,7 @@ Returns a refresh token in a HTTP-Only cookie and an access token in the respons
 <summary>Logout</summary>
 
 ```http
-  POST /logout/
+  POST /auth/logout/
 ```
 
 | Header Parameter | Type     | Description                                                                                     |
@@ -75,7 +77,7 @@ Invalidates the refresh token of the user.
 <summary>Refresh the access token</summary>
 
 ```http
-  POST /refresh-token/
+  POST /auth/refresh-token/
 ```
 
 Returns a new access token.
@@ -142,7 +144,7 @@ Registers a new pharmacist registration request.
 <summary>Reset Password Request</summary>
 
 ```http
-  POST /reset-password-request
+  POST /auth/reset-password-request
 ```
 
 Initiates a request for a password reset and sends OTP to the provided email.
@@ -157,7 +159,7 @@ Initiates a request for a password reset and sends OTP to the provided email.
 <summary>Delete Password Reset Info</summary>
 
 ```http
-  DELETE /delete-password-reset-info
+  DELETE /auth/delete-password-reset-info
 ```
 
 Deletes/Invalidates password reset information/OTP
@@ -172,7 +174,7 @@ Deletes/Invalidates password reset information/OTP
 <summary>Validate Password Reset Info</summary>
 
 ```http
-  POST /validate-password-reset-info
+  POST /auth/validate-password-reset-info
 ```
 
 Validates the OTP for password reset.
@@ -195,7 +197,7 @@ Validates the OTP for password reset.
 <summary>Reset Password</summary>
 
 ```http
-  POST /reset-password
+  POST /auth/reset-password
 ```
 
 Resets the user’s password.
