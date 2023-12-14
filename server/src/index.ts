@@ -15,6 +15,10 @@ import pharmacistRegistrationRequestRouter from "./routes/pharmacistRegistration
 import authRouter from "./routes/authRoutes";
 import paymentRouter from "./routes/paymentRoutes";
 import forgetPasswordRouter from "./routes/ForgetPassword";
+import { Server } from "socket.io";
+import { authenticateSocketConnection } from "./middlewares/authentication";
+import http from "http";
+import socketEventListeners from "./socket-connections";
 
 export const app = express();
 
@@ -46,3 +50,14 @@ app.use("/pharmacist-registration-requests", pharmacistRegistrationRequestRouter
 app.use("/auth", authRouter);
 app.use("/auth", forgetPasswordRouter);
 app.use("/payments", paymentRouter);
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: config.server.corsOptions
+});
+io.use(authenticateSocketConnection);
+io.on("connection", socketEventListeners);
+
+server.listen(config.server.socketPort, () => {
+  console.log(`Socket server listening on port ${config.server.socketPort}`);
+});

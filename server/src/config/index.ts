@@ -6,6 +6,7 @@ dotenv.config();
 const MONGO_URI = process.env.MONGO_URI || "";
 
 const SERVER_PORT = process.env.SERVER_PORT ? Number(process.env.SERVER_PORT) : 8080;
+const SERVER_SOCKET_PORT = process.env.SERVER_SOCKET_PORT || 5000;
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || "";
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "";
@@ -31,6 +32,7 @@ const config = {
   },
   server: {
     port: SERVER_PORT,
+    socketPort: SERVER_SOCKET_PORT,
     corsOptions,
     auth: {
       accessTokenSecret: ACCESS_TOKEN_SECRET,

@@ -9,6 +9,7 @@ interface Props {
   lastmessage?: string;
   time?: string;
   unread?: number;
+  href: string;
 }
 
 function stringToColor(string: string) {
@@ -44,7 +45,7 @@ function stringAvatar(name: string) {
     }`.toUpperCase()
   };
 }
-const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
+const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread, href }) => {
   const [messageWidth, setMessageWidth] = React.useState<number>(0);
 
   //   console.log(window.innerWidth);
@@ -62,6 +63,7 @@ const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
     <div style={{ display: "block" }}>
       <Button
         startIcon={name === "AbdelRahman Saleh" ? <Avatar src={asal} /> : <Avatar {...stringAvatar(name)} />}
+        href={href}
         // startIcon={<Avatar {...stringAvatar("AbdelRahman Saleh")} />}
         sx={{
           display: "flex",
@@ -86,7 +88,7 @@ const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread }) => {
               display="block"
               style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
             >
-              {lastmessage.length > 30 ? `${lastmessage.slice(0, messageWidth)}...` : lastmessage}
+              {lastmessage}
             </Typography>
           )}
         </div>

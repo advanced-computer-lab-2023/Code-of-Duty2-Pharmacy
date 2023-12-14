@@ -5,6 +5,7 @@ import { IPatient } from "./interfaces/IPatient";
 import PasswordResetSchema from "../users/PasswordReset";
 import bcrypt from "bcrypt";
 import WalletSchema from "../wallets/Wallet";
+import NotificationSchema from "../notifications/Notification";
 
 export interface IPatientModel extends IPatient, Document {}
 
@@ -16,7 +17,7 @@ export const PatientSchema = new Schema<IPatientModel>(
       type: String,
       validate: [isEmail, "invalid email"],
       unique: true,
-      index: true,
+      index: true
     },
     name: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
@@ -27,15 +28,15 @@ export const PatientSchema = new Schema<IPatientModel>(
       mobileNumber: {
         type: String,
         required: true,
-        validate: [isMobileNumber, "invalid mobile number"],
+        validate: [isMobileNumber, "invalid mobile number"]
       },
-      relationToPatient: { type: String, required: true },
+      relationToPatient: { type: String, required: true }
     },
 
     deliveryAddresses: {
       type: Array<String>,
       select: false,
-      default: [],
+      default: []
     },
     imageUrl: String,
     healthRecords: {
@@ -48,7 +49,7 @@ export const PatientSchema = new Schema<IPatientModel>(
           createdAt: { type: Date; immutable: true };
         };
       }>,
-      required: false,
+      required: false
     },
     cart: {
       type: [
@@ -56,31 +57,31 @@ export const PatientSchema = new Schema<IPatientModel>(
           medicineId: {
             type: Schema.Types.ObjectId,
             ref: "Medicine",
-            required: true,
+            required: true
           },
-          quantity: { type: Number, required: true },
-        },
+          quantity: { type: Number, required: true }
+        }
       ],
       required: false,
-      default: [],
+      default: []
     },
     subscribedPackage: {
       type: {
         packageId: {
           type: Schema.Types.ObjectId,
           ref: "HealthPackage",
-          required: true,
+          required: true
         },
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
         status: {
           type: String,
           enum: ["subscribed", "unsubscribed", "cancelled"],
-          required: true,
-        },
+          required: true
+        }
       },
       required: false,
-      select: false,
+      select: false
     },
     dependentFamilyMembers: {
       type: [
@@ -92,28 +93,28 @@ export const PatientSchema = new Schema<IPatientModel>(
           relation: {
             type: String,
             enum: ["wife", "husband", "children"],
-            required: true,
+            required: true
           },
           subscribedPackage: {
             type: {
               packageId: {
                 type: Schema.Types.ObjectId,
                 ref: "HealthPackage",
-                required: true,
+                required: true
               },
               startDate: { type: Date, required: true },
               endDate: { type: Date, required: true },
               status: {
                 type: ["subscribed", "unsubscribed", "cancelled"],
-                required: true,
-              },
+                required: true
+              }
             },
-            required: false,
-          },
-        },
+            required: false
+          }
+        }
       ],
       required: false,
-      select: false,
+      select: false
     },
     registeredFamilyMembers: {
       type: [
@@ -122,27 +123,32 @@ export const PatientSchema = new Schema<IPatientModel>(
             type: Schema.Types.ObjectId,
             ref: "Patient",
             required: true,
-            unique: true,
+            unique: true
           },
           relation: {
             type: String,
             enum: ["wife", "husband", "children"],
-            required: true,
-          },
-        },
+            required: true
+          }
+        }
       ],
       required: false,
-      select: false,
+      select: false
     },
     wallet: {
       type: WalletSchema,
       select: false,
-      required: false,
+      required: false
     },
     passwordReset: {
       type: PasswordResetSchema,
-      select: false,
+      select: false
     },
+    receivedNotifications: {
+      type: Array<typeof NotificationSchema>,
+      select: false,
+      required: false
+    }
   },
 
   { timestamps: true }
@@ -170,10 +176,7 @@ PatientSchema.virtual("age").get(function () {
   let age = today.getFullYear() - birthDate.getFullYear();
   let monthDifference = today.getMonth() - birthDate.getMonth();
 
-  if (
-    monthDifference < 0 ||
-    (monthDifference === 0 && today.getDate() < birthDate.getDate())
-  ) {
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
   return age;

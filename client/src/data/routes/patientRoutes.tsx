@@ -8,6 +8,7 @@ import ViewWallet from "../../pages/wallet/ViewWallet";
 import CreateWallet from "../../pages/wallet/CreateWallet";
 import PatientChangePasswordPage from "../../pages/patient/PatientChangePasswordPage";
 import ChatPage from "../../pages/chat/ChatPage";
+import ViewChat from "../../pages/chat/ViewChat";
 
 export const patientDashboardRoute: Route = {
   path: "/patient/dashboard",
@@ -54,6 +55,11 @@ export const patientChatPageRoute: Route = {
   element: <ChatPage />
 };
 
+export const patientChatViewRoute: Route = {
+  path: "/patient/current-chat",
+  element: <ViewChat />
+};
+
 const patientRoutes: Route[] = [
   patientDashboardRoute,
   viewMedicinesRoute,
@@ -63,7 +69,8 @@ const patientRoutes: Route[] = [
   changePatientPasswordsRoute,
   patientWalletRoute,
   createPatientWalletRoute,
-  patientChatPageRoute
+  patientChatPageRoute,
+  patientChatViewRoute
 ];
 
 export default patientRoutes;

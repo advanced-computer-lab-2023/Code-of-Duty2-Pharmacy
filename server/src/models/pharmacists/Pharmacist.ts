@@ -3,6 +3,7 @@ import isEmail from "validator/lib/isEmail";
 import { IPharmacist } from "./interfaces/IPharmacist";
 import bcrypt from "bcrypt";
 import PasswordResetSchema from "../users/PasswordReset";
+import NotificationSchema from "../notifications/Notification";
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
@@ -17,7 +18,7 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
       type: String,
       required: true,
       enum: ["unspecified", "male", "female"],
-      default: "unspecified",
+      default: "unspecified"
     },
     mobileNumber: { type: String, required: false }, //TO BE REQUIRED
     hourlyRate: { type: Number, required: true },
@@ -28,8 +29,13 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     workingLicense: { type: String },
     passwordReset: {
       type: PasswordResetSchema,
-      select: false,
+      select: false
     },
+    receivedNotifications: {
+      type: Array<typeof NotificationSchema>,
+      select: false,
+      required: false
+    }
   },
   { timestamps: true }
 );

@@ -16,7 +16,8 @@ import {
   changeMedicineQuantity,
   getCartMedicinesStock,
   getPatientOrders,
-  cancelOrder
+  cancelOrder,
+  getPatientById
 } from "../controllers/patientController";
 import {
   addPatientAWalletHandler,
@@ -35,6 +36,7 @@ const router = express.Router();
 
 router.use(authenticateUser);
 router.get("/", getAllPatients);
+router.get("/:id", getPatientById);
 router.get("/orders", getPatientOrders);
 router.delete("/orders/:orderId", cancelOrder);
 

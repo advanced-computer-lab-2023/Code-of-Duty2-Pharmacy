@@ -1,4 +1,5 @@
 import UserRole from "../../../types/enums/UserRole";
+import { INotification } from "../../notifications/interfaces/INotification";
 import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
 
 export interface IPharmacist extends IUserBaseInfo {
@@ -13,6 +14,8 @@ export interface IPharmacist extends IUserBaseInfo {
     otp: string;
     expiryDate: Date;
   };
+  receivedNotifications?: INotification[];
+
   verifyPasswordResetOtp?: (otp: string) => Promise<boolean>;
   verifyPassword?: (password: string) => Promise<boolean>;
 }

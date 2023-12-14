@@ -23,6 +23,19 @@ export const getAllPatients = async (req: Request, res: Response) => {
   }
 };
 
+export const getPatientById = async (req: Request, res: Response) => {
+  try {
+    const patientId = req.params.id;
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Patient not found" });
+    }
+    res.status(StatusCodes.OK).json(patient);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
 export const searchPatients = async (req: Request, res: Response) => {
   try {
     const { name } = req.query;

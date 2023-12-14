@@ -1,11 +1,8 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Pharmacist, { IPharmacistModel } from "../models/pharmacists/Pharmacist";
-import {
-  findPharmacistById,
-  updatePharmacistPasswordById,
-} from "../services/pharmacists";
+import { findPharmacistById, updatePharmacistPasswordById } from "../services/pharmacists";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import { updatePatientPasswordById } from "../services/patients";
 
@@ -13,20 +10,15 @@ export const deletePharmacist = async (req: Request, res: Response) => {
   try {
     const pharmacistId = req.params.id;
 
-    const deletedPharmacist: IPharmacistModel | null =
-      await Pharmacist.findByIdAndDelete(pharmacistId);
+    const deletedPharmacist: IPharmacistModel | null = await Pharmacist.findByIdAndDelete(pharmacistId);
 
     if (!deletedPharmacist) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Pharmacist not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
     res.status(StatusCodes.OK).json(deletedPharmacist);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
@@ -36,31 +28,35 @@ export const getPharmacists = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json(pharmacists);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
-export const getPharmacistInfo = async (
-  req: AuthorizedRequest,
-  res: Response
-) => {
+export const getPharmacistById = async (req: Request, res: Response) => {
+  try {
+    const pharmacistId = req.params.id;
+    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(pharmacistId);
+
+    if (!pharmacist) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
+    }
+
+    res.status(StatusCodes.OK).json(pharmacist);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const getPharmacistInfo = async (req: AuthorizedRequest, res: Response) => {
   try {
     const pharmacistId = req.user?.id;
-    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(
-      pharmacistId
-    );
+    const pharmacist: IPharmacistModel | null = await Pharmacist.findById(pharmacistId);
     if (!pharmacist) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Not Logged In" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Not Logged In" });
     }
     return res.status(StatusCodes.OK).json(pharmacist);
   } catch (err) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
@@ -73,90 +69,58 @@ export const searchPharmacists = async (req: Request, res: Response) => {
       (!username || username.length === 0) && (!email || email.length === 0)
         ? await Pharmacist.find()
         : !username || username.length === 0
-        ? await Pharmacist.find({ email: { $regex: email, $options: "i" } })
-        : await Pharmacist.find({
-            username: { $regex: username, $options: "i" },
-          });
+          ? await Pharmacist.find({ email: { $regex: email, $options: "i" } })
+          : await Pharmacist.find({
+              username: { $regex: username, $options: "i" }
+            });
 
     if (pharmacists.length === 0) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "No pharmacists found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "No pharmacists found" });
     }
     res.status(StatusCodes.OK).json(pharmacists);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
 
-export const changePharmacistPassword = async (
-  req: AuthorizedRequest,
-  res: Response
-) => {
+export const changePharmacistPassword = async (req: AuthorizedRequest, res: Response) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const pharmacistId = req.user?.id!;
-    const pharmacist = await Pharmacist.findById(pharmacistId).select(
-      "+password"
-    );
+    const pharmacist = await Pharmacist.findById(pharmacistId).select("+password");
     if (!pharmacist) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Pharmacist not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
-    const isPasswordCorrect = await pharmacist.verifyPassword?.(
-      currentPassword
-    );
+    const isPasswordCorrect = await pharmacist.verifyPassword?.(currentPassword);
     if (!isPasswordCorrect) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ message: "Old password is incorrect" });
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "Old password is incorrect" });
     }
     await updatePharmacistPasswordById(pharmacistId, newPassword);
-    return res
-      .status(StatusCodes.OK)
-      .json({ message: "Password updated successfully!" });
+    return res.status(StatusCodes.OK).json({ message: "Password updated successfully!" });
   } catch (error) {
     console.error(error);
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "An error occurred while updating the password" });
+    res.status(StatusCodes.BAD_REQUEST).json({ message: "An error occurred while updating the password" });
   }
 };
 
-export const updatePharmacist = async (
-  req: AuthorizedRequest,
-  res: Response
-) => {
+export const updatePharmacist = async (req: AuthorizedRequest, res: Response) => {
   try {
     const pharmacistId = req.user?.id;
     const pharmacist = await Pharmacist.findById(pharmacistId);
 
     if (!pharmacist) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Pharmacist not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
-    const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
-      pharmacistId,
-      req.body,
-      { new: true }
-    );
+    const updatedPharmacist = await Pharmacist.findByIdAndUpdate(pharmacistId, req.body, { new: true });
 
     if (!updatedPharmacist) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: "Pharmacist not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
     res.status(StatusCodes.OK).json(updatedPharmacist);
   } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };

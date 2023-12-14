@@ -171,27 +171,27 @@ const ChatList: React.FC<Props> = () => {
               New Chat
             </Button>
           </div>
-          <ChatPerson
+          {/* <ChatPerson
             name="AbdelRahman Saleh"
             lastmessage="Hello Dr Ahmed, I have a question about the dosage of the medicine I will take."
             time="12:54 PM"
             unread={2}
-          />
+          /> */}
           {/* {index !== patients.length - 1 && ( */}
-          <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
+          {/* <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} /> */}
           {/* )} 
           <br />*/}
-          <ChatPerson
+          {/* <ChatPerson
             name="Mohamed Salah"
             lastmessage="Hello there, I have a question about the active ingredient in the medicine I am taking."
             time="09:54 AM"
             unread={10}
-          />
+          /> */}
           {/* {index !== patients.length - 1 && ( */}
           <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
           {/* )} 
           <br />*/}
-          <ChatPerson name="Ahmed Mohamed" lastmessage="Hello Dr!." time="10:35 PM" unread={1} />
+          {/* <ChatPerson name="Ahmed Mohamed" lastmessage="Hello Dr!." time="10:35 PM" unread={1} /> */}
         </Box>
       )}
 
@@ -253,7 +253,11 @@ const ChatList: React.FC<Props> = () => {
               {patients &&
                 patients.map((patient, index) => (
                   <div key={patient._id + "p"}>
-                    <ChatPerson key={patient._id} name={`${patient.name}`} />
+                    <ChatPerson
+                      key={patient._id}
+                      name={`${patient.name}`}
+                      href={`/${usertype}/current-chat?id=${patient._id}&role=patient`}
+                    />
                     {index !== patients.length - 1 && (
                       <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
                     )}
@@ -264,7 +268,11 @@ const ChatList: React.FC<Props> = () => {
               {doctors &&
                 doctors.map((doctor, index) => (
                   <div key={doctor._id + "d"}>
-                    <ChatPerson key={doctor._id} name={`${doctor.name}`} />
+                    <ChatPerson
+                      key={doctor._id}
+                      name={`${doctor.name}`}
+                      href={`/${usertype}/current-chat?id=${doctor._id}&role=doctor`}
+                    />
                     {index !== doctors.length - 1 && (
                       <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
                     )}
@@ -275,7 +283,11 @@ const ChatList: React.FC<Props> = () => {
               {pharmacists &&
                 pharmacists.map((pharmacist, index) => (
                   <div key={pharmacist._id + "d"}>
-                    <ChatPerson key={pharmacist._id} name={`${pharmacist.name}`} />
+                    <ChatPerson
+                      key={pharmacist._id}
+                      name={`${pharmacist.name}`}
+                      href={`/${usertype}/current-chat?id=${pharmacist._id}&role=pharmacist`}
+                    />
                     {index !== pharmacists.length - 1 && (
                       <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
                     )}
