@@ -591,6 +591,7 @@ Changes a patient's password.
 
 <details>
 <summary>Get a Patient's Delivery Addresses</summary>
+
 ```http
   GET /patients/addresses
 ```
@@ -605,6 +606,7 @@ Returns a patient's delivery addresses. Uses the Patient ID embedded in the Acce
 
 <details>
 <summary>Add a Patient's Delivery Address</summary>
+
 ```http
   POST /patients/addresses
 ```
@@ -623,6 +625,7 @@ Adds to a patient's delivery addresses. Uses the Patient ID embedded in the Acce
 
 <details>
 <summary>Get a Patient's Details</summary>
+
 ```http
   GET /patients/me
 ```
@@ -637,6 +640,7 @@ Returns a patient's details. Uses the Patient ID embedded in the Access Token of
 
 <details>
 <summary>Get Cart Items</summary>
+
 ```http
   GET /patients/me/cart
 ```
@@ -651,6 +655,7 @@ Returns a patient's cart items. Uses the Patient ID embedded in the Access Token
 
 <details>
 <summary>Clear Cart</summary>
+
 ```http
   DELETE /patients/me/cart
 ```
@@ -665,6 +670,7 @@ Clears a patient's cart from all items. Uses the Patient ID embedded in the Acce
 
 <details>
 <summary>Add to Cart</summary>
+
 ```http
   POST /patients/me/cart
 ```
@@ -685,6 +691,7 @@ Adds an item to a patient's cart. Uses the Patient ID embedded in the Access Tok
 
 <details>
 <summary>Remove from Cart</summary>
+
 ```http
   DELETE /patients/me/cart/:itemId
 ```
@@ -703,6 +710,7 @@ Remove an item from a patient's cart. Uses the Patient ID embedded in the Access
 
 <details>
 <summary>Change Cart Item Quantity</summary>
+
 ```http
   PATCH /patients/me/cart/:medicineId/change-quantity/:newQuantity
 ```
@@ -722,6 +730,7 @@ Updates a medicine's quantity in a patient's cart. Uses the Patient ID embedded 
 
 <details>
 <summary>Get Cart Medicines Stock</summary>
+
 ```http
   GET /patients/me/cart-medicines-stock
 ```
@@ -736,6 +745,7 @@ Returns the currently available quantities of the medicines that have been place
 
 <details>
 <summary>Create Order</summary>
+
 ```http
   POST /patients/orders
 ```
@@ -769,6 +779,7 @@ Creates a new order belonging to this patient.
 
 <details>
 <summary>Check Patient Wallet Exists</summary>
+
 ```http
   GET /patients/wallets/exists
 ```
@@ -783,6 +794,7 @@ Returns a boolean flag determining if the logged in patient already has a wallet
 
 <details>
 <summary>Validate Wallet PIN Code</summary>
+
 ```http
   POST /patients/validate-wallet-pin-code
 ```
@@ -801,6 +813,7 @@ Returns a wallet token in a cookie if the supplied PIN code is validated, allowi
 
 <details>
 <summary>Add Patient Wallet</summary>
+
 ```http
   POST /patients/wallets
 ```
@@ -821,6 +834,7 @@ Adds a patient's wallet. Uses the Patient ID embedded in the Access Token of the
 
 <details>
 <summary>Get Patient Wallet</summary>
+
 ```http
   GET /patients/wallets
 ```
@@ -835,6 +849,7 @@ Returns a patient's wallet. Uses the Patient ID embedded in the Access Token of 
 
 <details>
 <summary>Patient Make Wallet Transaction</summary>
+
 ```http
   PATCH /patients/wallet-transactions
 ```
@@ -853,6 +868,7 @@ Performs a transaction with a patient's wallet. Uses the Patient ID embedded in 
 
 <details>
 <summary>Patient Recharge Wallet</summary>
+
 ```http
   PATCH /patients/wallet-recharge
 ```
@@ -873,6 +889,7 @@ Recharges a patient's wallet. Uses the Patient ID embedded in the Access Token o
 
 <details>
 <summary>Get Pharmacist Registration Requests</summary>
+
 ```http
   GET /pharmacist-registration-requests
 ```
@@ -887,6 +904,7 @@ Returns all pharmacist registration requests.
 
 <details>
 <summary>Accept Pharmacist Registration Request</summary>
+
 ```http
   POST /pharmacist-registration-requests/accept-pharmacist-request
 ```
@@ -905,6 +923,7 @@ Accepts a pharmacist registration request.
 
 <details>
 <summary>Reject Pharmacist Registration Request</summary>
+
 ```http
   POST /pharmacist-registration-requests/reject-pharmacist-request
 ```
@@ -923,6 +942,7 @@ Rejects a pharmacist registration request.
 
 <details>
 <summary>Delete Pharmacist</summary>
+
 ```http
   DELETE /pharmacists/:id
 ```
@@ -941,6 +961,7 @@ Deletes a pharmacist's account.
 
 <details>
 <summary>Get Pharmacists</summary>
+
 ```http
   GET /pharmacists
 ```
@@ -955,6 +976,7 @@ Returns all pharmacists.
 
 <details>
 <summary>Search Pharmacists</summary>
+
 ```http
   GET /pharmacists/search?username={username}&email={email}
 ```
@@ -976,6 +998,7 @@ Searches for and returns pharmacists that match the provided search parameters.
 
 <details>
 <summary>Pharmacist Change Password</summary>
+
 ```http
   POST /pharmacists/change-password
 ```
@@ -995,6 +1018,7 @@ Changes a pharmacist's password. Uses the Pharmacist ID embedded in the Access T
 
 <details>
 <summary>Get Pharmacist Info</summary>
+
 ```http
   GET /pharmacists/me/complete-info
 ```
@@ -1009,6 +1033,7 @@ Returns a pharmacist's info. Uses the Pharmacist ID embedded in the Access Token
 
 <details>
 <summary>Update Pharmacist Info</summary>
+
 ```http
   PATCH /pharmacists/me/complete-info
 ```
