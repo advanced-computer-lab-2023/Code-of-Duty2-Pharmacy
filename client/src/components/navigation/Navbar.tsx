@@ -1,15 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Divider,
-  Button,
-  IconButton,
-} from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/Home";
+import { AppBar, Toolbar, Typography, Box, Divider, Button, IconButton } from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
@@ -31,16 +23,12 @@ const Navbar = () => {
         position="sticky"
         sx={{
           height: "4rem",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <Toolbar>
           <Button onClick={() => navigate(welcomeRoute.path)}>
-            <img
-              src={el7a2niLogo}
-              alt="Logo"
-              style={{ height: "2rem", paddingRight: "1rem" }}
-            />
+            <img src={el7a2niLogo} alt="Logo" style={{ height: "2rem", paddingRight: "1rem" }} />
             <Typography
               variant="h6"
               noWrap
@@ -52,7 +40,7 @@ const Navbar = () => {
                 fontWeight: 700,
                 letterSpacing: ".3rem",
                 textDecoration: "none",
-                color: "white",
+                color: "white"
               }}
             >
               EL7A2NI PHARMACY
@@ -85,16 +73,13 @@ const Navbar = () => {
                   }
                 }}
               >
-                <HomeOutlinedIcon />
+                <DashboardIcon />
+                <Typography sx={{ pl: 1 }}>Switch to Dashboard</Typography>
               </IconButton>
 
-              <Divider
-                orientation="vertical"
-                flexItem
-                sx={{ bgcolor: "white", width: "1px", mx: 2 }}
-              />
+              {/* <Divider orientation="vertical" flexItem sx={{ bgcolor: "white", width: "1px", mx: 2 }} />
 
-              <UserTray />
+              <UserTray /> */}
             </Box>
           ) : (
             <div style={{ marginLeft: "auto" }}>
