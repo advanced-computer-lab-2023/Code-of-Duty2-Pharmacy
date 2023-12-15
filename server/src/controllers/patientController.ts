@@ -423,7 +423,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Order not found" });
     }
 
-    if (order.paymentMethod === "wallet") {
+    if (order.paymentMethod === "wallet" || order.paymentMethod === "card") {
       const patient = await Patient.findById(order.patientId).select("wallet");
 
       if (!patient || !patient.wallet) {
