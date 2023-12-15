@@ -247,7 +247,7 @@ const ChatList: React.FC<Props> = () => {
             m: 2,
 
             gap: 3,
-            padding: "2.0rem",
+            padding: "0.0rem",
             borderRadius: "8px",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
           }}
@@ -277,7 +277,7 @@ const ChatList: React.FC<Props> = () => {
           </div>
           <ChatPerson
             name="AbdelRahman Saleh"
-            lastmessage="Hello Dr Ahmed, I have a question about the dosage of the medicine I will take."
+            lastmessage="Hello, I am here to ensure you are having a great experience with our app. If you have any problems make sure to report."
             time="12:54 PM"
             unread={2}
           />
