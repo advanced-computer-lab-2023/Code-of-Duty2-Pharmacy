@@ -21,13 +21,9 @@ import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
 
-// --> Path: /pharmacists/
-
 router.use(authenticateUser);
 
-router.delete("/:id", deletePharmacist);
 router.get("/", getPharmacists);
-router.get("/:id", getPharmacistById);
 router.get("/search", searchPharmacists);
 router.post("/change-password", changePharmacistPassword);
 router.get("/me/complete-info", getPharmacistInfo);
@@ -39,5 +35,9 @@ router.post("/wallets", addPharmacistAWalletHandler);
 router.get("/wallets", authenticateWalletUser, getPharmacistWalletHandler);
 router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePharmacistWalletHandler);
+
+// WARNING: Keep these routes at the bottom of the file
+router.get("/:id", getPharmacistById);
+router.delete("/:id", deletePharmacist);
 
 export default router;

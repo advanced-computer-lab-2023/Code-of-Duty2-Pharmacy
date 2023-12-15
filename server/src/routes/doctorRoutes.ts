@@ -4,12 +4,11 @@ import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
 
-// --> Path: /doctors/
-
 router.use(authenticateUser);
-
 router.get("/", getAllDoctors);
 router.get("/search", searchDoctors);
+
+// WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getDoctorById);
 
 export default router;

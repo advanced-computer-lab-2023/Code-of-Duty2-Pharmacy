@@ -3,12 +3,10 @@ import {
   deletePasswordResetInfoHandler,
   resetPasswordHandler,
   resetPasswordRequestHandler,
-  validateOTPHandler,
+  validateOTPHandler
 } from "../controllers/auth/forgetPassword";
 
 const router = Router();
-
-// --> Path: /auth/forget-password/
 
 router
   .post("/reset-password-request", resetPasswordRequestHandler)

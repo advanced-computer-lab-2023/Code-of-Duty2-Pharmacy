@@ -32,10 +32,7 @@ import { authenticateUser } from "../middlewares/authentication";
 
 const router = express.Router();
 
-// --> Path: /patients/
-
 router.use(authenticateUser);
-
 router.get("/", getAllPatients);
 router.get("/orders", getPatientOrders);
 router.delete("/orders/:orderId", cancelOrder);
@@ -59,7 +56,7 @@ router.get("/wallets", authenticateWalletUser, getPatientWalletHandler);
 router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePatientWalletHandler);
 
-// WARNING: keep these routes at the bottom of the file
+// WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPatientById);
 router.delete("/:id", deletePatient);
 

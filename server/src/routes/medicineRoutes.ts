@@ -10,11 +10,8 @@ import {
   archiveOrUnarchiveMedicine
 } from "../controllers/medicineController";
 import { authenticateUser } from "../middlewares/authentication";
-import { arch } from "os";
 
 const router = express.Router();
-
-// --> Path: /medicines/
 
 router.use(authenticateUser);
 router.get("/", getAllMedicines);
@@ -23,7 +20,9 @@ router.get("/sales", getAllMedicinesSales);
 router.post("/sales", getMedicineSales);
 router.get("/search", searchMedicines);
 router.patch("/bulk-update", bulkUpdateMedicineQuantities);
-router.patch("/:id", updateMedicine);
 router.post("/archive-or-unarchive/:id", archiveOrUnarchiveMedicine);
+
+// WARNING: Keep these routes at the bottom of the file
+router.patch("/:id", updateMedicine);
 
 export default router;
