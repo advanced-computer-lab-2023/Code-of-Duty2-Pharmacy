@@ -1,4 +1,3 @@
-import { Inbox } from "@talkjs/react";
 import { Backdrop, Box, CircularProgress, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { useQueryParams } from "../../hooks/useQueryParams";
 import { useContext, useEffect, useRef, useState } from "react";

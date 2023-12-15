@@ -275,7 +275,7 @@ const ChatList: React.FC<Props> = () => {
               New Chat
             </Button>
           </div>
-          {/* <ChatPerson
+          <ChatPerson
             name="AbdelRahman Saleh"
             lastmessage="Hello Dr Ahmed, I have a question about the dosage of the medicine I will take."
             time="12:54 PM"
@@ -283,7 +283,7 @@ const ChatList: React.FC<Props> = () => {
           />
           <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
           <br />
-          <ChatPerson
+          {/* <ChatPerson
             name="Mohamed Salah"
             lastmessage="Hello there, I have a question about the active ingredient in the medicine I am taking."
             time="09:54 AM"

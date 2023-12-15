@@ -46,19 +46,14 @@ function stringAvatar(name: string) {
   };
 }
 const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread, href }) => {
-  const [messageWidth, setMessageWidth] = React.useState<number>(0);
-
-  //   console.log(window.innerWidth);
-  function windowWidth(): void {
-    // get the window width
-    let width = window.innerWidth;
-    // log it to the console
-    console.log(width);
-    setMessageWidth(width < 1100 ? width / 14 : width / 11);
-  }
+  const [messageWidth, setMessageWidth] = React.useState<number>(
+    window.innerWidth < 1100 ? window.innerWidth / 14 : window.innerWidth / 11
+  );
 
   // attach the function to the resize event
-  window.addEventListener("resize", windowWidth);
+  window.addEventListener("resize", () => {
+    setMessageWidth(window.innerWidth < 1100 ? window.innerWidth / 14 : window.innerWidth / 11);
+  });
   return (
     <div style={{ display: "block" }}>
       <Button
@@ -88,7 +83,7 @@ const ChatPerson: React.FC<Props> = ({ name, lastmessage, time, unread, href }) 
               display="block"
               style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}
             >
-              {lastmessage}
+              {lastmessage.length > 8 ? `${lastmessage.slice(0, messageWidth)}...` : lastmessage}
             </Typography>
           )}
         </div>
