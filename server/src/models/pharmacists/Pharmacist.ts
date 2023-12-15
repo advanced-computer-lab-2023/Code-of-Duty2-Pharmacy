@@ -3,6 +3,7 @@ import isEmail from "validator/lib/isEmail";
 import { IPharmacist } from "./interfaces/IPharmacist";
 import bcrypt from "bcrypt";
 import PasswordResetSchema from "../users/PasswordReset";
+import WalletSchema from "../wallets/Wallet";
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
@@ -27,6 +28,11 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     identification: { type: String },
     pharmacyDegree: { type: String },
     workingLicense: { type: String },
+    wallet: {
+      type: WalletSchema,
+      select: false,
+      required: false
+    },
     passwordReset: {
       type: PasswordResetSchema,
       select: false
@@ -35,12 +41,16 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
   { timestamps: true }
 );
 
+// TODO: Remove this I guess? Check bcrypt hashing across models.
 // PharmacistSchema.plugin(bcrypt);
 
 PharmacistSchema.plugin(require("mongoose-bcrypt"), { rounds: 10 });
 
 PharmacistSchema.methods.verifyPasswordResetOtp = function (otp: string) {
   return bcrypt.compare(otp, this.passwordReset.otp);
+};
+PharmacistSchema.methods.verifyWalletPinCode = function (pinCode: string) {
+  return bcrypt.compare(pinCode, this.wallet.pinCode);
 };
 
 export default mongoose.model<IPharmacistModel>("Pharmacist", PharmacistSchema);

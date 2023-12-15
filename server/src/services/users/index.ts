@@ -1,27 +1,22 @@
 import { IPatientModel } from "../../models/patients/Patient";
-import Pharmacist from "../../models/pharmacists/Pharmacist";
+import Pharmacist, { IPharmacistModel } from "../../models/pharmacists/Pharmacist";
 import { User } from "../../types/User";
 import { IUserModel } from "../../types/UserModel";
 import UserRole from "../../types/enums/UserRole";
-import {
-  findAllAdmins,
-  deleteAdminById,
-  findAdminById,
-  findAdminByUsername,
-  findAdminByEmail,
-} from "../admins";
+import { findAllAdmins, deleteAdminById, findAdminById, findAdminByUsername, findAdminByEmail } from "../admins";
 import {
   findAllPatients,
   deletePatientById,
   findPatientById,
   findPatientByUsername,
-  findPatientByEmail,
+  findPatientByEmail
 } from "../patients";
 import {
   findAllPharmacists,
   findPharmacistByEmail,
   findPharmacistById,
-  findPharmacistByUsername,
+  findPharmacistByIdAndSelect,
+  findPharmacistByUsername
 } from "../pharmacists";
 
 export const findAllUsersByType = async (Type: string) => {
@@ -42,9 +37,7 @@ export const findUser = async (user: User, elementsToSelect?: any) => {
     case UserRole.PATIENT:
       return await findPatientById(user.id, elementsToSelect);
     case UserRole.PHARMACIST:
-      const usertest = await Pharmacist.findById(user.id).select(
-        elementsToSelect
-      );
+      const usertest = await Pharmacist.findById(user.id).select(elementsToSelect);
       return usertest;
     case UserRole.ADMIN:
       return await findAdminById(user.id, elementsToSelect);
@@ -65,10 +58,7 @@ export const findUserByUsername = async (username: string, Type: string) => {
       throw new Error("Invalid user type");
   }
 };
-export const findUserByEmail = async (
-  email: string,
-  elementsToSelect?: any
-) => {
+export const findUserByEmail = async (email: string, elementsToSelect?: any) => {
   const admin = await findAdminByEmail(email, elementsToSelect);
   if (admin) {
     admin.role = UserRole.ADMIN;
@@ -90,18 +80,12 @@ export const findUserByEmail = async (
   throw new Error("User not found");
 };
 
-export const updateUserPassword = async (
-  user: IUserModel,
-  newPassword: string
-) => {
+export const updateUserPassword = async (user: IUserModel, newPassword: string) => {
   user.password = newPassword;
   await user.save();
 };
 
-export const updatePassword = async (
-  userPayload: User,
-  newPassword: string
-) => {
+export const updatePassword = async (userPayload: User, newPassword: string) => {
   const user = await findUser(userPayload);
 
   if (!user) throw new Error("User not found");
@@ -117,10 +101,12 @@ export const findUserByIdAndRole = async (
   id: string,
   role: UserRole,
   elementsToSelect?: any
-): Promise<IPatientModel | null> => {
+): Promise<IPatientModel | IPharmacistModel | null> => {
   switch (role) {
     case UserRole.PATIENT:
       return await findPatientById(id, elementsToSelect);
+    case UserRole.PHARMACIST:
+      return await findPharmacistByIdAndSelect(id, elementsToSelect); //TODO: Clean this up
     default:
       throw new Error("Invalid user type");
   }

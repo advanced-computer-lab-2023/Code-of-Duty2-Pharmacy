@@ -183,21 +183,25 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
             <>
               <Typography variant="h6">Archive Filter</Typography>
               <FormControlLabel
+                sx={{ marginBottom: -1 }}
                 control={
                   <Checkbox
                     checked={archiveVisibleMeds === "Unarchived" || archiveVisibleMeds === "All"}
                     onChange={handleArchivedChange}
                     value="Unarchived"
+                    size="small"
                   />
                 }
                 label="Unarchived"
               />
               <FormControlLabel
+                sx={{ marginBottom: -1 }}
                 control={
                   <Checkbox
                     checked={archiveVisibleMeds === "Archived" || archiveVisibleMeds === "All"}
                     onChange={handleArchivedChange}
                     value="Archived"
+                    size="small"
                   />
                 }
                 label="Archived"

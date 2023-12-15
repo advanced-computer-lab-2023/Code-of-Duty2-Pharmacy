@@ -1,17 +1,11 @@
-import Pharmacist, {
-  IPharmacistModel,
-} from "../../models/pharmacists/Pharmacist";
+import Pharmacist, { IPharmacistModel } from "../../models/pharmacists/Pharmacist";
 import Patient from "../../models/patients/Patient";
-import {
-  entityEmailDoesNotExistError,
-  entityIdDoesNotExistError,
-} from "../../utils/ErrorMessages";
+import { entityEmailDoesNotExistError, entityIdDoesNotExistError } from "../../utils/ErrorMessages";
 import { getRequestedTimePeriod } from "../../utils/getRequestedTimePeriod";
 
 export const findAllPharmacists = async () => await Pharmacist.find();
 
-export const findPharmacistById = async (id: string) =>
-  await Pharmacist.findById(id);
+export const findPharmacistById = async (id: string) => await Pharmacist.findById(id);
 // .select({
 //   _id: 1,
 //   name: 1,
@@ -27,34 +21,26 @@ export const findPharmacistById = async (id: string) =>
 
 // });
 
+export const findPharmacistByIdAndSelect = async (id: string, elementsToSelect: any) =>
+  await Pharmacist.findById(id).select(elementsToSelect);
+
 export const findPharmacistByUsername = async (username: string) =>
   await Pharmacist.findOne({ username }).select({ _id: 1, password: 1 });
 
-export const findPharmacistByEmail = async (
-  email: string,
-  elementsToSelect?: any
-) => {
+export const findPharmacistByEmail = async (email: string, elementsToSelect?: any) => {
   const PromisedPharmacist = Pharmacist.findOne({ email });
-  if (!elementsToSelect)
-    return await PromisedPharmacist.select({ _id: 1, password: 1 });
+  if (!elementsToSelect) return await PromisedPharmacist.select({ _id: 1, password: 1 });
   return await PromisedPharmacist.select(elementsToSelect);
 };
 
-export const deletePharmacistById = async (id: string) =>
-  await Pharmacist.findByIdAndDelete(id);
+export const deletePharmacistById = async (id: string) => await Pharmacist.findByIdAndDelete(id);
 
-export const createNewPharmacist = async (
-  username: string,
-  password: string
-) => {
+export const createNewPharmacist = async (username: string, password: string) => {
   const newPharmacist = new Pharmacist({ username, password });
   await newPharmacist.save();
 };
 
-export const updatePharmacistPasswordByEmail = async (
-  email: string,
-  newPassword: string
-) => {
+export const updatePharmacistPasswordByEmail = async (email: string, newPassword: string) => {
   const pharmacist = await findPharmacistByEmail(email);
   if (!pharmacist) {
     throw new Error(entityEmailDoesNotExistError("pharmacist", email));
@@ -62,10 +48,7 @@ export const updatePharmacistPasswordByEmail = async (
   await updatePharmacistPassword(pharmacist, newPassword);
 };
 
-export const updatePharmacistPasswordById = async (
-  pharmacistId: string,
-  newPassword: string
-) => {
+export const updatePharmacistPasswordById = async (pharmacistId: string, newPassword: string) => {
   const pharmacist = await findPharmacistById(pharmacistId);
   if (!pharmacist) {
     throw new Error(entityEmailDoesNotExistError("pharmacist", pharmacistId));
@@ -73,10 +56,7 @@ export const updatePharmacistPasswordById = async (
   await updatePharmacistPassword(pharmacist, newPassword);
 };
 
-export const updatePharmacistPassword = async (
-  pharmacist: IPharmacistModel,
-  newPassword: string
-) => {
+export const updatePharmacistPassword = async (pharmacist: IPharmacistModel, newPassword: string) => {
   pharmacist.password = newPassword;
   await pharmacist.save();
 };

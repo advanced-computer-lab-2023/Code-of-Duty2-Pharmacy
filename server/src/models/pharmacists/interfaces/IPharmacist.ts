@@ -9,10 +9,16 @@ export interface IPharmacist extends IUserBaseInfo {
   identification?: string;
   pharmacyDegree?: string;
   workingLicense?: string;
+  wallet?: {
+    amount: number;
+    currency: string;
+    pinCode: string;
+  };
   passwordReset?: {
     otp: string;
     expiryDate: Date;
   };
   verifyPasswordResetOtp?: (otp: string) => Promise<boolean>;
+  verifyWalletPinCode?: (pinCode: string) => Promise<boolean>;
   verifyPassword?: (password: string) => Promise<boolean>;
 }
