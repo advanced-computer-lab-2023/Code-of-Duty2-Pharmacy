@@ -7,6 +7,8 @@ import { refreshAccessToken } from "../controllers/auth/refreshToken";
 
 const router = express.Router();
 
+// --> Path: /auth/
+
 router.post("/login", login);
 router.post("/pharmacist-login", pharmacistLogin);
 router.post("/doctor-login", doctorLogin);
