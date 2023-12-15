@@ -13,21 +13,11 @@ interface Props {
   searchCollection?: string;
   attribute?: string;
   initialValue?: string;
-  onSearch: (
-    searchTerm: string,
-    searchCollection: string,
-    attribute?: string
-  ) => void;
+  onSearch: (searchTerm: string, searchCollection: string, attribute?: string) => void;
 }
 
-const goSearch = async (
-  searchTerm: string,
-  searchCollection: string,
-  attribute = "name"
-) => {
-  const response = await axios.get(
-    `${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`
-  );
+const goSearch = async (searchTerm: string, searchCollection: string, attribute = "name") => {
+  const response = await axios.get(`${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`);
 
   return response.data;
 };
@@ -36,7 +26,7 @@ const NameSearchBar: React.FC<Props> = ({
   searchCollection = "medicines",
   attribute = "name",
   initialValue = "",
-  onSearch,
+  onSearch
 }) => {
   let firstLetter = searchCollection.charAt(0).toUpperCase();
   const withoutLastChar = searchCollection.slice(1, -1); // the plural form
@@ -57,10 +47,12 @@ const NameSearchBar: React.FC<Props> = ({
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
-          borderRadius: "2px",
+          width: "100%",
+          justifyContent: "flex-end",
+          alignItems: "center"
         }}
       >
         <TextField
@@ -74,23 +66,20 @@ const NameSearchBar: React.FC<Props> = ({
           }}
           id="filled-start-adornment"
           placeholder={initialValue}
-          size="small"
-          sx={{ m: 1, minWidth: "30vw" }}
+          fullWidth
           InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">{attribute}:</InputAdornment>
-            ),
+            startAdornment: <InputAdornment position="start">{attribute}:</InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handleSearch}>
+                <IconButton onClick={handleSearch} edge="end">
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>
-            ),
+            )
           }}
-          variant="filled"
+          variant="outlined"
         />
-      </div>
+      </Box>
     </Box>
   );
 };

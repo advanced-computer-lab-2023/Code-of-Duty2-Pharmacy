@@ -170,7 +170,8 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
           display: "flex",
           justifyContent: "flex-start",
           gap: 3,
-          padding: "2.0rem"
+          padding: "2.0rem",
+          flexWrap: { xs: "wrap", sm: "nowrap" } // Add this line
         }}
       >
         <Box
@@ -241,8 +242,15 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
           )}
         </Box>
 
-        <Box>
-          <NameSearchBar searchCollection="medicines" onSearch={handleSearch} initialValue="(or leave empty for all)" />
+        <Box mb={5}>
+          <Box pr={3} mb={2}>
+            <NameSearchBar
+              searchCollection="medicines"
+              onSearch={handleSearch}
+              initialValue="(or leave empty for all)"
+            />
+          </Box>
+
           {filteredMedicines.length === 0 && <p>No medicines found.</p>}
           <Box
             sx={{
