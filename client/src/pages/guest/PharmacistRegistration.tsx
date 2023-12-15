@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Alert, Box, Button, Container, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Alert, Box, Button, Container, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import LoadingButton from "@mui/lab/LoadingButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import config from "../../config/config";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
@@ -146,12 +147,18 @@ const PharmacistRegistrationRequest = () => {
 
   return (
     <div>
-      <Button onClick={() => navigate(welcomeRoute.path)} sx={{ mb: 5, fontSize: "1.2rem" }}>
+      <Button
+        startIcon={<ArrowBackIcon />}
+        onClick={() => navigate(welcomeRoute.path)}
+        sx={{ mb: 5, ml: 3, mt: 3, fontSize: "1.2rem" }}
+      >
         Back to Home
       </Button>
       <Container maxWidth="sm" sx={{ marginTop: "-4rem" }}>
         <form onSubmit={handleSubmit}>
-          <h1 style={{ textAlign: "center" }}>Pharmacist Registration</h1>
+          <Typography variant="h4" gutterBottom component="div" color="primary">
+            Pharmacist Registration
+          </Typography>
 
           {registrationSucceeded && (
             <Alert severity="success">
@@ -313,6 +320,8 @@ const PharmacistRegistrationRequest = () => {
             Already have an account? Login here
           </NavLink>
         </Box>
+
+        <Box mb={10} />
       </Container>
     </div>
   );

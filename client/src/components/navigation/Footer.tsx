@@ -7,11 +7,10 @@ const Footer = () => {
       sx={{
         backgroundColor: (theme) => theme.palette.background.paper,
         padding: (theme) => theme.spacing(6, 0),
-        marginTop: (theme) => theme.spacing(10),
         borderTop: (theme) => `1px solid ${theme.palette.divider}`,
         position: "static",
         bottom: 0,
-        width: "100%",
+        width: "100%"
       }}
     >
       <Container maxWidth="lg">
@@ -21,7 +20,7 @@ const Footer = () => {
             color: (theme) => theme.palette.text.secondary,
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
           }}
         >
           © {new Date().getFullYear()} El7a2ni. All rights reserved.

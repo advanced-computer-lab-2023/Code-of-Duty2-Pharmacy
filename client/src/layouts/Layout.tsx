@@ -70,7 +70,6 @@ const Layout: React.FC<Props> = ({ children }) => {
     return (
       <>
         <MainPageContent />
-        <Footer />
       </>
     );
   }
