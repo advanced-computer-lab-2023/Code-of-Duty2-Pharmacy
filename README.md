@@ -14,6 +14,7 @@ It is part of the larger _El7a2ni Healthcare Platform_, which also includes the 
 - [Motivation](#motivation)
 - [Build Status](#build-status)
 - [Code Style](#code-style)
+- [Project Management](#project-management)
 - [Screenshots](#screenshots)
 - [Tech/Framework used](#techframework-used)
 - [Features](#features)
@@ -66,6 +67,13 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 ## Code Style
 
 The code style is enforced using `prettier`. You can find the code formatting rules in the `.prettierrc` file.
+
+## Project Management
+
+Jira was used as our main issue tracking and project management tool for creating this software.
+
+![Jira](docs/screenshots/jira/jira1.png)
+![Jira](docs/screenshots/jira/jira2.png)
 
 ## Screenshots
 
