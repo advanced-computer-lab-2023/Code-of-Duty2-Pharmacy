@@ -163,6 +163,7 @@ PatientSchema.methods.verifyWalletPinCode = function (pinCode: string) {
   return bcrypt.compare(pinCode, this.wallet.pinCode);
 };
 
+// TODO: Why is this stuff repeated twice?
 PatientSchema.methods.verifyPasswordResetOtp = function (otp: string) {
   return bcrypt.compare(otp, this.passwordReset.otp);
 };

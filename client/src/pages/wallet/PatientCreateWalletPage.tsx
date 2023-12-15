@@ -1,5 +1,6 @@
 import CreateWalletForm from "../../features/wallets/wallet-creation/CreateWalletForm";
-const CreateWallet: React.FC = () => {
+
+const PatientCreateWalletPage: React.FC = () => {
   return (
     <CreateWalletForm
       walletExistsRoute="/patients/wallets/exists"
@@ -9,4 +10,4 @@ const CreateWallet: React.FC = () => {
   );
 };
 
-export default CreateWallet;
+export default PatientCreateWalletPage;

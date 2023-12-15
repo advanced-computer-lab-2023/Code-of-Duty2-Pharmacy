@@ -7,18 +7,18 @@ import { getErrorMessage } from "../../../utils/displayError";
 import { Wallet } from "../../../types/Wallet";
 import { useLocation } from "react-router-dom";
 import { patientWalletRoute } from "../../../data/routes/patientRoutes";
+import { pharmacistWalletRoute } from "../../../data/routes/pharmacistRoutes";
 
 type ExistingWalletComponentProps = {
   getWalletDetailsQuery: UseQueryResult<Wallet, unknown>;
   validatePinMutation: UseMutationResult<void, unknown, string, unknown>;
 };
+
 const ExistingWalletComponent: React.FC<ExistingWalletComponentProps> = ({
   getWalletDetailsQuery,
-  validatePinMutation,
+  validatePinMutation
 }) => {
-  const [pinCodeDigits, setPinCodeDigits] = useState<Array<string>>(
-    Array(5).fill("")
-  );
+  const [pinCodeDigits, setPinCodeDigits] = useState<Array<string>>(Array(5).fill(""));
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -32,7 +32,7 @@ const ExistingWalletComponent: React.FC<ExistingWalletComponentProps> = ({
     <div>
       <Modal
         open={
-          currentPageLocation === patientWalletRoute.path &&
+          (currentPageLocation === patientWalletRoute.path || currentPageLocation === pharmacistWalletRoute.path) &&
           (getWalletDetailsQuery.isError || validatePinMutation.isError)
         }
         onClose={validatePinMutation.reset}
@@ -40,10 +40,7 @@ const ExistingWalletComponent: React.FC<ExistingWalletComponentProps> = ({
       >
         <form onSubmit={handleSubmit}>
           <Typography variant="h6">Enter Wallet Pin</Typography>
-          <WalletPasswordInput
-            pinCodeDigits={pinCodeDigits}
-            setPinCodeDigits={setPinCodeDigits}
-          />
+          <WalletPasswordInput pinCodeDigits={pinCodeDigits} setPinCodeDigits={setPinCodeDigits} />
           {validatePinMutation.isError && (
             <Typography variant="body2" color="error">
               {getErrorMessage(validatePinMutation.error)}

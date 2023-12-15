@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
 import { useMutation, useQuery } from "react-query";
@@ -10,7 +10,7 @@ import { Wallet } from "../../types/Wallet";
 
 async function validatePin(pinCode: string) {
   await axios.post(`${config.API_URL}/patients/validate-wallet-pin-code`, {
-    pinCode,
+    pinCode
   });
 }
 async function getWalletDetails(): Promise<Wallet> {
@@ -18,22 +18,33 @@ async function getWalletDetails(): Promise<Wallet> {
   return response.data;
 }
 
-const ViewWallet: React.FC = () => {
+const PatientViewWalletPage: React.FC = () => {
   const getWalletDetailsQuery = useQuery(["wallets"], getWalletDetails, {
-    retry: 1,
+    retry: 1
   });
 
   const validatePinMutation = useMutation(validatePin, {
-    onSuccess: () => getWalletDetailsQuery.refetch(),
+    onSuccess: () => getWalletDetailsQuery.refetch()
   });
 
-  const doesWalletExistsQuery = useQuery(
-    ["doesWalletExist"],
-    doesUserHasAWallet("/patients/wallets/exists")
-  );
+  const doesWalletExistsQuery = useQuery(["doesWalletExist"], doesUserHasAWallet("/patients/wallets/exists"));
 
   const exists = doesWalletExistsQuery.data;
-  if (doesWalletExistsQuery.isLoading) return <></>;
+
+  if (doesWalletExistsQuery.isLoading)
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh"
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+
   return (
     <>
       {exists ? (
@@ -53,4 +64,4 @@ const ViewWallet: React.FC = () => {
   );
 };
 
-export default ViewWallet;
+export default PatientViewWalletPage;

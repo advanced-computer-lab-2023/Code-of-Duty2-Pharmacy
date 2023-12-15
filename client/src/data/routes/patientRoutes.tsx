@@ -4,8 +4,8 @@ import PatientDashboard from "../../pages/patient/PatientDashboard";
 import PatientViewOrdersPage from "../../pages/patient/PatientViewOrdersPage";
 import PatientViewMedicinesPage from "../../pages/patient/PatientViewMedicinesPage";
 import { Route } from "../../types";
-import ViewWallet from "../../pages/wallet/ViewWallet";
-import CreateWallet from "../../pages/wallet/CreateWallet";
+import PatientViewWalletPage from "../../pages/wallet/PatientViewWalletPage";
+import PatientCreateWalletPage from "../../pages/wallet/PatientCreateWalletPage";
 import PatientChangePasswordPage from "../../pages/patient/PatientChangePasswordPage";
 import ChatPage from "../../pages/chat/ChatPage";
 import ViewChat from "../../pages/chat/ViewChat";
@@ -43,12 +43,12 @@ export const changePatientPasswordsRoute: Route = {
 
 export const patientWalletRoute: Route = {
   path: "/patient/wallet",
-  element: <ViewWallet />
+  element: <PatientViewWalletPage />
 };
 
 export const createPatientWalletRoute: Route = {
   path: "/patient/wallet/create",
-  element: <CreateWallet />
+  element: <PatientCreateWalletPage />
 };
 
 export const patientChatPageRoute: Route = {
