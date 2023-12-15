@@ -4,17 +4,16 @@ import {
   viewMedicinesRoute,
   viewPatientsRoute,
   viewPharmacistRegistrationRequestsRoute,
-  viewPharmacistsRoute,
+  viewPharmacistsRoute
 } from "../routes/adminRoutes";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
-import HealingIcon from "@mui/icons-material/Healing";
-import PeopleIcon from "@mui/icons-material/People";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
+import MedicationIcon from "@mui/icons-material/Medication";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import FeedIcon from "@mui/icons-material/Feed";
 
 import { SidebarItem } from "../../types";
 
@@ -22,49 +21,49 @@ export const adminSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
     href: adminDashboardRoute.path,
-    icon: <DashboardIcon />,
-  },
-  {
-    title: "Manage Users",
-    icon: <SupervisorAccountIcon />,
-    items: [
-      {
-        title: "Admins",
-        href: addAdminRoute.path,
-        icon: <AdminIcon />,
-      },
-      {
-        title: "Pharmacists",
-        href: viewPharmacistsRoute.path,
-        icon: <LocalPharmacyIcon />,
-      },
-      {
-        title: "Patients",
-        href: viewPatientsRoute.path,
-        icon: <PeopleIcon />,
-      },
-    ],
-  },
-  {
-    title: "Registration Requests",
-    icon: <AssignmentIcon />,
-    items: [
-      {
-        title: "Pharmacists",
-        href: viewPharmacistRegistrationRequestsRoute.path,
-        icon: <AssignmentTurnedInIcon />,
-      },
-    ],
+    icon: <DashboardIcon />
   },
   {
     title: "System Services",
-    icon: <SettingsApplicationsIcon />,
+    icon: <SettingsSuggestIcon />,
     items: [
       {
         title: "Medicines",
         href: viewMedicinesRoute.path,
-        icon: <HealingIcon />,
-      },
-    ],
+        icon: <MedicationIcon />
+      }
+    ]
   },
+  {
+    title: "Manage Users",
+    icon: <ManageAccountsIcon />,
+    items: [
+      {
+        title: "Patients",
+        href: viewPatientsRoute.path,
+        icon: <RecentActorsIcon />
+      },
+      {
+        title: "Pharmacists",
+        href: viewPharmacistsRoute.path,
+        icon: <LocalPharmacyIcon />
+      },
+      {
+        title: "Admins",
+        href: addAdminRoute.path,
+        icon: <AdminIcon />
+      }
+    ]
+  },
+  {
+    title: "Registration Requests",
+    icon: <FeedIcon />,
+    items: [
+      {
+        title: "Pharmacists",
+        href: viewPharmacistRegistrationRequestsRoute.path,
+        icon: <LocalPharmacyIcon />
+      }
+    ]
+  }
 ];

@@ -61,6 +61,7 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 - API calls in the frontend should be separated from the actual pages.
 - Form validation and more loading indicators need be implemented in a more robust, consistent and reusable way in the frontend, perhaps using React Query.
 - Vitest testing needs to be set up for the API.
+- Pagination is needed for Medicine List, Patient List, Admin List, and Pharmacist List.
 
 ## Code Style
 
@@ -522,7 +523,7 @@ See `CONTRIBUTING.md` for ways to get started. Please adhere to the `Code of Con
   - [React Tutorial for Beginners](https://www.youtube.com/watch?v=SqcY0GlETPk)
 - Project Repositories
   - [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
- 
+
 ## License
 
 This software currently has no license in place.
