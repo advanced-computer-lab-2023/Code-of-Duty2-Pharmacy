@@ -1,43 +1,46 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Palette {
     gradient?: string;
+    complexGradient?: string;
   }
   interface PaletteOptions {
     gradient?: string;
+    complexGradient?: string;
   }
 }
 
 const lightTheme = createTheme({
   typography: {
     fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
+      "-apple-system",
+      "BlinkMacSystemFont",
       '"Segoe UI"',
-      'Roboto',
+      "Roboto",
       '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
+      "Arial",
+      "sans-serif",
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-      ].join(','),
+      '"Segoe UI Symbol"'
+    ].join(",")
   },
   palette: {
-    mode: 'light',
+    mode: "light",
     background: {
-      default: '#FFFFFF',
-      paper: '#FFFFFF',
+      default: "#FFFFFF",
+      paper: "#FFFFFF"
     },
     primary: {
-      main: '#064C5B',
+      main: "#064C5B"
     },
     secondary: {
-      main: '#064C5B',
+      main: "#064C5B"
     },
-    gradient: 'linear-gradient(to bottom, #064C5B, #16758a)',
-  },
+    gradient: "linear-gradient(to bottom, #064C5B, #16758a)",
+    complexGradient: "linear-gradient(95deg, #064C5B 30%, #16758a 60%, #1a8ba1 90%)"
+  }
 });
 
 export default lightTheme;

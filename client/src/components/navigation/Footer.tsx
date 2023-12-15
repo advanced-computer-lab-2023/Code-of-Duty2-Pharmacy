@@ -5,19 +5,18 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: (theme) => theme.palette.background.paper,
+        backgroundColor: (theme) => theme.palette.primary.main,
         padding: (theme) => theme.spacing(6, 0),
         borderTop: (theme) => `1px solid ${theme.palette.divider}`,
         position: "static",
         bottom: 0,
-        width: "100%"
+        width: "100%",
+        color: "white"
       }}
     >
       <Container maxWidth="lg">
         <Typography
-          variant="body2"
           sx={{
-            color: (theme) => theme.palette.text.secondary,
             display: "flex",
             justifyContent: "center",
             alignItems: "center"
