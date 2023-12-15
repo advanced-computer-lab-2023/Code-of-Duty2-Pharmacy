@@ -109,9 +109,9 @@ const Home: React.FC = () => {
           </Typography>
           <Typography variant="body1" gutterBottom>
             Our online pharmacy is one of two platforms on the <strong>El7a2ni Online Healthcare System</strong>, which
-            also includes the El7a2ni Clinic platform. Together, these platforms provide a comprehensive suite of
-            healthcare services, from online consultations with licensed physicians to the delivery of prescription
-            medications and wellness products.
+            also includes the <strong>El7a2ni Clinic platform</strong>. Together, these platforms provide a
+            comprehensive suite of healthcare services, from online consultations with licensed physicians to the
+            delivery of prescription medications and wellness products.
           </Typography>
         </Section>
 
