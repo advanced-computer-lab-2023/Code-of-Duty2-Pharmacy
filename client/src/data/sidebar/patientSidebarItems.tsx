@@ -1,11 +1,13 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import MedicationIcon from "@mui/icons-material/Medication";
-import Wallet from "@mui/icons-material/Wallet";
+import ChatIcon from "@mui/icons-material/Chat";
 
 import { SidebarItem } from "../../types";
+import MedicationIcon from "@mui/icons-material/Medication";
+import Wallet from "@mui/icons-material/Wallet";
 import {
+  patientChatPageRoute,
   patientDashboardRoute,
   patientWalletRoute,
   viewMedicinesRoute,
@@ -37,6 +39,11 @@ export const patientSidebarItems: SidebarItem[] = [
     title: "Wallet",
     href: patientWalletRoute.path,
     icon: <Wallet />
+  },
+  {
+    title: "Chatting",
+    href: patientChatPageRoute.path,
+    icon: <ChatIcon />
   }
 ];
 export default patientSidebarItems;
