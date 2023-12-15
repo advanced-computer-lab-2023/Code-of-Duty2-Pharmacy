@@ -170,7 +170,7 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
               {canDelete && (
                 <Grid item xs={12} sx={{ mt: 2 }}>
                   <Button variant="contained" color="error" onClick={() => deletePatient(patient)}>
-                    Delete Patient
+                    Delete Account
                   </Button>
                 </Grid>
               )}
