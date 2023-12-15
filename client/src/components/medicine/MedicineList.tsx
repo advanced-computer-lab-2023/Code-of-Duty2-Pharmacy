@@ -171,7 +171,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
           justifyContent: "flex-start",
           gap: 3,
           padding: "2.0rem",
-          flexWrap: { xs: "wrap", sm: "nowrap" } // Add this line
+          flexWrap: { xs: "wrap", sm: "nowrap" }
         }}
       >
         <Box
@@ -230,7 +230,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
           ))}
 
           {!showMore && filterOptions.length > 10 && (
-            <Button onClick={handleShowMoreClick} color="secondary">
+            <Button sx={{ ml: -5 }} onClick={handleShowMoreClick} color="secondary">
               Show more
             </Button>
           )}
