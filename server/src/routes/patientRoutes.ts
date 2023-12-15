@@ -37,10 +37,8 @@ const router = express.Router();
 router.use(authenticateUser);
 
 router.get("/", getAllPatients);
-router.get("/:id", getPatientById);
 router.get("/orders", getPatientOrders);
 router.delete("/orders/:orderId", cancelOrder);
-router.delete("/:id", deletePatient);
 router.get("/search", searchPatients);
 router.post("/change-password", changePatientPassword);
 router.get("/addresses", getDeliveryAddresses);
@@ -60,5 +58,9 @@ router.post("/wallets", addPatientAWalletHandler);
 router.get("/wallets", authenticateWalletUser, getPatientWalletHandler);
 router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePatientWalletHandler);
+
+// WARNING: keep these routes at the bottom of the file
+router.get("/:id", getPatientById);
+router.delete("/:id", deletePatient);
 
 export default router;
