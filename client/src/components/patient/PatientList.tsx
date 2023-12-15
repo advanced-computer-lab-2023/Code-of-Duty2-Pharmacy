@@ -1,7 +1,21 @@
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Typography, Paper, Grid, Avatar, TextField, Snackbar, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Avatar,
+  TextField,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText
+} from "@mui/material";
 import { blue, green, grey, purple } from "@mui/material/colors";
 
 import config from "../../config/config";
@@ -9,17 +23,18 @@ import { Patient } from "../../types";
 import DeletionModal from "../modals/DeletionModal";
 
 const colors = [
-  blue[900],
-  blue[700],
-  blue[500],
-  green[900],
-  grey[900],
-  grey[700],
-  grey[500],
-  "#000000",
-  purple[900],
-  purple[700],
-  purple[500]
+  // blue[900],
+  // blue[700],
+  // blue[500],
+  // green[900],
+  // grey[900],
+  // grey[700],
+  // grey[500],
+  // "#000000",
+  // purple[900],
+  // purple[700],
+  // purple[500]
+  grey[900]
 ];
 
 const getColorForPatient = (patient: Patient) => {
@@ -42,6 +57,8 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
     fetchPatients();
@@ -59,6 +76,15 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
   const deletePatient = (patient: Patient) => {
     setPatientToDelete(patient);
     setDeleteModalOpen(true);
+  };
+
+  const handleOpenDialog = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   const handleDeleteConfirm = async () => {
@@ -114,71 +140,116 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Gender
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1)}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Date of Birth
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {new Date(patient.dateOfBirth).toLocaleDateString()}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Email
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.email}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Mobile Number
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.mobileNumber}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Emergency Contact Name
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.emergencyContact.fullname}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Emergency Contact Mobile Number
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.emergencyContact.mobileNumber}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary" sx={{ fontWeight: "bold" }}>
-                  Emergency Contact Relation To Patient
-                </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
-                  {patient.emergencyContact.relationToPatient}
-                </Typography>
-              </Grid>
-              {canDelete && (
-                <Grid item xs={12} sx={{ mt: 2 }}>
-                  <Button variant="contained" color="error" onClick={() => deletePatient(patient)}>
-                    Delete Account
+                <Box display="flex" justifyContent="space-between">
+                  <Button sx={{ ml: -1 }} variant="text" color="primary" onClick={() => handleOpenDialog(patient)}>
+                    View Account Details
                   </Button>
-                </Grid>
-              )}
+                  {canDelete && (
+                    <Button variant="contained" color="error" onClick={() => deletePatient(patient)}>
+                      Delete Account
+                    </Button>
+                  )}
+                </Box>
+              </Grid>
             </Grid>
           </Paper>
         ))}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle id="alert-dialog-title">{selectedPatient?.name}'s Details</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {selectedPatient && (
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Name
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Username
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.username}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Gender
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.gender.charAt(0).toUpperCase() + selectedPatient.gender.slice(1)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Date of Birth
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {new Date(selectedPatient.dateOfBirth).toLocaleDateString()}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Email
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.email}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Mobile Number
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.mobileNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Emergency Contact Name
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.emergencyContact.fullname}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Emergency Contact Mobile Number
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.emergencyContact.mobileNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1" color="black" sx={{ fontWeight: "bold" }}>
+                    Emergency Contact Relation To Patient
+                  </Typography>
+                  <Typography variant="subtitle1" color="black">
+                    {selectedPatient.emergencyContact.relationToPatient}
+                  </Typography>
+                </Grid>
+              </Grid>
+            )}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <DeletionModal
         open={deleteModalOpen}
         handleClose={() => setDeleteModalOpen(false)}

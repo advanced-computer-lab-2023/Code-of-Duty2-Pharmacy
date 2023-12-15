@@ -22,17 +22,18 @@ import { blue, green, grey, purple } from "@mui/material/colors";
 import DeletionModal from "../modals/DeletionModal";
 
 const colors = [
-  blue[900],
-  blue[700],
-  blue[500],
-  green[900],
-  grey[900],
-  grey[700],
-  grey[500],
-  "#000000",
-  purple[900],
-  purple[700],
-  purple[500]
+  // blue[900],
+  // blue[700],
+  // blue[500],
+  // green[900],
+  // grey[900],
+  // grey[700],
+  // grey[500],
+  // "#000000",
+  // purple[900],
+  // purple[700],
+  // purple[500]
+  grey[900]
 ];
 
 const getColorForPharmacist = (pharmacist: Pharmacist) => {
@@ -145,6 +146,8 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
               @{pharmacist.username}
             </Typography>
           </Typography>
+
+          <Box mb={1} />
 
           <Box display="flex" justifyContent="space-between">
             <Button
