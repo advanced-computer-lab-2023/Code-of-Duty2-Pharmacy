@@ -12,6 +12,7 @@ import pharmacistRoutes from "./data/routes/pharmacistRoutes";
 import unverifiedRoutes from "./data/routes/unverifiedRoutes";
 import Layout from "./layouts/Layout";
 import UserRole from "./types/enums/UserRole";
+import doctorRoutes from "./data/routes/doctorRoutes";
 
 function AppRoutes() {
   return (
@@ -52,6 +53,12 @@ function AppRoutes() {
 
       <Route element={<ProtectedRoutesHandler role={UserRole.PHARMACIST} />}>
         {pharmacistRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
+        ))}
+      </Route>
+
+      <Route element={<ProtectedRoutesHandler role={UserRole.DOCTOR} />}>
+        {doctorRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={<Layout>{route.element}</Layout>} />
         ))}
       </Route>

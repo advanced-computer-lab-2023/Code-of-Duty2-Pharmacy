@@ -1,19 +1,10 @@
-import {
-  FormControlLabel,
-  IconButton,
-  Menu,
-  MenuItem,
-  Switch,
-} from "@mui/material";
+import { Divider, FormControlLabel, IconButton, Menu, MenuItem, Switch, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AccountCircle,
-  Brightness4,
-  Brightness7,
-  Logout as LogoutIcon,
-} from "@mui/icons-material";
-import LockResetIcon from '@mui/icons-material/LockReset';
+import { AccountCircle, Brightness4, Brightness7, Logout as LogoutIcon } from "@mui/icons-material";
+import LockResetIcon from "@mui/icons-material/LockReset";
+import SwitchAccessShortcutIcon from "@mui/icons-material/SwitchAccessShortcut";
+
 import { ThemeContext } from "../../contexts/ThemeContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
@@ -24,7 +15,7 @@ import UserRole from "../../types/enums/UserRole";
 
 const Avatar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  // const { theme, toggleTheme } = useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -44,7 +35,7 @@ const Avatar = () => {
 
   const { authState } = useContext(AuthContext);
   var changePasswordPath = "";
-  if (authState.role === UserRole.PATIENT ) {
+  if (authState.role === UserRole.PATIENT) {
     changePasswordPath = changePatientPasswordsRoute.path;
   } else if (authState.role === UserRole.ADMIN) {
     changePasswordPath = changeAdminPasswordsRoute.path;
@@ -65,32 +56,40 @@ const Avatar = () => {
       >
         <AccountCircle />
       </IconButton>
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem>
+      <Menu id="menu-appbar" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        {/* <MenuItem>
           <FormControlLabel
             control={
               <Switch checked={theme === "dark"} onChange={toggleTheme} />
             }
             label={theme === "dark" ? <Brightness4 /> : <Brightness7 />}
           />
+        </MenuItem> */}
+        <Typography variant="h6" style={{ padding: "0.5em 1em" }}>
+          What's happening?
+        </Typography>
+
+        <Divider sx={{ my: 1, mx: 1 }} />
+
+        <MenuItem onClick={() => navigate(welcomeRoute.path)}>
+          <SwitchAccessShortcutIcon sx={{ mr: 1 }} />
+          Switch to Welcome View
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            navigate(changePasswordPath);
+            handleClose();
+          }}
+        >
+          <LockResetIcon sx={{ mr: 1 }} />
+          Change Password
         </MenuItem>
 
         <MenuItem onClick={handleLogout}>
-          <LogoutIcon />
+          <LogoutIcon sx={{ mr: 1 }} />
           Logout
         </MenuItem>
-
-         {/* change password the menu item */}
-         <MenuItem onClick={() => {navigate(changePasswordPath); handleClose();}}>
-          <LockResetIcon />
-            Change Password
-        </MenuItem>
-
       </Menu>
     </>
   );

@@ -4,15 +4,12 @@ import { getAllPharmacistRegistrationRequests } from "../controllers/adminContro
 import { authenticateUser } from "../middlewares/authentication";
 import {
   acceptPharmacistRegistrationRequest,
-  rejectPharmacistRegistrationRequest,
+  rejectPharmacistRegistrationRequest
 } from "../controllers/registrationController";
 
 const router = express.Router();
 
-// --> Path: /pharmacist-registration-requests/
-
 router.use(authenticateUser);
-
 router.get("/", getAllPharmacistRegistrationRequests);
 router.post("/accept-pharmacist-request", acceptPharmacistRegistrationRequest);
 router.post("/reject-pharmacist-request", rejectPharmacistRegistrationRequest);

@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -19,6 +18,7 @@ import { Server } from "socket.io";
 import { authenticateSocketConnection } from "./middlewares/authentication";
 import http from "http";
 import socketEventListeners from "./socket-connections";
+import prescriptionRouter from "./routes/prescriptionRoutes";
 
 export const app = express();
 
@@ -61,3 +61,4 @@ io.on("connection", socketEventListeners);
 server.listen(config.server.socketPort, () => {
   console.log(`Socket server listening on port ${config.server.socketPort}`);
 });
+app.use("/prescriptions", prescriptionRouter);

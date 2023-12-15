@@ -5,8 +5,7 @@ import ManageAdminsPage from "../../pages/admin/AdminAddAdminPage";
 import AdminViewPharmacistRequestsPage from "../../pages/admin/AdminViewPharmacistRequestsPage";
 import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage";
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
-import ChangePasswordPage from "../../pages/common/ChangePasswordPage";
-import AdminViewPharmacistRegisterationRequest from "../../pages/admin/AdminViewPharmacistRegisterationRequest";
+import AdminViewPharmacistRegistrationRequest from "../../pages/admin/AdminViewPharmacistRegistrationRequest";
 import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
 
 export const adminDashboardRoute: Route = {
@@ -40,7 +39,7 @@ export const viewPatientsRoute: Route = {
 };
 export const viewPharmacistRequestRoute: Route = {
   path: "/admin/view-pharmacist-request",
-  element: <AdminViewPharmacistRegisterationRequest />
+  element: <AdminViewPharmacistRegistrationRequest />
 };
 
 export const changeAdminPasswordsRoute: Route = {

@@ -5,6 +5,7 @@ import { User } from "../../types/User";
 import Pharmacist from "../../models/pharmacists/Pharmacist";
 import Admin from "../../models/admins/Admin";
 import Patient from "../../models/patients/Patient";
+import Doctor from "../../models/doctors/Doctor";
 
 export const authenticatePatientOrAdmin = async (username: string, password: string) => {
   const adminAuthenticationTokensAndRole = await authenticateUserIfAdmin(username, password);
@@ -82,6 +83,20 @@ export const authenticatePharmacist = async (username: string, password: string)
       imageUrl: pharmacist.imageUrl
     }
   };
+};
+
+export const authenticateDoctor = async (username: string, password: string) => {
+  const doctor = await Doctor.findOne({ username }).select("+password");
+
+  if (!doctor) {
+    throw new Error(usernameOrPasswordIncorrectErrorMessage);
+  }
+
+  await validateUserPassword(doctor, password);
+  const user = { id: doctor._id, role: UserRole.DOCTOR };
+  const accessToken = signAndGetAccessToken(user);
+  const refreshToken = signAndGetRefreshToken(user);
+  return { accessToken, refreshToken, role: UserRole.DOCTOR };
 };
 
 const validateUserPassword = async (user: any, password: string) => {

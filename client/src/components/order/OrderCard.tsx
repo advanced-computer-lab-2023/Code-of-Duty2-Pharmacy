@@ -11,11 +11,7 @@ interface OrderCardProps {
   onCancel: (orderId: string) => void;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({
-  order,
-  canViewStatus,
-  onCancel,
-}) => {
+const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus, onCancel }) => {
   return (
     <Card sx={{ width: "40%", ml: 5, mb: 5 }}>
       <CardContent>
@@ -29,10 +25,8 @@ const OrderCard: React.FC<OrderCardProps> = ({
 
           {order.medicines.map((medicine: any, index: any) => {
             return (
-              <Box mb={1} pl={1}>
-                <Typography variant="body1" key={index}>
-                  {medicine?.medicineId.name}
-                </Typography>
+              <Box mb={1} pl={1} key={index}>
+                <Typography variant="body1">{medicine?.medicineId.name}</Typography>
                 <Typography variant="body2" color="text.secondary">
                   Qty {medicine?.quantity}
                 </Typography>
@@ -49,16 +43,14 @@ const OrderCard: React.FC<OrderCardProps> = ({
         <Box mt={2} />
 
         <Typography variant="h6">Payment Method</Typography>
-        {order.paymentMethod.charAt(0).toUpperCase() +
-          order.paymentMethod.slice(1)}
+        {order.paymentMethod.charAt(0).toUpperCase() + order.paymentMethod.slice(1)}
 
         <Box mt={2} />
 
         {canViewStatus && (
           <>
             <Typography variant="h6">Order Status</Typography>
-            {order.orderStatus.charAt(0).toUpperCase() +
-              order.orderStatus.slice(1)}{" "}
+            {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}{" "}
           </>
         )}
 
@@ -66,11 +58,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
 
         <Box mt={2} />
 
-        <Button
-          color="error"
-          variant="outlined"
-          onClick={() => onCancel(order._id)}
-        >
+        <Button color="error" variant="outlined" onClick={() => onCancel(order._id)}>
           Cancel Order
         </Button>
       </CardContent>

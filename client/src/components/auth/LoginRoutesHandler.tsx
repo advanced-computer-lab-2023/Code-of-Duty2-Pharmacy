@@ -1,5 +1,4 @@
 /**
- *
  * This handler ensures login routes are not accessible to already authenticated users.
  *
  * Any login route should be a child of this component, thus forcing any access to a login page
@@ -10,13 +9,13 @@
  *
  * Otherwise, actual redirection after actually logging in with credentials should be handled
  * in the actual login page(s).
- *
  */
 
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthContext";
+import { doctorIntermediaryRoute } from "../../data/routes/doctorRoutes";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
@@ -24,23 +23,25 @@ import { pharmacistUnverifiedRoute } from "../../data/routes/unverifiedRoutes";
 import { pageNotFoundRoute } from "../../data/routes/generalRoutes";
 import UserRole from "../../types/enums/UserRole";
 
+type RoleToRoute = {
+  [role in UserRole]?: string;
+};
+
+const roleToRoute: RoleToRoute = {
+  [UserRole.PATIENT]: patientDashboardRoute.path,
+  [UserRole.ADMIN]: adminDashboardRoute.path,
+  [UserRole.PHARMACIST]: pharmacistDashboardRoute.path,
+  [UserRole.UNVERIFIED_PHARMACIST]: pharmacistUnverifiedRoute.path,
+  [UserRole.DOCTOR]: doctorIntermediaryRoute.path // TODO: Get rid of this
+};
+
 const LoginRoutesHandler = () => {
   const { authState } = useContext(AuthContext);
 
-  return authState.isAuthenticated ? (
-    authState.role === UserRole.PATIENT ? (
-      <Navigate to={patientDashboardRoute.path} replace />
-    ) : authState.role === UserRole.ADMIN ? (
-      <Navigate to={adminDashboardRoute.path} replace />
-    ) : authState.role === UserRole.PHARMACIST ? (
-      <Navigate to={pharmacistDashboardRoute.path} replace />
-    ) : authState.role === UserRole.UNVERIFIED_PHARMACIST ? (
-      <Navigate to={pharmacistUnverifiedRoute.path} replace />
-    ) : (
-      <Navigate to={pageNotFoundRoute.path} replace />
-    )
-  ) : (
-    <Outlet />
-  );
+  const route = roleToRoute[authState.role] || pageNotFoundRoute.path;
+
+  // <Outlet /> renders the elements of the child routes of this route, which are the login pages
+  return authState.isAuthenticated ? <Navigate to={route} replace /> : <Outlet />;
 };
+
 export default LoginRoutesHandler;

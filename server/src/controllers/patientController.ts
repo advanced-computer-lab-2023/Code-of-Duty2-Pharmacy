@@ -5,7 +5,6 @@ import { findPatientById, updatePatientPasswordById } from "../services/patients
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
-import { STATUS_CODES } from "http";
 import Order, { IOrderModel } from "../models/orders/Order";
 import HealthPackage from "../models/health_packages/HealthPackage";
 
@@ -69,6 +68,8 @@ export const deletePatient = async (req: Request, res: Response) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
+
+// TODO: Remove this "confirmPassword" as it's unused and unnecessary
 export const changePatientPassword = async (req: AuthorizedRequest, res: Response) => {
   try {
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -80,6 +81,7 @@ export const changePatientPassword = async (req: AuthorizedRequest, res: Respons
     }
 
     const isPasswordCorrect = await patient.verifyPassword?.(currentPassword);
+
     if (!isPasswordCorrect) {
       return res.status(StatusCodes.BAD_REQUEST).json({ message: "Old password is incorrect" });
     }
@@ -332,13 +334,11 @@ export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
+
 export const changeMedicineQuantity = async (req: AuthorizedRequest, res: Response) => {
   try {
     const userId = req.user?.id;
     const { medicineId, newQuantity } = req.params;
-    // console.log(req.params);
-    // console.log("medicineId", medicineId);
-    // console.log("newQuantity", newQuantity);
 
     const newQuantityNumber = Number(newQuantity);
 
@@ -374,25 +374,18 @@ export const getCartMedicinesStock = async (req: AuthorizedRequest, res: Respons
   try {
     const userId = req.user?.id;
 
-    try {
-      const patient = await Patient.findById(userId).populate({
-        path: "cart.medicineId",
-        select: "availableQuantity"
-      });
+    const patient = await Patient.findById(userId).populate({
+      path: "cart.medicineId",
+      select: "availableQuantity"
+    });
 
-      if (!patient) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ message: "Patient not found" });
-      }
-
-      const availableQuantities = patient.cart
-        ? patient.cart.map((item: any) => item.medicineId.availableQuantity)
-        : [];
-
-      return res.status(StatusCodes.OK).json({ availableQuantities });
-    } catch (err) {
-      console.error(err);
-      return res.status(StatusCodes.OK).json({ message: "Server error" });
+    if (!patient) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: "Patient not found" });
     }
+
+    const availableQuantities = patient.cart ? patient.cart.map((item: any) => item.medicineId.availableQuantity) : [];
+
+    return res.status(StatusCodes.OK).json({ availableQuantities });
   } catch (err) {
     console.error(err);
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Server error" });
@@ -425,6 +418,7 @@ export const cancelOrder = async (req: Request, res: Response) => {
     const orderId = req.params.orderId;
 
     const order: IOrderModel | null = await Order.findById(orderId);
+
     if (!order) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Order not found" });
     }

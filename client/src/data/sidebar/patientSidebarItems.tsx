@@ -1,18 +1,18 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import HealingIcon from "@mui/icons-material/Healing";
+import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ChatIcon from "@mui/icons-material/Chat";
 
 import { SidebarItem } from "../../types";
+import MedicationIcon from "@mui/icons-material/Medication";
+import Wallet from "@mui/icons-material/Wallet";
 import {
-  createPatientWalletRoute,
   patientChatPageRoute,
   patientDashboardRoute,
   patientWalletRoute,
   viewMedicinesRoute,
   viewOrdersRoute
 } from "../routes/patientRoutes";
-import { Wallet } from "@mui/icons-material";
 
 export const patientSidebarItems: SidebarItem[] = [
   {
@@ -23,10 +23,15 @@ export const patientSidebarItems: SidebarItem[] = [
   {
     title: "Medicines",
     href: viewMedicinesRoute.path,
-    icon: <HealingIcon />
+    icon: <MedicationIcon />
   },
   {
-    title: "View Orders",
+    title: "Prescriptions",
+    href: "/patient/prescriptions",
+    icon: <LocalPharmacyIcon />
+  },
+  {
+    title: "Orders",
     href: viewOrdersRoute.path,
     icon: <AssignmentIcon />
   },

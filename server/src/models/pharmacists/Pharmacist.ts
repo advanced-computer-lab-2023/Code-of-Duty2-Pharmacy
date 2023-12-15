@@ -7,6 +7,7 @@ import NotificationSchema from "../notifications/Notification";
 
 export interface IPharmacistModel extends IPharmacist, Document {}
 
+// TODO: Add the world "Url" to the end of the needed fields
 export const PharmacistSchema = new Schema<IPharmacistModel>(
   {
     username: { type: String, required: true, unique: true },
