@@ -146,23 +146,28 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
             </Typography>
           </Typography>
 
-          <Box mt={2} />
-
-          <Button
-            id={`viewPhButton${index}`}
-            key={index}
-            sx={{ mr: 1 }}
-            onClick={() => handleOpen(index)}
-            variant="text"
-          >
-            View Account Details
-          </Button>
-
-          {canDelete && (
-            <Button key={pharmacist._id} variant="contained" color="error" onClick={() => deletePharmacist(pharmacist)}>
-              Delete Account
+          <Box display="flex" justifyContent="space-between">
+            <Button
+              id={`viewPhButton${index}`}
+              key={index}
+              sx={{ mr: 1, ml: -1 }}
+              onClick={() => handleOpen(index)}
+              variant="text"
+            >
+              View Account Details
             </Button>
-          )}
+
+            {canDelete && (
+              <Button
+                key={pharmacist._id}
+                variant="contained"
+                color="error"
+                onClick={() => deletePharmacist(pharmacist)}
+              >
+                Delete Account
+              </Button>
+            )}
+          </Box>
         </Paper>
       ))}
 
