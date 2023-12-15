@@ -4,7 +4,6 @@ import {
   Avatar,
   Box,
   Button,
-  Container,
   Divider,
   Grid,
   IconButton,
@@ -21,7 +20,7 @@ import axios from "axios";
 
 import config from "../../config/config";
 import { Medicine } from "../../types";
-import ConfirmationModal from "../../components/modals/ConfirmationDialog";
+import ConfirmationModal from "../../components/modals/ConfirmationModal";
 
 const DoctorManagePrescriptionsPage = () => {
   const [prescription, setPrescription] = useState<any>(null);
