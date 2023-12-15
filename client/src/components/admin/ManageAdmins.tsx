@@ -17,7 +17,9 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  TableHead
+  TableHead,
+  Typography,
+  Divider
 } from "@mui/material";
 // import { jwtDecode } from 'jwt-decode';
 
@@ -126,11 +128,11 @@ const ManageAdmins = () => {
 
   return (
     <div style={{ padding: "2.0rem" }}>
-      <h1 style={{ textAlign: "center", fontSize: "2vw" }}>Manage Admins </h1>
-      <hr />
       <Box display="flex" flexDirection="column" alignItems="flex-start">
         <form onSubmit={handleSubmit}>
-          <h1 style={{ textAlign: "start" }}>Add Admin </h1>
+          <Typography variant="h4" gutterBottom component="div" color="primary">
+            Add a new admin
+          </Typography>
           {showSuccessAlert && (
             <Alert severity="success" onClose={() => setShowSuccessAlert(false)}>
               Admin <strong> {newAdminUsername} </strong> added successfully!
@@ -180,11 +182,16 @@ const ManageAdmins = () => {
           </Box>
         </form>
       </Box>
-      <br />
-      <hr />
+
+      <Box>
+        <Divider sx={{ my: 5 }} />
+      </Box>
+
       {/* view and delete admins */}
-      <Box display="flex" flexDirection="column" alignItems="flex-start" style={{ width: "30%" }}>
-        <h1>View & Delete Admins </h1>
+      <Box display="flex" flexDirection="column" alignItems="flex-start">
+        <Typography variant="h4" gutterBottom component="div" color="primary">
+          Current admin accounts
+        </Typography>
 
         {deletedAdminUsername !== "" && (
           <Alert severity="success" onClose={() => setDeletedAdminUsername("")} style={{ width: "100%" }}>
@@ -196,6 +203,7 @@ const ManageAdmins = () => {
           margin="normal"
           label="Search by username"
           value={searchTerm}
+          fullWidth
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
@@ -206,8 +214,10 @@ const ManageAdmins = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">
-                    <strong> Username</strong>
+                  <TableCell>
+                    <Typography variant="h6" gutterBottom component="div">
+                      Username
+                    </Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -225,7 +235,7 @@ const ManageAdmins = () => {
                             deleteAdmin(admin._id, index);
                           }}
                         >
-                          Delete
+                          Delete Account
                         </LoadingButton>
                       </div>
                     </TableCell>
