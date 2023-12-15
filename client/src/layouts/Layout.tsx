@@ -49,7 +49,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         >
           <UserPanel sidebarItems={sidebarItems} />
           <MainPageContent />
-          <Footer />
+          {/* <Footer /> */}
         </Box>
       </Box>
     );
