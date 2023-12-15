@@ -261,6 +261,8 @@ const Home: React.FC = () => {
             </Grid>
           </Grid>
         </Section>
+
+        <Box pb={20} />
       </Container>
     </Box>
   );
