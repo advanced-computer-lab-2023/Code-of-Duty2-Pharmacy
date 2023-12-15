@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { Paper, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { grey } from "@mui/material/colors";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
@@ -77,14 +78,20 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
             <Button
               variant="text"
               color="primary"
-              sx={{ fontSize: "1rem" }}
+              sx={{ ml: -1, fontSize: "1rem" }}
               onClick={() => navigate(`/admin/view-pharmacist-request/?request=${JSON.stringify(request)}`)}
             >
               View Application Details
             </Button>
 
             <Typography>
-              <strong>Name: </strong> {request.name} <span style={{ color: "#949494" }}>@{request.username}</span>
+              <span style={{ color: grey[700] }}>@{request.username}</span>
+            </Typography>
+
+            <Box mb={0.9} />
+
+            <Typography>
+              <strong>Name: </strong> {request.name}
             </Typography>
 
             <Typography>

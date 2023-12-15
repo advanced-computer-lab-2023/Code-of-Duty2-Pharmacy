@@ -103,8 +103,10 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
           <Paper elevation={3} key={patient._id} sx={{ p: 2, mb: 2 }}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <Typography variant="h6" color="secondary">
-                  <Avatar sx={{ bgcolor: getColorForPatient(patient) }}>{patient.name.charAt(0).toUpperCase()}</Avatar>{" "}
+                <Typography variant="h6">
+                  <Avatar sx={{ bgcolor: getColorForPatient(patient), mb: 1 }}>
+                    {patient.name.charAt(0).toUpperCase()}
+                  </Avatar>{" "}
                   {patient.name}{" "}
                   <Typography variant="body1" color="textSecondary" component="span">
                     @{patient.username}

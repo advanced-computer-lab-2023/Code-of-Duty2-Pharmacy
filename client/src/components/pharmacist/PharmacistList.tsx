@@ -136,12 +136,12 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
 
       {pharmacists.map((pharmacist, index) => (
         <Paper elevation={3} key={index} sx={{ p: 2, mb: 2, mt: 2 }}>
-          <Typography variant="h6" color="secondary">
-            <Avatar sx={{ bgcolor: getColorForPharmacist(pharmacist) }}>
+          <Typography variant="h6">
+            <Avatar sx={{ bgcolor: getColorForPharmacist(pharmacist), mb: 1 }}>
               {pharmacist.name.charAt(0).toUpperCase()}
             </Avatar>
             {pharmacist.name}{" "}
-            <Typography variant="body1" color="textSecondary" component="span">
+            <Typography color="textSecondary" component="span">
               @{pharmacist.username}
             </Typography>
           </Typography>
