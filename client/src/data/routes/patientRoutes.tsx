@@ -7,6 +7,7 @@ import { Route } from "../../types";
 import ViewWallet from "../../pages/wallet/ViewWallet";
 import CreateWallet from "../../pages/wallet/CreateWallet";
 import PatientChangePasswordPage from "../../pages/patient/PatientChangePasswordPage";
+import PatientPrescriptionsPage from "../../pages/patient/PatientPrescriptionsPage";
 
 export const patientDashboardRoute: Route = {
   path: "/patient/dashboard",
@@ -48,6 +49,11 @@ export const createPatientWalletRoute: Route = {
   element: <CreateWallet />
 };
 
+export const patientPrescriptionsRoute: Route = {
+  path: "/patient/prescriptions",
+  element: <PatientPrescriptionsPage />
+};
+
 const patientRoutes: Route[] = [
   patientDashboardRoute,
   viewMedicinesRoute,
@@ -56,7 +62,8 @@ const patientRoutes: Route[] = [
   checkoutRoute,
   changePatientPasswordsRoute,
   patientWalletRoute,
-  createPatientWalletRoute
+  createPatientWalletRoute,
+  patientPrescriptionsRoute
 ];
 
 export default patientRoutes;

@@ -1,37 +1,42 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import HealingIcon from "@mui/icons-material/Healing";
+import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import MedicationIcon from "@mui/icons-material/Medication";
+import Wallet from "@mui/icons-material/Wallet";
 
 import { SidebarItem } from "../../types";
 import {
-  createPatientWalletRoute,
   patientDashboardRoute,
   patientWalletRoute,
   viewMedicinesRoute,
-  viewOrdersRoute,
+  viewOrdersRoute
 } from "../routes/patientRoutes";
-import { Wallet } from "@mui/icons-material";
 
 export const patientSidebarItems: SidebarItem[] = [
   {
     title: "Dashboard",
     href: patientDashboardRoute.path,
-    icon: <DashboardIcon />,
+    icon: <DashboardIcon />
   },
   {
     title: "Medicines",
     href: viewMedicinesRoute.path,
-    icon: <HealingIcon />,
+    icon: <MedicationIcon />
   },
   {
-    title: "View Orders",
+    title: "Prescriptions",
+    href: "/patient/prescriptions",
+    icon: <LocalPharmacyIcon />
+  },
+  {
+    title: "Orders",
     href: viewOrdersRoute.path,
-    icon: <AssignmentIcon />,
+    icon: <AssignmentIcon />
   },
   {
     title: "Wallet",
     href: patientWalletRoute.path,
-    icon: <Wallet />,
-  },
+    icon: <Wallet />
+  }
 ];
 export default patientSidebarItems;
