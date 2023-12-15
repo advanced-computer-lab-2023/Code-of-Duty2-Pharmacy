@@ -1,10 +1,9 @@
 interface Notification {
   _id: string;
   email: string;
-  title: string;
+  subject: string;
   description: string;
-  dateTime: Date;
-  methods: { method: "SMS" | "email" }[];
+  time: Date;
 }
 
 export default Notification;

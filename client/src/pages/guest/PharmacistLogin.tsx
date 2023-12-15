@@ -8,10 +8,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import {
-  pharmacistRegistrationRoute,
-  welcomeRoute,
-} from "../../data/routes/guestRoutes";
+import { pharmacistRegistrationRoute, welcomeRoute } from "../../data/routes/guestRoutes";
 import pharmacistImage from "../../assets/pharmacist.jpg";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useState } from "react";
@@ -25,6 +22,9 @@ import axios from "axios";
 import config from "../../config/config";
 import { forgetPasswordRoute } from "../../data/routes/loginRoutes";
 import { pharmacistUnverifiedRoute } from "../../data/routes/unverifiedRoutes";
+import { UserContext } from "../../contexts/UserContext";
+import { LoginResponse } from "../../types/LoginResponse";
+import { establishSocketConnection } from "../../services/Socket";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />
@@ -40,9 +40,23 @@ export default function PharmacistLogin() {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const fromOrWelcome = location.state?.from?.pathname || welcomeRoute.path;
 
+  function storePharmacistInfo(data: LoginResponse) {
+    setUser(
+      data.info
+        ? {
+            id: data.info.id,
+            name: data.info.name,
+            email: data.info.email,
+            role: "PHARMACIST",
+            photoUrl: data.info.imageUrl
+          }
+        : null
+    );
+  }
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -61,23 +75,19 @@ export default function PharmacistLogin() {
     }
 
     try {
-      const response = await axios.post(
-        `${config.API_URL}/auth/pharmacist-login`,
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${config.API_URL}/auth/pharmacist-login`, {
+        username,
+        password
+      });
 
       const data = response.data;
       login(data.accessToken, data.role);
+      storePharmacistInfo(data);
+      establishSocketConnection(data.accessToken, data.info!.id);
 
       if (data.role === UserRole.UNVERIFIED_PHARMACIST) {
         navigate(pharmacistUnverifiedRoute.path);
-      } else if (
-        data.role === UserRole.PHARMACIST &&
-        fromOrWelcome.startsWith("/pharmacist")
-      ) {
+      } else if (data.role === UserRole.PHARMACIST && fromOrWelcome.startsWith("/pharmacist")) {
         navigate(fromOrWelcome);
       } else if (data.role === UserRole.PHARMACIST) {
         navigate(pharmacistDashboardRoute.path);
@@ -97,8 +107,7 @@ export default function PharmacistLogin() {
             style={{
               width: "100%",
               marginTop: "3.5rem",
-              boxShadow:
-                "0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19)",
+              boxShadow: "0px 4px 8px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19)"
             }}
           />
         </Grid>
@@ -109,13 +118,10 @@ export default function PharmacistLogin() {
               marginTop: "3rem",
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "center"
             }}
           >
-            <Button
-              onClick={() => navigate(welcomeRoute.path)}
-              sx={{ mb: 5, fontSize: "1.2rem" }}
-            >
+            <Button onClick={() => navigate(welcomeRoute.path)} sx={{ mb: 5, fontSize: "1.2rem" }}>
               Back to Home
             </Button>
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -143,16 +149,10 @@ export default function PharmacistLogin() {
                 }
               >
                 <AlertTitle>Oops!</AlertTitle>
-                Something's wrong with your credentials —{" "}
-                <strong>please make sure they're correct!</strong>
+                Something's wrong with your credentials — <strong>please make sure they're correct!</strong>
               </Alert>
             )}
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 1 }}
-            >
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -183,29 +183,18 @@ export default function PharmacistLogin() {
                 error={passwordError}
                 helperText={passwordError ? "Password is required" : ""}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
                   {/* TODO: Add Forgot password href here but use Navigate instead */}
-                  <NavLink
-                    to={forgetPasswordRoute.path}
-                    style={{ color: "inherit" }}
-                  >
+                  <NavLink to={forgetPasswordRoute.path} style={{ color: "inherit" }}>
                     Forgot password?
                   </NavLink>
                 </Grid>
                 <Grid item>
-                  <NavLink
-                    to={pharmacistRegistrationRoute.path}
-                    style={{ color: "inherit" }}
-                  >
+                  <NavLink to={pharmacistRegistrationRoute.path} style={{ color: "inherit" }}>
                     Don't have an account? Sign Up
                   </NavLink>
                 </Grid>

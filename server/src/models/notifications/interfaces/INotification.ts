@@ -1,7 +1,7 @@
 export interface INotification {
-  email: string;
-  title: string;
+  _id?: string;
+  subject: string;
   description: string;
-  dateTime: Date;
-  methods: { method: "SMS" | "email" }[];
+  time: Date;
+  isRead: boolean;
 }

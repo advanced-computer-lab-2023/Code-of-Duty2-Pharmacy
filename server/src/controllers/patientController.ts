@@ -22,6 +22,37 @@ export const getAllPatients = async (req: Request, res: Response) => {
   }
 };
 
+export const getPatientById = async (req: Request, res: Response) => {
+  try {
+    const patientId = req.params.id;
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Patient not found" });
+    }
+    res.status(StatusCodes.OK).json(patient);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const searchPatients = async (req: Request, res: Response) => {
+  try {
+    const { name } = req.query;
+
+    const patients: IPatientModel[] = await Patient.find({
+      name: { $regex: name as string, $options: "i" }
+    });
+
+    if (patients.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "No Patients found" });
+    }
+
+    res.status(StatusCodes.OK).json(patients);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
 export const deletePatient = async (req: Request, res: Response) => {
   try {
     const patientId = req.params.id;
@@ -293,9 +324,7 @@ export const deleteCartItem = async (req: AuthorizedRequest, res: Response) => {
   try {
     const patientId = req.user?.id;
     const medicineId = req.params.itemId;
-
     const result = await Patient.updateOne({ _id: patientId }, { $pull: { cart: { medicineId: medicineId } } });
-
     if (result.matchedCount === 0) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Patient not found" });
     }

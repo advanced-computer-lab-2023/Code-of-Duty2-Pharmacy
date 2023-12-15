@@ -4,6 +4,8 @@ import PharmacistViewMedicinesPage from "../../pages/pharmacist/PharmacistViewMe
 import PharmacistAddMedicinePage from "../../pages/pharmacist/PharmacistAddMedicinePage";
 import PharmacistAdditionalInfo from "../../pages/pharmacist/PharmacistAdditionalInfo";
 import PharmacistChangePasswordPage from "../../pages/pharmacist/PharmacistChangePasswordPage";
+import ChatPage from "../../pages/chat/ChatPage";
+import ViewChat from "../../pages/chat/ViewChat";
 import PharmacistViewWalletPage from "../../pages/wallet/PharmacistViewWalletPage";
 import PharmacistCreateWalletPage from "../../pages/wallet/PharmacistCreateWalletPage";
 
@@ -31,6 +33,14 @@ export const PharmacistAdditionalInfoRoute: Route = {
   path: "/pharmacist/complete-additional-info",
   element: <PharmacistAdditionalInfo />
 };
+export const pharmacistChatPageRoute: Route = {
+  path: "/pharmacist/chats",
+  element: <ChatPage />
+};
+export const pharmacistChatViewRoute: Route = {
+  path: "/pharmacist/current-chat",
+  element: <ViewChat />
+};
 
 export const pharmacistWalletRoute: Route = {
   path: "/pharmacist/wallet",
@@ -48,6 +58,8 @@ const pharmacistRoutes: Route[] = [
   addMedicineRoute,
   changePharmacistPasswordsRoute,
   PharmacistAdditionalInfoRoute,
+  pharmacistChatPageRoute,
+  pharmacistChatViewRoute,
   pharmacistWalletRoute,
   createPharmacistWalletRoute
 ];

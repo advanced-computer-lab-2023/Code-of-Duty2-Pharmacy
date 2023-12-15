@@ -1,4 +1,5 @@
 import UserRole from "../../../types/enums/UserRole";
+import { INotification } from "../../notifications/interfaces/INotification";
 import { IUserBaseInfo } from "../../users/interfaces/IUserBaseInfo";
 import { ICartItem } from "./subinterfaces/ICartItem";
 import { IDependentFamilyMember } from "./subinterfaces/IDependentFamilyMember";
@@ -24,6 +25,8 @@ export interface IPatient extends IUserBaseInfo {
     otp: string;
     expiryDate: Date;
   };
+  receivedNotifications?: INotification[];
+
   verifyPasswordResetOtp?: (otp: string) => Promise<boolean>;
   verifyWalletPinCode?: (pinCode: string) => Promise<boolean>;
   verifyPassword?: (password: string) => Promise<boolean>;

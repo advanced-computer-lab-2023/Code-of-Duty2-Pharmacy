@@ -1,20 +1,11 @@
-import mongoose, { Document, Schema } from "mongoose";
-import isEmail from "validator/lib/isEmail";
+import { Schema } from "mongoose";
 import { INotification } from "./interfaces/INotification";
 
-export interface INotificationModel extends INotification, Document {}
-
-export const NotificationSchema = new Schema<INotificationModel>({
-  email: {
-    type: String,
-    validate: [isEmail, "invalid email"],
-    unique: true,
-    required: true,
-  },
-  title: { type: String, required: true },
+const NotificationSchema = new Schema<INotification>({
+  subject: { type: String, required: true },
   description: { type: String, required: true },
-  dateTime: { type: Date, required: true },
-  methods: [{ type: String, enum: ["SMS", "email"], required: true }],
+  time: { type: Date, required: true },
+  isRead: { type: Boolean, default: false }
 });
 
-export default mongoose.model<INotificationModel>("Notification");
+export default NotificationSchema;

@@ -5,6 +5,7 @@ import { IPatient } from "./interfaces/IPatient";
 import PasswordResetSchema from "../users/PasswordReset";
 import bcrypt from "bcrypt";
 import WalletSchema from "../wallets/Wallet";
+import NotificationSchema from "../notifications/Notification";
 
 export interface IPatientModel extends IPatient, Document {}
 
@@ -142,6 +143,11 @@ export const PatientSchema = new Schema<IPatientModel>(
     passwordReset: {
       type: PasswordResetSchema,
       select: false
+    },
+    receivedNotifications: {
+      type: Array<typeof NotificationSchema>,
+      select: false,
+      required: false
     }
   },
 
