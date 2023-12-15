@@ -16,10 +16,3 @@ Contributions are always welcome!
 ## Code of Conduct
 
 This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/). Please read the [full text](https://www.contributor-covenant.org/version/2/0/code_of_conduct/) so that you can understand what actions will and will not be tolerated.
-
-## Project Structure
-
-```bash
-.
-├── TODO: Add project structure
-```
