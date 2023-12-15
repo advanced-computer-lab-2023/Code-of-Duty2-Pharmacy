@@ -15,6 +15,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Archive, AttachMoney, Unarchive } from "@mui/icons-material";
 import { Alert, AlertTitle, Stack, Tooltip } from "@mui/material";
+import medicinePlaceholderImage from "../../assets/medicine-placeholder.png";
 
 import config from "../../config/config";
 import Medicine from "../../types/Medicine";
@@ -111,8 +112,11 @@ const MedicineCard: React.FC<Props> = ({
             <CardMedia
               component="img"
               height={140}
-              image={editedMedicine.pictureUrl}
+              image={editedMedicine.pictureUrl || medicinePlaceholderImage}
               alt={`${editedMedicine.name} image`}
+              onError={(e) => {
+                e.currentTarget.src = medicinePlaceholderImage;
+              }}
               sx={{
                 filter: editedMedicine.availableQuantity === 0 ? "grayscale(100%)" : "none",
                 objectFit: "contain"
