@@ -92,6 +92,7 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
         fullWidth
         sx={{ mb: 2 }}
       />
+
       {patients
         .filter(
           (patient) =>
