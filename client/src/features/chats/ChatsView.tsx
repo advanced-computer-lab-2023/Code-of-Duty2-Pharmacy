@@ -1,5 +1,5 @@
 import { Inbox } from "@talkjs/react";
-import { Backdrop, Box, CircularProgress } from "@mui/material";
+import { Backdrop, Box, CircularProgress, IconButton, useMediaQuery, useTheme } from "@mui/material";
 import { useQueryParams } from "../../hooks/useQueryParams";
 import { useContext, useEffect, useRef, useState } from "react";
 import Talk from "talkjs";
@@ -9,12 +9,14 @@ import { useQuery } from "react-query";
 import config from "../../config/config";
 import ChattingWindow from "../../types/ChattingWindow";
 import { UserContext } from "../../contexts/UserContext";
-import { get } from "http";
+import { ArrowBack } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import useFirstPath from "../../hooks/useFirstPath";
 declare let window: ChattingWindow;
 
 const getOtherUserData = async ({ id, role }: { id: string | null; role: UserRole | null }) => {
   if (!id) return null;
-  console.log("=-=-=-=-=-=-=-=-=-=-=-=-Role: ", UserRole[role!]);
+  // console.log("=-=-=-=-=-=-=-=-=-=-=-=-Role: ", UserRole[role!]);
   const receiver = role === UserRole.DOCTOR ? "doctors" : role === UserRole.PATIENT ? "patients" : "pharmacists";
   const response = await axios.get(`${config.API_URL}/${receiver}/${id}`);
 
@@ -22,9 +24,9 @@ const getOtherUserData = async ({ id, role }: { id: string | null; role: UserRol
 };
 
 const ChatsView = () => {
+  const currUsertype = useFirstPath();
   const id = useQueryParams().get("id")!;
   const queryRole = useQueryParams().get("role")!;
-  console.log("=-=-=-=-=-=-=-=-=-=-=-=-Role: ", queryRole);
   const role: UserRole | null =
     queryRole === "doctor"
       ? UserRole.DOCTOR
@@ -34,12 +36,21 @@ const ChatsView = () => {
           ? UserRole.PHARMACIST
           : null;
   const otherUserDataQuery = useQuery(["otherUserData", id, role], () => getOtherUserData({ id, role: role }));
-  console.log("=-=-=-=-=-=-=-=-=-=-=-=-Name: ", otherUserDataQuery.data?.name);
+  // console.log("=-=-=-=-=-=-=-=-=-=-=-=-Name: ", otherUserDataQuery.data?.name);
 
+  const navigate = useNavigate();
   const currentUser = useContext(UserContext).user!;
   const [conversationId, setConversationId] = useState<string | null>(null);
   const container = useRef<any>();
   const [isLoading, setIsLoading] = useState(true);
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+  const mytheme = useTheme();
+  const isScreenSmall = useMediaQuery(mytheme.breakpoints.down("md"));
+
+  // attach the function to the resize event
+  window.addEventListener("resize", () => {
+    setWindowWidth(window.innerWidth);
+  });
 
   useEffect(() => {
     Talk.ready
@@ -106,13 +117,29 @@ const ChatsView = () => {
           zIndex: 0
         }}
       >
+        {(windowWidth > 600 || !isScreenSmall) && (
+          <div
+            style={{
+              display: "block",
+              marginTop: "-30.5rem",
+              paddingRight: "0.5rem",
+              paddingBottom: "1.0rem",
+              paddingLeft: isScreenSmall ? "0.0rem" : "9.5rem",
+              marginLeft: isScreenSmall ? "-3.0rem" : "0.0rem"
+            }}
+          >
+            <IconButton aria-label="delete" size="large" onClick={() => navigate(`/${currUsertype}/chats`)}>
+              <ArrowBack fontSize="inherit" /> back to chats
+            </IconButton>
+          </div>
+        )}
         <div
           className="chatbox-container"
           ref={container}
           style={{ width: "100%", height: "70%" }} // Modify this line
         >
           <div id="talkjs-container">
-            <i></i>
+            <i>{isLoading && "Loading Chat..."}</i>
           </div>
         </div>
       </Box>

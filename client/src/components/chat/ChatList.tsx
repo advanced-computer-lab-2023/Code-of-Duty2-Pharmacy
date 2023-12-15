@@ -39,9 +39,6 @@ const ChatList: React.FC<Props> = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
-  const handleClose = () => {
-    setLoading(false);
-  };
 
   React.useEffect(() => {
     if (usertype.includes("pharmacist")) {
@@ -51,7 +48,6 @@ const ChatList: React.FC<Props> = () => {
       if (pharmacists.length === 0) fetchPharmacists();
     }
     fetchChats();
-    console.log("chats: ", chats);
   }, [patients, doctors, pharmacists]);
 
   const fetchPatients = async () => {
@@ -94,7 +90,7 @@ const ChatList: React.FC<Props> = () => {
 
     setChats(await getChatHistory());
 
-    setLoading(false);
+    if (pharmacists && doctors && patients) setLoading(false);
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
