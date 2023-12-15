@@ -8,8 +8,8 @@ interface Props {
   name: string;
   lastmessage?: string;
   time?: string;
-  unread?: number;
-  href: string;
+  unread?: number | string;
+  href?: string;
 }
 
 function stringToColor(string: string) {

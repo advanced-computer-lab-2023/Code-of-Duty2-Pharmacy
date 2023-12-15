@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import ChatPerson from "./ChatPerson";
 import Button from "@mui/material/Button";
 import AddCommentIcon from "@mui/icons-material/AddComment";
-import { Ref, forwardRef, useState } from "react";
+import { Ref, forwardRef, useContext, useState } from "react";
 import React from "react";
 import Tab from "@mui/material/Tab";
 import useFirstPath from "../../hooks/useFirstPath";
@@ -12,10 +12,11 @@ import axios from "axios";
 import config from "../../config/config";
 import TabContext from "@mui/lab/TabContext";
 import { TabList, TabPanel } from "@mui/lab";
-import { IconButton, Snackbar, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, IconButton, Snackbar, Typography } from "@mui/material";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import ArrowBack from "@mui/icons-material/ArrowBack";
 import { NameSearchBar, goSearch } from "../search/NameSearchBar";
+import { UserContext } from "../../contexts/UserContext";
 
 function Alert(props: AlertProps, ref: Ref<any>) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
@@ -25,7 +26,10 @@ const AlertRef = forwardRef(Alert);
 interface Props {}
 const ChatList: React.FC<Props> = () => {
   const usertype = useFirstPath();
-  const [chats, setChats] = useState([]);
+  const currentUser = useContext(UserContext).user!;
+  const [chats, setChats] = useState<
+    [{ contactId: string; contactName: string; message: string; contactType: string; date: string; iread: boolean }]
+  >([{ contactId: "", contactName: "", message: "", contactType: "Unknown", date: "", iread: false }]);
   const [loading, setLoading] = useState<boolean>(false);
   const [showNewChat, setShowNewChat] = useState<boolean>(false);
   const [value, setValue] = React.useState<string>(usertype.includes("pharmacist") ? "pat" : "pha");
@@ -35,15 +39,20 @@ const ChatList: React.FC<Props> = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
+  const handleClose = () => {
+    setLoading(false);
+  };
 
   React.useEffect(() => {
     if (usertype.includes("pharmacist")) {
-      fetchPatients();
-      fetchDoctors();
+      if (patients.length === 0) fetchPatients();
+      if (doctors.length === 0) fetchDoctors();
     } else if (usertype.includes("patient")) {
-      fetchPharmacists();
+      if (pharmacists.length === 0) fetchPharmacists();
     }
-  }, []);
+    fetchChats();
+    console.log("chats: ", chats);
+  }, [patients, doctors, pharmacists]);
 
   const fetchPatients = async () => {
     await axios
@@ -82,9 +91,9 @@ const ChatList: React.FC<Props> = () => {
 
   const fetchChats = async () => {
     setLoading(true);
-    // await axios.get(`${config.API_URL}/chats`).then((res) => {
-    //   setChats(res.data.chats);
-    // });
+
+    setChats(await getChatHistory());
+
     setLoading(false);
   };
 
@@ -135,6 +144,105 @@ const ChatList: React.FC<Props> = () => {
     }
   };
 
+  const getOtherUserData = (id: string | null, currentUserType: string): { name: string; role: string } => {
+    if (!id) return { name: "Unknown", role: "Unknown" };
+    if (currentUserType === "PATIENT") {
+      for (const pharmacist of pharmacists) {
+        if (pharmacist._id === id) {
+          return { name: pharmacist.name, role: "pharmacist" };
+        }
+      }
+    } else if (currentUserType === "PHARMACIST") {
+      for (const patient of patients) {
+        if (patient._id === id) {
+          return { name: patient.name, role: "patient" };
+        }
+      }
+      for (const doctor of doctors) {
+        if (doctor._id === id) {
+          return { name: doctor.name, role: "doctor" };
+        }
+      }
+    }
+    return { name: "Unknown", role: "Unknown" };
+  };
+
+  const getChatHistory = async () => {
+    const appId = config.TALKJS_APP_ID; // replace with your TalkJS app ID
+    const secretKey = config.TALKJS_SECRET_KEY; // replace with your TalkJS secret key
+
+    // Get a list of all conversations
+    const conversationsResponse = await fetch(`https://api.talkjs.com/v1/${appId}/conversations`, {
+      headers: {
+        Authorization: `Bearer ${secretKey}`
+      }
+    });
+    const responseJson = await conversationsResponse.json();
+    const conversations = responseJson.data; // Adjust this line
+
+    let myhistory: [
+      { contactId: string; contactName: string; message: string; contactType: string; date: string; iread: boolean }
+    ] = [{ contactId: "", contactName: "", message: "", contactType: "Unknown", date: "", iread: false }];
+
+    // For each conversation, get the messages
+    for (const conversation of conversations) {
+      const messagesResponse = await fetch(
+        `https://api.talkjs.com/v1/${appId}/conversations/${conversation.id}/messages`,
+        {
+          headers: {
+            Authorization: `Bearer ${secretKey}`
+          }
+        }
+      );
+
+      const messages = await messagesResponse.json();
+      // for (const message of messages.data) {
+      const senderId = messages.data[0]?.senderId;
+      const receiverId = Object.keys(conversation.participants).find((id) => id !== senderId);
+      //   console.log(`Sender ID: ${senderId}, Receiver ID: ${receiverId}`);
+      // }
+      // console.log(messages);
+      if (!senderId || !receiverId) continue;
+      if (senderId !== currentUser.id && receiverId !== currentUser.id) continue;
+
+      if (senderId === currentUser.id && receiverId === currentUser.id) continue;
+      if (senderId === currentUser.id && receiverId?.length === 0) continue;
+      if (receiverId === currentUser.id && senderId?.length === 0) continue;
+
+      const formattedToday = `${new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit"
+      })}`;
+      const formattedDate = `${new Date(messages.data[0]?.createdAt).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit"
+      })}`;
+      const date = `${formattedDate === formattedToday ? "" : formattedDate} ${new Date(
+        messages.data[0]?.createdAt
+      ).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+      })}`;
+      const otherUser = await getOtherUserData(senderId === currentUser.id ? receiverId : senderId, currentUser.role);
+
+      // if (myhistory[0].contactId === "") {
+      //   myhistory.pop();
+      // }
+      myhistory.push({
+        contactId: senderId === currentUser.id ? receiverId : senderId,
+        contactName: otherUser && otherUser.name ? otherUser.name : "Unknown",
+        message: messages.data[0]?.text,
+        contactType: otherUser && otherUser.role ? otherUser.role : "Unknown",
+        date: date,
+        iread: messages.data[0]?.senderId === currentUser.id ? true : messages.data[0]?.readBy.length > 0 ? true : false
+      });
+    }
+    return myhistory;
+  };
+
   return (
     <div>
       {!showNewChat && (
@@ -176,24 +284,48 @@ const ChatList: React.FC<Props> = () => {
             lastmessage="Hello Dr Ahmed, I have a question about the dosage of the medicine I will take."
             time="12:54 PM"
             unread={2}
-          /> */}
-          {/* {index !== patients.length - 1 && ( */}
-          {/* <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} /> */}
-          {/* )} 
-          <br />*/}
-          {/* <ChatPerson
+          />
+          <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
+          <br />
+          <ChatPerson
             name="Mohamed Salah"
             lastmessage="Hello there, I have a question about the active ingredient in the medicine I am taking."
             time="09:54 AM"
             unread={10}
-          /> */}
-          {/* {index !== patients.length - 1 && ( */}
+          />
           <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
-          {/* )} 
-          <br />*/}
-          {/* <ChatPerson name="Ahmed Mohamed" lastmessage="Hello Dr!." time="10:35 PM" unread={1} /> */}
+          <br />
+          <ChatPerson name="Ahmed Mohamed" lastmessage="Hello Dr!." time="10:35 PM" unread={1} />
+          <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
+          <br /> */}
+          {chats &&
+            (chats.length > 1 || chats[0]?.contactId.length > 0) &&
+            chats.map(
+              (chat, index) =>
+                chat.contactId.length > 0 &&
+                (chat.contactType === "patient" ||
+                  chat.contactType === "pharmacist" ||
+                  chat.contactType === "doctor") && (
+                  <div key={index}>
+                    <ChatPerson
+                      key={index}
+                      name={`${chat.contactName}`}
+                      lastmessage={`${chat.message}`}
+                      time={`${chat.date}`}
+                      unread={chat.iread ? undefined : ""}
+                      href={`/${usertype}/current-chat?id=${chat.contactId}&role=${chat.contactType}`}
+                    />
+                    {index !== chats.length - 1 && (
+                      <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
+                    )}
+                  </div>
+                )
+            )}
         </Box>
       )}
+
+      {/* New Chat page */}
+      {/* ------------------------------------------------------- */}
 
       {showNewChat && (
         <Box
@@ -308,6 +440,9 @@ const ChatList: React.FC<Props> = () => {
           {snackbarMessage}
         </AlertRef>
       </Snackbar>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };
