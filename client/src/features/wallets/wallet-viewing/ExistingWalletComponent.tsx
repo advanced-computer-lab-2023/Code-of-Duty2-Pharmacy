@@ -1,4 +1,4 @@
-import { Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import WalletComponent from "./Wallet";
 import WalletPasswordInput from "../../../components/WalletPasswordInput";
 import { UseMutationResult, UseQueryResult } from "react-query";
@@ -38,24 +38,39 @@ const ExistingWalletComponent: React.FC<ExistingWalletComponentProps> = ({
         onClose={validatePinMutation.reset}
         sx={{ backgroundColor: "white" }}
       >
-        <form onSubmit={handleSubmit}>
-          <Typography variant="h6">Enter Wallet Pin</Typography>
-          <WalletPasswordInput pinCodeDigits={pinCodeDigits} setPinCodeDigits={setPinCodeDigits} />
-          {validatePinMutation.isError && (
-            <Typography variant="body2" color="error">
-              {getErrorMessage(validatePinMutation.error)}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100vh",
+            backgroundColor: "white"
+          }}
+        >
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              Enter your wallet's PIN code:
             </Typography>
-          )}
-          <Button type="submit">Submit</Button>
-        </form>
+            <WalletPasswordInput pinCodeDigits={pinCodeDigits} setPinCodeDigits={setPinCodeDigits} />
+            {validatePinMutation.isError && (
+              <Typography variant="body2" color="error">
+                {getErrorMessage(validatePinMutation.error)}
+              </Typography>
+            )}
+            <Button type="submit">Submit</Button>
+          </form>
+        </Box>
       </Modal>
+
       {getWalletDetailsQuery.isSuccess && (
         <div>
           <WalletComponent
             balance={getWalletDetailsQuery.data?.amount!}
             currency={getWalletDetailsQuery.data?.currency!}
           />
-          <Button href="https://stripe.com">Recharge</Button>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button href="https://stripe.com">Recharge</Button>
+          </Box>
         </div>
       )}
     </div>
