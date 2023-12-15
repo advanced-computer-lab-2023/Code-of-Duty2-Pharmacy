@@ -23,6 +23,8 @@ const router = express.Router();
 
 router.use(authenticateUser);
 
+// --> Path: /pharmacists/
+
 router.get("/", getPharmacists);
 router.get("/search", searchPharmacists);
 router.post("/change-password", changePharmacistPassword);

@@ -6,6 +6,8 @@ import { getAllAdmins } from "../controllers/adminController";
 
 const router = express.Router();
 
+// --> Path: /admins/
+
 router.use(authenticateUser);
 router.get("/", getAllAdmins);
 router.post("/", addAdmin);
