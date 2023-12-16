@@ -121,6 +121,7 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Track past and current orders, cancel ongoing orders, and receive money-back to e-wallet for orders made with e-wallet or credit card.
 - Create an e-wallet on the system with a PIN code and recharge it with credit card.
 - Change my password or reset forgotten password.
+- Chat with pharmacists.
 
 </details>
 
@@ -131,6 +132,7 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Add a new medicine to the system.
 - Update existing medicines' details, prices and upload medicine images.
 - Change my password or reset forgotten password.
+- Chat with patients or doctors.
 
 </details>
 
