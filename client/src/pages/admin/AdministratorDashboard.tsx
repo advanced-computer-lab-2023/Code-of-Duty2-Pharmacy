@@ -10,19 +10,23 @@ const AdministratorDashboard = () => {
       <Typography variant="h4" gutterBottom component="div" color="primary">
         Admin Dashboard
       </Typography>
+
       <Typography variant="subtitle1" gutterBottom component="div" color="primary">
         Manage and support system users and services.
       </Typography>
+
       <PatientCountComponent
         onViewAllPatients={function (): void {
           throw new Error("Function not implemented.");
         }}
       />
+
       <PharmacistCountComponent
         onViewAllPharmacists={function (): void {
           throw new Error("Function not implemented.");
         }}
       />
+
       <div style={{ marginBottom: "20%" }}>
         <PharmacistRegistrationRequestCountComponent
           onViewAllPharmacistRegistrationRequests={function (): void {
@@ -30,6 +34,7 @@ const AdministratorDashboard = () => {
           }}
         />
       </div>
+
       <AdminCountComponent
         onViewAllAdmins={function (): void {
           throw new Error("Function not implemented.");
