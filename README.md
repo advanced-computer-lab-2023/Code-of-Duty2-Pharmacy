@@ -80,9 +80,48 @@ Jira was used as our main issue tracking and project management tool for creatin
 ## Screenshots
 
 <details>
-<summary>Welcome page</summary>
+<summary>Landing page</summary>
 
-![Welcome page]()
+![Landing page](docs/screenshots/demo/landing_page1.png)
+![Landing page](docs/screenshots/demo/landing_page2.png)
+![Landing page](docs/screenshots/demo/landing_page3.png)
+![Landing page](docs/screenshots/demo/landing_page4.png)
+
+</details>
+
+<details>
+<summary>Patient login</summary>
+
+![Patient login](docs/screenshots/demo/patient_login.png)
+
+</details>
+
+<details>
+<summary>Pharmacist login</summary>
+
+![Pharmacist login](docs/screenshots/demo/pharmacist_login.png)
+
+</details>
+
+<details>
+<summary>Pharmacist chat</summary>
+
+![Pharmacist chat](docs/screenshots/demo/pharmacist_chat1.png)
+![Pharmacist chat](docs/screenshots/demo/pharmacist_chat2.png)
+
+</details>
+
+<details>
+<summary>Pharmacist application email</summary>
+
+![Pharmacist application email](docs/screenshots/demo/pharmacist_email.png)
+
+</details>
+
+<details>
+<summary>Medicine catalog (for patients)</summary>
+
+![Medicine catalog](docs/screenshots/demo/medicine_catalog.png)
 
 </details>
 
