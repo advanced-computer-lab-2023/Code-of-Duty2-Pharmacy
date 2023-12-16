@@ -20,6 +20,7 @@ import config from "../../config/config";
 import CheckoutContext from "../../contexts/CheckoutContext";
 import { PaymentMethod } from "../../types";
 import { cartReviewRoute } from "../../data/routes/patientRoutes";
+import socket from "../../services/Socket";
 
 function Alert(props: AlertProps, ref: Ref<any>) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
@@ -33,8 +34,7 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
-  const [stripePromise, setStripePromise] =
-    useState<null | Promise<Stripe | null>>(null);
+  const [stripePromise, setStripePromise] = useState<null | Promise<Stripe | null>>(null);
   const [clientSecret, setClientSecret] = useState<string>("");
   const [activeStage, setActiveStage] = useState(0);
   const [cartItems, setCartItems] = useState([]);
@@ -66,10 +66,7 @@ const Checkout = () => {
 
   // TODO: Fix this arbitrary amount
   const fetchPaymentIntentClientSecret = async (_total: number) => {
-    const response = await axios.post(
-      `${config.API_URL}/payments/create-payment-intent`,
-      { amount: 1000 }
-    );
+    const response = await axios.post(`${config.API_URL}/payments/create-payment-intent`, { amount: 1000 });
     const clientSecret = response.data.clientSecret;
     setClientSecret(clientSecret);
   };
@@ -85,10 +82,7 @@ const Checkout = () => {
       }
 
       setCartItems(cartItems);
-      const total = cartItems.reduce(
-        (sum: number, item: any) => sum + item.medicineId.price * item.quantity,
-        0
-      );
+      const total = cartItems.reduce((sum: number, item: any) => sum + item.medicineId.price * item.quantity, 0);
 
       setTotal(total);
       return total;
@@ -105,10 +99,7 @@ const Checkout = () => {
     setActiveStage(activeStage - 1);
   };
 
-  const handleCreateOrder = async (
-    paidAmount: number,
-    paymentMethod: PaymentMethod
-  ) => {
+  const handleCreateOrder = async (paidAmount: number, paymentMethod: PaymentMethod) => {
     try {
       const patientResponse = await axios.get(`${config.API_URL}/patients/me`);
       const patientData = patientResponse.data;
@@ -120,29 +111,26 @@ const Checkout = () => {
         patientMobileNumber: patientData.mobileNumber,
         medicines: cartItems.map((item: any) => ({
           medicineId: item.medicineId._id,
-          quantity: item.quantity,
+          quantity: item.quantity
         })),
         paidAmount,
-        paymentMethod,
+        paymentMethod
       };
 
       await axios.post(`${config.API_URL}/patients/orders`, orderData);
 
       const updates = cartItems.map((item: any) => ({
         medicineId: item.medicineId._id,
-        boughtQuantity: item.quantity,
+        boughtQuantity: item.quantity
       }));
-      await axios.patch(`${config.API_URL}/medicines/bulk-update`, updates);
+      // await axios.patch(`${config.API_URL}/medicines/bulk-update`, updates);
+      socket.emit("bulk-update-meds", updates);
 
       await axios.delete(`${config.API_URL}/patients/me/cart`);
 
       setOpenSnackbar(true);
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      if (error.response && error.response.data && error.response.data.message) {
         throw new Error(error.response.data.message);
       } else {
         throw error;
@@ -163,12 +151,7 @@ const Checkout = () => {
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="70vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
         <CircularProgress />
       </Box>
     );
@@ -184,15 +167,11 @@ const Checkout = () => {
         paymentData,
         setPaymentData,
         handleCreateOrder,
-        handleNext,
+        handleNext
       }}
     >
       <Container component="main" sx={{ mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(cartReviewRoute.path)}
-          sx={{ mt: 0 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(cartReviewRoute.path)} sx={{ mt: 0 }}>
           Back to Cart
         </Button>
 
@@ -214,8 +193,7 @@ const Checkout = () => {
               Thank you for your order.
             </Typography>
             <Typography variant="subtitle1">
-              Your order has been confirmed, and will send you shipping updates
-              via email.
+              Your order has been confirmed, and will send you shipping updates via email.
             </Typography>
             <Snackbar
               open={openSnackbar}
@@ -223,10 +201,7 @@ const Checkout = () => {
               onClose={() => setOpenSnackbar(false)}
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             >
-              <AlertRef
-                onClose={() => setOpenSnackbar(false)}
-                severity="success"
-              >
+              <AlertRef onClose={() => setOpenSnackbar(false)} severity="success">
                 Order placed successfully!
               </AlertRef>
             </Snackbar>

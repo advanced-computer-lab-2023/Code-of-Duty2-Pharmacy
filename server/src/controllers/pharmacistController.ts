@@ -125,3 +125,18 @@ export const updatePharmacist = async (req: AuthorizedRequest, res: Response) =>
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
+
+export const getAllNotifications = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+
+    if (!pharmacist) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
+    }
+
+    res.status(StatusCodes.OK).json(pharmacist.receivedNotifications ? pharmacist.receivedNotifications : []);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
