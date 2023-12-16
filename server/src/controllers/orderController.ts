@@ -7,58 +7,42 @@ import Order from "../models/orders/Order";
 import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Medicine from "../models/medicines/Medicine";
 
-export const getAllOrders = async (req: AuthorizedRequest, res: Response) => {
-  try {
+interface OrderToReportData {
+  medicines: Array<{medicineName: string; medicinePrice: number; medicineQuantity: number }>;
+  paidAmount: number;
+  orderDate : Date;
+}
+//  
+export const getOrdersReportData  = async (req: AuthorizedRequest, res: Response) => {
+  try { 
+    // the bottom line is commented because currently , all orders will be pending
+    // const orders = await Order.find({ orderStatus: "successful" });
     const orders = await Order.find();
+    const medicineIds = [...new Set(orders.flatMap(order => order.medicines.map(medicine => medicine.medicineId.toString())))];
+    const medicines = await Medicine.find({ '_id': { $in: medicineIds } });
 
-    res.status(StatusCodes.OK).json(orders);
-  } catch (err) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: (err as Error).message });
+    const orderToReportPage: OrderToReportData[] = [];
+    orders.forEach((order) => {
+      const orderToReportPageItem: OrderToReportData = {
+        medicines: [],
+        paidAmount: order.paidAmount,
+        orderDate: order.timestamp,
+      };
+      order.medicines.forEach((medicine) => {
+        const medicineData = medicines.find((medicineItem) => medicineItem._id.toString() === medicine.medicineId.toString());
+        if (medicineData) {
+          orderToReportPageItem.medicines.push({
+            medicineName: medicineData.name,
+            medicinePrice: medicineData.price,
+            medicineQuantity: medicine.quantity,
+          });
+        }
+      });
+      orderToReportPage.push(orderToReportPageItem);
+    });
+    res.status(StatusCodes.OK).json(orderToReportPage);
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
   }
-};
-// get all the orders , return an array of objects , each object contain 
-// medicine name , medicine price, the total quantity sold of each medicine , and the total price of each medicine
-export const getGroupedOrdersData = async (req: AuthorizedRequest, res: Response) => {
-  
-  const orders = await Order.find();
-  const medicineIds = [...new Set(orders.flatMap(order => order.medicines.map(medicine => medicine.medicineId.toString())))];
-  const medicines = await Medicine.find({ '_id': { $in: medicineIds } });
-  const medicineMap = new Map();
-  medicines.forEach((medicine) => {  
-    medicineMap.set(medicine._id.toString(), {
-      name: medicine.name,
-      price: medicine.price,
-      totalQuantitySold: 0,
-      totalPrice: 0,
-    });
-  });
-  orders.forEach((order) => {
-    order.medicines.forEach((medicine) => {
-      const medicineData = medicineMap.get(medicine.medicineId.toString());
-      if (medicineData) {
-        medicineData.totalQuantitySold += medicine.quantity;
-        medicineData.totalPrice += medicine.quantity * medicineData.price;
-      }
-    });
-  });
-  const returndata = Array.from(medicineMap.values());
-  res.status(StatusCodes.OK).json(returndata);
-}
 
-// get the name , id, and price of all the medicines in the orders
-export const getMedicinesInOrders = async (req: AuthorizedRequest, res: Response) => {
-  const orders = await Order.find();
-  const medicineIds = [...new Set(orders.flatMap(order => order.medicines.map(medicine => medicine.medicineId.toString())))];
-  const medicines = await Medicine.find({ '_id': { $in: medicineIds } });
-  const medicineMap = new Map();
-  medicines.forEach((medicine) => {  
-    medicineMap.set(medicine._id.toString(), {
-      name: medicine.name,
-      price: medicine.price,
-    });
-  });
-  const returndata = Array.from(medicineMap.values());
-  res.status(StatusCodes.OK).json(returndata);
-}
+};

@@ -8,7 +8,7 @@ import {
   updatePharmacist,
 } from "../controllers/pharmacistController";
 import { authenticateUser } from "../middlewares/authentication";
-import { getAllOrders, getGroupedOrdersData, getMedicinesInOrders } from "../controllers/orderController";
+import { getOrdersReportData } from "../controllers/orderController";
 
 const router = express.Router();
 
@@ -23,9 +23,8 @@ router.post("/change-password", changePharmacistPassword);
 router.get("/me/complete-info", getPharmacistInfo);
 router.patch("/me/complete-info", updatePharmacist);
 
-router.get("/orders", getAllOrders)
-router.get("/medicines-in-orders",getMedicinesInOrders )
-router.get("/total-sales", getGroupedOrdersData)
+router.get("/orders-report-data", getOrdersReportData)
+
 
 
 export default router;
