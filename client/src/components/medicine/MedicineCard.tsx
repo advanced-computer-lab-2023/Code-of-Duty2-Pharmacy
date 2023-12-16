@@ -20,7 +20,6 @@ import medicinePlaceholderImage from "../../assets/medicine-placeholder.png";
 import config from "../../config/config";
 import Medicine from "../../types/Medicine";
 import EditMedicineModal from "./EditMedicineModal";
-import { display } from "@mui/system";
 
 interface Props {
   medicine: Medicine;
