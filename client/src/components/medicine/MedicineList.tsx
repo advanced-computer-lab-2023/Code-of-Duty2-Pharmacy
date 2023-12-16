@@ -1,5 +1,5 @@
 import { useState, useEffect, Ref, forwardRef } from "react";
-import { Checkbox, FormControlLabel, Typography, Button, Box, Snackbar } from "@mui/material";
+import { Checkbox, FormControlLabel, Typography, Button, Box, Snackbar, Grid } from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
 
@@ -33,6 +33,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
+  const [activeIngredientSearch, setActiveIngredientSearch] = useState("");
 
   const filterOptions = MedicineUsages;
 
@@ -54,7 +55,11 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/medicines`);
-      setMedicines(response.data.medicines.filter((medicine: Medicine) => canEdit || medicine.isArchived === false));
+      setMedicines(
+        response.data.medicines
+          .filter((medicine: Medicine) => canEdit || medicine.isArchived === false)
+          .filter((medicine: Medicine) => canEdit || medicine.isOverTheCounter === true)
+      );
       setDiscount(response.data.discount);
       setPackageName(response.data.packageName);
     } catch (err) {
@@ -66,6 +71,24 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
     try {
       let responseData = await goSearch(searchTerm, searchCollection);
       setMedicines(responseData);
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        fetchMedicines();
+        return;
+      }
+      if (err.response?.status === 404) {
+        setMedicines([]);
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
+  const handleActiveIngredientSearch = async (searchTerm: string, searchCollection: string) => {
+    try {
+      let responseData = await goSearch(searchTerm, searchCollection, "activeIngredient");
+      setMedicines(responseData);
+      setActiveIngredientSearch(searchTerm);
     } catch (err: any) {
       if (err.response?.status === 400) {
         fetchMedicines();
@@ -187,18 +210,6 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                 sx={{ marginBottom: -1 }}
                 control={
                   <Checkbox
-                    checked={archiveVisibleMeds === "Unarchived" || archiveVisibleMeds === "All"}
-                    onChange={handleArchivedChange}
-                    value="Unarchived"
-                    size="small"
-                  />
-                }
-                label="Unarchived"
-              />
-              <FormControlLabel
-                sx={{ marginBottom: -1 }}
-                control={
-                  <Checkbox
                     checked={archiveVisibleMeds === "Archived" || archiveVisibleMeds === "All"}
                     onChange={handleArchivedChange}
                     value="Archived"
@@ -206,6 +217,18 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                   />
                 }
                 label="Archived"
+              />
+              <FormControlLabel
+                sx={{ marginBottom: -1 }}
+                control={
+                  <Checkbox
+                    checked={archiveVisibleMeds === "Unarchived" || archiveVisibleMeds === "All"}
+                    onChange={handleArchivedChange}
+                    value="Unarchived"
+                    size="small"
+                  />
+                }
+                label="Unarchived"
               />
               <br />
             </>
@@ -243,13 +266,19 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
         </Box>
 
         <Box mb={5}>
-          <Box pr={3} mb={2}>
-            <NameSearchBar
-              searchCollection="medicines"
-              onSearch={handleSearch}
-              initialValue="(or leave empty for all)"
-            />
-          </Box>
+          <Grid container spacing={2} pr={3} mb={2}>
+            <Grid item sm={12} md={8}>
+              <NameSearchBar searchCollection="medicines" onSearch={handleSearch} initialValue="Medicine name" />
+            </Grid>
+            <Grid item sm={12} md={4}>
+              <NameSearchBar
+                searchCollection="medicines"
+                onSearch={handleActiveIngredientSearch}
+                initialValue="Main active ingredient"
+                value={activeIngredientSearch}
+              />
+            </Grid>
+          </Grid>
 
           {filteredMedicines.length === 0 && <p>No medicines found.</p>}
           <Box
@@ -280,6 +309,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                   canViewQuantity={canViewQuantity}
                   sales={medSales[medicine._id]}
                   handleArchiveOrUnArchiveButton={canEdit ? handleArchiveOrUnArchiveButton : undefined}
+                  handleActiveIngredientSearch={handleActiveIngredientSearch}
                 />
               </div>
             ))}

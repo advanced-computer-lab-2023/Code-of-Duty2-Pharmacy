@@ -6,20 +6,19 @@ import config from "../../config/config";
 import { PharmacistRegistrationRequest } from "../../types";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { Paper, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import { grey } from "@mui/material/colors";
 
 const PharmacistRegistrationRequestsList: React.FC = () => {
   const [requests, setRequests] = useState<PharmacistRegistrationRequest[]>([]);
-  const [filteredRequests, setFilteredRequests] = useState<
-    PharmacistRegistrationRequest[]
-  >([]);
+  const [filteredRequests, setFilteredRequests] = useState<PharmacistRegistrationRequest[]>([]);
   const [filter, setFilter] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get<PharmacistRegistrationRequest[]>(
-        `${config.API_URL}/pharmacist-registration-requests`
-      )
+      .get<PharmacistRegistrationRequest[]>(`${config.API_URL}/pharmacist-registration-requests`)
       .then((response) => {
         setRequests(response.data);
         setFilteredRequests(response.data);
@@ -29,39 +28,25 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
 
   const handleAccept = (username: string) => {
     axios
-      .post(
-        `${config.API_URL}/pharmacist-registration-requests/accept-pharmacist-request`,
-        {
-          username: username,
-        }
-      )
+      .post(`${config.API_URL}/pharmacist-registration-requests/accept-pharmacist-request`, {
+        username: username
+      })
       .then((response) => {
         if (response.status === 200) {
-          setRequests(
-            requests.filter((request) => request.username !== username)
-          );
-          setFilteredRequests(
-            filteredRequests.filter((request) => request.username !== username)
-          );
+          setRequests(requests.filter((request) => request.username !== username));
+          setFilteredRequests(filteredRequests.filter((request) => request.username !== username));
         }
       });
   };
   const handleReject = (username: string) => {
     axios
-      .post(
-        `${config.API_URL}/pharmacist-registration-requests/reject-pharmacist-request`,
-        {
-          username: username,
-        }
-      )
+      .post(`${config.API_URL}/pharmacist-registration-requests/reject-pharmacist-request`, {
+        username: username
+      })
       .then((response) => {
         if (response.status === 200) {
-          setRequests(
-            requests.filter((request) => request.username !== username)
-          );
-          setFilteredRequests(
-            filteredRequests.filter((request) => request.username !== username)
-          );
+          setRequests(requests.filter((request) => request.username !== username));
+          setFilteredRequests(filteredRequests.filter((request) => request.username !== username));
         }
       });
   };
@@ -69,86 +54,66 @@ const PharmacistRegistrationRequestsList: React.FC = () => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = event.target.value;
     setFilter(newFilter);
-    setFilteredRequests(
-      requests.filter((request) => request.username.includes(newFilter))
-    );
+    setFilteredRequests(requests.filter((request) => request.username.includes(newFilter)));
   };
 
   return (
     <div style={{ padding: "2.0rem" }}>
-      <hr />
-      <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>
+      <Typography variant="h4" gutterBottom component="div" color="primary">
         Pharmacist Registration Requests
-      </h1>
-      <input
-        type="text"
-        value={filter}
-        onChange={handleFilterChange}
-        placeholder="Filter by username"
-        style={{
-          padding: "10px",
-          fontSize: "1.2rem",
-          borderRadius: "5px",
-          marginBottom: "20px",
-        }}
-      />
-      <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
+      </Typography>
+
+      <TextField margin="normal" label="Filter by username" value={filter} fullWidth onChange={handleFilterChange} />
+
+      <Box>
         {filteredRequests.map((request) => (
-          <li
+          <Paper
             key={request._id}
-            style={{
-              marginBottom: "20px",
-              padding: "20px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
+            sx={{
+              mb: 2,
+              p: 2,
+              borderRadius: "5px"
             }}
           >
             <Button
-              style={{ float: "right" }}
-              variant="contained"
+              variant="text"
               color="primary"
-              onClick={() =>
-                navigate(
-                  `/admin/view-pharmacist-request/?request=${JSON.stringify(
-                    request
-                  )}`
-                )
-              }
+              sx={{ ml: -1, fontSize: "1rem" }}
+              onClick={() => navigate(`/admin/view-pharmacist-request/?request=${JSON.stringify(request)}`)}
             >
-              View
+              View Application Details
             </Button>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
-              <strong>Name: </strong> {request.name}{" "}
-              <span style={{ color: "#949494" }}>({request.username})</span>
-            </p>
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
+
+            <Typography>
+              <span style={{ color: grey[700] }}>@{request.username}</span>
+            </Typography>
+
+            <Box mb={0.9} />
+
+            <Typography>
+              <strong>Name: </strong> {request.name}
+            </Typography>
+
+            <Typography>
               <strong>Email:</strong> {request.email}
-            </p>
-            <div style={{ float: "right" }}>
-              <div style={{ paddingRight: "1.0rem", display: "inline" }}>
-                <Button
-                  variant="outlined"
-                  color="success"
-                  onClick={() => handleAccept(request.username)}
-                >
-                  Accept
-                </Button>
-              </div>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleReject(request.username)}
-              >
+            </Typography>
+
+            <Box sx={{ float: "right" }}>
+              <Button variant="text" color="error" onClick={() => handleReject(request.username)}>
                 Reject
               </Button>
-            </div>
 
-            <p style={{ margin: "0", fontSize: "1.2rem" }}>
+              <Button variant="text" color="success" onClick={() => handleAccept(request.username)}>
+                Accept Request
+              </Button>
+            </Box>
+
+            <Typography>
               <strong>Status:</strong> {request.status}
-            </p>
-          </li>
+            </Typography>
+          </Paper>
         ))}
-      </ul>
+      </Box>
     </div>
   );
 };

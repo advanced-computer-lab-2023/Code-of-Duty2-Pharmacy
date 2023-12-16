@@ -18,7 +18,8 @@ import {
   getPatientOrders,
   cancelOrder,
   getPatientById,
-  getAllNotifications
+  getAllNotifications,
+  getPatientPayablePrescriptions
 } from "../controllers/patientController";
 import {
   addPatientAWalletHandler,
@@ -60,6 +61,7 @@ router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePatientWalletHandler);
 
 router.get("/notifications", getAllNotifications);
+router.get("/payable-prescriptions", getPatientPayablePrescriptions);
 
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPatientById);

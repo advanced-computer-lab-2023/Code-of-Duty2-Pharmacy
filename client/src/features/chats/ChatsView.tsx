@@ -127,8 +127,13 @@ const ChatsView = () => {
               marginLeft: isScreenSmall ? "-3.0rem" : "0.0rem"
             }}
           >
-            <IconButton aria-label="delete" size="large" onClick={() => navigate(`/${currUsertype}/chats`)}>
-              <ArrowBack fontSize="inherit" /> back to chats
+            <IconButton
+              aria-label="delete"
+              size="large"
+              color="primary"
+              onClick={() => navigate(`/${currUsertype}/chats`)}
+            >
+              <ArrowBack fontSize="inherit" /> Back to Chats
             </IconButton>
           </div>
         )}

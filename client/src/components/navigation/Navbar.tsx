@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Box, Divider, Button, IconButton } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Button, IconButton } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import "typeface-montserrat";
 
 import { AuthContext } from "../../contexts/AuthContext";
 import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
-import UserTray from "../trays/UserTray";
 import AuthTray from "../trays/AuthTray";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 import UserRole from "../../types/enums/UserRole";
@@ -34,9 +34,10 @@ const Navbar = () => {
               noWrap
               component="a"
               sx={{
+                fontFamily: "Montserrat, sans-serif",
                 mr: 2,
                 display: { md: "flex" },
-                fontWeight: 700,
+                fontWeight: 500,
                 letterSpacing: ".3rem",
                 textDecoration: "none",
                 color: "white"

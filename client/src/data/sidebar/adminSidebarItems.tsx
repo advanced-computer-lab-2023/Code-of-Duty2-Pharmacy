@@ -24,17 +24,6 @@ export const adminSidebarItems: SidebarItem[] = [
     icon: <DashboardIcon />
   },
   {
-    title: "System Services",
-    icon: <SettingsSuggestIcon />,
-    items: [
-      {
-        title: "Medicines",
-        href: viewMedicinesRoute.path,
-        icon: <MedicationIcon />
-      }
-    ]
-  },
-  {
     title: "Manage Users",
     icon: <ManageAccountsIcon />,
     items: [
@@ -63,6 +52,17 @@ export const adminSidebarItems: SidebarItem[] = [
         title: "Pharmacists",
         href: viewPharmacistRegistrationRequestsRoute.path,
         icon: <LocalPharmacyIcon />
+      }
+    ]
+  },
+  {
+    title: "System Services",
+    icon: <SettingsSuggestIcon />,
+    items: [
+      {
+        title: "Medicines",
+        href: viewMedicinesRoute.path,
+        icon: <MedicationIcon />
       }
     ]
   }

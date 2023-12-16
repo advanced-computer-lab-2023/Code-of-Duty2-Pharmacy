@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -29,12 +29,18 @@ const DoctorManagePrescriptionsPage = () => {
   const [prescriptionMedicines, setPrescriptionMedicines] = useState<Medicine[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const isDependent = queryParams.get("isDependent") === "true"; // Convert string to boolean
+
   const { prescriptionId } = useParams();
 
   useEffect(() => {
     const fetchPrescription = async () => {
       try {
-        const response = await axios.get(`${config.API_URL}/prescriptions/${prescriptionId}`);
+        const response = await axios.get(
+          `${config.API_URL}/prescriptions/${prescriptionId}?isDependent=${isDependent}`
+        );
         setPrescription(response.data.prescription);
         setPrescriptionMedicines(response.data.prescription.medicines.map((medicine: any) => medicine.medicineId));
       } catch (error) {
@@ -60,9 +66,12 @@ const DoctorManagePrescriptionsPage = () => {
 
   const handleSelectMedicine = async (medicine: Medicine) => {
     try {
-      const response = await axios.post(`${config.API_URL}/prescriptions/${prescriptionId}/medicines`, {
-        medicineId: medicine._id
-      });
+      const response = await axios.post(
+        `${config.API_URL}/prescriptions/${prescriptionId}/medicines?isDependent=${isDependent}`,
+        {
+          medicineId: medicine._id
+        }
+      );
       setPrescription(response.data.prescription);
       setPrescriptionMedicines([...prescriptionMedicines, medicine]);
     } catch (error) {
@@ -73,7 +82,9 @@ const DoctorManagePrescriptionsPage = () => {
   const handleRemoveMedicine = async (medicine: Medicine) => {
     try {
       const medicineId = medicine._id;
-      const response = await axios.delete(`${config.API_URL}/prescriptions/${prescriptionId}/medicines/${medicineId}`);
+      const response = await axios.delete(
+        `${config.API_URL}/prescriptions/${prescriptionId}/medicines/${medicineId}?isDependent=${isDependent}`
+      );
       setPrescription(response.data.prescription);
       setPrescriptionMedicines(prescriptionMedicines.filter((m) => m._id !== medicine._id));
     } catch (error) {
@@ -94,7 +105,11 @@ const DoctorManagePrescriptionsPage = () => {
   };
 
   const handleReturnToClinic = async () => {
-    window.location.href = "https://www.example.com"; // TODO: Replace with actual URL.
+    // TODO: Make sure this will always work.
+    // This assumes that the user will always be redirected to this page from the Clinic application.
+    // If the user somehow gets to this page without being redirected from the Clinic application,
+    // this will not work, as we are going back two pages exactly according to this assumption.
+    window.history.go(-2);
   };
 
   return (

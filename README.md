@@ -14,6 +14,7 @@ It is part of the larger _El7a2ni Healthcare Platform_, which also includes the 
 - [Motivation](#motivation)
 - [Build Status](#build-status)
 - [Code Style](#code-style)
+- [Project Management](#project-management)
 - [Screenshots](#screenshots)
 - [Tech/Framework used](#techframework-used)
 - [Features](#features)
@@ -33,6 +34,7 @@ It is part of the larger _El7a2ni Healthcare Platform_, which also includes the 
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 ![ReactJS](https://img.shields.io/badge/-ReactJs-61DAFB?logo=react&logoColor=white&style=for-the-badge)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
@@ -67,12 +69,97 @@ We eliminate any and all visual clutter that most Pharmacy systems right now suf
 
 The code style is enforced using `prettier`. You can find the code formatting rules in the `.prettierrc` file.
 
+## Project Management
+
+Jira was used as our main issue tracking and project management tool for creating this software.
+
+![Jira](docs/screenshots/jira/jira1.png)
+![Jira](docs/screenshots/jira/jira2.png)
+![Jira](docs/screenshots/jira/jira3.png)
+
 ## Screenshots
 
 <details>
-<summary>Welcome page</summary>
+<summary>Landing page</summary>
 
-![Welcome page]()
+![Landing page](docs/screenshots/demo/landing_page1.png)
+![Landing page](docs/screenshots/demo/landing_page2.png)
+![Landing page](docs/screenshots/demo/landing_page3.png)
+![Landing page](docs/screenshots/demo/landing_page4.png)
+![Landing page](docs/screenshots/demo/landing_page5.png)
+
+</details>
+
+<details>
+<summary>Patient login</summary>
+
+![Patient login](docs/screenshots/demo/patient_login.png)
+
+</details>
+
+<details>
+<summary>Patient dashboard</summary>
+
+![Patient dashboard]()
+
+</details>
+
+<details>
+<summary>Medicine catalog (for patients)</summary>
+
+![Medicine catalog](docs/screenshots/demo/medicine_catalog.png)
+
+</details>
+
+<details>
+<summary>Checkout and payment</summary>
+
+![Checkout](docs/screenshots/demo/checkout1.png)
+![Checkout](docs/screenshots/demo/checkout2.png)
+![Checkout](docs/screenshots/demo/checkout3.png)
+
+</details>
+
+<details>
+<summary>Pharmacist login</summary>
+
+![Pharmacist login](docs/screenshots/demo/pharmacist_login.png)
+
+</details>
+
+<details>
+<summary>Pharmacist dashboard</summary>
+
+![Pharmacist dashboard]()
+
+</details>
+
+<details>
+<summary>Pharmacist chat</summary>
+
+![Pharmacist chat](docs/screenshots/demo/pharmacist_chat1.png)
+![Pharmacist chat](docs/screenshots/demo/pharmacist_chat2.png)
+
+</details>
+
+<details>
+<summary>Pharmacist application email</summary>
+
+![Pharmacist application email](docs/screenshots/demo/pharmacist_email.png)
+
+</details>
+
+<details>
+<summary>Admin checking patient details</summary>
+
+![Patient list](docs/screenshots/demo/patient_list.png)
+
+</details>
+
+<details>
+<summary>Admin reviewing pharmacist registration request</summary>
+
+![Pharmacist registration request](docs/screenshots/demo/registration_request.png)
 
 </details>
 
@@ -86,6 +173,7 @@ This software uses the `MERN` technology stack. Here is a more comprehensive lis
 - [MongoDB](https://www.mongodb.com/)
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 - [Mongoose](https://mongoosejs.com/)
+- [Jira](https://www.atlassian.com/software/jira)
 - [Firebase](https://firebase.google.com/)
 - [Gmail API](https://developers.google.com/gmail/api/guides)
 - [NodeMailer](https://nodemailer.com/about/)
@@ -100,7 +188,7 @@ This software uses the `MERN` technology stack. Here is a more comprehensive lis
 
 ## Features
 
-The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and **_Admin_**.
+The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **_Doctor_** and **_Admin_**.
 
 <details>
 
@@ -110,6 +198,7 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Track past and current orders, cancel ongoing orders, and receive money-back to e-wallet for orders made with e-wallet or credit card.
 - Create an e-wallet on the system with a PIN code and recharge it with credit card.
 - Change my password or reset forgotten password.
+- Chat with pharmacists.
 
 </details>
 
@@ -120,6 +209,7 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Add a new medicine to the system.
 - Update existing medicines' details, prices and upload medicine images.
 - Change my password or reset forgotten password.
+- Chat with patients or doctors.
 
 </details>
 
@@ -131,6 +221,15 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Accept or reject a pharmacist registration request.
 - View a patient or pharmacist's details and remove them from the system.
 - View medicines on the system.
+
+</details>
+
+<details>
+
+<summary> Doctor features </summary>
+
+- Add or remove medicines to/from a patient's prescription from the pharmacy platform by logging in to
+  an integrated portal for it.
 
 </details>
 
@@ -515,15 +614,49 @@ See `CONTRIBUTING.md` for ways to get started. Please adhere to the `Code of Con
 
 ## Credits
 
-- Documentation
-  - [ReactJs Documentation](https://react.dev/reference/react)
-  - [Material UI Documentation](https://mui.com/material-ui/getting-started/)
-- Tutorials
-  - [React Stripe.js and the Payment Element](https://www.youtube.com/watch?v=e-whXipfRvg)
-  - [React Tutorial for Beginners](https://www.youtube.com/watch?v=SqcY0GlETPk)
-- Project Repositories
-  - [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
+#### Documentation
+
+- [ReactJs Docs](https://react.dev/reference/react)
+- [Material UI Docs](https://mui.com/material-ui/getting-started/)
+- [MongoDB Atlas Docs](https://www.mongodb.com/docs/atlas/)
+- [Stripe Docs](https://stripe.com/docs)
+- [Stripe Web Elements Docs](https://stripe.com/docs/payments/elements)
+
+#### Tutorials
+
+- [React Stripe.js and the Payment Element](https://www.youtube.com/watch?v=e-whXipfRvg)
+- [React Tutorial for Beginners](https://www.youtube.com/watch?v=SqcY0GlETPk)
+- [JWT Authentication Tutorial - Node.js](https://www.youtube.com/watch?v=mbsmsi7l3r4)
+- [Junior vs Senior React Folder Structure - How To Organize React Projects](https://youtu.be/UUga4-z7b6s?si=pgbJMR4J_-I-ogfh)
+- [Jira Training | Jira Tutorial for Beginners | Jira Course | Intellipaat](https://youtu.be/uM_m6EzMg3k?si=JD7ZLabGg7hEsqEd)
+- [Typescript Tutorial for Beginners](https://www.youtube.com/watch?v=d56mG7DezGs&t=986s)
+
+#### Websites and Tools
+
+- [readme.so](https://readme.so/)
+- [dillinger.io](https://dillinger.io/)
+
+#### Courses
+
+- [Meta APIs Course](https://www.coursera.org/learn/apis)
+- [Meta React Basics Course](https://www.coursera.org/programs/shell-2-5p9mb/learn/react-basics?specialization=meta-front-end-developer)
+- [Meta Advanced React Course](https://www.coursera.org/learn/advanced-react)
+
+#### Articles
+
+- [Structuring Folders in Your Backend Project: Best Practices](https://www.linkedin.com/pulse/structuring-folders-your-backend-project-best-practices-lokesh-sharma/)
+- [Building with Patterns: The Extended Reference Pattern](https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern)
+- [README File – Everything you Need to Know](https://www.mygreatlearning.com/blog/readme-file/)
+
+#### Books
+
+- [Clean Code: A Handbook of Agile Software Craftsmanship](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
+- [Clean Architecture: A Craftsman’s Guide to Software Structure and Design](https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/)
+
+#### Project Repositories
+
+- [Linear Depression Project Repository](https://github.com/Advanced-Computer-Lab-2022/Linear-Depression)
 
 ## License
 
-This software currently has no license in place.
+This project is licensed under the terms of the Apache 2.0 license. For more details, see the `LICENSE` file in the root of this repository.

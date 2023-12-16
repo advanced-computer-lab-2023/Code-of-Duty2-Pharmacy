@@ -22,17 +22,18 @@ import { blue, green, grey, purple } from "@mui/material/colors";
 import DeletionModal from "../modals/DeletionModal";
 
 const colors = [
-  blue[900],
-  blue[700],
-  blue[500],
-  green[900],
-  grey[900],
-  grey[700],
-  grey[500],
-  "#000000",
-  purple[900],
-  purple[700],
-  purple[500]
+  // blue[900],
+  // blue[700],
+  // blue[500],
+  // green[900],
+  // grey[900],
+  // grey[700],
+  // grey[500],
+  // "#000000",
+  // purple[900],
+  // purple[700],
+  // purple[500]
+  grey[900]
 ];
 
 const getColorForPharmacist = (pharmacist: Pharmacist) => {
@@ -125,7 +126,7 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
         searchCollection="pharmacists"
         onSearch={handlePharmacistSearch}
         attribute="username"
-        initialValue="(or leave empty for all)"
+        initialValue="Pharmacist username"
       />
       {/* <NameSearchBar
         searchCollection="pharmacists"
@@ -136,33 +137,40 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
 
       {pharmacists.map((pharmacist, index) => (
         <Paper elevation={3} key={index} sx={{ p: 2, mb: 2, mt: 2 }}>
-          <Typography variant="h6" color="secondary">
-            <Avatar sx={{ bgcolor: getColorForPharmacist(pharmacist) }}>
+          <Typography variant="h6">
+            <Avatar sx={{ bgcolor: getColorForPharmacist(pharmacist), mb: 1 }}>
               {pharmacist.name.charAt(0).toUpperCase()}
             </Avatar>
             {pharmacist.name}{" "}
-            <Typography variant="body1" color="textSecondary" component="span">
+            <Typography color="textSecondary" component="span">
               @{pharmacist.username}
             </Typography>
           </Typography>
 
-          <Box mt={2} />
+          <Box mb={1} />
 
-          <Button
-            id={`viewPhButton${index}`}
-            key={index}
-            sx={{ mr: 1 }}
-            onClick={() => handleOpen(index)}
-            variant="text"
-          >
-            View Account Details
-          </Button>
-
-          {canDelete && (
-            <Button key={pharmacist._id} variant="contained" color="error" onClick={() => deletePharmacist(pharmacist)}>
-              Delete Account
+          <Box display="flex" justifyContent="space-between">
+            <Button
+              id={`viewPhButton${index}`}
+              key={index}
+              sx={{ mr: 1, ml: -1 }}
+              onClick={() => handleOpen(index)}
+              variant="text"
+            >
+              View Account Details
             </Button>
-          )}
+
+            {canDelete && (
+              <Button
+                key={pharmacist._id}
+                variant="contained"
+                color="error"
+                onClick={() => deletePharmacist(pharmacist)}
+              >
+                Delete Account
+              </Button>
+            )}
+          </Box>
         </Paper>
       ))}
 

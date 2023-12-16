@@ -7,6 +7,7 @@ import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
 import Order, { IOrderModel } from "../models/orders/Order";
 import HealthPackage from "../models/health_packages/HealthPackage";
+import Prescription from "../models/prescriptions/Prescription";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -463,5 +464,52 @@ export const getAllNotifications = async (req: AuthorizedRequest, res: Response)
     res.status(StatusCodes.OK).json(patient.receivedNotifications !== undefined ? patient.receivedNotifications : []);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+export const getPatientPayablePrescriptions = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const patientId = req.user?.id;
+
+    const patient = await Patient.findById(patientId).select("subscribedPackage");
+
+    let discount = 0;
+
+    if (patient && patient.subscribedPackage && patient.subscribedPackage.status === "subscribed") {
+      const healthPackage = await HealthPackage.findById(patient.subscribedPackage.packageId);
+
+      if (healthPackage) {
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
+      }
+    }
+
+    const prescriptions = await Prescription.find({ patientId, isSubmitted: true, isPaid: false })
+      .populate({
+        path: "medicines.medicineId",
+        select: "name description pictureUrl price"
+      })
+      .populate({
+        path: "doctorId",
+        select: "name"
+      });
+
+    const prescriptionsWithDiscount = prescriptions.map((prescription) => {
+      const prescriptionObject = prescription.toObject();
+      prescriptionObject.medicines = prescriptionObject.medicines.map((medicine: any) => {
+        const discountedPrice = (medicine.medicineId.price * (1 - discount)).toFixed(2);
+        return {
+          ...medicine,
+          medicineId: {
+            ...medicine.medicineId,
+            price: discountedPrice,
+            originalPrice: medicine.medicineId.price.toFixed(2)
+          }
+        };
+      });
+      return prescriptionObject;
+    });
+
+    res.status(StatusCodes.OK).json(prescriptionsWithDiscount);
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
 };

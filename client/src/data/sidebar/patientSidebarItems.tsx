@@ -1,7 +1,7 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
 import AssignmentIcon from "@mui/icons-material/Assignment";
-import ChatIcon from "@mui/icons-material/Chat";
+import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 
 import { SidebarItem } from "../../types";
 import MedicationIcon from "@mui/icons-material/Medication";
@@ -43,7 +43,7 @@ export const patientSidebarItems: SidebarItem[] = [
   {
     title: "Chatting",
     href: patientChatPageRoute.path,
-    icon: <ChatIcon />
+    icon: <MarkUnreadChatAltIcon />
   }
 ];
 export default patientSidebarItems;

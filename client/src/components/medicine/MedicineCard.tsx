@@ -32,6 +32,7 @@ interface Props {
   sales?: number;
   hideArchiveButton?: boolean;
   handleArchiveOrUnArchiveButton?: (medicine: Medicine) => number;
+  handleActiveIngredientSearch?: (searchTerm: string, searchCollection: string) => Promise<void>;
 }
 
 const MedicineCard: React.FC<Props> = ({
@@ -44,7 +45,8 @@ const MedicineCard: React.FC<Props> = ({
   canViewQuantity,
   sales = 0,
   hideArchiveButton = false,
-  handleArchiveOrUnArchiveButton = () => {}
+  handleArchiveOrUnArchiveButton = () => {},
+  handleActiveIngredientSearch = () => {}
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
@@ -128,6 +130,8 @@ const MedicineCard: React.FC<Props> = ({
               <Typography gutterBottom variant="h5" component="div">
                 {editedMedicine.name}
               </Typography>
+              {editedMedicine.isOverTheCounter === false && <Alert severity="info">Prescription-issued only</Alert>}
+
               <Typography variant="body2" color="text.secondary">
                 {editedMedicine.description}
               </Typography>
@@ -141,13 +145,19 @@ const MedicineCard: React.FC<Props> = ({
 
                 <Box mt={2}>
                   <Typography variant="body2" color="text.secondary">
-                    Active Ingredients
+                    Main Active Ingredient
+                  </Typography>
+
+                  {editedMedicine.activeIngredients && <Chip label={editedMedicine.activeIngredients[0]} />}
+
+                  <Typography mt={2} variant="body2" color="text.secondary">
+                    Additional Ingredients
                   </Typography>
 
                   {editedMedicine.activeIngredients &&
-                    editedMedicine.activeIngredients.map((ingredient, index) => (
-                      <Chip label={ingredient} key={index} />
-                    ))}
+                    editedMedicine.activeIngredients
+                      .slice(1)
+                      .map((ingredient, index) => <Chip label={ingredient} key={index} />)}
 
                   <Box mt={2}>
                     {canViewQuantity && editedMedicine.availableQuantity > 0 && (
@@ -238,76 +248,118 @@ const MedicineCard: React.FC<Props> = ({
       </Box>
 
       <CardActions>
-        {canBuy && (
-          <>
-            {editedMedicine.availableQuantity === 0 ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%"
-                }}
-              >
-                <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.6 }}>
-                  <span style={{ fontWeight: "bold" }}>Out of Stock</span>
+        {canEdit && (
+          <Box>
+            {editedMedicine.availableQuantity === 0 && (
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", my: 2, ml: 1 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.7 }}>
+                  Out of Stock
                 </Typography>
-              </Box>
-            ) : (
-              <>
-                <input
-                  type="number"
-                  min="1"
-                  max={editedMedicine.availableQuantity}
-                  defaultValue="1"
-                  style={{
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    padding: "5px",
-                    height: "25px",
-                    fontSize: "14px"
+
+                <Button
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  sx={{
+                    borderColor: "primary.main",
+                    color: "primary.main",
+                    textTransform: "none",
+                    ml: 2
                   }}
-                />
-
-                <Button
-                  size="small"
-                  color="primary"
-                  startIcon={<AddShoppingCartIcon />}
-                  onClick={() => handleAddingToCart(editedMedicine._id, false)}
+                  onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
                 >
-                  Add to Cart
+                  View Alternatives?
                 </Button>
-
-                <Button
-                  size="small"
-                  color="primary"
-                  startIcon={<AttachMoney />}
-                  onClick={() => handleAddingToCart(editedMedicine._id, true)}
-                >
-                  Buy Now
-                </Button>
-              </>
+              </Box>
             )}
-          </>
+
+            <Box>
+              <Button onClick={handleEditClick} startIcon={<EditIcon />} color="secondary">
+                Edit
+              </Button>
+
+              {!hideArchiveButton && (
+                <Button
+                  onClick={() => {
+                    if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
+                      editedMedicine.isArchived = !editedMedicine.isArchived;
+                  }}
+                  startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
+                  color="secondary"
+                >
+                  {editedMedicine.isArchived ? "Unarchive" : "Archive"}
+                </Button>
+              )}
+            </Box>
+          </Box>
         )}
 
-        {canEdit && (
-          <>
-            <Button onClick={handleEditClick} startIcon={<EditIcon />} color="secondary">
-              Edit
+        {editedMedicine.availableQuantity === 0 && !canEdit ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              rowGap: 1
+            }}
+          >
+            <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.7 }}>
+              Out of Stock
+            </Typography>
+
+            <Button
+              size="small"
+              color="primary"
+              variant="outlined"
+              sx={{
+                borderColor: "primary.main",
+                color: "primary.main",
+                textTransform: "none",
+                ml: 2
+              }}
+              onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
+            >
+              View Alternatives?
             </Button>
-            {!hideArchiveButton && (
-              <Button
-                onClick={() => {
-                  if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
-                    editedMedicine.isArchived = !editedMedicine.isArchived;
+          </Box>
+        ) : (
+          canBuy && (
+            <>
+              <input
+                type="number"
+                min="1"
+                max={editedMedicine.availableQuantity}
+                defaultValue="1"
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  padding: "5px",
+                  height: "25px",
+                  fontSize: "14px"
                 }}
-                startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
-                color="secondary"
+              />
+
+              <Button
+                size="small"
+                color="primary"
+                startIcon={<AddShoppingCartIcon />}
+                onClick={() => handleAddingToCart(editedMedicine._id, false)}
               >
-                {editedMedicine.isArchived ? "Unarchive" : "Archive"}
+                Add to Cart
               </Button>
-            )}
-          </>
+
+              <Button
+                size="small"
+                color="primary"
+                startIcon={<AttachMoney />}
+                onClick={() => handleAddingToCart(editedMedicine._id, true)}
+              >
+                Buy Now
+              </Button>
+            </>
+          )
         )}
       </CardActions>
 

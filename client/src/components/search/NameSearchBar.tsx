@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
@@ -12,12 +12,12 @@ interface Props {
   searchCollection?: string;
   attribute?: string;
   initialValue?: string;
+  value?: string;
   onSearch: (searchTerm: string, searchCollection: string, attribute?: string) => void;
 }
 
 const goSearch = async (searchTerm: string, searchCollection: string, attribute = "name") => {
   const response = await axios.get(`${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`);
-
   return response.data;
 };
 
@@ -25,13 +25,17 @@ const NameSearchBar: React.FC<Props> = ({
   searchCollection = "medicines",
   attribute = "name",
   initialValue = "",
+  value = "", // Add this line
   onSearch
 }) => {
-  let firstLetter = searchCollection.charAt(0).toUpperCase();
-  const withoutLastChar = searchCollection.slice(1, -1); // the plural form
-  let labelName = firstLetter + withoutLastChar;
+  // let firstLetter = searchCollection.charAt(0).toUpperCase();
+  // const withoutLastChar = searchCollection.slice(1, -1); // the plural form
+  // let labelName = firstLetter + withoutLastChar;
+  const [searchTerm, setSearchTerm] = useState("");
 
-  let [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    setSearchTerm(value);
+  }, [value]);
 
   const handleSearch = () => {
     onSearch(searchTerm, searchCollection, attribute);
@@ -55,7 +59,8 @@ const NameSearchBar: React.FC<Props> = ({
         }}
       >
         <TextField
-          label={labelName}
+          // label={initialValue}
+          value={searchTerm}
           onChange={handleTextChange}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
@@ -67,7 +72,6 @@ const NameSearchBar: React.FC<Props> = ({
           placeholder={initialValue}
           fullWidth
           InputProps={{
-            startAdornment: <InputAdornment position="start">{attribute}:</InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={handleSearch} edge="end">

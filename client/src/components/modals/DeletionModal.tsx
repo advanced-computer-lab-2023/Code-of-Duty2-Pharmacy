@@ -7,9 +7,19 @@ interface DeletionModalProps {
   handleDelete: () => void;
   title: string;
   description: string;
+  secondaryButtonText?: string;
+  primaryButtonText?: string;
 }
 
-const DeletionModal: FC<DeletionModalProps> = ({ open, handleClose, handleDelete, title, description }) => (
+const DeletionModal: FC<DeletionModalProps> = ({
+  open,
+  handleClose,
+  handleDelete,
+  title,
+  description,
+  secondaryButtonText = "Cancel",
+  primaryButtonText = "Delete"
+}) => (
   <Dialog
     open={open}
     onClose={handleClose}
@@ -22,10 +32,10 @@ const DeletionModal: FC<DeletionModalProps> = ({ open, handleClose, handleDelete
     </DialogContent>
     <DialogActions sx={{ pt: 2, pr: 4, pb: 3 }}>
       <Button onClick={handleClose} sx={{ color: "black" }}>
-        Cancel
+        {secondaryButtonText}
       </Button>
       <Button onClick={handleDelete} color="error" variant="contained" autoFocus>
-        Delete
+        {primaryButtonText}
       </Button>
     </DialogActions>
   </Dialog>
