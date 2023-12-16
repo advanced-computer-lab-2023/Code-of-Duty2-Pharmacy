@@ -91,6 +91,13 @@ Jira was used as our main issue tracking and project management tool for creatin
 </details>
 
 <details>
+<summary>Medicine catalog (for patients)</summary>
+
+![Medicine catalog](docs/screenshots/demo/medicine_catalog.png)
+
+</details>
+
+<details>
 <summary>Patient login</summary>
 
 ![Patient login](docs/screenshots/demo/patient_login.png)
@@ -116,13 +123,6 @@ Jira was used as our main issue tracking and project management tool for creatin
 <summary>Pharmacist application email</summary>
 
 ![Pharmacist application email](docs/screenshots/demo/pharmacist_email.png)
-
-</details>
-
-<details>
-<summary>Medicine catalog (for patients)</summary>
-
-![Medicine catalog](docs/screenshots/demo/medicine_catalog.png)
 
 </details>
 
