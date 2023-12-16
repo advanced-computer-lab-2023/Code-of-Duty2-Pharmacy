@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import config from "../../config/config";
 import { MedicineUsages } from "../../data/medicines";
 import { Medicine } from "../../types";
-import { Box, styled } from "@mui/material";
+import { Box, MenuItem, Select, styled } from "@mui/material";
 import { uploadMedicineImage } from "../../services/upload";
 
 interface Props {
@@ -25,26 +25,18 @@ interface Props {
   onSave: (updatedMedicine: Medicine) => void;
 }
 
-const EditMedicineModal: React.FC<Props> = ({
-  medicine,
-  open,
-  onClose,
-  onSave,
-}) => {
+const EditMedicineModal: React.FC<Props> = ({ medicine, open, onClose, onSave }) => {
   const [name, setName] = useState(medicine.name);
   const [price, setPrice] = useState(medicine.price);
   const [description, setDescription] = useState(medicine.description || "");
   const [usages, setUsages] = useState(medicine.usages || []);
   const [pictureUrl, setPictureUrl] = useState(medicine.pictureUrl || "");
-  const [activeIngredients, setActiveIngredients] = useState(
-    medicine.activeIngredients || []
-  );
-  const [availableQuantity, setAvailableQuantity] = useState(
-    medicine.availableQuantity || 0
-  );
+  const [activeIngredients, setActiveIngredients] = useState(medicine.activeIngredients || []);
+  const [availableQuantity, setAvailableQuantity] = useState(medicine.availableQuantity || 0);
   const [newActiveIngredient, setNewActiveIngredient] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [isOverTheCounter, setIsOverTheCounter] = useState(medicine.isOverTheCounter || false);
 
   useEffect(() => {
     setImagePreviewUrl(medicine.pictureUrl || "");
@@ -62,20 +54,13 @@ const EditMedicineModal: React.FC<Props> = ({
   };
 
   const handleDeleteActiveIngredient = (ingredientToDelete: string) => () => {
-    setActiveIngredients((ingredients) =>
-      ingredients.filter((ingredient) => ingredient !== ingredientToDelete)
-    );
+    setActiveIngredients((ingredients) => ingredients.filter((ingredient) => ingredient !== ingredientToDelete));
   };
 
-  const handleAddActiveIngredient = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleAddActiveIngredient = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ([" ", "Tab", ",", "Enter"].includes(e.key)) {
       e.preventDefault();
-      if (
-        newActiveIngredient &&
-        !activeIngredients.includes(newActiveIngredient)
-      ) {
+      if (newActiveIngredient && !activeIngredients.includes(newActiveIngredient)) {
         setActiveIngredients([...activeIngredients, newActiveIngredient]);
         setNewActiveIngredient("");
       }
@@ -113,6 +98,7 @@ const EditMedicineModal: React.FC<Props> = ({
         activeIngredients,
         pictureUrl: finalPictureUrl,
         availableQuantity,
+        isOverTheCounter
       });
 
       const updatedMedicine = {
@@ -124,6 +110,7 @@ const EditMedicineModal: React.FC<Props> = ({
         activeIngredients,
         pictureUrl: finalPictureUrl,
         availableQuantity,
+        isOverTheCounter
       };
 
       onSave(updatedMedicine);
@@ -139,12 +126,7 @@ const EditMedicineModal: React.FC<Props> = ({
       <DialogContent>
         <form id="edit-form" onSubmit={handleSubmit}>
           <Box mt={1}>
-            <TextField
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              fullWidth
-            />
+            <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} fullWidth />
           </Box>
 
           <Box mt={3}>
@@ -188,12 +170,7 @@ const EditMedicineModal: React.FC<Props> = ({
               filterSelectedOptions
               value={usages}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Medicinal Usages"
-                  placeholder="Select all that applies..."
-                  fullWidth
-                />
+                <TextField {...params} label="Medicinal Usages" placeholder="Select all that applies..." fullWidth />
               )}
               onChange={(_event, newValue) => {
                 setUsages(newValue as string[]);
@@ -222,19 +199,22 @@ const EditMedicineModal: React.FC<Props> = ({
           </Box>
 
           <Box mt={3}>
+            <Select
+              labelId="over-the-counter-label"
+              value={isOverTheCounter ? "Over the Counter" : "Prescription"}
+              onChange={(e) => setIsOverTheCounter(e.target.value === "Over the Counter")}
+              fullWidth
+            >
+              <MenuItem value={"Over the Counter"}>Over the Counter</MenuItem>
+              <MenuItem value={"Prescription"}>Prescription Only</MenuItem>
+            </Select>
+          </Box>
+
+          <Box mt={3}>
             <Box mt={3}>
-              <Button
-                component="label"
-                variant="contained"
-                startIcon={<CloudUploadIcon />}
-              >
+              <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
                 Upload Medicine Image
-                <VisuallyHiddenInput
-                  accept="image/*"
-                  id="upload-image"
-                  type="file"
-                  onChange={handleImageUpload}
-                />
+                <VisuallyHiddenInput accept="image/*" id="upload-image" type="file" onChange={handleImageUpload} />
               </Button>
             </Box>
 
@@ -245,10 +225,7 @@ const EditMedicineModal: React.FC<Props> = ({
                   alt="Preview"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-                <IconButton
-                  style={{ position: "absolute", top: -30, right: -30 }}
-                  onClick={handleRemoveImage}
-                >
+                <IconButton style={{ position: "absolute", top: -30, right: -30 }} onClick={handleRemoveImage}>
                   <CloseIcon />
                 </IconButton>
               </Box>
@@ -276,7 +253,7 @@ const VisuallyHiddenInput = styled("input")({
   bottom: 0,
   left: 0,
   whiteSpace: "nowrap",
-  width: 1,
+  width: 1
 });
 
 export default EditMedicineModal;

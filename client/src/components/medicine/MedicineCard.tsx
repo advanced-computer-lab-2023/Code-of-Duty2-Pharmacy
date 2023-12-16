@@ -128,6 +128,8 @@ const MedicineCard: React.FC<Props> = ({
               <Typography gutterBottom variant="h5" component="div">
                 {editedMedicine.name}
               </Typography>
+              {editedMedicine.isOverTheCounter === false && <Alert severity="info">Prescription-issued only</Alert>}
+
               <Typography variant="body2" color="text.secondary">
                 {editedMedicine.description}
               </Typography>
