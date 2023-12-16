@@ -16,25 +16,26 @@ import {
   DialogActions,
   DialogContentText
 } from "@mui/material";
-import { blue, green, grey, purple } from "@mui/material/colors";
+import { blue, green, grey, pink, purple } from "@mui/material/colors";
 
 import config from "../../config/config";
 import { Patient } from "../../types";
 import DeletionModal from "../modals/DeletionModal";
 
 const colors = [
-  // blue[900],
+  blue[900],
   // blue[700],
   // blue[500],
-  // green[900],
+  green[900],
   // grey[900],
   // grey[700],
   // grey[500],
   // "#000000",
-  // purple[900],
+  purple[900],
   // purple[700],
   // purple[500]
-  grey[900]
+  grey[900],
+  pink[900]
 ];
 
 const getColorForPatient = (patient: Patient) => {

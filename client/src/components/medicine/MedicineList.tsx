@@ -55,7 +55,11 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const fetchMedicines = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/medicines`);
-      setMedicines(response.data.medicines.filter((medicine: Medicine) => canEdit || medicine.isArchived === false));
+      setMedicines(
+        response.data.medicines
+          .filter((medicine: Medicine) => canEdit || medicine.isArchived === false)
+          .filter((medicine: Medicine) => canEdit || medicine.isOverTheCounter === true)
+      );
       setDiscount(response.data.discount);
       setPackageName(response.data.packageName);
     } catch (err) {

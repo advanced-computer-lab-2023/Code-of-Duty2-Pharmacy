@@ -1,9 +1,9 @@
 import { Schema } from "mongoose";
 
-export interface IPrescription {
+interface IDependentPrescription {
   date: Date;
   doctorId: Schema.Types.ObjectId;
-  patientId: Schema.Types.ObjectId;
+  patientNationalId: string;
   status: "filled" | "unfilled";
   isSubmitted: boolean;
   isPaid: boolean;
@@ -13,6 +13,7 @@ export interface IPrescription {
     dosage: string;
     quantity: number;
   }>;
+  supervisingPatientId: Schema.Types.ObjectId;
 }
 
-export default IPrescription;
+export default IDependentPrescription;

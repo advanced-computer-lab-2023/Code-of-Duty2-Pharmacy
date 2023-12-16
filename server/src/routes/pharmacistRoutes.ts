@@ -6,7 +6,9 @@ import {
   getPharmacistInfo,
   getPharmacists,
   searchPharmacists,
-  updatePharmacist
+  updatePharmacist,
+  getAllNotifications,
+  getAndMarkNotificationAsRead
 } from "../controllers/pharmacistController";
 import {
   addPharmacistAWalletHandler,
@@ -18,6 +20,7 @@ import {
 } from "../controllers/payments/wallets/Pharmacist";
 import { authenticateWalletUser } from "../middlewares/walletAuthentication";
 import { authenticateUser } from "../middlewares/authentication";
+import { getOrdersReportData } from "../controllers/orderController";
 
 const router = express.Router();
 
@@ -38,8 +41,14 @@ router.get("/wallets", authenticateWalletUser, getPharmacistWalletHandler);
 router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePharmacistWalletHandler);
 
+router.get("/notifications", getAllNotifications);
+router.patch("/notifications/get-markread-notification", getAndMarkNotificationAsRead);
+
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPharmacistById);
 router.delete("/:id", deletePharmacist);
+router.get("/orders-report-data", getOrdersReportData)
+
+
 
 export default router;

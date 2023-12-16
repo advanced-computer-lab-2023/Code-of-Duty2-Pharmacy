@@ -12,7 +12,8 @@ const Footer = () => {
         position: "static",
         bottom: 0,
         width: "100%",
-        color: grey[500]
+        color: grey[500],
+        boxShadow: "0 -5px 7px rgba(0, 0, 0, 0.3)"
       }}
     >
       <Container maxWidth="lg">

@@ -4,7 +4,8 @@ import {
   viewMedicinesRoute,
   viewPatientsRoute,
   viewPharmacistRegistrationRequestsRoute,
-  viewPharmacistsRoute
+  viewPharmacistsRoute,
+  adminViewTotalSalesRoute
 } from "../routes/adminRoutes";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -14,6 +15,8 @@ import MedicationIcon from "@mui/icons-material/Medication";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import FeedIcon from "@mui/icons-material/Feed";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import { SidebarItem } from "../../types";
 
@@ -33,14 +36,14 @@ export const adminSidebarItems: SidebarItem[] = [
         icon: <RecentActorsIcon />
       },
       {
-        title: "Pharmacists",
-        href: viewPharmacistsRoute.path,
-        icon: <LocalPharmacyIcon />
-      },
-      {
         title: "Admins",
         href: addAdminRoute.path,
         icon: <AdminIcon />
+      },
+      {
+        title: "Pharmacists",
+        href: viewPharmacistsRoute.path,
+        icon: <LocalPharmacyIcon />
       }
     ]
   },
@@ -63,6 +66,17 @@ export const adminSidebarItems: SidebarItem[] = [
         title: "Medicines",
         href: viewMedicinesRoute.path,
         icon: <MedicationIcon />
+      }
+    ]
+  },
+  {
+    title: "Reports",
+    icon: <AssessmentIcon />,
+    items: [
+      {
+        title: "Total Sales",
+        href: adminViewTotalSalesRoute.path,
+        icon: <AttachMoneyIcon />
       }
     ]
   }

@@ -1,5 +1,6 @@
 import { User } from "../types/User";
 import SocketType from "../types/SocketType";
+import { bulkUpdateMedicineQuantitiesHandler } from "../controllers/medicineController";
 
 const userIdToSocketIdMap: Map<string, string> = new Map();
 
@@ -21,7 +22,13 @@ const socketEventListeners = (socket: SocketType) => {
   socket.on("error", (err) => {
     console.log(`Error occurred on socket ${socket.id}: ${err}`);
   });
-  socket.on("outOfStock", (medicine) => {});
+  socket.on("outOfStock", (notification) => {
+    console.log("out of stock");
+  });
+  socket.on("bulk-update-meds", (data) => {
+    console.log("bulk-update-meds wana te3ebt");
+    bulkUpdateMedicineQuantitiesHandler(data, socket);
+  });
 };
 
 export default socketEventListeners;

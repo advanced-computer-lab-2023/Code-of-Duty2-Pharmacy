@@ -30,6 +30,7 @@ interface Props {
   canViewSales: boolean;
   canViewQuantity: boolean;
   sales?: number;
+  hideArchiveButton?: boolean;
   handleArchiveOrUnArchiveButton?: (medicine: Medicine) => number;
   handleActiveIngredientSearch?: (searchTerm: string, searchCollection: string) => Promise<void>;
 }
@@ -43,6 +44,7 @@ const MedicineCard: React.FC<Props> = ({
   canViewSales,
   canViewQuantity,
   sales = 0,
+  hideArchiveButton = false,
   handleArchiveOrUnArchiveButton = () => {},
   handleActiveIngredientSearch = () => {}
 }) => {
@@ -128,6 +130,8 @@ const MedicineCard: React.FC<Props> = ({
               <Typography gutterBottom variant="h5" component="div">
                 {editedMedicine.name}
               </Typography>
+              {editedMedicine.isOverTheCounter === false && <Alert severity="info">Prescription-issued only</Alert>}
+
               <Typography variant="body2" color="text.secondary">
                 {editedMedicine.description}
               </Typography>
@@ -274,16 +278,18 @@ const MedicineCard: React.FC<Props> = ({
                 Edit
               </Button>
 
-              <Button
-                onClick={() => {
-                  if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
-                    editedMedicine.isArchived = !editedMedicine.isArchived;
-                }}
-                startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
-                color="secondary"
-              >
-                {editedMedicine.isArchived ? "Unarchive" : "Archive"}
-              </Button>
+              {!hideArchiveButton && (
+                <Button
+                  onClick={() => {
+                    if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
+                      editedMedicine.isArchived = !editedMedicine.isArchived;
+                  }}
+                  startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
+                  color="secondary"
+                >
+                  {editedMedicine.isArchived ? "Unarchive" : "Archive"}
+                </Button>
+              )}
             </Box>
           </Box>
         )}

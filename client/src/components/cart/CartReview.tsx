@@ -9,9 +9,7 @@ import {
   LinearProgress,
   Stack,
   TextField,
-  Typography,
-  Divider,
-  Paper
+  Typography
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -148,11 +146,12 @@ const CartReview = () => {
 
   return (
     <>
-      <Typography variant="h4" gutterBottom component="div" color="primary" ml={"3%"}>
+      <Typography variant="h4" component="div" color="primary" ml="3%">
         Review your cart
       </Typography>
-      <Paper elevation={3} sx={{ px: 2, py: 5, mb: 2, mx: "3%" }}>
-        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start" gap="1rem" ml="10%">
+
+      <Box sx={{ p: "2%", ml: "1.25%" }}>
+        <Box display="flex" flexDirection="column" justifyContent="center" alignItems="flex-start">
           {cartItems.some(
             (item: { quantity: number }, index: number) =>
               item.quantity > cartMedicineQuantites.availableQuantities[index]
@@ -169,12 +168,10 @@ const CartReview = () => {
               <Typography>It looks like your cart is currently empty.</Typography>
             ) : (
               <Box>
-                <Box sx={{ ml: 1, mb: 1 }}>
-                  <Typography variant="h4">
+                <Box sx={{ mb: "1%" }}>
+                  <Typography variant="h4" fontSize="1.4rem" color="text.primary" gutterBottom>
                     Total ({cartItems.length} {cartItems.length > 1 ? "items" : "item"}){": "}
-                    <Typography variant="h4" component="span">
-                      EGP {total.toFixed(2)}
-                    </Typography>
+                    EGP {total.toFixed(2)}
                   </Typography>{" "}
                 </Box>
 
@@ -194,7 +191,7 @@ const CartReview = () => {
 
                     {/* {isLoading[index] && <CircularProgress />} */}
 
-                    <Box display="flex" justifyContent="flex-start" alignItems="flex-start" p={1}>
+                    <Box display="flex" p={1}>
                       <Box
                         sx={{
                           height: "5rem",
@@ -217,20 +214,20 @@ const CartReview = () => {
                         <Typography variant="body1" fontWeight={"bold"}>
                           {item.medicineId.name}
                         </Typography>
-                        <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+
+                        <Stack direction="row" spacing={2}>
                           <Typography variant="body1" color="text.secondary">
-                            {"Qty "}
+                            Qty
                           </Typography>
+
                           <TextField
                             type="number"
                             InputProps={{
                               size: "small",
-
                               inputProps: { min: 1 },
                               readOnly: !isEditable[index],
                               style: {
                                 width: "30%"
-                                // flexGrow: 1,
                               }
                             }}
                             // value={item.quantity}
@@ -245,6 +242,39 @@ const CartReview = () => {
                             }}
                             inputRef={(ref) => (textFieldRefs.current[index] = ref)}
                           />
+                        </Stack>
+                        <br />
+                      </Box>
+
+                      <Box
+                        p={1}
+                        ml="auto"
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center"
+                        }}
+                      >
+                        <Typography variant="body1" fontWeight={"bold"}>
+                          EGP {(item.medicineId.price * item.quantity).toFixed(2)}
+                        </Typography>
+
+                        {item.quantity > 1 && (
+                          <Typography variant="body2" color="text.secondary">
+                            EGP {item.medicineId.price.toFixed(2)} each
+                          </Typography>
+                        )}
+
+                        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <Button
+                            sx={{ mt: "4%" }}
+                            color="error"
+                            size="small"
+                            variant="outlined"
+                            onClick={() => handleDelete(index)}
+                          >
+                            Remove
+                          </Button>
 
                           <Button
                             sx={{
@@ -254,7 +284,7 @@ const CartReview = () => {
                                   ? theme.palette.common.white
                                   : theme.palette.common.black
                             }}
-                            variant={isEditable[index] ? "contained" : "outlined"}
+                            variant={isEditable[index] ? "contained" : "text"}
                             onClick={() => {
                               setTextFieldValue(cartItems.map((item: any) => item.quantity));
                               if (!isEditable[index]) {
@@ -270,24 +300,7 @@ const CartReview = () => {
                           >
                             {isEditable[index] ? "Confirm" : "Modify"}
                           </Button>
-
-                          <Button color="error" onClick={() => handleDelete(index)}>
-                            Remove from cart
-                          </Button>
-                        </Stack>
-                        <br />
-                      </Box>
-
-                      <Box p={1} ml="auto">
-                        <Typography variant="body1" fontWeight={"bold"}>
-                          EGP {(item.medicineId.price * item.quantity).toFixed(2)}
-                        </Typography>
-
-                        {item.quantity > 1 && (
-                          <Typography variant="body2" color="text.secondary">
-                            EGP {item.medicineId.price.toFixed(2)} each
-                          </Typography>
-                        )}
+                        </Box>
                       </Box>
                     </Box>
                   </Card>
@@ -320,7 +333,7 @@ const CartReview = () => {
             )}
           </Box>
         </Box>
-      </Paper>
+      </Box>
     </>
   );
 };

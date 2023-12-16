@@ -4,7 +4,7 @@ import config from "../../config/config";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Box, Typography, Snackbar } from "@mui/material";
+import { Box, Typography, Snackbar, Select, MenuItem } from "@mui/material";
 import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 import { forwardRef, Ref } from "react";
 
@@ -20,20 +20,19 @@ const AddMedicineForm = () => {
   const [newIngredient, setNewIngredient] = useState("");
   const [price, setPrice] = useState(0);
   const [availableQuantity, setAvailableQuantity] = useState(0);
+  const [isOverTheCounter, setIsOverTheCounter] = useState<boolean | null>(null);
 
   const [nameError, setNameError] = useState(false);
   const [activeIngredientsError, setActiveIngredientsError] = useState(false);
   const [priceError, setPriceError] = useState(false);
+  const [isOverTheCounterError, setIsOverTheCounterError] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] =
-    useState<AlertColor>("success");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
 
   const handleDeleteIngredient = (ingredientToDelete: string) => () => {
-    setActiveIngredients((ingredients) =>
-      ingredients.filter((ingredient) => ingredient !== ingredientToDelete)
-    );
+    setActiveIngredients((ingredients) => ingredients.filter((ingredient) => ingredient !== ingredientToDelete));
   };
 
   const handleAddIngredient = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,6 +63,11 @@ const AddMedicineForm = () => {
       isValid = false;
     }
 
+    if (isOverTheCounter === null) {
+      setIsOverTheCounterError(true);
+      isValid = false;
+    }
+
     return isValid;
   };
 
@@ -80,6 +84,7 @@ const AddMedicineForm = () => {
         activeIngredients,
         price,
         availableQuantity,
+        isOverTheCounter
       });
 
       setName("");
@@ -104,10 +109,7 @@ const AddMedicineForm = () => {
     }
   };
 
-  const handleSnackbarClose = (
-    _event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleSnackbarClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
       return;
     }
@@ -123,11 +125,10 @@ const AddMedicineForm = () => {
         </Typography>
 
         <Typography variant="body1" color="text.secondary">
-          You may only add a <span style={{ fontWeight: "bold" }}>NEW</span>{" "}
-          medicine that hasn't been already added to the system,
+          You may only add a <span style={{ fontWeight: "bold" }}>NEW</span> medicine that hasn't been already added to
+          the system,
           <br />
-          if the medicine is out of stock, just update the quantity of the
-          existing medicine.
+          if the medicine is out of stock, just update the quantity of the existing medicine.
         </Typography>
       </Box>
 
@@ -148,15 +149,11 @@ const AddMedicineForm = () => {
         <Box mt={3}>
           <TextField
             label="Active Ingredients"
-            placeholder="Separate by spaces"
+            placeholder="Separate by spaces (First ingredient is will be the main active ingredient)"
             value={newIngredient}
             onKeyDown={handleAddIngredient}
             error={activeIngredientsError}
-            helperText={
-              activeIngredientsError
-                ? "At least one active ingredient is required required"
-                : ""
-            }
+            helperText={activeIngredientsError ? "At least one active ingredient is required required" : ""}
             onChange={(e) => {
               setNewIngredient(e.target.value);
               setActiveIngredientsError(false);
@@ -166,11 +163,7 @@ const AddMedicineForm = () => {
           {activeIngredients && <Box mt={2} />}
 
           {activeIngredients.map((ingredient, index) => (
-            <Chip
-              key={index}
-              label={ingredient}
-              onDelete={handleDeleteIngredient(ingredient)}
-            />
+            <Chip key={index} label={ingredient} onDelete={handleDeleteIngredient(ingredient)} />
           ))}
 
           <Box mt={3} />
@@ -201,6 +194,34 @@ const AddMedicineForm = () => {
               (e.target as HTMLInputElement).select();
             }}
           />
+
+          <Box mt={3} />
+
+          <Box mt={3}>
+            <Typography variant="body1" color="text.secondary">
+              Is the medicine over the counter or prescription?
+            </Typography>
+
+            <Box mt={1} />
+
+            <Select
+              value={isOverTheCounter === null ? "" : String(isOverTheCounter)}
+              onChange={(e) => setIsOverTheCounter(e.target.value === "true")}
+              displayEmpty
+              error={isOverTheCounterError}
+            >
+              <MenuItem disabled value="">
+                None
+              </MenuItem>
+              <MenuItem value="true">Over the Counter</MenuItem>
+              <MenuItem value="false">Prescription Only</MenuItem>
+            </Select>
+            {isOverTheCounterError && (
+              <p style={{ color: "red", fontSize: "0.8rem" }}>
+                Please select whether the medicine is over the counter or prescription.
+              </p>
+            )}
+          </Box>
 
           <Box mt={3} />
 

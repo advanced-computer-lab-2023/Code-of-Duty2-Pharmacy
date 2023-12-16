@@ -7,10 +7,8 @@ import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
 import AdminViewPharmacistRegistrationRequest from "../../pages/admin/AdminViewPharmacistRegistrationRequest";
 import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
-import AllPatientsPage from "../../components/patient/AllPatients";
-import AllPharmacistsPage from "../../components/pharmacist/AllPharmacists";
-import AllAdminsPage from "../../components/admin/AllAdmins";
-import AllPharmacistRegistrationRequestsPage from "../../components/pharmacist/AllPharmacistsRegistrationRequests";
+import NotificationView from "../../pages/notification/NotificationView";
+import AdminTotalSalesViewPage from "../../pages/admin/AdminTotalSalesViewPage";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
@@ -51,24 +49,14 @@ export const changeAdminPasswordsRoute: Route = {
   element: <AdminChangePasswordPage />
 };
 
-export const viewAllPatientsRoute: Route = {
-  path: "/admin/view-all-patients",
-  element: <AllPatientsPage />
-};
 
-export const viewAllPharmacistsRoute: Route = {
-  path: "/admin/view-all-pharmacists",
-  element: <AllPharmacistsPage />
+export const adminViewNotificationRoute: Route = {
+  path: "/admin/notification/view",
+  element: <NotificationView />
 };
-
-export const viewAllAdminsRoute: Route = {
-  path: "/admin/view-all-admins",
-  element: <AllAdminsPage />
-};
-
-export const viewAllPharmacistRegistrationRequestsRoute: Route = {
-  path: "/admin/view-all-pharmacist-registration-requests",
-  element: <AllPharmacistRegistrationRequestsPage />
+export const adminViewTotalSalesRoute: Route = {
+  path: "/admin/view-total-sales",
+  element: <AdminTotalSalesViewPage />
 };
 
 const adminRoutes: Route[] = [
@@ -80,10 +68,8 @@ const adminRoutes: Route[] = [
   viewPatientsRoute,
   changeAdminPasswordsRoute,
   viewPharmacistRequestRoute,
-  viewAllPatientsRoute,
-  viewAllPharmacistsRoute,
-  viewAllAdminsRoute,
-  viewAllPharmacistRegistrationRequestsRoute
+  adminViewNotificationRoute,
+  adminViewTotalSalesRoute
 ];
 
 export default adminRoutes;

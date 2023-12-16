@@ -7,6 +7,11 @@ import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Patient from "../models/patients/Patient";
 import HealthPackage from "../models/health_packages/HealthPackage";
 import { UserRole } from "../types";
+import SocketType from "../types/SocketType";
+import {
+  sendNotificationsToAllPharmacists,
+  sendNotificationsToAllPharmacistsWithoutSocket
+} from "../services/pharmacists";
 
 export const getAllMedicines = async (req: AuthorizedRequest, res: Response) => {
   try {
@@ -111,6 +116,19 @@ export const searchMedicines = async (req: Request, res: Response) => {
   }
 };
 
+export const getMedicineById = async (req: Request, res: Response) => {
+  try {
+    const medicineId = req.params.id;
+    const medicine = await Medicine.findById(medicineId);
+    if (!medicine) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Medicine not found" });
+    }
+    res.status(StatusCodes.OK).json(medicine);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
 export const getMedicineSales = async (req: Request, res: Response) => {
   let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
@@ -142,7 +160,7 @@ export const getAllMedicinesSales = async (req: Request, res: Response) => {
 export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: Response) => {
   try {
     const updates = req.body;
-
+    console.log("&&&hereeeeeeee");
     const bulkOps = updates.map((update: any) => ({
       updateOne: {
         filter: { _id: update.medicineId },
@@ -150,11 +168,63 @@ export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: 
       }
     }));
 
-    await Medicine.bulkWrite(bulkOps);
+    const result = await Medicine.bulkWrite(bulkOps);
+
+    // console.log("+++++result", result.modifiedCount);
+    if (result.modifiedCount > 0) {
+      for (let update of updates) {
+        // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
+        const updatedMedicine = await Medicine.findById(update.medicineId);
+        // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        if (updatedMedicine?.availableQuantity !== undefined && updatedMedicine.availableQuantity === 0) {
+          sendNotificationsToAllPharmacistsWithoutSocket(
+            `${updatedMedicine.name} Out of Stock`,
+            `Medicine ${updatedMedicine.name} is out of stock, id = ${updatedMedicine._id}`
+          );
+        }
+      }
+    }
 
     res.status(200).send();
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const bulkUpdateMedicineQuantitiesHandler = async (
+  data: [{ medicineId: string; boughtQuantity: number }],
+  socket: SocketType
+) => {
+  try {
+    console.log("&&&updates", data);
+    const updates = data;
+    const bulkOps = updates.map((update: any) => ({
+      updateOne: {
+        filter: { _id: update.medicineId },
+        update: { $inc: { availableQuantity: -update.boughtQuantity } }
+      }
+    }));
+    console.log("+++++bulkOps", bulkOps);
+
+    const result = await Medicine.bulkWrite(bulkOps);
+
+    if (result.modifiedCount > 0) {
+      for (let update of updates) {
+        // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
+        const updatedMedicine = await Medicine.findById(update.medicineId);
+        // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        if (updatedMedicine?.availableQuantity !== undefined && updatedMedicine.availableQuantity === 0) {
+          sendNotificationsToAllPharmacists(
+            "Medicine Out of Stock",
+            `Medicine ${updatedMedicine.name} is out of stock, id = ${updatedMedicine._id}`,
+            socket
+          );
+        }
+      }
+    }
+  } catch (err) {
+    // res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+    socket.emit("error", { message: (err as Error).message });
   }
 };
 
