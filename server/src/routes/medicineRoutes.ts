@@ -7,7 +7,8 @@ import {
   getMedicineSales,
   getAllMedicinesSales,
   bulkUpdateMedicineQuantities,
-  archiveOrUnarchiveMedicine
+  archiveOrUnarchiveMedicine,
+  getTopThreeMedicines
 } from "../controllers/medicineController";
 import { authenticateUser } from "../middlewares/authentication";
 
@@ -23,6 +24,7 @@ router.post("/sales", getMedicineSales);
 router.get("/search", searchMedicines);
 router.patch("/bulk-update", bulkUpdateMedicineQuantities);
 router.post("/archive-or-unarchive/:id", archiveOrUnarchiveMedicine);
+router.get("/top-three", getTopThreeMedicines);
 
 // WARNING: Keep these routes at the bottom of the file
 router.patch("/:id", updateMedicine);

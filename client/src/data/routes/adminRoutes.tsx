@@ -7,6 +7,10 @@ import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
 import AdminViewPharmacistRegistrationRequest from "../../pages/admin/AdminViewPharmacistRegistrationRequest";
 import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
+import AllPatientsPage from "../../components/patient/AllPatients";
+import AllPharmacistsPage from "../../components/pharmacist/AllPharmacists";
+import AllAdminsPage from "../../components/admin/AllAdmins";
+import AllPharmacistRegistrationRequestsPage from "../../components/pharmacist/AllPharmacistsRegistrationRequests";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
@@ -47,6 +51,26 @@ export const changeAdminPasswordsRoute: Route = {
   element: <AdminChangePasswordPage />
 };
 
+export const viewAllPatientsRoute: Route = {
+  path: "/admin/view-all-patients",
+  element: <AllPatientsPage />
+};
+
+export const viewAllPharmacistsRoute: Route = {
+  path: "/admin/view-all-pharmacists",
+  element: <AllPharmacistsPage />
+};
+
+export const viewAllAdminsRoute: Route = {
+  path: "/admin/view-all-admins",
+  element: <AllAdminsPage />
+};
+
+export const viewAllPharmacistRegistrationRequestsRoute: Route = {
+  path: "/admin/view-all-pharmacist-registration-requests",
+  element: <AllPharmacistRegistrationRequestsPage />
+};
+
 const adminRoutes: Route[] = [
   adminDashboardRoute,
   viewMedicinesRoute,
@@ -55,7 +79,11 @@ const adminRoutes: Route[] = [
   viewPharmacistsRoute,
   viewPatientsRoute,
   changeAdminPasswordsRoute,
-  viewPharmacistRequestRoute
+  viewPharmacistRequestRoute,
+  viewAllPatientsRoute,
+  viewAllPharmacistsRoute,
+  viewAllAdminsRoute,
+  viewAllPharmacistRegistrationRequestsRoute
 ];
 
 export default adminRoutes;

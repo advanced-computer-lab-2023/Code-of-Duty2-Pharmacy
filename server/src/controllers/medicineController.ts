@@ -178,3 +178,48 @@ export const archiveOrUnarchiveMedicine = async (req: AuthorizedRequest, res: Re
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
 };
+
+export const getTopThreeMedicines = async (req: Request, res: Response) => {
+  try {
+    const orders = await Order.find();
+    let medsMap: Map<string, number> = new Map<string, number>();
+
+    for (let i = 0; i < orders.length; i++) {
+      for (let j = 0; j < orders[i].medicines.length; j++) {
+        let quantity = medsMap.get(orders[i].medicines[j].medicineId.toString()) || 0;
+        medsMap.set(orders[i].medicines[j].medicineId.toString(), quantity + orders[i].medicines[j].quantity);
+      }
+    }
+
+    // Sort by sales quantity in descending order
+    const sortedMedicines = Array.from(medsMap.entries()).sort((a, b) => b[1] - a[1]);
+
+    // Get top three medicines
+    const topThreeMedicines = sortedMedicines.slice(0, 3);
+
+    // Fetch medicine details for the top three
+    const resultArray = await Promise.all(
+      topThreeMedicines.map(async ([medicineId, sales]) => {
+        const medicine = await Medicine.findById(medicineId);
+        if (medicine) {
+          return {
+            medicineName: medicine.name,
+            price: medicine.price,
+            sales
+          };
+        } else {
+          // Handle the case where the medicine is not found
+          return {
+            medicineName: "Not Found",
+            price: 0,
+            sales
+          };
+        }
+      })
+    );
+
+    res.status(StatusCodes.OK).json(resultArray);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
