@@ -12,7 +12,7 @@ export const MedicineSchema = new Schema<IMedicineModel>(
     pictureUrl: { type: String },
     description: { type: String },
     usages: { type: [String] },
-    isOverTheCounter: { type: Boolean },
+    isOverTheCounter: { type: Boolean, required: true, default: false },
     isArchived: { type: Boolean, required: true, default: false }
   },
   { timestamps: true }
