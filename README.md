@@ -112,6 +112,15 @@ Jira was used as our main issue tracking and project management tool for creatin
 </details>
 
 <details>
+<summary>Checkout and payment</summary>
+
+![Checkout](docs/screenshots/demo/checkout1.png)
+![Checkout](docs/screenshots/demo/checkout2.png)
+![Checkout](docs/screenshots/demo/checkout3.png)
+
+</details>
+
+<details>
 <summary>Pharmacist login</summary>
 
 ![Pharmacist login](docs/screenshots/demo/pharmacist_login.png)
