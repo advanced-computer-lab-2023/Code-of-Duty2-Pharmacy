@@ -52,7 +52,7 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
         </Box>
       ) : (
         <>
-          {successfulOrders.length > 0 && (
+          {unsuccessfulOrders.length > 0 && (
             <>
               <Box ml={5}>
                 <Typography variant="h4" gutterBottom component="div" color="primary">
@@ -66,7 +66,7 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
             </>
           )}
 
-          {unsuccessfulOrders.length > 0 && (
+          {successfulOrders.length > 0 && (
             <>
               <Box ml={5}>
                 <Typography variant="h4" gutterBottom component="div" color="primary">
