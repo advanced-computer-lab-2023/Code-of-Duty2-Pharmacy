@@ -2,13 +2,18 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 import Prescription from "../models/prescriptions/Prescription";
+import DependentPrescription from "../models/prescriptions/DependentPrescription";
 import Medicine from "../models/medicines/Medicine";
+import mongoose from "mongoose";
 
 export const getPrescription = async (req: Request, res: Response) => {
   try {
     const { prescriptionId } = req.params;
+    const isDependent = req.query.isDependent === "true";
 
-    const prescription = await Prescription.findById(prescriptionId)
+    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+
+    const prescription = await Model.findById(prescriptionId)
       .populate("doctorId", "name")
       .populate("patientId", "name")
       .populate("medicines.medicineId", "name description pictureUrl");
@@ -27,8 +32,11 @@ export const addMedicineToPrescription = async (req: Request, res: Response) => 
   try {
     const { medicineId } = req.body;
     const { prescriptionId } = req.params;
+    const isDependent = req.query.isDependent === "true";
 
-    const prescription = await Prescription.findById(prescriptionId);
+    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+
+    const prescription = await Model.findById(prescriptionId);
 
     if (!prescription) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Prescription not found" });
@@ -60,8 +68,11 @@ export const addMedicineToPrescription = async (req: Request, res: Response) => 
 export const deleteMedicineFromPrescription = async (req: Request, res: Response) => {
   try {
     const { prescriptionId, medicineId } = req.params;
+    const isDependent = req.query.isDependent === "true";
 
-    const prescription = await Prescription.findById(prescriptionId);
+    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+
+    const prescription = await Model.findById(prescriptionId);
 
     if (!prescription) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Prescription not found" });
@@ -69,7 +80,8 @@ export const deleteMedicineFromPrescription = async (req: Request, res: Response
 
     const originalMedicineCount = prescription.medicines.length;
 
-    prescription.medicines = prescription.medicines.filter((med) => med.medicineId.toString() !== medicineId);
+    // TODO: Change this 'any' type to a proper type
+    prescription.medicines = prescription.medicines.filter((med: any) => med.medicineId.toString() !== medicineId);
 
     if (prescription.medicines.length === originalMedicineCount) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Medicine not found in the prescription" });

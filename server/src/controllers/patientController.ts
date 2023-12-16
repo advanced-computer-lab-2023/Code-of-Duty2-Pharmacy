@@ -7,6 +7,7 @@ import Medicine, { IMedicineModel } from "../models/medicines/Medicine";
 import { ICartItem } from "../models/patients/interfaces/subinterfaces/ICartItem";
 import Order, { IOrderModel } from "../models/orders/Order";
 import HealthPackage from "../models/health_packages/HealthPackage";
+import Prescription from "../models/prescriptions/Prescription";
 
 export const getAllPatients = async (req: Request, res: Response) => {
   try {
@@ -448,5 +449,14 @@ export const cancelOrder = async (req: Request, res: Response) => {
     res.status(StatusCodes.OK).json(order);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+// TODO: Finish this to get the patient's prescriptions that can be seen by him in the pharmacy.
+export const getPatientPrescriptions = async (req: AuthorizedRequest, res: Response) => {
+  try {
+    const patientId = req.user?.id;
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
 };
