@@ -6,6 +6,8 @@ import Admin, { IAdminModel } from "../../models/admins/Admin";
 import { getSocketIdForUserId } from "../../socket-connections";
 import SocketType from "../../types/SocketType";
 import { newNotification } from "../../models/notifications/Notification";
+import { sendEmail } from "../../utils/email";
+import { env } from "process";
 
 export const findAllPharmacists = async () => await Pharmacist.find();
 
@@ -82,7 +84,7 @@ export const sendNotificationsToAllPharmacistsWithoutSocket = async (
   const pharmacists = await findAllPharmacists();
   console.log("pharmacistssssssssssssssssssss");
   pharmacists.forEach((pharmacist) => {
-    sendNotificationWithoutSocket(pharmacist._id, "pharmacist", notification, title);
+    sendNotificationWithoutSocket(pharmacist._id, "pharmacist", notification, title, true);
   });
 };
 
@@ -125,21 +127,24 @@ export const sendNotificationWithoutSocket = async (
   Id: string,
   usertype: string,
   notification: string,
-  title: string | undefined = undefined
+  title: string | undefined = undefined,
+  sendEmail: boolean = false
 ) => {
   let user = null;
 
   if (usertype === "pharmacist") {
-    user = await Pharmacist.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
+    user = await Pharmacist.findById(Id).select("+receivedNotifications +email +name +_id");
   } else if (usertype === "patient") {
-    user = await Patient.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
-  } else if (usertype === "admin") {
-    user = await Admin.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
-  } else {
+    user = await Patient.findById(Id).select("+receivedNotifications +email +name +_id");
+  }
+  // else if (usertype === "admin") {
+  //   user = await Admin.findById(Id).select("+receivedNotifications +email +name +_id");
+  // }
+  else {
     throw new Error("Invalid user type");
   }
 
-  if (!user) {
+  if (!user || user === null) {
     throw new Error(entityIdDoesNotExistError("pharmacist", Id));
   }
   console.log("sending notification");
@@ -148,6 +153,8 @@ export const sendNotificationWithoutSocket = async (
   }
   user.receivedNotifications.push(newNotification(title ? title : "Medicine Out of Stock", notification));
   await user.save();
+
+  if (sendEmail) sendOutOfStockEmailToPharmacist(user.name, notification.split(" is out of stock,")[0], user.email);
 };
 
 export const markNotificationAsRead = async (
@@ -162,6 +169,100 @@ export const markNotificationAsRead = async (
   }
   notification.isRead = true;
   await user.save();
+};
+
+export const sendOutOfStockEmailToPharmacist = async (
+  pharmacistName: string,
+  medicineName: string,
+  pharmacistEmail: string
+) => {
+  const outOfStockMessage = `<html lang="en">
+  
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Stock Update - Urgent</title>
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f7f7f7;
+        }
+    
+        .container {
+          max-width: 600px;
+          margin: 20px auto;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+    
+        h1 {
+          color: #064C5B;
+          margin-bottom: 20px;
+        }
+    
+        p {
+          color: #555;
+          line-height: 1.6;
+        }
+    
+        .cta-button {
+          display: inline-block;
+          padding: 10px 20px;
+          background-color: #064C5B;
+          color: #ffffff;
+          text-decoration: none;
+          border-radius: 5px;
+          margin-top: 20px;
+        }
+    
+        .footer {
+          margin-top: 20px;
+          text-align: center;
+          color: #888;
+          font-size: 0.8rem;
+        }
+      </style>
+    </head>
+    
+    <body>
+      <div class="container">
+        <h1>Medicine Out of Stock</h1>
+        <h3>Dear ${pharmacistName},</h3>
+        <p>We want to inform you that ${medicineName} is out stock now.</p>
+       <p>Please consider taking an action, we do not want to risk the health of our patients.</p>
+        <a class="cta-button" href="${
+          env.FRONT_END_URL || "http://localhost:5173"
+        }/pharmacist/view-medicines">Medicines Page</a>
+        <p>Thank you for your time.</p>
+        <p>Best regards,</p>
+        <strong>'El7a2ni Team'</strong>
+      </div>
+    
+      <div class="footer">
+        <p>This is an automated email. © 2023-2024 El7a2ni. All rights reserved.</p>
+      </div>
+    </body>
+    </html>`;
+  await sendEmail({
+    to: pharmacistEmail,
+    subject: "Medicine Stock Update - Urgent",
+    html: outOfStockMessage,
+    text: "Job Acceptance",
+    from: "El7a2ni Pharmacy"
+  })
+    .then(() => {
+      console.log("Email sent successfully");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+      return false;
+    });
 };
 
 type PharmacistInfo = {
