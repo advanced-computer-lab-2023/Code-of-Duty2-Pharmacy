@@ -263,18 +263,14 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
 
         <Box mb={5}>
           <Grid container spacing={2} pr={3} mb={2}>
-            <Grid item xs={8} sm={8}>
-              <NameSearchBar
-                searchCollection="medicines"
-                onSearch={handleSearch}
-                initialValue="Search for medicine name"
-              />
+            <Grid item sm={12} md={6}>
+              <NameSearchBar searchCollection="medicines" onSearch={handleSearch} initialValue="Medicine name" />
             </Grid>
-            <Grid item xs={4} sm={4}>
+            <Grid item sm={12} md={6}>
               <NameSearchBar
                 searchCollection="medicines"
                 onSearch={handleActiveIngredientSearch}
-                initialValue="Search for main active ingredient"
+                initialValue="Main active ingredient"
                 value={activeIngredientSearch}
               />
             </Grid>

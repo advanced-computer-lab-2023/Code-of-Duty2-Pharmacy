@@ -59,6 +59,7 @@ const NameSearchBar: React.FC<Props> = ({
         }}
       >
         <TextField
+          // label={initialValue}
           value={searchTerm}
           onChange={handleTextChange}
           onKeyPress={(e) => {
