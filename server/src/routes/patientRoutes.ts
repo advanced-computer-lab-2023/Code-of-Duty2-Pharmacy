@@ -18,7 +18,7 @@ import {
   getPatientOrders,
   cancelOrder,
   getPatientById,
-  getPatientPrescriptions
+  getPatientPayablePrescriptions
 } from "../controllers/patientController";
 import {
   addPatientAWalletHandler,
@@ -59,7 +59,7 @@ router.get("/wallets", authenticateWalletUser, getPatientWalletHandler);
 router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePatientWalletHandler);
 
-router.get("/prescriptions", getPatientPrescriptions);
+router.get("/payable-prescriptions", getPatientPayablePrescriptions);
 
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPatientById);

@@ -452,10 +452,13 @@ export const cancelOrder = async (req: Request, res: Response) => {
   }
 };
 
-// TODO: Finish this to get the patient's prescriptions that can be seen by him in the pharmacy.
-export const getPatientPrescriptions = async (req: AuthorizedRequest, res: Response) => {
+export const getPatientPayablePrescriptions = async (req: AuthorizedRequest, res: Response) => {
   try {
     const patientId = req.user?.id;
+
+    const prescriptions = await Prescription.find({ patientId, isSubmitted: true, isPaid: false });
+
+    res.status(StatusCodes.OK).json(prescriptions);
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
