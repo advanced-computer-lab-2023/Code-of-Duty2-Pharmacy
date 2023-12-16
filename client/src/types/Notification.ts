@@ -1,9 +1,9 @@
 interface Notification {
-  _id: string;
-  email: string;
+  _id?: string;
   subject: string;
   description: string;
-  time: Date;
+  time?: Date;
+  isRead?: boolean;
 }
 
 export default Notification;

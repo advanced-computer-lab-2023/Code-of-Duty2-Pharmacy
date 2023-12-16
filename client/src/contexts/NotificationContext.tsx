@@ -13,14 +13,14 @@ type NotificationContextType = {
   removeNotification: (id: string) => void;
 };
 export const NotificationContext = createContext<NotificationContextType>({
-  notifications: null,
+  notifications: [],
   setNotifications: () => {},
   addNotification: () => {},
   removeNotification: () => {}
 });
 
 const getAllNotifications = async (role: UserRole): Promise<Notification[]> => {
-  console.log(role);
+  // console.log(role);
   const userRolePath =
     role === UserRole.DOCTOR
       ? "doctors"
@@ -30,6 +30,7 @@ const getAllNotifications = async (role: UserRole): Promise<Notification[]> => {
           ? "admins"
           : "pharmacists";
   const response = await axios.get(`${config.API_URL}/${userRolePath}/notifications`);
+  console.log("fetched====", response.data);
   return response.data;
 };
 
@@ -43,6 +44,7 @@ const NotificationContextProvider: React.FC<ProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (authState.role) {
+      console.log("getting notifications");
       getAllNotifications(authState.role).then((data) => {
         setNotifications(data);
       });

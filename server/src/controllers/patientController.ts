@@ -454,13 +454,13 @@ export const cancelOrder = async (req: Request, res: Response) => {
 export const getAllNotifications = async (req: AuthorizedRequest, res: Response) => {
   try {
     const patientId = req.user?.id;
-    const patient = await Patient.findById(patientId);
+    const patient = await Patient.findById(patientId).select("+receivedNotifications");
 
     if (!patient) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Patient not found" });
     }
 
-    res.status(StatusCodes.OK).json(patient.receivedNotifications ? patient.receivedNotifications : []);
+    res.status(StatusCodes.OK).json(patient.receivedNotifications !== undefined ? patient.receivedNotifications : []);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }

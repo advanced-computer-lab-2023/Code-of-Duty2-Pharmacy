@@ -25,7 +25,8 @@ const socketEventListeners = (socket: SocketType) => {
   socket.on("outOfStock", (notification) => {
     console.log("out of stock");
   });
-  socket.on("bulk-update-meds", (data: [{ medicineId: string; boughtQuantity: number }]) => {
+  socket.on("bulk-update-meds", (data) => {
+    console.log("bulk-update-meds wana te3ebt");
     bulkUpdateMedicineQuantitiesHandler(data, socket);
   });
 };

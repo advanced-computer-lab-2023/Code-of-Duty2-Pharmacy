@@ -74,6 +74,16 @@ export const sendNotificationsToAllPharmacists = async (
     sendNotification(pharmacist._id, "pharmacist", notification, title, socket);
   });
 };
+export const sendNotificationsToAllPharmacistsWithoutSocket = async (
+  title: string | undefined = undefined,
+  notification: string
+) => {
+  const pharmacists = await findAllPharmacists();
+  console.log("pharmacistssssssssssssssssssss");
+  pharmacists.forEach((pharmacist) => {
+    sendNotificationWithoutSocket(pharmacist._id, "pharmacist", notification, title);
+  });
+};
 
 export const sendNotification = async (
   Id: string,
@@ -105,11 +115,43 @@ export const sendNotification = async (
     subject: title ? title : "Medicine Out of Stock",
     description: notification
   });
+  await user.save();
 
-  socket.to(getSocketIdForUserId(Id)).emit(`outOfStock`, {
+  socket.to(getSocketIdForUserId(Id)).emit("notification", {
     notification: user.receivedNotifications[user.receivedNotifications.length - 1]
   });
 
+  // await user.save();
+};
+export const sendNotificationWithoutSocket = async (
+  Id: string,
+  usertype: string,
+  notification: string,
+  title: string | undefined = undefined
+) => {
+  let user: IPharmacistModel | IAdminModel | IPatientModel | null = null;
+
+  if (usertype === "pharmacist") {
+    user = await Pharmacist.findOne({ _id: Id });
+  } else if (usertype === "patient") {
+    user = await Patient.findOne({ _id: Id });
+  } else if (usertype === "admin") {
+    user = await Admin.findOne({ _id: Id });
+  } else {
+    throw new Error("Invalid user type");
+  }
+
+  if (!user) {
+    throw new Error(entityIdDoesNotExistError("pharmacist", Id));
+  }
+  console.log("sending notification");
+  if (!user.receivedNotifications) {
+    user.receivedNotifications = [];
+  }
+  user.receivedNotifications.push({
+    subject: title ? title : "Medicine Out of Stock",
+    description: notification
+  });
   await user.save();
 };
 

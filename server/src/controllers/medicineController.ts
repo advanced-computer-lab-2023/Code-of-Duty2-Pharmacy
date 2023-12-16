@@ -8,7 +8,10 @@ import Patient from "../models/patients/Patient";
 import HealthPackage from "../models/health_packages/HealthPackage";
 import { UserRole } from "../types";
 import SocketType from "../types/SocketType";
-import { sendNotificationsToAllPharmacists } from "../services/pharmacists";
+import {
+  sendNotificationsToAllPharmacists,
+  sendNotificationsToAllPharmacistsWithoutSocket
+} from "../services/pharmacists";
 
 export const getAllMedicines = async (req: AuthorizedRequest, res: Response) => {
   try {
@@ -137,7 +140,7 @@ export const getAllMedicinesSales = async (req: Request, res: Response) => {
 export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: Response) => {
   try {
     const updates = req.body;
-
+    console.log("&&&hereeeeeeee");
     const bulkOps = updates.map((update: any) => ({
       updateOne: {
         filter: { _id: update.medicineId },
@@ -145,7 +148,22 @@ export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: 
       }
     }));
 
-    await Medicine.bulkWrite(bulkOps);
+    const result = await Medicine.bulkWrite(bulkOps);
+
+    console.log("+++++result", result.modifiedCount);
+    if (result.modifiedCount > 0) {
+      for (let update of updates) {
+        // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
+        const updatedMedicine = await Medicine.findById(update.medicineId);
+        console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        if (updatedMedicine?.availableQuantity !== undefined && updatedMedicine.availableQuantity === 0) {
+          sendNotificationsToAllPharmacistsWithoutSocket(
+            "Medicine Out of Stock",
+            `Medicine ${updatedMedicine.name} is out of stock`
+          );
+        }
+      }
+    }
 
     res.status(200).send();
   } catch (err) {
@@ -158,14 +176,15 @@ export const bulkUpdateMedicineQuantitiesHandler = async (
   socket: SocketType
 ) => {
   try {
+    console.log("&&&updates", data);
     const updates = data;
-
     const bulkOps = updates.map((update: any) => ({
       updateOne: {
         filter: { _id: update.medicineId },
         update: { $inc: { availableQuantity: -update.boughtQuantity } }
       }
     }));
+    console.log("+++++bulkOps", bulkOps);
 
     const result = await Medicine.bulkWrite(bulkOps);
 
@@ -174,6 +193,7 @@ export const bulkUpdateMedicineQuantitiesHandler = async (
       if (result.modifiedCount > 0) {
         const updatedMedicine = await Medicine.findById(update.medicineId);
         // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        socket.emit("notification", new Notification("Updating medicine...."));
         if (updatedMedicine?.availableQuantity && updatedMedicine.availableQuantity <= 0) {
           sendNotificationsToAllPharmacists(
             "Medicine Out of Stock",

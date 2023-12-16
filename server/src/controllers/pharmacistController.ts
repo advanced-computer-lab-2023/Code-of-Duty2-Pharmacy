@@ -129,13 +129,44 @@ export const updatePharmacist = async (req: AuthorizedRequest, res: Response) =>
 export const getAllNotifications = async (req: AuthorizedRequest, res: Response) => {
   try {
     const pharmacistId = req.user?.id;
-    const pharmacist = await Pharmacist.findById(pharmacistId);
+    const pharmacist = await Pharmacist.findById(pharmacistId).select("+receivedNotifications");
+
+    if (!pharmacist) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
+    }
+    // console.log("pharmacist", pharmacist);
+    // console.log("pharmacist.receivedNotifications", pharmacist.receivedNotifications);
+    res
+      .status(StatusCodes.OK)
+      .json(pharmacist.receivedNotifications !== undefined ? pharmacist.receivedNotifications : []);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const markNotificationAsRead = async (req: AuthorizedRequest, res: Response) => {
+  // patch request
+  try {
+    const pharmacistId = req.user?.id;
+    const pharmacist = await Pharmacist.findById(pharmacistId).select("+receivedNotifications");
 
     if (!pharmacist) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
-    res.status(StatusCodes.OK).json(pharmacist.receivedNotifications ? pharmacist.receivedNotifications : []);
+    const notificationId = req.body.id;
+
+    const notification = pharmacist.receivedNotifications?.find((notification) => notification._id == notificationId);
+
+    if (!notification) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Notification not found" });
+    }
+
+    notification.isRead = true;
+
+    await pharmacist.save();
+
+    res.status(StatusCodes.OK).json(notification);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }

@@ -105,13 +105,13 @@ export const changeAdminPassword = async (req: AuthorizedRequest, res: Response)
 export const getAllNotifications = async (req: AuthorizedRequest, res: Response) => {
   try {
     const adminId = req.user?.id;
-    const admin = await Admin.findById(adminId);
+    const admin = await Admin.findById(adminId).select("+receivedNotifications");
 
     if (!admin) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Admin not found" });
     }
 
-    res.status(StatusCodes.OK).json(admin.receivedNotifications ? admin.receivedNotifications : []);
+    res.status(StatusCodes.OK).json(admin.receivedNotifications !== undefined ? admin.receivedNotifications : []);
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }
