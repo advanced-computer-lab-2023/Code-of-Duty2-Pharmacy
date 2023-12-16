@@ -7,16 +7,31 @@ import useFirstPath from "../../hooks/useFirstPath";
 import { Notification } from "../../types";
 import axios from "axios";
 import config from "../../config/config";
+import { useState } from "react";
+import { Medicine } from "../../types";
+import MedicineCard from "../medicine/MedicineCard";
 
 interface Props {
   notification: Notification;
   additionalObject?: any;
+  medId?: string;
 }
-const NotificationViewElement: React.FC<Props> = ({ notification, additionalObject = undefined }) => {
+const NotificationViewElement: React.FC<Props> = ({
+  notification,
+  additionalObject = undefined,
+  medId = undefined
+}) => {
   const navigate = useNavigate();
   const usertype = useFirstPath();
+  const [medicine, setMedicine] = useState<Medicine>();
 
-  //   useEffect(() => { }, [notification]);
+  useEffect(() => {
+    if (medId) {
+      axios.get(`${config.API_URL}/medicines/${medId}`).then((res) => {
+        setMedicine(res.data);
+      });
+    }
+  }, []);
 
   return (
     <div style={{ padding: "2.0rem" }}>
@@ -70,6 +85,19 @@ const NotificationViewElement: React.FC<Props> = ({ notification, additionalObje
         <p style={{ margin: "0", fontSize: "1.2rem" }}>
           <strong>Description</strong> {notification.description}
         </p>
+
+        {medicine && (
+          <MedicineCard
+            medicine={medicine}
+            discount={0}
+            packageName={""}
+            canBuy={false}
+            canEdit={usertype === "pharmacist"}
+            canViewSales={false}
+            canViewQuantity={true}
+            hideArchiveButton={true}
+          />
+        )}
       </Box>
       <br />
     </div>

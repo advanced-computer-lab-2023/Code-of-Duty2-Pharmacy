@@ -25,7 +25,16 @@ const NotificationView: React.FC = () => {
 
   return (
     <>
-      {notification && <NotificationViewElement notification={notification} />}
+      {notification && (
+        <NotificationViewElement
+          notification={notification}
+          medId={
+            notification.description.includes(", id = ") && usertype === "pharmacist"
+              ? notification.description.split(", id = ")[1]
+              : undefined
+          }
+        />
+      )}
       {!notification && <h1>Nothing To see Here :)</h1>}
     </>
   );

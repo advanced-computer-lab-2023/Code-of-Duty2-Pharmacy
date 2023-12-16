@@ -109,6 +109,19 @@ export const searchMedicines = async (req: Request, res: Response) => {
   }
 };
 
+export const getMedicineById = async (req: Request, res: Response) => {
+  try {
+    const medicineId = req.params.id;
+    const medicine = await Medicine.findById(medicineId);
+    if (!medicine) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Medicine not found" });
+    }
+    res.status(StatusCodes.OK).json(medicine);
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
 export const getMedicineSales = async (req: Request, res: Response) => {
   let medicineId: string = (req.body.medicineId as string) || "";
   const orders = await Order.find();
