@@ -146,7 +146,7 @@ const CartReview = () => {
 
   return (
     <>
-      <Typography variant="h4" gutterBottom component="div" color="primary" ml="3%">
+      <Typography variant="h4" component="div" color="primary" ml="3%">
         Review your cart
       </Typography>
 
@@ -169,7 +169,7 @@ const CartReview = () => {
             ) : (
               <Box>
                 <Box sx={{ mb: "1%" }}>
-                  <Typography variant="h4" color="text.primary" sx={{ opacity: 0.89 }} gutterBottom>
+                  <Typography variant="h4" fontSize="1.4rem" color="text.primary" gutterBottom>
                     Total ({cartItems.length} {cartItems.length > 1 ? "items" : "item"}){": "}
                     EGP {total.toFixed(2)}
                   </Typography>{" "}
