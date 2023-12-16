@@ -141,13 +141,19 @@ const MedicineCard: React.FC<Props> = ({
 
                 <Box mt={2}>
                   <Typography variant="body2" color="text.secondary">
-                    Active Ingredients
+                    Main Active Ingredient
+                  </Typography>
+
+                  {editedMedicine.activeIngredients && <Chip label={editedMedicine.activeIngredients[0]} />}
+
+                  <Typography mt={2} variant="body2" color="text.secondary">
+                    Additional Ingredients
                   </Typography>
 
                   {editedMedicine.activeIngredients &&
-                    editedMedicine.activeIngredients.map((ingredient, index) => (
-                      <Chip label={ingredient} key={index} />
-                    ))}
+                    editedMedicine.activeIngredients
+                      .slice(1)
+                      .map((ingredient, index) => <Chip label={ingredient} key={index} />)}
 
                   <Box mt={2}>
                     {canViewQuantity && editedMedicine.availableQuantity > 0 && (
