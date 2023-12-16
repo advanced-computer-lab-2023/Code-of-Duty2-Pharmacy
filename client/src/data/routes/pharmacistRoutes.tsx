@@ -9,6 +9,7 @@ import ViewChat from "../../pages/chat/ViewChat";
 import PharmacistViewWalletPage from "../../pages/wallet/PharmacistViewWalletPage";
 import PharmacistCreateWalletPage from "../../pages/wallet/PharmacistCreateWalletPage";
 import NotificationView from "../../pages/notification/NotificationView";
+import PharmacistTotalSalesViewPage from "../../pages/pharmacist/PharmacistTotalSalesView";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
@@ -58,6 +59,11 @@ export const pharmacistViewNotificationRoute: Route = {
   element: <NotificationView />
 };
 
+export const pharmacistViewTotalSalesRoute: Route = {
+  path: "/pharmacist/view-total-sales",
+  element: <PharmacistTotalSalesViewPage />
+};
+
 const pharmacistRoutes: Route[] = [
   pharmacistDashboardRoute,
   viewMedicinesRoute,
@@ -68,7 +74,8 @@ const pharmacistRoutes: Route[] = [
   pharmacistChatViewRoute,
   pharmacistWalletRoute,
   createPharmacistWalletRoute,
-  pharmacistViewNotificationRoute
+  pharmacistViewNotificationRoute,
+  pharmacistViewTotalSalesRoute
 ];
 
 export default pharmacistRoutes;

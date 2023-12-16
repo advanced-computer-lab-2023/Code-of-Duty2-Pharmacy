@@ -20,6 +20,7 @@ import {
 } from "../controllers/payments/wallets/Pharmacist";
 import { authenticateWalletUser } from "../middlewares/walletAuthentication";
 import { authenticateUser } from "../middlewares/authentication";
+import { getOrdersReportData } from "../controllers/orderController";
 
 const router = express.Router();
 
@@ -46,5 +47,8 @@ router.patch("/notifications/get-markread-notification", getAndMarkNotificationA
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPharmacistById);
 router.delete("/:id", deletePharmacist);
+router.get("/orders-report-data", getOrdersReportData)
+
+
 
 export default router;
