@@ -8,7 +8,7 @@ import {
   searchPharmacists,
   updatePharmacist,
   getAllNotifications,
-  markNotificationAsRead
+  getAndMarkNotificationAsRead
 } from "../controllers/pharmacistController";
 import {
   addPharmacistAWalletHandler,
@@ -41,7 +41,7 @@ router.patch("/wallet-transactions", performAWalletTransactionHandler);
 router.patch("/wallet-recharge", rechargePharmacistWalletHandler);
 
 router.get("/notifications", getAllNotifications);
-router.patch("/markreadnotifications", markNotificationAsRead);
+router.patch("/notifications/get-markread-notification", getAndMarkNotificationAsRead);
 
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPharmacistById);

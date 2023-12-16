@@ -144,17 +144,16 @@ export const getAllNotifications = async (req: AuthorizedRequest, res: Response)
   }
 };
 
-export const markNotificationAsRead = async (req: AuthorizedRequest, res: Response) => {
+export const getAndMarkNotificationAsRead = async (req: AuthorizedRequest, res: Response) => {
   // patch request
   try {
     const pharmacistId = req.user?.id;
     const pharmacist = await Pharmacist.findById(pharmacistId).select("+receivedNotifications");
-
     if (!pharmacist) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Pharmacist not found" });
     }
 
-    const notificationId = req.body.id;
+    const notificationId = req.body.notificationId;
 
     const notification = pharmacist.receivedNotifications?.find((notification) => notification._id == notificationId);
 
@@ -163,6 +162,7 @@ export const markNotificationAsRead = async (req: AuthorizedRequest, res: Respon
     }
 
     notification.isRead = true;
+    pharmacist.markModified("receivedNotifications");
 
     await pharmacist.save();
 

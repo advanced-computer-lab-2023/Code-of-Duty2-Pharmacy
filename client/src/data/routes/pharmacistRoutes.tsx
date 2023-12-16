@@ -8,6 +8,7 @@ import ChatPage from "../../pages/chat/ChatPage";
 import ViewChat from "../../pages/chat/ViewChat";
 import PharmacistViewWalletPage from "../../pages/wallet/PharmacistViewWalletPage";
 import PharmacistCreateWalletPage from "../../pages/wallet/PharmacistCreateWalletPage";
+import NotificationView from "../../pages/notification/NotificationView";
 
 export const pharmacistDashboardRoute: Route = {
   path: "/pharmacist/dashboard",
@@ -52,6 +53,11 @@ export const createPharmacistWalletRoute: Route = {
   element: <PharmacistCreateWalletPage />
 };
 
+export const pharmacistViewNotificationRoute: Route = {
+  path: "/pharmacist/notification/view",
+  element: <NotificationView />
+};
+
 const pharmacistRoutes: Route[] = [
   pharmacistDashboardRoute,
   viewMedicinesRoute,
@@ -61,7 +67,8 @@ const pharmacistRoutes: Route[] = [
   pharmacistChatPageRoute,
   pharmacistChatViewRoute,
   pharmacistWalletRoute,
-  createPharmacistWalletRoute
+  createPharmacistWalletRoute,
+  pharmacistViewNotificationRoute
 ];
 
 export default pharmacistRoutes;

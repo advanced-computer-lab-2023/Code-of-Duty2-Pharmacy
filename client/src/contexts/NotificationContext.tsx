@@ -30,7 +30,7 @@ const getAllNotifications = async (role: UserRole): Promise<Notification[]> => {
           ? "admins"
           : "pharmacists";
   const response = await axios.get(`${config.API_URL}/${userRolePath}/notifications`);
-  console.log("fetched====", response.data);
+  // console.log("fetched====", response.data);
   return response.data;
 };
 
@@ -46,7 +46,7 @@ const NotificationContextProvider: React.FC<ProviderProps> = ({ children }) => {
     if (authState.role) {
       console.log("getting notifications");
       getAllNotifications(authState.role).then((data) => {
-        setNotifications(data);
+        setNotifications(data.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()));
       });
     }
   }, [authState.role]);

@@ -5,6 +5,7 @@ import { getRequestedTimePeriod } from "../../utils/getRequestedTimePeriod";
 import Admin, { IAdminModel } from "../../models/admins/Admin";
 import { getSocketIdForUserId } from "../../socket-connections";
 import SocketType from "../../types/SocketType";
+import { newNotification } from "../../models/notifications/Notification";
 
 export const findAllPharmacists = async () => await Pharmacist.find();
 
@@ -111,10 +112,7 @@ export const sendNotification = async (
   if (!user.receivedNotifications) {
     user.receivedNotifications = [];
   }
-  user.receivedNotifications.push({
-    subject: title ? title : "Medicine Out of Stock",
-    description: notification
-  });
+  user.receivedNotifications.push(newNotification(title ? title : "Medicine Out of Stock", notification));
   await user.save();
 
   socket.to(getSocketIdForUserId(Id)).emit("notification", {
@@ -129,14 +127,14 @@ export const sendNotificationWithoutSocket = async (
   notification: string,
   title: string | undefined = undefined
 ) => {
-  let user: IPharmacistModel | IAdminModel | IPatientModel | null = null;
+  let user = null;
 
   if (usertype === "pharmacist") {
-    user = await Pharmacist.findOne({ _id: Id });
+    user = await Pharmacist.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
   } else if (usertype === "patient") {
-    user = await Patient.findOne({ _id: Id });
+    user = await Patient.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
   } else if (usertype === "admin") {
-    user = await Admin.findOne({ _id: Id });
+    user = await Admin.findOne({ _id: Id }).select({ _id: 1, receivedNotifications: 1 });
   } else {
     throw new Error("Invalid user type");
   }
@@ -145,13 +143,10 @@ export const sendNotificationWithoutSocket = async (
     throw new Error(entityIdDoesNotExistError("pharmacist", Id));
   }
   console.log("sending notification");
-  if (!user.receivedNotifications) {
+  if (user.receivedNotifications === undefined) {
     user.receivedNotifications = [];
   }
-  user.receivedNotifications.push({
-    subject: title ? title : "Medicine Out of Stock",
-    description: notification
-  });
+  user.receivedNotifications.push(newNotification(title ? title : "Medicine Out of Stock", notification));
   await user.save();
 };
 

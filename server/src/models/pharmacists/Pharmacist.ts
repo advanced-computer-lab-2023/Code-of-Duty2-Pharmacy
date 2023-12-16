@@ -41,7 +41,8 @@ export const PharmacistSchema = new Schema<IPharmacistModel>(
     receivedNotifications: {
       type: Array<typeof NotificationSchema>,
       select: false,
-      required: false
+      required: true,
+      default: []
     }
   },
   { timestamps: true }

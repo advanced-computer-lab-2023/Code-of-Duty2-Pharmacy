@@ -150,16 +150,16 @@ export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: 
 
     const result = await Medicine.bulkWrite(bulkOps);
 
-    console.log("+++++result", result.modifiedCount);
+    // console.log("+++++result", result.modifiedCount);
     if (result.modifiedCount > 0) {
       for (let update of updates) {
         // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
         const updatedMedicine = await Medicine.findById(update.medicineId);
-        console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
         if (updatedMedicine?.availableQuantity !== undefined && updatedMedicine.availableQuantity === 0) {
           sendNotificationsToAllPharmacistsWithoutSocket(
-            "Medicine Out of Stock",
-            `Medicine ${updatedMedicine.name} is out of stock`
+            `${updatedMedicine.name} Out of Stock`,
+            `Medicine ${updatedMedicine.name} is out of stock, id = ${updatedMedicine._id}`
           );
         }
       }
@@ -188,16 +188,15 @@ export const bulkUpdateMedicineQuantitiesHandler = async (
 
     const result = await Medicine.bulkWrite(bulkOps);
 
-    for (let update of updates) {
-      // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
-      if (result.modifiedCount > 0) {
+    if (result.modifiedCount > 0) {
+      for (let update of updates) {
+        // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
         const updatedMedicine = await Medicine.findById(update.medicineId);
         // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
-        socket.emit("notification", new Notification("Updating medicine...."));
-        if (updatedMedicine?.availableQuantity && updatedMedicine.availableQuantity <= 0) {
+        if (updatedMedicine?.availableQuantity !== undefined && updatedMedicine.availableQuantity === 0) {
           sendNotificationsToAllPharmacists(
             "Medicine Out of Stock",
-            `Medicine ${updatedMedicine.name} is out of stock`,
+            `Medicine ${updatedMedicine.name} is out of stock, id = ${updatedMedicine._id}`,
             socket
           );
         }
