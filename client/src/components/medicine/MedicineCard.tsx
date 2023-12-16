@@ -238,63 +238,69 @@ const MedicineCard: React.FC<Props> = ({
       </Box>
 
       <CardActions>
-        {canBuy && (
-          <>
-            {editedMedicine.availableQuantity === 0 ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%"
+        {editedMedicine.availableQuantity === 0 ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%"
+            }}
+          >
+            <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.7 }}>
+              Out of Stock
+            </Typography>
+            <Button
+              size="small"
+              color="primary"
+              variant="outlined"
+              sx={{
+                borderColor: "primary.main",
+                color: "primary.main",
+                textTransform: "none",
+                ml: 2
+              }}
+              onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
+            >
+              View Alternatives?
+            </Button>
+          </Box>
+        ) : (
+          canBuy && (
+            <>
+              <input
+                type="number"
+                min="1"
+                max={editedMedicine.availableQuantity}
+                defaultValue="1"
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  padding: "5px",
+                  height: "25px",
+                  fontSize: "14px"
                 }}
+              />
+
+              <Button
+                size="small"
+                color="primary"
+                startIcon={<AddShoppingCartIcon />}
+                onClick={() => handleAddingToCart(editedMedicine._id, false)}
               >
-                <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.6 }}>
-                  <span style={{ fontWeight: "bold" }}>Out of Stock</span>
-                </Typography>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
-                >
-                  View Alternatives
-                </Button>
-              </Box>
-            ) : (
-              <>
-                <input
-                  type="number"
-                  min="1"
-                  max={editedMedicine.availableQuantity}
-                  defaultValue="1"
-                  style={{
-                    borderRadius: "5px",
-                    border: "1px solid #ccc",
-                    padding: "5px",
-                    height: "25px",
-                    fontSize: "14px"
-                  }}
-                />
+                Add to Cart
+              </Button>
 
-                <Button
-                  size="small"
-                  color="primary"
-                  startIcon={<AddShoppingCartIcon />}
-                  onClick={() => handleAddingToCart(editedMedicine._id, false)}
-                >
-                  Add to Cart
-                </Button>
-
-                <Button
-                  size="small"
-                  color="primary"
-                  startIcon={<AttachMoney />}
-                  onClick={() => handleAddingToCart(editedMedicine._id, true)}
-                >
-                  Buy Now
-                </Button>
-              </>
-            )}
-          </>
+              <Button
+                size="small"
+                color="primary"
+                startIcon={<AttachMoney />}
+                onClick={() => handleAddingToCart(editedMedicine._id, true)}
+              >
+                Buy Now
+              </Button>
+            </>
+          )
         )}
 
         {canEdit && (
