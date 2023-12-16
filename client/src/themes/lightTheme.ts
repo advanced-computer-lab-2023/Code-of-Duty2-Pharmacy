@@ -39,7 +39,7 @@ const lightTheme = createTheme({
       main: "#064C5B"
     },
     gradient: "linear-gradient(to bottom, #064C5B, #16758a)",
-    complexGradient: "linear-gradient(95deg, #064C5B 30%, #16758a 60%, #1a8ba1 90%)"
+    complexGradient: "linear-gradient(15deg, #064C5B 10%, #303171 60%, #003939 95%)"
   }
 });
 
