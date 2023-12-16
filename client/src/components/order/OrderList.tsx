@@ -4,7 +4,7 @@ import config from "../../config/config";
 
 import OrderCard from "./OrderCard";
 import { Order } from "../../types";
-import { Typography } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
 
 const OrderList: React.FC<Props> = ({ canViewStatus }) => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetchOrders();
@@ -24,6 +25,8 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
       setOrders(response.data);
     } catch (err) {
       console.error("Error fetching orders:", err);
+    } finally {
+      setLoading(false);
     }
   };
   const cancelOrder = async (orderId: string) => {
@@ -38,6 +41,14 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
 
   const successfulOrders = orders.filter((order) => order.orderStatus === "successful");
   const unsuccessfulOrders = orders.filter((order) => order.orderStatus !== "successful");
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <>

@@ -456,9 +456,45 @@ export const getPatientPayablePrescriptions = async (req: AuthorizedRequest, res
   try {
     const patientId = req.user?.id;
 
-    const prescriptions = await Prescription.find({ patientId, isSubmitted: true, isPaid: false });
+    const patient = await Patient.findById(patientId).select("subscribedPackage");
 
-    res.status(StatusCodes.OK).json(prescriptions);
+    let discount = 0;
+
+    if (patient && patient.subscribedPackage && patient.subscribedPackage.status === "subscribed") {
+      const healthPackage = await HealthPackage.findById(patient.subscribedPackage.packageId);
+
+      if (healthPackage) {
+        discount = healthPackage.discounts.gainedPharmacyMedicinesDiscount;
+      }
+    }
+
+    const prescriptions = await Prescription.find({ patientId, isSubmitted: true, isPaid: false })
+      .populate({
+        path: "medicines.medicineId",
+        select: "name description pictureUrl price"
+      })
+      .populate({
+        path: "doctorId",
+        select: "name"
+      });
+
+    const prescriptionsWithDiscount = prescriptions.map((prescription) => {
+      const prescriptionObject = prescription.toObject();
+      prescriptionObject.medicines = prescriptionObject.medicines.map((medicine: any) => {
+        const discountedPrice = (medicine.medicineId.price * (1 - discount)).toFixed(2);
+        return {
+          ...medicine,
+          medicineId: {
+            ...medicine.medicineId,
+            price: discountedPrice,
+            originalPrice: medicine.medicineId.price.toFixed(2)
+          }
+        };
+      });
+      return prescriptionObject;
+    });
+
+    res.status(StatusCodes.OK).json(prescriptionsWithDiscount);
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
