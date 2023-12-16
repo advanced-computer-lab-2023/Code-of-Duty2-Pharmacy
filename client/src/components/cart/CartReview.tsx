@@ -106,7 +106,7 @@ const CartReview = () => {
           .catch((error) => {
             console.log(error);
             success = false;
-            alert("Failed to change item quantity ! ");
+            alert("Failed to change item quantity!");
           })
           .finally(() => {
             newIsLoading[index] = false;
@@ -134,7 +134,7 @@ const CartReview = () => {
       .delete(`${config.API_URL}/patients/me/cart/${cartItems[index].medicineId._id}`)
       .catch((error) => {
         console.log(error);
-        alert("Failed to delete item from cart ! ");
+        alert("Failed to delete item from cart!");
         return;
       })
       .finally(() => {
@@ -159,7 +159,8 @@ const CartReview = () => {
           ) && (
             <Alert severity="error">
               <AlertTitle>Error</AlertTitle>
-              Some medicines in your cart can't be bought due to stock shortage !
+              Some items in your cart are currently unavailable due to limited stock. Please modify your cart
+              accordingly.
             </Alert>
           )}
 
@@ -169,9 +170,9 @@ const CartReview = () => {
             ) : (
               <Box>
                 <Box sx={{ ml: 1, mb: 1 }}>
-                  <Typography variant="h6">
+                  <Typography variant="h4">
                     Total ({cartItems.length} {cartItems.length > 1 ? "items" : "item"}){": "}
-                    <Typography variant="h6" component="span" fontWeight="bold">
+                    <Typography variant="h4" component="span">
                       EGP {total.toFixed(2)}
                     </Typography>
                   </Typography>{" "}
