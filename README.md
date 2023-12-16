@@ -149,6 +149,20 @@ Jira was used as our main issue tracking and project management tool for creatin
 
 </details>
 
+<details>
+<summary>Admin checking patient details</summary>
+
+![Patient list](docs/screenshots/demo/patient_list.png)
+
+</details>
+
+<details>
+<summary>Admin reviewing pharmacist registration request</summary>
+
+![Pharmacist registration request](docs/screenshots/demo/registration_request.png)
+
+</details>
+
 ## Tech/Framework used
 
 This software uses the `MERN` technology stack. Here is a more comprehensive list of used technologies in this software:
