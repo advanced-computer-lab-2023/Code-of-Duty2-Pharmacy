@@ -275,6 +275,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                 searchCollection="medicines"
                 onSearch={handleActiveIngredientSearch}
                 initialValue="Search for main active ingredient"
+                value={activeIngredientSearch}
               />
             </Grid>
           </Grid>
