@@ -41,31 +41,44 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
 
   return (
     <>
-      {successfulOrders.length > 0 && (
+      {orders.length === 0 ? (
+        <Box ml={5}>
+          <Typography variant="h4" gutterBottom component="div" color="primary">
+            No Orders
+          </Typography>
+          <Typography variant="body1" gutterBottom component="div" color="textSecondary">
+            You have no ongoing or past orders.
+          </Typography>
+        </Box>
+      ) : (
         <>
-          <Box ml={5}>
-            <Typography variant="h4" gutterBottom component="div" color="primary">
-              Current Orders
-            </Typography>
-          </Box>
+          {successfulOrders.length > 0 && (
+            <>
+              <Box ml={5}>
+                <Typography variant="h4" gutterBottom component="div" color="primary">
+                  Current Orders
+                </Typography>
+              </Box>
 
-          {unsuccessfulOrders.map((order, index) => (
-            <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
-          ))}
-        </>
-      )}
+              {unsuccessfulOrders.map((order, index) => (
+                <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
+              ))}
+            </>
+          )}
 
-      {unsuccessfulOrders.length > 0 && (
-        <>
-          <Box ml={5}>
-            <Typography variant="h4" gutterBottom component="div" color="primary">
-              Past Orders
-            </Typography>
-          </Box>
+          {unsuccessfulOrders.length > 0 && (
+            <>
+              <Box ml={5}>
+                <Typography variant="h4" gutterBottom component="div" color="primary">
+                  Past Orders
+                </Typography>
+              </Box>
 
-          {successfulOrders.map((order, index) => (
-            <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
-          ))}
+              {successfulOrders.map((order, index) => (
+                <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
+              ))}
+            </>
+          )}
         </>
       )}
     </>
