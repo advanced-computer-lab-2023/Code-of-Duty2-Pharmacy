@@ -49,6 +49,7 @@ export const changeAdminPasswordsRoute: Route = {
   element: <AdminChangePasswordPage />
 };
 
+
 export const adminViewNotificationRoute: Route = {
   path: "/admin/notification/view",
   element: <NotificationView />

@@ -156,8 +156,7 @@ const CartReview = () => {
             (item: { quantity: number }, index: number) =>
               item.quantity > cartMedicineQuantites.availableQuantities[index]
           ) && (
-            <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
+            <Alert severity="error" sx={{ mb: "2%" }}>
               Some items in your cart are currently unavailable due to limited stock. Please modify your cart
               accordingly.
             </Alert>
@@ -182,7 +181,7 @@ const CartReview = () => {
                     {isLoading[index] && <br />}
 
                     {cartMedicineQuantites.availableQuantities[index] < item.quantity && (
-                      <Alert severity="warning">
+                      <Alert severity="warning" sx={{ ml: "2%" }}>
                         {cartMedicineQuantites[index] === 0
                           ? "This medicine is currently out of stock"
                           : `Stock has only ${cartMedicineQuantites.availableQuantities[index]} of this medicine`}
