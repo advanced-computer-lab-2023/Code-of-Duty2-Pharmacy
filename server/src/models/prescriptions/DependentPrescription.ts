@@ -11,16 +11,18 @@ export const DependentPrescriptionSchema = new Schema<IDependentPrescriptionMode
       required: true
     },
     status: { type: String, enum: ["filled", "unfilled"], required: true },
-    medicines: [
-      {
-        medicineId: {
-          type: Schema.Types.ObjectId,
-          ref: "Medicine",
-          required: true
-        },
-        dosage: { type: String, required: true }
-      }
-    ],
+    isSubmitted: { type: Boolean, default: false, required: true },
+    isPaid: { type: Boolean, default: false, required: true },
+    medicines: {
+      type: [
+        {
+          medicineId: { type: Schema.Types.ObjectId, ref: "Medicine", required: true },
+          name: { type: String, required: true },
+          dosage: { type: String, required: true },
+          quantity: { type: Number, required: true }
+        }
+      ]
+    },
     supervisingPatientId: {
       type: Schema.Types.ObjectId,
       ref: "Patient",
