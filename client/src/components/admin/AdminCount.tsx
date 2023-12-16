@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -10,11 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { addAdminRoute } from "../../data/routes/adminRoutes";
 
 interface AdminCountProps {
-  onViewAllAdmins: () => void;
+  adminCount: number;
+  setAdminCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const AdminCountComponent: React.FC<AdminCountProps> = ({ onViewAllAdmins }) => {
-  const [adminCount, setAdminCount] = useState<number | null>(null);
+const AdminCountComponent: React.FC<AdminCountProps> = ({ adminCount, setAdminCount }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,21 +34,21 @@ const AdminCountComponent: React.FC<AdminCountProps> = ({ onViewAllAdmins }) => 
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-      <Card sx={{ width: 200, marginRight: "10px" }}>
-        <CardContent>
-          <Typography variant="h4" align="center" gutterBottom>
-            {adminCount !== null ? adminCount : "Loading..."}
-          </Typography>
-          <Typography variant="subtitle1" align="center" gutterBottom>
-            Admins
-          </Typography>
-          <Button variant="outlined" onClick={handleClick} fullWidth>
-            View All Admins
-          </Button>
-        </CardContent>
-      </Card>
-    </Box>
+    <Card style={{ display: "inline-block", alignItems: "center" }}>
+      <CardContent>
+        <Typography variant="h4" align="center" gutterBottom>
+          {adminCount !== null ? adminCount : "Loading..."}
+        </Typography>
+
+        <Typography variant="subtitle1" align="center" gutterBottom>
+          Admins
+        </Typography>
+
+        <Button variant="outlined" onClick={handleClick} fullWidth>
+          View All Admins
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,12 +8,12 @@ import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
 import { viewPharmacistsRoute } from "../../data/routes/adminRoutes";
 
-interface PharmacistCountProps {
-  onViewAllPharmacists: () => void;
+interface Props {
+  pharmacistCount: number;
+  setPharmacistCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const PharmacistCountComponent: React.FC<PharmacistCountProps> = ({ onViewAllPharmacists }) => {
-  const [pharmacistCount, setPharmacistCount] = useState<number | null>(null);
+const PharmacistCountComponent: React.FC<Props> = ({ pharmacistCount, setPharmacistCount }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,14 +34,16 @@ const PharmacistCountComponent: React.FC<PharmacistCountProps> = ({ onViewAllPha
   };
 
   return (
-    <Card style={{ width: "25%", marginLeft: "10px" }}>
+    <Card style={{ display: "inline-block", alignItems: "center" }}>
       <CardContent>
         <Typography variant="h4" align="center" gutterBottom>
           {pharmacistCount !== null ? pharmacistCount : "Loading..."}
         </Typography>
+
         <Typography variant="subtitle1" align="center" gutterBottom>
           Pharmacists
         </Typography>
+
         <Button variant="outlined" onClick={handleClick} fullWidth>
           View All Pharmacists
         </Button>

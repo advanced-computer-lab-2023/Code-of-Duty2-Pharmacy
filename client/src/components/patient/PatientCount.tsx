@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,19 +8,12 @@ import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
 import { viewPatientsRoute } from "../../data/routes/adminRoutes";
 
-interface PatientCountProps {
-  onViewAllPatients: (patients: Patient[]) => void;
+interface Props {
+  patientCount: number;
+  setPatientCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
-interface Patient {
-  username: string;
-  name: string;
-  email: string;
-  mobileNumber: string;
-}
-
-const PatientCountComponent: React.FC<PatientCountProps> = ({ onViewAllPatients }) => {
-  const [patientCount, setPatientCount] = useState<number | null>(null);
+const PatientCountComponent: React.FC<Props> = ({ patientCount, setPatientCount }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,14 +34,16 @@ const PatientCountComponent: React.FC<PatientCountProps> = ({ onViewAllPatients 
   };
 
   return (
-    <Card style={{ width: "25%" }}>
+    <Card style={{ display: "inline-block", alignItems: "center" }}>
       <CardContent>
         <Typography variant="h4" align="center" gutterBottom>
           {patientCount !== null ? patientCount : "Loading..."}
         </Typography>
+
         <Typography variant="subtitle1" align="center" gutterBottom>
           Patients
         </Typography>
+
         <Button variant="outlined" onClick={handleClick} fullWidth>
           View All Patients
         </Button>
