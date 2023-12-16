@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -30,7 +30,6 @@ const DoctorManagePrescriptionsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { prescriptionId } = useParams();
-  const location = useLocation();
 
   useEffect(() => {
     const fetchPrescription = async () => {
