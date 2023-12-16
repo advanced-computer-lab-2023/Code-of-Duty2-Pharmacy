@@ -31,6 +31,7 @@
     "react-router-dom": "^6.16.0",
     "socket.io-client": "^4.7.2",
     "talkjs": "^0.18.0",
+    "typeface-montserrat": "^1.1.13",
     "uuid": "^9.0.1",
     "zod": "^3.22.4",
     "zxcvbn": "^4.4.2"
