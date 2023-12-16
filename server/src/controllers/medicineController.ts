@@ -86,15 +86,22 @@ export const updateMedicine = async (req: Request, res: Response) => {
 
 export const searchMedicines = async (req: Request, res: Response) => {
   let medicineName: string = (req.query.name as string) || "";
+  let activeIngredient: string = (req.query.activeIngredient as string) || "";
 
-  if (medicineName.length === 0) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please provide a medicine name" });
+  if (medicineName.length === 0 && activeIngredient.length === 0) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: "Please provide a medicine name or active ingredient" });
   }
 
   try {
-    const medicines: IMedicineModel[] = await Medicine.find({
-      name: { $regex: medicineName, $options: "i" }
-    });
+    let query: any = {};
+    if (medicineName.length > 0) {
+      query.name = { $regex: medicineName, $options: "i" };
+    }
+    if (activeIngredient.length > 0) {
+      query.activeIngredients = { $elemMatch: { $eq: activeIngredient } };
+    }
+
+    const medicines: IMedicineModel[] = await Medicine.find(query);
     if (medicines.length === 0) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "No medicines found" });
     }

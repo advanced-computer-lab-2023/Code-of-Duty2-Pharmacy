@@ -49,7 +49,7 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
             </Typography>
           </Box>
 
-          {successfulOrders.map((order, index) => (
+          {unsuccessfulOrders.map((order, index) => (
             <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
           ))}
         </>
@@ -63,7 +63,7 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
             </Typography>
           </Box>
 
-          {unsuccessfulOrders.map((order, index) => (
+          {successfulOrders.map((order, index) => (
             <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
           ))}
         </>

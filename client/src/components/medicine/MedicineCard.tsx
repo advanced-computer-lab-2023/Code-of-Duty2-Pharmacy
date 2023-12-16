@@ -31,6 +31,7 @@ interface Props {
   canViewQuantity: boolean;
   sales?: number;
   handleArchiveOrUnArchiveButton?: (medicine: Medicine) => number;
+  handleActiveIngredientSearch?: (searchTerm: string, searchCollection: string) => Promise<void>;
 }
 
 const MedicineCard: React.FC<Props> = ({
@@ -42,7 +43,8 @@ const MedicineCard: React.FC<Props> = ({
   canViewSales,
   canViewQuantity,
   sales = 0,
-  handleArchiveOrUnArchiveButton = () => {}
+  handleArchiveOrUnArchiveButton = () => {},
+  handleActiveIngredientSearch = () => {}
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
@@ -249,6 +251,13 @@ const MedicineCard: React.FC<Props> = ({
                 <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.6 }}>
                   <span style={{ fontWeight: "bold" }}>Out of Stock</span>
                 </Typography>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
+                >
+                  View Alternatives
+                </Button>
               </Box>
             ) : (
               <>

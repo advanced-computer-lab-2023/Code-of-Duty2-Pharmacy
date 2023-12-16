@@ -33,6 +33,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
+  const [activeIngredientSearch, setActiveIngredientSearch] = useState("");
 
   const filterOptions = MedicineUsages;
 
@@ -66,6 +67,24 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
     try {
       let responseData = await goSearch(searchTerm, searchCollection);
       setMedicines(responseData);
+    } catch (err: any) {
+      if (err.response?.status === 400) {
+        fetchMedicines();
+        return;
+      }
+      if (err.response?.status === 404) {
+        setMedicines([]);
+      } else {
+        console.log(err);
+      }
+    }
+  };
+
+  const handleActiveIngredientSearch = async (searchTerm: string, searchCollection: string) => {
+    try {
+      let responseData = await goSearch(searchTerm, searchCollection, "activeIngredient");
+      setMedicines(responseData);
+      setActiveIngredientSearch(searchTerm);
     } catch (err: any) {
       if (err.response?.status === 400) {
         fetchMedicines();
@@ -249,6 +268,12 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
               onSearch={handleSearch}
               initialValue="(or leave empty for all)"
             />
+
+            <NameSearchBar
+              searchCollection="medicines"
+              onSearch={handleActiveIngredientSearch}
+              initialValue="(or leave empty for all)"
+            />
           </Box>
 
           {filteredMedicines.length === 0 && <p>No medicines found.</p>}
@@ -280,6 +305,7 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
                   canViewQuantity={canViewQuantity}
                   sales={medSales[medicine._id]}
                   handleArchiveOrUnArchiveButton={canEdit ? handleArchiveOrUnArchiveButton : undefined}
+                  handleActiveIngredientSearch={handleActiveIngredientSearch}
                 />
               </div>
             ))}
