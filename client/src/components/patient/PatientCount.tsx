@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { viewPatientsRoute } from "../../data/routes/adminRoutes";
 
 interface PatientCountProps {
   onViewAllPatients: (patients: Patient[]) => void;
@@ -36,7 +37,7 @@ const PatientCountComponent: React.FC<PatientCountProps> = ({ onViewAllPatients 
   }, []);
 
   const handleClick = () => {
-    navigate("/admin/view-all-patients");
+    navigate(viewPatientsRoute.path);
   };
 
   return (

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { viewPharmacistsRoute } from "../../data/routes/adminRoutes";
 
 interface PharmacistCountProps {
   onViewAllPharmacists: () => void;
@@ -29,7 +30,7 @@ const PharmacistCountComponent: React.FC<PharmacistCountProps> = ({ onViewAllPha
   }, []);
 
   const handleClick = () => {
-    navigate("/admin/view-all-pharmacists");
+    navigate(viewPharmacistsRoute.path);
   };
 
   return (

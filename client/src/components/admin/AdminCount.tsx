@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import axios from "axios";
 import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { addAdminRoute } from "../../data/routes/adminRoutes";
 
 interface AdminCountProps {
   onViewAllAdmins: () => void;
@@ -30,7 +31,7 @@ const AdminCountComponent: React.FC<AdminCountProps> = ({ onViewAllAdmins }) => 
   }, []);
 
   const handleClick = () => {
-    navigate("/admin/view-all-admins");
+    navigate(addAdminRoute.path);
   };
 
   return (

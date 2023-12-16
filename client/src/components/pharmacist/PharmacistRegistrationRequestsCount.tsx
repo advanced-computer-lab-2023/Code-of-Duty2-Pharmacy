@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import axios from "axios";
 import config from "../../config/config";
 import { useNavigate } from "react-router-dom";
+import { viewPharmacistRegistrationRequestsRoute } from "../../data/routes/adminRoutes";
 
 interface PharmacistRegistrationRequestCountProps {
   onViewAllPharmacistRegistrationRequests: () => void;
@@ -32,7 +33,7 @@ const PharmacistRegistrationRequestCountComponent: React.FC<PharmacistRegistrati
   }, []);
 
   const handleClick = () => {
-    navigate("/admin/view-all-pharmacist-registration-requests");
+    navigate(viewPharmacistRegistrationRequestsRoute.path);
   };
 
   return (
@@ -42,9 +43,11 @@ const PharmacistRegistrationRequestCountComponent: React.FC<PharmacistRegistrati
           <Typography variant="h4" align="center" gutterBottom>
             {registrationRequestCount !== null ? registrationRequestCount : "Loading..."}
           </Typography>
+
           <Typography variant="subtitle1" align="center" gutterBottom>
             Pharmacist Registration Requests
           </Typography>
+
           <Button variant="outlined" onClick={handleClick} fullWidth>
             View All Registration Requests
           </Button>
