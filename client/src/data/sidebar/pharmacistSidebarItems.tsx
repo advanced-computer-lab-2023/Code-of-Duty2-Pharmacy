@@ -10,7 +10,8 @@ import {
   viewMedicinesRoute,
   addMedicineRoute,
   pharmacistChatPageRoute,
-  pharmacistWalletRoute
+  pharmacistWalletRoute,
+  pharmacistViewTotalSalesRoute
 } from "../routes/pharmacistRoutes";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
@@ -41,8 +42,8 @@ export const pharmacistSidebarItems: SidebarItem[] = [
     icon: <Wallet />
   },
   {
-    title: "Sales Report",
-    href: pharmacistDashboardRoute.path,
+    title: "Total Sales",
+    href: pharmacistViewTotalSalesRoute.path,
     icon: <AttachMoneyIcon />
   }
 ];

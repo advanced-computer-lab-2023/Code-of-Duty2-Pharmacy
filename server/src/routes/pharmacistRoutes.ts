@@ -44,10 +44,13 @@ router.patch("/wallet-recharge", rechargePharmacistWalletHandler);
 router.get("/notifications", getAllNotifications);
 router.patch("/notifications/get-markread-notification", getAndMarkNotificationAsRead);
 
+router.get("/orders-report-data", getOrdersReportData)
+
+
 // WARNING: Keep these routes at the bottom of the file
 router.get("/:id", getPharmacistById);
 router.delete("/:id", deletePharmacist);
-router.get("/orders-report-data", getOrdersReportData)
+
 
 
 
