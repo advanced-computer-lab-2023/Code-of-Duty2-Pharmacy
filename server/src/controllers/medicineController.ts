@@ -7,6 +7,8 @@ import { AuthorizedRequest } from "../types/AuthorizedRequest";
 import Patient from "../models/patients/Patient";
 import HealthPackage from "../models/health_packages/HealthPackage";
 import { UserRole } from "../types";
+import SocketType from "../types/SocketType";
+import { sendNotificationsToAllPharmacists } from "../services/pharmacists";
 
 export const getAllMedicines = async (req: AuthorizedRequest, res: Response) => {
   try {
@@ -148,6 +150,42 @@ export const bulkUpdateMedicineQuantities = async (req: AuthorizedRequest, res: 
     res.status(200).send();
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+  }
+};
+
+export const bulkUpdateMedicineQuantitiesHandler = async (
+  data: [{ medicineId: string; boughtQuantity: number }],
+  socket: SocketType
+) => {
+  try {
+    const updates = data;
+
+    const bulkOps = updates.map((update: any) => ({
+      updateOne: {
+        filter: { _id: update.medicineId },
+        update: { $inc: { availableQuantity: -update.boughtQuantity } }
+      }
+    }));
+
+    const result = await Medicine.bulkWrite(bulkOps);
+
+    for (let update of updates) {
+      // If the update was successful and the medicine is out of stock, send a notification to all pharmacists
+      if (result.modifiedCount > 0) {
+        const updatedMedicine = await Medicine.findById(update.medicineId);
+        // console.log(`New quantity of medicine ${update.medicineId}: ${updatedMedicine?.availableQuantity}`);
+        if (updatedMedicine?.availableQuantity && updatedMedicine.availableQuantity <= 0) {
+          sendNotificationsToAllPharmacists(
+            "Medicine Out of Stock",
+            `Medicine ${updatedMedicine.name} is out of stock`,
+            socket
+          );
+        }
+      }
+    }
+  } catch (err) {
+    // res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
+    socket.emit("error", { message: (err as Error).message });
   }
 };
 

@@ -21,7 +21,9 @@ const socketEventListeners = (socket: SocketType) => {
   socket.on("error", (err) => {
     console.log(`Error occurred on socket ${socket.id}: ${err}`);
   });
-  socket.on("outOfStock", (medicine) => {});
+  socket.on("outOfStock", (notification) => {
+    console.log("out of stock");
+  });
 };
 
 export default socketEventListeners;
