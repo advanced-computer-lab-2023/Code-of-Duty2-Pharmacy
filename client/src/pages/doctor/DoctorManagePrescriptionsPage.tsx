@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -30,6 +30,7 @@ const DoctorManagePrescriptionsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { prescriptionId } = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchPrescription = async () => {
@@ -94,7 +95,11 @@ const DoctorManagePrescriptionsPage = () => {
   };
 
   const handleReturnToClinic = async () => {
-    window.location.href = "https://www.example.com"; // TODO: Replace with actual URL.
+    // TODO: Make sure this will always work.
+    // This assumes that the user will always be redirected to this page from the Clinic application.
+    // If the user somehow gets to this page without being redirected from the Clinic application,
+    // this will not work, as we are going back two pages exactly according to this assumption.
+    window.history.go(-2);
   };
 
   return (
