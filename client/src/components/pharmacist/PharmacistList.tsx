@@ -126,7 +126,7 @@ const PharmacistList: React.FC<Props> = ({ canDelete }) => {
         searchCollection="pharmacists"
         onSearch={handlePharmacistSearch}
         attribute="username"
-        initialValue="(or leave empty for all)"
+        initialValue="Search pharmacists with username"
       />
       {/* <NameSearchBar
         searchCollection="pharmacists"

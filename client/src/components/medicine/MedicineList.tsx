@@ -1,5 +1,5 @@
 import { useState, useEffect, Ref, forwardRef } from "react";
-import { Checkbox, FormControlLabel, Typography, Button, Box, Snackbar } from "@mui/material";
+import { Checkbox, FormControlLabel, Typography, Button, Box, Snackbar, Grid } from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
 
@@ -262,19 +262,22 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
         </Box>
 
         <Box mb={5}>
-          <Box pr={3} mb={2}>
-            <NameSearchBar
-              searchCollection="medicines"
-              onSearch={handleSearch}
-              initialValue="(or leave empty for all)"
-            />
-
-            <NameSearchBar
-              searchCollection="medicines"
-              onSearch={handleActiveIngredientSearch}
-              initialValue="(or leave empty for all)"
-            />
-          </Box>
+          <Grid container spacing={2} pr={3} mb={2}>
+            <Grid item xs={8} sm={8}>
+              <NameSearchBar
+                searchCollection="medicines"
+                onSearch={handleSearch}
+                initialValue="Search for medicine name"
+              />
+            </Grid>
+            <Grid item xs={4} sm={4}>
+              <NameSearchBar
+                searchCollection="medicines"
+                onSearch={handleActiveIngredientSearch}
+                initialValue="Search for main active ingredient"
+              />
+            </Grid>
+          </Grid>
 
           {filteredMedicines.length === 0 && <p>No medicines found.</p>}
           <Box

@@ -17,7 +17,6 @@ interface Props {
 
 const goSearch = async (searchTerm: string, searchCollection: string, attribute = "name") => {
   const response = await axios.get(`${config.API_URL}/${searchCollection}/search/?${attribute}=${searchTerm}`);
-
   return response.data;
 };
 
@@ -55,7 +54,6 @@ const NameSearchBar: React.FC<Props> = ({
         }}
       >
         <TextField
-          label={labelName}
           onChange={handleTextChange}
           onKeyPress={(e) => {
             if (e.key === "Enter") {
@@ -67,7 +65,6 @@ const NameSearchBar: React.FC<Props> = ({
           placeholder={initialValue}
           fullWidth
           InputProps={{
-            startAdornment: <InputAdornment position="start">{attribute}:</InputAdornment>,
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={handleSearch} edge="end">

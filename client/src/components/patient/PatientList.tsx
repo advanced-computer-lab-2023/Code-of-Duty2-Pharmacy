@@ -110,6 +110,7 @@ const PatientList: React.FC<Props> = ({ canDelete }) => {
         Patient Information
       </Typography>
 
+      {/* TODO: Turn into a search bar after pagination */}
       <TextField
         variant="outlined"
         label="Search by name or username"
