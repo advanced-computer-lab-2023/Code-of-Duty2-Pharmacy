@@ -111,7 +111,7 @@ This software uses the `MERN` technology stack. Here is a more comprehensive lis
 
 ## Features
 
-The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and **_Admin_**.
+The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **_Doctor_** and **_Admin_**.
 
 <details>
 
@@ -144,6 +144,15 @@ The system has four user types: **_Guest_**, **_Patient_**, **_Pharmacist_** and
 - Accept or reject a pharmacist registration request.
 - View a patient or pharmacist's details and remove them from the system.
 - View medicines on the system.
+
+</details>
+
+<details>
+
+<summary> Doctor features </summary>
+
+- Add or remove medicines to/from a patient's prescription from the pharmacy platform by logging in to
+  an integrated portal for it.
 
 </details>
 
