@@ -20,6 +20,7 @@ import medicinePlaceholderImage from "../../assets/medicine-placeholder.png";
 import config from "../../config/config";
 import Medicine from "../../types/Medicine";
 import EditMedicineModal from "./EditMedicineModal";
+import { display } from "@mui/system";
 
 interface Props {
   medicine: Medicine;
@@ -244,18 +245,65 @@ const MedicineCard: React.FC<Props> = ({
       </Box>
 
       <CardActions>
-        {editedMedicine.availableQuantity === 0 ? (
+        {canEdit && (
+          <Box>
+            {editedMedicine.availableQuantity === 0 && (
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", my: 2, ml: 1 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.7 }}>
+                  Out of Stock
+                </Typography>
+
+                <Button
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  sx={{
+                    borderColor: "primary.main",
+                    color: "primary.main",
+                    textTransform: "none",
+                    ml: 2
+                  }}
+                  onClick={() => handleActiveIngredientSearch(editedMedicine.activeIngredients[0], "medicines")}
+                >
+                  View Alternatives?
+                </Button>
+              </Box>
+            )}
+
+            <Box>
+              <Button onClick={handleEditClick} startIcon={<EditIcon />} color="secondary">
+                Edit
+              </Button>
+
+              <Button
+                onClick={() => {
+                  if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
+                    editedMedicine.isArchived = !editedMedicine.isArchived;
+                }}
+                startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
+                color="secondary"
+              >
+                {editedMedicine.isArchived ? "Unarchive" : "Archive"}
+              </Button>
+            </Box>
+          </Box>
+        )}
+
+        {editedMedicine.availableQuantity === 0 && !canEdit ? (
           <Box
             sx={{
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              width: "100%"
+              width: "100%",
+              rowGap: 1
             }}
           >
             <Typography variant="body1" color="text.secondary" sx={{ opacity: 0.7 }}>
               Out of Stock
             </Typography>
+
             <Button
               size="small"
               color="primary"
@@ -307,24 +355,6 @@ const MedicineCard: React.FC<Props> = ({
               </Button>
             </>
           )
-        )}
-
-        {canEdit && (
-          <>
-            <Button onClick={handleEditClick} startIcon={<EditIcon />} color="secondary">
-              Edit
-            </Button>
-            <Button
-              onClick={() => {
-                if (handleArchiveOrUnArchiveButton(editedMedicine) === 0)
-                  editedMedicine.isArchived = !editedMedicine.isArchived;
-              }}
-              startIcon={editedMedicine.isArchived ? <Unarchive /> : <Archive />}
-              color="secondary"
-            >
-              {editedMedicine.isArchived ? "Unarchive" : "Archive"}
-            </Button>
-          </>
         )}
       </CardActions>
 
