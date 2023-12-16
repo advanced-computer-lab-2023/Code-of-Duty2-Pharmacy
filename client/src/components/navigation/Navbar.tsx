@@ -9,7 +9,6 @@ import { patientDashboardRoute } from "../../data/routes/patientRoutes";
 import { adminDashboardRoute } from "../../data/routes/adminRoutes";
 import { pharmacistDashboardRoute } from "../../data/routes/pharmacistRoutes";
 import { welcomeRoute } from "../../data/routes/guestRoutes";
-
 import AuthTray from "../trays/AuthTray";
 import el7a2niLogo from "../../assets/el7a2ni_logo.png";
 import UserRole from "../../types/enums/UserRole";
