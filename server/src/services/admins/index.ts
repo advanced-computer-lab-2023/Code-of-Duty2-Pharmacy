@@ -1,45 +1,32 @@
 import { env } from "process";
 import Admin, { IAdminModel } from "../../models/admins/Admin";
-import {
-  entityEmailDoesNotExistError,
-  entityIdDoesNotExistError,
-} from "../../utils/ErrorMessages";
+import { entityEmailDoesNotExistError, entityIdDoesNotExistError } from "../../utils/ErrorMessages";
 import { sendEmail } from "../../utils/email";
 
 export const findAllAdmins = async () => await Admin.find();
 
-export const 
-findAdminById = async (id: string, elementsToSelect?: any) => {
+export const findAdminById = async (id: string, elementsToSelect?: any) => {
   const PromisedAdmin = Admin.findById(id);
-  if (!elementsToSelect)
-    return await PromisedAdmin.select({ _id: 1, password: 1 });
+  if (!elementsToSelect) return await PromisedAdmin.select({ _id: 1, password: 1 });
   return await PromisedAdmin.select(elementsToSelect);
 };
 export const findAdminByUsername = async (username: string) =>
   await Admin.findOne({ username }).select({ _id: 1, password: 1 });
 
-export const findAdminByEmail = async (
-  email: string,
-  elementsToSelect?: any
-) => {
+export const findAdminByEmail = async (email: string, elementsToSelect?: any) => {
   const PromisedAdmin = Admin.findOne({ email });
-  if (!elementsToSelect)
-    return await PromisedAdmin.select({ _id: 1, password: 1 });
+  if (!elementsToSelect) return await PromisedAdmin.select({ _id: 1, password: 1 });
   return await PromisedAdmin.select(elementsToSelect);
 };
 
-export const deleteAdminById = async (id: string) =>
-  await Admin.findByIdAndDelete(id);
+export const deleteAdminById = async (id: string) => await Admin.findByIdAndDelete(id);
 
 export const createNewAdmin = async (username: string, password: string) => {
   const newAdmin = new Admin({ username, password });
   await newAdmin.save();
 };
 
-export const updateAdminPasswordByEmail = async (
-  email: string,
-  newPassword: string
-) => {
+export const updateAdminPasswordByEmail = async (email: string, newPassword: string) => {
   const admin = await findAdminByEmail(email);
   if (!admin) {
     throw new Error(entityEmailDoesNotExistError("admin", email));
@@ -47,28 +34,19 @@ export const updateAdminPasswordByEmail = async (
   await updateAdminPassword(admin, newPassword);
 };
 
-export const updateAdminPasswordById = async (
-  adminId: string,
-  newPassword: string
-) => {
+export const updateAdminPasswordById = async (adminId: string, newPassword: string) => {
   const admin = await findAdminById(adminId);
   if (!admin) {
     throw new Error(entityIdDoesNotExistError("admin", adminId));
   }
   await updateAdminPassword(admin, newPassword);
 };
-export const updateAdminPassword = async (
-  admin: IAdminModel,
-  newPassword: string
-) => {
+export const updateAdminPassword = async (admin: IAdminModel, newPassword: string) => {
   admin.password = newPassword;
   await admin.save();
 };
 
-export const sendRejectionEmailToPharmacist = async (
-  pharmacistName: string,
-  pharmacistEmail: string
-) => {
+export const sendRejectionEmailToPharmacist = async (pharmacistName: string, pharmacistEmail: string) => {
   const rejectionmessage = `<!DOCTYPE html>
 <html lang="en">
 
@@ -127,7 +105,7 @@ export const sendRejectionEmailToPharmacist = async (
 
   <div class="footer">
     <p>This is an automated email. Please do not reply.</p>
-    <br> <p> © 2023 El7a2ni. All rights reserved.</p>
+    <br> <p> © 2023-2024 El7a2ni. All rights reserved.</p>
   </div>
 </body>
 </html>`;
@@ -137,7 +115,7 @@ export const sendRejectionEmailToPharmacist = async (
     subject: "Application Update",
     html: rejectionmessage,
     text: "Application Update",
-    from: "El7a2nii Pharmacy",
+    from: "El7a2nii Pharmacy"
   })
     .then(() => {
       console.log("Email sent successfully");
@@ -149,10 +127,7 @@ export const sendRejectionEmailToPharmacist = async (
     });
 };
 
-export const sendAcceptanceEmailToPharmacist = async (
-  pharmacistName: string,
-  pharmacistEmail: string
-) => {
+export const sendAcceptanceEmailToPharmacist = async (pharmacistName: string, pharmacistEmail: string) => {
   const approvalmessage = `<!DOCTYPE html>
   <html lang="en">
   
@@ -217,7 +192,7 @@ export const sendAcceptanceEmailToPharmacist = async (
       <p>Click the button below to access the required documents and complete the remaining information:</p>
       <a class="cta-button" href="${
         env.FRONT_END_URL || "http://localhost:5173"
-      }/pharmacist/complete-additional-info">Complete Onboarding</a>
+      }/pharmacist/view-medicines">Open Medicines Page</a>
       <p>If you have any questions or need further assistance, feel free to reply to this email or contact us.</p>
       <p>Welcome to the 'El7a2ni' team, and we look forward to a successful collaboration!</p>
       <p>Best regards,</p>
@@ -225,7 +200,7 @@ export const sendAcceptanceEmailToPharmacist = async (
     </div>
   
     <div class="footer">
-      <p>This is an automated email. © 2023 El7a2ni. All rights reserved.</p>
+      <p>This is an automated email. © 2023-2024 El7a2ni. All rights reserved.</p>
     </div>
   </body>
   </html>`;
@@ -234,7 +209,7 @@ export const sendAcceptanceEmailToPharmacist = async (
     subject: "Job Update - Pharmacist Position",
     html: approvalmessage,
     text: "Job Acceptance",
-    from: "El7a2ni Pharmacy",
+    from: "El7a2ni Pharmacy"
   })
     .then(() => {
       console.log("Email sent successfully");
