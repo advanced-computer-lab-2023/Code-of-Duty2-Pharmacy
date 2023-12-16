@@ -2,17 +2,13 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { patientRegistrationRoute } from "../../data/routes/guestRoutes";
 import { pharmacistRegistrationRoute } from "../../data/routes/guestRoutes";
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
-import { useTheme } from "@mui/material/styles";
 import MedicationIcon from "@mui/icons-material/Medication";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import ChatIcon from "@mui/icons-material/Chat";
 import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
-import WalletIcon from "@mui/icons-material/Wallet";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import MonitorHeartOutlinedIcon from "@mui/icons-material/MonitorHeartOutlined";
 import SettingsSystemDaydreamIcon from "@mui/icons-material/SettingsSystemDaydream";
 
 interface SectionProps {
@@ -60,8 +56,6 @@ const Section: React.FC<SectionProps> = ({ children }) => {
 };
 
 const Home: React.FC = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
