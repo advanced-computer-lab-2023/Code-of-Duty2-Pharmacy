@@ -501,6 +501,21 @@ Deletes an admin.
 
 </details>
 
+<details>
+<summary>View Sales Report</summary>
+
+```http
+  GET /admins/areport-data
+```
+
+Gets all orders, along with bought medicines info needed (medicine name,Id,price)
+
+| Header Parameter | Type     | Description                                                      |
+| :--------------- | :------- | :--------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Admin. |
+
+</details>
+
 ## Patients
 
 <details>
@@ -1055,6 +1070,21 @@ Updates a pharmacist's info. Uses the Pharmacist ID embedded in the Access Token
 | `identification` | `string` | **Required**. URL to the identification document of the pharmacist.  |
 | `pharmacyDegree` | `string` | **Required**. URL to the pharmacy degree of the pharmacist.          |
 | `workingLicense` | `string` | **Required**. URL to the working license document of the pharmacist. |
+
+</details>
+
+<details>
+<summary>View Sales Report</summary>
+
+```http
+  GET /pharmacists/areport-data
+```
+
+Gets all orders, along with bought medicines info needed (medicine name,Id,price)
+
+| Header Parameter | Type     | Description                                                           |
+| :--------------- | :------- | :-------------------------------------------------------------------- |
+| `Authorization`  | `string` | **Required**. JWT Token signed by a user having a role of Pharmacist. |
 
 </details>
 
