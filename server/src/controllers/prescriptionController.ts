@@ -24,6 +24,7 @@ export const getPrescription = async (req: Request, res: Response) => {
 
     res.status(StatusCodes.OK).json({ message: "Prescription found", prescription });
   } catch (error) {
+    console.log(error);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: (error as Error).message });
   }
 };

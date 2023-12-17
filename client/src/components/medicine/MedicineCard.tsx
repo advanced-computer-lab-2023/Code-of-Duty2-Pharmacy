@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Ref, forwardRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "@mui/material/Card";
@@ -14,12 +14,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Archive, AttachMoney, Unarchive } from "@mui/icons-material";
-import { Alert, AlertTitle, Stack, Tooltip } from "@mui/material";
+import { Alert, AlertTitle, Snackbar, Stack, Tooltip } from "@mui/material";
 import medicinePlaceholderImage from "../../assets/medicine-placeholder.png";
+import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
 
 import config from "../../config/config";
 import Medicine from "../../types/Medicine";
 import EditMedicineModal from "./EditMedicineModal";
+
+function Alerty(props: AlertProps, ref: Ref<any>) {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
+}
+const AlertRef = forwardRef(Alerty);
 
 interface Props {
   medicine: Medicine;
@@ -51,6 +57,9 @@ const MedicineCard: React.FC<Props> = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [editedMedicine, setEditedMedicine] = useState(medicine);
   const [alertVisible, setAlertVisible] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>("success");
   const navigate = useNavigate();
 
   const handleEditClick = () => {
@@ -79,17 +88,35 @@ const MedicineCard: React.FC<Props> = ({
         if (navigateToCart) {
           navigate(`/patient/review-cart`);
         }
+        setSnackbarOpen(true);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Added to cart successfully!");
       })
       .catch((err) => {
-        if (err.response.data.message === "Quantity exceeds the available quantity") {
-          setAlertVisible(true);
-          setTimeout(() => {
-            setAlertVisible(false);
-          }, 5000);
+        if (err.response?.data?.message === "Quantity exceeds the available quantity") {
+          // setAlertVisible(true);
+          // setTimeout(() => {
+          //   setAlertVisible(false);
+          // }, 5000);
+
+          setSnackbarOpen(true);
+          setSnackbarSeverity("warning");
+          setSnackbarMessage("Your total amount in cart cannot exceed the maximum quantity");
         } else {
+          setSnackbarOpen(true);
+          setSnackbarSeverity("error");
+          setSnackbarMessage("Something went wrong! Try again later.");
           console.log(err);
         }
       });
+  };
+
+  const handleSnackbarClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   return (
@@ -327,7 +354,7 @@ const MedicineCard: React.FC<Props> = ({
         ) : (
           canBuy && (
             <>
-              <input
+              {/* <input
                 type="number"
                 min="1"
                 max={editedMedicine.availableQuantity}
@@ -339,7 +366,7 @@ const MedicineCard: React.FC<Props> = ({
                   height: "25px",
                   fontSize: "14px"
                 }}
-              />
+              /> */}
 
               <Button
                 size="small"
@@ -363,6 +390,16 @@ const MedicineCard: React.FC<Props> = ({
         )}
       </CardActions>
 
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4500}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <AlertRef onClose={handleSnackbarClose} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </AlertRef>
+      </Snackbar>
       <EditMedicineModal open={modalOpen} medicine={editedMedicine} onClose={handleClose} onSave={handleSave} />
     </Card>
   );

@@ -70,8 +70,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           case HttpStatusCode.Unauthorized:
             if (isRefreshTokenExpired(error, originalRequest)) {
+              console.log("Refresh token expired");
               await logout();
             } else {
+              console.log("Resending Request With New Access Token");
               return await resendRequestWithNewAccessToken(refreshAuth, originalRequest);
             }
             break;
@@ -137,6 +139,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       await axios.post(`${config.API_URL}/auth/logout`, {}, { withCredentials: true });
+      console.log("Logout successful");
     } catch (error) {
       console.error("Error during logout", error);
     }

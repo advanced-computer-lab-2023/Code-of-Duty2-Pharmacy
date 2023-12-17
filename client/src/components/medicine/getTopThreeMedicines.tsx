@@ -31,7 +31,7 @@ const TopMedicines = () => {
     label: medicine.medicineName
   }));
 
-  return <PieChart series={[{ data: pieChartData }]} width={800} height={300} />;
+  return <PieChart series={[{ data: pieChartData }]} width={600} height={200} />;
 };
 
 export default TopMedicines;

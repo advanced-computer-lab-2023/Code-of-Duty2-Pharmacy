@@ -21,7 +21,7 @@ const PharmacistDashboard: React.FC = () => {
           Here are the top three most frequently bought medicines.
         </Typography>
 
-        <Box mt={"2%"} ml={"-17%"}>
+        <Box mt={"2%"}>
           <TopMedicines />
         </Box>
       </Box>
