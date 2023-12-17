@@ -1,11 +1,26 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../config/config";
+import { CircularProgress, Typography, Paper, Box, Divider, Grid } from "@mui/material";
+import { FaTruckMoving, FaBoxOpen } from "react-icons/fa";
+import { styled } from "@mui/system";
 
 import OrderCard from "./OrderCard";
 import { Order } from "../../types";
-import { CircularProgress, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+
+const IconText = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px"
+});
+
+const Icon = styled("div")({
+  marginTop: "10px"
+});
+
+const StyledDivider = styled(Divider)({
+  margin: "30px 0"
+});
 
 interface Props {
   canViewStatus: boolean;
@@ -29,10 +44,10 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
       setLoading(false);
     }
   };
+
   const cancelOrder = async (orderId: string) => {
     try {
       await axios.delete(`${config.API_URL}/patients/orders/${orderId}`);
-      // Update the local state of orders
       setOrders((orders) => orders.filter((order) => order._id !== orderId));
     } catch (err) {
       console.error("Error cancelling order:", err);
@@ -52,7 +67,11 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
 
   return (
     <>
-      {orders.length === 0 ? (
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+        </Box>
+      ) : orders.length === 0 ? (
         <Box ml={5}>
           <Typography variant="h4" gutterBottom component="div" color="primary">
             No Orders
@@ -64,31 +83,45 @@ const OrderList: React.FC<Props> = ({ canViewStatus }) => {
       ) : (
         <>
           {unsuccessfulOrders.length > 0 && (
-            <>
-              <Box ml={5}>
-                <Typography variant="h4" gutterBottom component="div" color="primary">
+            <Paper elevation={3} sx={{ margin: 2, padding: 2 }}>
+              <Typography variant="h4" gutterBottom component="div" color="primary">
+                <IconText>
+                  <Icon>
+                    <FaTruckMoving />
+                  </Icon>{" "}
                   Current Orders
-                </Typography>
-              </Box>
-
-              {unsuccessfulOrders.map((order, index) => (
-                <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
-              ))}
-            </>
+                </IconText>
+              </Typography>
+              <Grid container spacing={2}>
+                {unsuccessfulOrders.map((order, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <OrderCard order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
           )}
 
-          {successfulOrders.length > 0 && (
-            <>
-              <Box ml={5}>
-                <Typography variant="h4" gutterBottom component="div" color="primary">
-                  Past Orders
-                </Typography>
-              </Box>
+          <StyledDivider variant="middle" />
 
-              {successfulOrders.map((order, index) => (
-                <OrderCard key={index} order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
-              ))}
-            </>
+          {successfulOrders.length > 0 && (
+            <Paper elevation={3} sx={{ margin: 2, padding: 2 }}>
+              <Typography variant="h4" gutterBottom component="div" color="primary">
+                <IconText>
+                  <Icon>
+                    <FaBoxOpen />
+                  </Icon>{" "}
+                  Past Orders
+                </IconText>
+              </Typography>
+              <Grid container spacing={2}>
+                {successfulOrders.map((order, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <OrderCard order={order} canViewStatus={canViewStatus} onCancel={cancelOrder} />
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
           )}
         </>
       )}

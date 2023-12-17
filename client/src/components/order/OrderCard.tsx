@@ -33,7 +33,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, canViewStatus, onCancel })
   };
 
   return (
-    <Card sx={{ width: "40%", ml: 5, mb: 5 }}>
+    <Card sx={{ width: "75%", ml: 0.5, mb: 5 }}>
       <CardContent>
         <Box>
           <Typography variant="h6">Order Number</Typography>
