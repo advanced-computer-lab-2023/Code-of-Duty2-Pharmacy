@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Typography, Box, Divider } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 import PatientCountComponent from "../../components/patient/PatientCount";

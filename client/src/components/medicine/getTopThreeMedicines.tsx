@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import config from "../../config/config";
-import { Paper, Typography } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 interface Medicine {
