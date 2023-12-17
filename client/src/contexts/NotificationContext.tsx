@@ -43,7 +43,7 @@ const NotificationContextProvider: React.FC<ProviderProps> = ({ children }) => {
   const { authState } = useContext(AuthContext);
 
   useEffect(() => {
-    if (authState.role) {
+    if (authState.role === UserRole.PHARMACIST || authState.role === UserRole.PATIENT) {
       console.log("getting notifications");
       getAllNotifications(authState.role).then((data) => {
         setNotifications(data.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()));
