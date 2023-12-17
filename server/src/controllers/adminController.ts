@@ -12,7 +12,7 @@ export const getAllAdmins = async (req: AuthorizedRequest, res: Response) => {
   try {
     const admins = await Admin.find();
 
-    res.status(StatusCodes.OK).json(admins);
+    res.status(StatusCodes.OK).json({admins : admins , loggedInAdminId : req.user?.id});
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: (err as Error).message });
   }

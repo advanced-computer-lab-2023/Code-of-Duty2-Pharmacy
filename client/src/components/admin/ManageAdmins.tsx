@@ -19,8 +19,11 @@ import {
   TableRow,
   TableHead,
   Typography,
-  Divider
+  Divider,
+  Button
 } from "@mui/material";
+import { set } from "lodash";
+import ConfirmationModal from "../modals/ConfirmationModal";
 // import { jwtDecode } from 'jwt-decode';
 
 const ManageAdmins = () => {
@@ -36,9 +39,12 @@ const ManageAdmins = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   //////////////////// for viewing and deleting admins
 
   const [Admins, setAdmins] = useState<Admin[]>([]);
+  const [loggedInAdminId, setLoggedInAdminId] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleting, setIsDeleting] = useState<Array<boolean>>([]);
   const [deletedAdminUsername, setDeletedAdminUsername] = useState("");
@@ -53,7 +59,8 @@ const ManageAdmins = () => {
   const fetchAdmins = async () => {
     try {
       const response = await axios.get(`${config.API_URL}/admins`);
-      setAdmins(response.data);
+      setAdmins(response.data.admins);
+      setLoggedInAdminId(response.data.loggedInAdminId);
     } catch (err) {
       console.error("Error fetching admins:", err);
     }
@@ -223,20 +230,45 @@ const ManageAdmins = () => {
               </TableHead>
               <TableBody>
                 {Admins.filter((admin) => admin.username.includes(searchTerm)).map((admin, index) => (
-                  <TableRow key={index}>
+                  <TableRow
+                    key={index}
+                    style={{ backgroundColor: admin._id === loggedInAdminId ? "#90ee90" : "white" }}
+                  >
                     <TableCell>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <p>{admin.username} </p>
-                        <LoadingButton
-                          color="error"
-                          variant="contained"
-                          loading={isDeleting[index]}
-                          onClick={() => {
-                            deleteAdmin(admin._id, index);
+                        <p>
+                          {admin._id === loggedInAdminId ? (
+                            <>
+                              {admin.username} <strong>(you)</strong>
+                            </>
+                          ) : (
+                            admin.username
+                          )}{" "}
+                        </p>{" "}
+                        <ConfirmationModal
+                          open={isModalOpen}
+                          title="Delete Admin"
+                          handleClose={() => {
+                            setIsModalOpen(false);
                           }}
-                        >
-                          Delete Account
-                        </LoadingButton>
+                          description={`Are you sure you want to delete admin " ${admin.username} " ?`}
+                          handleConfirm={() => {
+                            deleteAdmin(admin._id, index);
+                            setIsModalOpen(false);
+                          }}
+                        />
+                        {admin._id !== loggedInAdminId && (
+                          <LoadingButton
+                            color="error"
+                            variant="contained"
+                            loading={isDeleting[index]}
+                            onClick={() => {
+                              setIsModalOpen(true);
+                            }}
+                          >
+                            Delete Account
+                          </LoadingButton>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
