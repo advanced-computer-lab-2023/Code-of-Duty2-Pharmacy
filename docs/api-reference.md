@@ -505,7 +505,7 @@ Deletes an admin.
 <summary>View Sales Report</summary>
 
 ```http
-  GET /admins/areport-data
+  GET /admins/orders-report-data
 ```
 
 Gets all orders, along with bought medicines info needed (medicine name,Id,price)
@@ -1077,7 +1077,7 @@ Updates a pharmacist's info. Uses the Pharmacist ID embedded in the Access Token
 <summary>View Sales Report</summary>
 
 ```http
-  GET /pharmacists/areport-data
+  GET /pharmacists/orders-report-data
 ```
 
 Gets all orders, along with bought medicines info needed (medicine name,Id,price)
