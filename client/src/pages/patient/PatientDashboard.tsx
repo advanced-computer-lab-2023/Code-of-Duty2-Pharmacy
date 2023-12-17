@@ -1,4 +1,7 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Card, CardContent, CircularProgress } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import config from "../../config/config";
 // import { BarChart } from "@mui/x-charts/BarChart";
 // import { PieChart } from "@mui/x-charts/PieChart";
 // import { axisClasses } from "@mui/x-charts";
@@ -44,9 +47,16 @@ const PatientDashboard = () => {
       <Typography variant="h4" gutterBottom component="div" color="primary">
         Patient Dashboard
       </Typography>
+
       <Typography variant="subtitle1" gutterBottom component="div" color="primary">
         We're here to support your health journey every step of the way.
       </Typography>
+
+      {/* <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ flex: "1", marginLeft: "20%", marginTop: "1%" }}>
+          <LatestPrescriptionCard />
+        </div>
+      </div> */}
 
       {/* <Box mt={"2%"}>
         <Typography variant="h6" gutterBottom component="div" color="primary">
