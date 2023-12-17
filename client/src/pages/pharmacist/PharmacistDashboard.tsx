@@ -7,9 +7,11 @@ const PharmacistDashboard: React.FC = () => {
       <Typography variant="h4" gutterBottom component="div" color="primary">
         Pharmacist Dashboard
       </Typography>
-      <Typography variant="subtitle1" gutterBottom component="div" color="primary">
-        Manage medicines and support patients with their medication needs.
+
+      <Typography variant="subtitle1" fontSize={"1.2rem"} gutterBottom component="div" color="primary">
+        Welcome to your home. Gain insight on medicine statistics and navigate to frequently used pages.
       </Typography>
+
       <TopMedicines />
     </Box>
   );
