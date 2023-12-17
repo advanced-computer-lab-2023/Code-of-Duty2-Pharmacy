@@ -10,7 +10,12 @@ function Alert(props: AlertProps, ref: Ref<any>) {
   return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
 }
 const AlertRef = forwardRef(Alert);
-const EmailForm: React.FC = () => {
+
+interface Props {
+  onSubmit: (email: string) => void;
+}
+
+const EmailForm: React.FC<Props> = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const { setUserData, setStep, setError } = useContext(ForgetPasswordContext);
   const navigate = useNavigate();
@@ -25,6 +30,7 @@ const EmailForm: React.FC = () => {
       const response = await sendEmailRequest(email);
       setUserData(response.data);
       setError("");
+      onSubmit(email);
       setStep(2);
     } catch (error: any) {
       console.log(error);
