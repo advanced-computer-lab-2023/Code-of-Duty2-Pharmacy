@@ -83,7 +83,7 @@ const OTPForm: React.FC<Props> = ({ email }) => {
           <form onSubmit={handleOTPSubmit}>
             <TextField label="OTP" value={otp} onChange={(e) => setOTP(e.target.value)} />
             <Typography variant="caption" gutterBottom component="div" color="primary">
-              OTP expires in <CountdownTimer initialSeconds={20} whenTimeIsUp={handleTokenExpire} />
+              OTP expires in <CountdownTimer initialSeconds={10 * 60} whenTimeIsUp={handleTokenExpire} />
             </Typography>
             <Button type="submit">Submit</Button>
           </form>
