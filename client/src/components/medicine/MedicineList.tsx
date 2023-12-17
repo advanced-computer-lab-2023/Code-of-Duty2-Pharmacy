@@ -2,7 +2,6 @@ import { useState, useEffect, Ref, forwardRef } from "react";
 import { Checkbox, FormControlLabel, Typography, Button, Box, Snackbar, Grid } from "@mui/material";
 import axios from "axios";
 import config from "../../config/config";
-import { Card, CardContent } from "@mui/material";
 
 import { Medicine } from "../../types";
 import { MedicineUsages } from "../../data/medicines";
