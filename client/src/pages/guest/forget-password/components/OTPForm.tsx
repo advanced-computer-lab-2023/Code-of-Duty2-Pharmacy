@@ -4,6 +4,8 @@ import { sendOTPRequest } from "../services/services";
 import { ForgetPasswordContext } from "../contexts/ForgetPasswordContext";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { CountdownTimer } from "../../../../components/others/CountDownTimer";
+import { env } from "process";
 
 const OTPForm = () => {
   const [otp, setOTP] = useState("");
@@ -47,7 +49,7 @@ const OTPForm = () => {
           <form onSubmit={handleOTPSubmit}>
             <TextField label="OTP" value={otp} onChange={(e) => setOTP(e.target.value)} />
             <Typography variant="caption" gutterBottom component="div" color="primary">
-              OTP expires in 10 minutes
+              OTP expires in <CountdownTimer initialSeconds={10 * 60} />
             </Typography>
             <Button type="submit">Submit</Button>
           </form>
