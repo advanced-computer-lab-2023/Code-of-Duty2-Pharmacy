@@ -275,7 +275,7 @@ const ChatList: React.FC<Props> = () => {
               New Chat
             </Button>
           </div>
-          <ChatPerson
+          {/*<ChatPerson
             name="AbdelRahman Saleh"
             lastmessage="Hello, I am here to ensure you are having a great experience with our app. If you have any problems make sure to report."
             time="12:54 PM"
@@ -283,7 +283,7 @@ const ChatList: React.FC<Props> = () => {
           />
           <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
           <br />
-          {/* <ChatPerson
+           <ChatPerson
             name="Mohamed Salah"
             lastmessage="Hello there, I have a question about the active ingredient in the medicine I am taking."
             time="09:54 AM"
@@ -294,6 +294,13 @@ const ChatList: React.FC<Props> = () => {
           <ChatPerson name="Ahmed Mohamed" lastmessage="Hello Dr!." time="10:35 PM" unread={1} />
           <hr style={{ width: "70%", marginLeft: "1.0rem", border: "1px solid #f0f0f0" }} />
           <br /> */}
+          {!(chats && (chats.length > 1 || chats[0]?.contactId.length > 0)) && (
+            <Typography variant="h6" style={{ textAlign: "center", marginTop: "2.0rem" }}>
+              No Chats Yet...
+              <br />
+              Start a new chat!
+            </Typography>
+          )}
           {chats &&
             (chats.length > 1 || chats[0]?.contactId.length > 0) &&
             chats.map(
@@ -327,9 +334,7 @@ const ChatList: React.FC<Props> = () => {
         <Box
           sx={{
             m: 2,
-
             gap: 3,
-            padding: "2.0rem",
             borderRadius: "8px",
             boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)"
           }}
