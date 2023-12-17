@@ -210,6 +210,7 @@ The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **
 - Update existing medicines' details, prices and upload medicine images.
 - Change my password or reset forgotten password.
 - Chat with patients or doctors.
+- View total sales report
 
 </details>
 
@@ -218,9 +219,12 @@ The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **
  <summary> Admin features </summary>
 
 - Add an admin to the system.
+- View and Delete all admins
 - Accept or reject a pharmacist registration request.
 - View a patient or pharmacist's details and remove them from the system.
 - View medicines on the system.
+- View total sales report
+
 
 </details>
 
@@ -251,6 +255,7 @@ The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **
 
 ```typescript
 export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
+
   try {
     const userId = req.user?.id;
 
