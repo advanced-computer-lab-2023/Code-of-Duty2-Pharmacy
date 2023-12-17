@@ -234,39 +234,36 @@ const MedicineList: React.FC<Props> = ({ canBuy, canEdit, canViewSales, canViewQ
               <br />
             </>
           )}
-          <Card>
-            <CardContent>
-              <Typography variant="h6">Filter by usages</Typography>
 
-              {(showMore ? filterOptions : filterOptions.slice(0, 10)).map((option) => (
-                <Box marginBottom={-1} key={option}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={usageFilter.includes(option)}
-                        onChange={handleUsageFilterChange(option)}
-                        value={option}
-                        size="small"
-                      />
-                    }
-                    label={option}
+          <Typography variant="h6">Filter by usages</Typography>
+
+          {(showMore ? filterOptions : filterOptions.slice(0, 10)).map((option) => (
+            <Box marginBottom={-1} key={option}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={usageFilter.includes(option)}
+                    onChange={handleUsageFilterChange(option)}
+                    value={option}
+                    size="small"
                   />
-                </Box>
-              ))}
+                }
+                label={option}
+              />
+            </Box>
+          ))}
 
-              {!showMore && filterOptions.length > 10 && (
-                <Button sx={{ ml: 2 }} onClick={handleShowMoreClick} color="secondary">
-                  Show more
-                </Button>
-              )}
+          {!showMore && filterOptions.length > 10 && (
+            <Button sx={{ ml: 2 }} onClick={handleShowMoreClick} color="secondary">
+              Show more
+            </Button>
+          )}
 
-              {showMore && (
-                <Button sx={{ ml: 2 }} onClick={handleShowLessClick} color="secondary">
-                  Show less
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+          {showMore && (
+            <Button sx={{ ml: 2 }} onClick={handleShowLessClick} color="secondary">
+              Show less
+            </Button>
+          )}
         </Box>
 
         <Box mb={5}>
