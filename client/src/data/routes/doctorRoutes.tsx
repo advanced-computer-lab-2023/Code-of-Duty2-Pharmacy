@@ -3,7 +3,7 @@ import DoctorManagePrescriptionsPage from "../../pages/doctor/DoctorManagePrescr
 import { Route } from "../../types";
 
 export const doctorManagePrescriptionsRoute: Route = {
-  path: "/doctor/manage-prescription/:prescriptionId",
+  path: "/doctor/manage-prescription/:prescriptionId/:isDependent",
   element: <DoctorManagePrescriptionsPage />
 };
 

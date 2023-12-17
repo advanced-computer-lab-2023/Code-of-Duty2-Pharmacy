@@ -11,7 +11,10 @@ export const getPrescription = async (req: Request, res: Response) => {
     const { prescriptionId } = req.params;
     const isDependent = req.query.isDependent === "true";
 
-    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+    const Model = mongoose.model(
+      isDependent ? "DependentPrescription" : "Prescription",
+      isDependent ? DependentPrescription.schema : Prescription.schema
+    );
 
     const prescription = await Model.findById(prescriptionId)
       .populate("doctorId", "name")
@@ -35,7 +38,10 @@ export const addMedicineToPrescription = async (req: Request, res: Response) => 
     const { prescriptionId } = req.params;
     const isDependent = req.query.isDependent === "true";
 
-    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+    const Model = mongoose.model(
+      isDependent ? "DependentPrescription" : "Prescription",
+      isDependent ? DependentPrescription.schema : Prescription.schema
+    );
 
     const prescription = await Model.findById(prescriptionId);
 
@@ -71,7 +77,10 @@ export const deleteMedicineFromPrescription = async (req: Request, res: Response
     const { prescriptionId, medicineId } = req.params;
     const isDependent = req.query.isDependent === "true";
 
-    const Model = mongoose.model(isDependent ? "DependentPrescription" : "Prescription");
+    const Model = mongoose.model(
+      isDependent ? "DependentPrescription" : "Prescription",
+      isDependent ? DependentPrescription.schema : Prescription.schema
+    );
 
     const prescription = await Model.findById(prescriptionId);
 

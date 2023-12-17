@@ -30,10 +30,8 @@ const DoctorManagePrescriptionsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const isDependent = queryParams.get("isDependent") === "true"; // Convert string to boolean
 
-  const { prescriptionId } = useParams();
+  const { prescriptionId, isDependent } = useParams();
 
   useEffect(() => {
     const fetchPrescription = async () => {
@@ -109,6 +107,8 @@ const DoctorManagePrescriptionsPage = () => {
     // This assumes that the user will always be redirected to this page from the Clinic application.
     // If the user somehow gets to this page without being redirected from the Clinic application,
     // this will not work, as we are going back two pages exactly according to this assumption.
+    // console.log("http://localhost:5173/doctor/dashboard");
+    // window.location.href = "http://localhost:5173/doctor/patients";
     window.history.go(-2);
   };
 
@@ -130,10 +130,10 @@ const DoctorManagePrescriptionsPage = () => {
           Manage Prescription Medication
         </Typography>
 
-        <Typography variant="body1" sx={{ opacity: 0.75, mt: 2 }}>
+        {/* <Typography variant="body1" sx={{ opacity: 0.75, mt: 2 }}>
           Prescription registered for:{" "}
           <span style={{ fontWeight: "bold" }}>{prescription && prescription.patientId.name}</span>
-        </Typography>
+        </Typography> */}
 
         <Typography variant="body1" sx={{ opacity: 0.75, mt: 2 }}>
           Prescription ID: <span style={{ fontWeight: "bold" }}>{prescription && `#${prescription._id}`}</span>
