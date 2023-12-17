@@ -258,7 +258,6 @@ const PharmacistRegistrationRequest = () => {
                   error: dateOfBirthErrorMessage !== "" ? true : false
                 }
               }}
-              // onError={() => {setDateOfBirthError(true);} }
             />
           </LocalizationProvider>
           <TextField

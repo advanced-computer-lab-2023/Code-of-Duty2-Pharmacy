@@ -7,6 +7,8 @@ import AdminViewPharmacistsPage from "../../pages/admin/AdminViewPharmacistsPage
 import AdminViewPatientsPage from "../../pages/admin/AdminViewPatientsPage";
 import AdminViewPharmacistRegistrationRequest from "../../pages/admin/AdminViewPharmacistRegistrationRequest";
 import AdminChangePasswordPage from "../../pages/admin/AdminChangePasswordPage";
+import NotificationView from "../../pages/notification/NotificationView";
+import AdminTotalSalesViewPage from "../../pages/admin/AdminTotalSalesViewPage";
 
 export const adminDashboardRoute: Route = {
   path: "/admin/dashboard",
@@ -47,6 +49,16 @@ export const changeAdminPasswordsRoute: Route = {
   element: <AdminChangePasswordPage />
 };
 
+
+export const adminViewNotificationRoute: Route = {
+  path: "/admin/notification/view",
+  element: <NotificationView />
+};
+export const adminViewTotalSalesRoute: Route = {
+  path: "/admin/view-total-sales",
+  element: <AdminTotalSalesViewPage />
+};
+
 const adminRoutes: Route[] = [
   adminDashboardRoute,
   viewMedicinesRoute,
@@ -55,7 +67,9 @@ const adminRoutes: Route[] = [
   viewPharmacistsRoute,
   viewPatientsRoute,
   changeAdminPasswordsRoute,
-  viewPharmacistRequestRoute
+  viewPharmacistRequestRoute,
+  adminViewNotificationRoute,
+  adminViewTotalSalesRoute
 ];
 
 export default adminRoutes;

@@ -17,8 +17,16 @@ const queryClient = new QueryClient({
 
 const App = () => {
   useEffect(() => {
+    socket.on("error", ({ message }) => {
+      console.log(message);
+    });
+    socket.on("message", (message) => {
+      console.log(message);
+    });
+
+    socket.emit("message", "hello");
     return () => {
-      socket.disconnect();
+      if (socket.connected) socket.disconnect();
     };
   }, []);
   return (
