@@ -32,14 +32,7 @@ const TopMedicines = () => {
     label: medicine.medicineName
   }));
 
-  return (
-    <Paper elevation={3} style={{ padding: "16px", margin: "16px", maxWidth: "600px" }}>
-      <Typography align="center" variant="h6">
-        Top Three Medicines Sales
-      </Typography>
-      <PieChart series={[{ data: pieChartData }]} width={600} height={200} />
-    </Paper>
-  );
+  return <PieChart series={[{ data: pieChartData }]} width={800} height={300} />;
 };
 
 export default TopMedicines;

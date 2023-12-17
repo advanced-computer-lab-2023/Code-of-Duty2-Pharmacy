@@ -8,11 +8,23 @@ const PharmacistDashboard: React.FC = () => {
         Pharmacist Dashboard
       </Typography>
 
-      <Typography variant="subtitle1" fontSize={"1.2rem"} gutterBottom component="div" color="primary">
+      <Typography variant="subtitle1" fontSize={"1.2rem"} gutterBottom component="div" color="">
         Welcome to your home. Gain insight on medicine statistics and navigate to frequently used pages.
       </Typography>
 
-      <TopMedicines />
+      <Box mt={5}>
+        <Typography variant="h6" component="div" color="primary">
+          Most Frequently Bought Medicines
+        </Typography>
+
+        <Typography variant="subtitle1" component="div" color="">
+          Here are the top three most frequently bought medicines.
+        </Typography>
+
+        <Box mt={"2%"} ml={"-17%"}>
+          <TopMedicines />
+        </Box>
+      </Box>
     </Box>
   );
 };
