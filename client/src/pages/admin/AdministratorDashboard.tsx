@@ -32,7 +32,7 @@ const AdministratorDashboard = () => {
           View the number of system users.
         </Typography>
 
-        <Box mt={"1%"} ml={"-5%"}>
+        <Box mt={"1%"}>
           <PieChart
             series={[
               {
