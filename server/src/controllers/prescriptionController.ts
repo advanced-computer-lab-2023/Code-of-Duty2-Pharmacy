@@ -43,7 +43,7 @@ export const addMedicineToPrescription = async (req: Request, res: Response) => 
       isDependent ? DependentPrescription.schema : Prescription.schema
     );
 
-    const prescription = await Model.findById(prescriptionId);
+    const prescription: any = await Model.findById(prescriptionId);
 
     if (!prescription) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Prescription not found" });
@@ -82,7 +82,7 @@ export const deleteMedicineFromPrescription = async (req: Request, res: Response
       isDependent ? DependentPrescription.schema : Prescription.schema
     );
 
-    const prescription = await Model.findById(prescriptionId);
+    const prescription: any = await Model.findById(prescriptionId);
 
     if (!prescription) {
       return res.status(StatusCodes.NOT_FOUND).json({ message: "Prescription not found" });

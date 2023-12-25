@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -28,8 +28,6 @@ const DoctorManagePrescriptionsPage = () => {
   const [search, setSearch] = useState("");
   const [prescriptionMedicines, setPrescriptionMedicines] = useState<Medicine[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const location = useLocation();
 
   const { prescriptionId, isDependent } = useParams();
 
