@@ -62,11 +62,11 @@ const PatientDashboard = () => {
         Patient Dashboard
       </Typography>
 
-      <Typography variant="subtitle1" gutterBottom component="div" color="primary">
+      <Typography variant="subtitle1" component="div" color="primary" gutterBottom>
         We're here to support your health journey every step of the way.
       </Typography>
 
-      <Typography variant="body1" gutterBottom>
+      <Typography variant="subtitle2" component="div" color="primary" gutterBottom>
         Track your orders, manage your profile, and stay updated with your health regimen all in one place.
       </Typography>
 
@@ -77,8 +77,7 @@ const PatientDashboard = () => {
         Quick Access
       </Typography>
 
-      <Grid container spacing={4}>
-        {/* Button for Review Cart */}
+      <Grid container spacing={4} sx={{ pr: "2%" }}>
         <Grid item xs={12} sm={4}>
           <Card>
             <CardContent>
@@ -89,7 +88,6 @@ const PatientDashboard = () => {
           </Card>
         </Grid>
 
-        {/* Button for Change Password */}
         <Grid item xs={12} sm={4}>
           <Card>
             <CardContent>
@@ -100,7 +98,6 @@ const PatientDashboard = () => {
           </Card>
         </Grid>
 
-        {/* Button for Notifications */}
         <Grid item xs={12} sm={4}>
           <Card>
             <CardContent>
@@ -115,6 +112,8 @@ const PatientDashboard = () => {
           </Card>
         </Grid>
       </Grid>
+
+      <Box mb={"4%"} />
     </Box>
   );
 };

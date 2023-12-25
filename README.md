@@ -100,7 +100,7 @@ Jira was used as our main issue tracking and project management tool for creatin
 <details>
 <summary>Patient dashboard</summary>
 
-![Patient dashboard]()
+![Patient dashboard](docs/screenshots/demo/patient_dashboard.png)
 
 </details>
 
@@ -130,7 +130,7 @@ Jira was used as our main issue tracking and project management tool for creatin
 <details>
 <summary>Pharmacist dashboard</summary>
 
-![Pharmacist dashboard]()
+![Pharmacist dashboard](docs/screenshots/demo/pharmacist_dashboard.png)
 
 </details>
 
@@ -146,6 +146,13 @@ Jira was used as our main issue tracking and project management tool for creatin
 <summary>Pharmacist application email</summary>
 
 ![Pharmacist application email](docs/screenshots/demo/pharmacist_email.png)
+
+</details>
+
+<details>
+<summary>Admin dashboard</summary>
+
+![Admin dashboard](docs/screenshots/demo/admin_dashboard.png)
 
 </details>
 
@@ -225,7 +232,6 @@ The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **
 - View medicines on the system.
 - View total sales report
 
-
 </details>
 
 <details>
@@ -255,7 +261,6 @@ The system has five user types: **_Guest_**, **_Patient_**, **_Pharmacist_**, **
 
 ```typescript
 export const getCartItems = async (req: AuthorizedRequest, res: Response) => {
-
   try {
     const userId = req.user?.id;
 
